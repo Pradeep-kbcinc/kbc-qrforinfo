@@ -9,7 +9,7 @@
                     <p class="mt-6">Listing Type</p>
                     <v-row>
                         <v-col>
-                            <v-btn variant="outlined" block size="x-large" rounded="lg" class="text-none elevation-0 text-body-1">
+                            <v-btn color="primary" style="background-color: #f0f6ff;border: 2px solid;" variant="outlined" block size="x-large" rounded="lg" class="text-none elevation-0 text-body-1">
                                 For Sale</v-btn>
                         </v-col>
                         <v-col>

@@ -6,6 +6,7 @@ import Login from "@/pages/login.vue";
 import Dashboard from "@/components/Dashboard.vue";
 import Properties from "@/components/Properties.vue";
 import AddNewProperty from "@/components/AddNewProperty.vue";
+import Settings from "@/components/Settings.vue"
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -29,6 +30,12 @@ const router = createRouter({
           name: "AddNewProperty",
           component: AddNewProperty,
         },
+        {
+          path: "/settings",
+          name: "Settings",
+          component: Settings,
+        },
+        
       ],
     },
     {
