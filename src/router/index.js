@@ -7,16 +7,19 @@ import Dashboard from "@/components/Dashboard.vue";
 import Properties from "@/components/Properties.vue";
 import AddNewProperty from "@/components/AddNewProperty.vue";
 import Settings from "@/components/Settings.vue"
+import SavedProperties from "@/components/SavedProperties.vue";
+import Messages from "@/components/Messages.vue";
+import PropertyDetails from "@/components/PropertyDetails.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: "/",
+      path: "/home",
       name: "LandingPage",
       component: Layout,
       children: [
         {
-          path: "/",
+          path: "/home",
           name: "Dashboard",
           component: Dashboard,
         },
@@ -24,6 +27,21 @@ const router = createRouter({
           path: "/properties",
           name: "Properties",
           component: Properties,
+        },
+        {
+          path: "/property/:id",
+          name: "Property",
+          component: PropertyDetails,
+        },
+        {
+          path: "/saved",
+          name: "Saved",
+          component: SavedProperties,
+        },
+        {
+          path: "/messages",
+          name: "Messages",
+          component: Messages,
         },
         {
           path: "/add-new-property",
@@ -35,11 +53,11 @@ const router = createRouter({
           name: "Settings",
           component: Settings,
         },
-        
+
       ],
     },
     {
-      path: "/login",
+      path: "/",
       name: "Login",
       component: Login,
     },
