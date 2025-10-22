@@ -1,14 +1,15 @@
 <template>
+  <!-- <Header /> -->
   <div class="">
     <div class="bg-gradient pa-6">
       <v-row>
         <v-col>
           <h3 class="text-h4 font-weight-bold">Find Your Dream Property</h3>
         </v-col>
-        <v-col>
+        <v-col cols="12">
           <div class="position-relative d-flex align-center">
             <v-text-field placeholder="Search Properties..." hide-details variant="solo-filled" rounded="lg"></v-text-field>
-            <v-btn color="primary" class="text-none rounded-lg elevation-0 font-weight-bold position-absolute top-0 right-0 mt-2 mr-2" height="42">Save Changes</v-btn>
+            <v-btn color="primary" class="text-none rounded-lg elevation-0 font-weight-bold position-absolute top-0 right-0 mt-2 mr-2" height="42"> <v-icon size="large" class="mr-2 mt-1">mdi-magnify</v-icon> Search</v-btn>
           </div>
         </v-col>
       </v-row>
@@ -27,7 +28,7 @@
 
 <script setup>
 import PropertyCard from './PropertyCard.vue';
-
+import Header from '@/layouts/header.vue'
 const propertyArr = ref([
   {
     id: 1,
@@ -54,6 +55,7 @@ const propertyArr = ref([
     saved: false,
   },
 ])
+
 </script>
 
 <style scoped>

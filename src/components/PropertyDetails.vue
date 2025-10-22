@@ -1,4 +1,5 @@
 <template>
+  <!-- <Header /> -->
   <div class="">
     <div class="d-flex justify-space-between pa-6 pb-0">
       <div class="">
@@ -108,7 +109,7 @@
 
 <script setup>
 import PropertyCard from './PropertyCard.vue';
-
+import Header from '@/layouts/header.vue'
 const route = useRoute()
 const propertyObj = ref({});
 const propertyArr = ref([
