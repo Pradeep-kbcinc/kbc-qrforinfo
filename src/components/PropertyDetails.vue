@@ -1,6 +1,7 @@
 <template>
-  <!-- <Header /> -->
-  <div class="">
+  <Header v-if="route.name == 'BuyPropertyDetails'" />
+   
+  <div :class="route.name == 'BuyPropertyDetails' ? 'mt-16' : ''">
     <div class="d-flex justify-space-between pa-6 pb-0">
       <div class="">
         <h3 class="text-h4 font-weight-bold">{{ propertyObj.title }}</h3>

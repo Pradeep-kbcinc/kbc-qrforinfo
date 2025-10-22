@@ -61,6 +61,16 @@ const router = createRouter({
       name: "Login",
       component: Login,
     },
+    {
+      path: "/buy/properties",
+      name: "BuyProperties",
+      component: Properties,
+    },
+    {
+      path: "/buy/property/:id",
+      name: "BuyPropertyDetails",
+      component: PropertyDetails,
+    },
   ],
 });
 

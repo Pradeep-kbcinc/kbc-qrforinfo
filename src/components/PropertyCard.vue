@@ -1,5 +1,5 @@
 <template>
-  <v-card @click="$router.push('/property/' + propertyObj.id)" class="card-box-shadow rounded-lg">
+  <v-card @click="route.name !== 'BuyProperties' ? $router.push('/property/' + propertyObj.id) : $router.push('/buy/property/' + propertyObj.id)" class="card-box-shadow rounded-lg">
     <v-card min-height="250" elevation="0" rounded="0" class="bg-box-gradient d-flex justify-center align-center position-relative" style="font-size: 5.0rem;line-height: 1;">
       🏠
 
@@ -20,6 +20,7 @@
 </template>
 
 <script setup>
+const route = useRoute()
 defineProps({
   propertyObj: {
     type: Object,

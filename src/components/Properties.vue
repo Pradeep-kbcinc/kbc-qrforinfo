@@ -1,6 +1,6 @@
 <template>
-  <!-- <Header /> -->
-  <div class="">
+  <Header v-if="route.name == 'BuyProperties'" />
+  <div :class="route.name == 'BuyProperties' ? 'mt-16' : ''">
     <div class="bg-gradient pa-6">
       <v-row>
         <v-col>
@@ -29,6 +29,7 @@
 <script setup>
 import PropertyCard from './PropertyCard.vue';
 import Header from '@/layouts/header.vue'
+const route = useRoute()
 const propertyArr = ref([
   {
     id: 1,
