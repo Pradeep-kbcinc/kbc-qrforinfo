@@ -2,29 +2,40 @@ import { createRouter, createWebHistory } from "vue-router";
 import { setupLayouts } from "virtual:generated-layouts";
 import { routes } from "vue-router/auto-routes";
 import Layout from "@/layouts/default.vue";
-import Login from "@/pages/login.vue"
+import Login from "@/pages/login.vue";
 import Dashboard from "@/components/Dashboard.vue";
+import Properties from "@/components/Properties.vue";
+import AddNewProperty from "@/components/AddNewProperty.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      name: 'LandingPage',
+      path: "/",
+      name: "LandingPage",
       component: Layout,
-      children:[
+      children: [
         {
-          path: '/',
-          name: 'Dashboard',
+          path: "/",
+          name: "Dashboard",
           component: Dashboard,
-        }
-      ]
-    }, 
+        },
+        {
+          path: "/properties",
+          name: "Properties",
+          component: Properties,
+        },
+        {
+          path: "/add-new-property",
+          name: "AddNewProperty",
+          component: AddNewProperty,
+        },
+      ],
+    },
     {
-      path: '/login',
-      name: 'Login',
+      path: "/login",
+      name: "Login",
       component: Login,
-      
-    }, 
+    },
   ],
 });
 

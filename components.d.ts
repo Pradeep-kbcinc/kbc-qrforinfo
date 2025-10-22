@@ -11,10 +11,13 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AddNewProperty: typeof import('./src/components/AddNewProperty.vue')['default']
     AppFooter: typeof import('./src/components/AppFooter.vue')['default']
+    CreateNewProperty: typeof import('./src/components/CreateNewProperty.vue')['default']
     Dashboard: typeof import('./src/components/Dashboard.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     Login: typeof import('./src/components/Login.vue')['default']
+    Properties: typeof import('./src/components/Properties.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }
