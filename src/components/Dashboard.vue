@@ -2,7 +2,7 @@
     <v-container fluid>
         <div class="mt-1 d-flex align-center">
             <div>
-                <h3 class="text-h5 font-weight-bold">Dashboard</h3>
+                <h3 class="font-weight-bold">Dashboard</h3>
                 <p>Welcome Back, Abhijit Debnath</p>
             </div>
             <v-spacer></v-spacer>

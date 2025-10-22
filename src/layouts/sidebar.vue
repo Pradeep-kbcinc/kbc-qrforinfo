@@ -1,7 +1,7 @@
 <template>
   <v-navigation-drawer
     v-model="sidebarToggle"
-    class="pt-6 elevation-0"
+    class="pt-2 elevation-0"
     color="white"
     :width="250"
   >
