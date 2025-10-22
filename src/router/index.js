@@ -1,36 +1,78 @@
-/**
- * router/index.ts
- *
- * Automatic routes for `./src/pages/*.vue`
- */
-
-// Composables
-import { createRouter, createWebHistory } from 'vue-router'
-import { setupLayouts } from 'virtual:generated-layouts'
-import { routes } from 'vue-router/auto-routes'
-
+import { createRouter, createWebHistory } from "vue-router";
+import { setupLayouts } from "virtual:generated-layouts";
+import { routes } from "vue-router/auto-routes";
+import Layout from "@/layouts/default.vue";
+import Login from "@/pages/login.vue"
+import Dashboard from "@/components/Dashboard.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: setupLayouts(routes),
-})
+  routes: [
+    {
+      path: '/',
+      name: 'LandingPage',
+      component: Layout,
+      children:[
+        {
+          path: '/',
+          name: 'Dashboard',
+          component: Dashboard,
+        }
+      ]
+    }, 
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login,
+      
+    }, 
+  ],
+});
 
-// Workaround for https://github.com/vitejs/vite/issues/11804
-router.onError((err, to) => {
-  if (err?.message?.includes?.('Failed to fetch dynamically imported module')) {
-    if (localStorage.getItem('vuetify:dynamic-reload')) {
-      console.error('Dynamic import error, reloading page did not fix it', err)
-    } else {
-      console.log('Reloading page to fix dynamic import error')
-      localStorage.setItem('vuetify:dynamic-reload', 'true')
-      location.assign(to.fullPath)
-    }
-  } else {
-    console.error(err)
-  }
-})
+// async function routeGuard(to, from, next) {
+//   const authStore = useAuthStore()
+//   const isAuthenticated = authStore.isAuthenticated
+//   if (isAuthenticated && !authStore.userDetails) {
+//     try {
+//       const response = localStorage.getItem('userDetails')
+//       if (response) {
+//         const res = JSON.parse(response)
+//         authStore.userLoginVerify(res)
+//       } else {
+//         // console.log('not verified verifyUser 1')
+//         // next({ name: 'PageNotFound' })
+//         authStore.logout()
+//         // authStore.userLoginVerify(undefined)
+//         // console.log('not verified verifyUser')
+//       }
+//     } catch (e) {
+//       next({ name: 'PageNotFound' })
+//       authStore.logout()
+//       console.log(e)
+//     }
+//   }
 
-router.isReady().then(() => {
-  localStorage.removeItem('vuetify:dynamic-reload')
-})
+//   if (isAuthenticated && authStore.userDetails) {
+//     if (to.meta.role == 'ALL') {
+//       next()
+//     } else if (authStore.userDetails.USER_ROLE.some((value) => value.USER_ROLE !== to.meta.role)) {
+//       // Redirect to unauthorized page or some other route
+//       next({ name: 'PageNotFound' })
+//     } else {
+//       next()
+//     }
+//   } else {
+//     next({ name: 'Login' })
+//   }
+// }
 
-export default router
+// function checkLoggedInRouteGuard(to, from, next) {
+//   const authStore = useAuthStore()
+//   const isAuthenticated = authStore.isAuthenticated
+//   if (isAuthenticated) {
+//     next({ name: 'Home' })
+//   } else {
+//     next()
+//   }
+// }
+
+export default router;
