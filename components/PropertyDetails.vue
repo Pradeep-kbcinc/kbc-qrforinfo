@@ -7,7 +7,7 @@
         <h3 class="text-h4 font-weight-bold">{{ propertyObj.title }}</h3>
         <p><v-icon>mdi-map-marker-outline</v-icon> {{ propertyObj.city }}</p>
       </div>
-      <div v-if="$route.name == 'property-id'" class="d-flex ga-4">
+      <div v-if="!$route.name.includes('/buy/')" class="d-flex ga-4">
         <v-btn @click="$router.push('/add-new-property')" variant="outlined" prependIcon="mdi-square-edit-outline" class="text-none rounded-lg elevation-0 font-weight-bold" height="42">Edit</v-btn>
         <v-btn @click="shareAction(propertyObj)" color="primary" prependIcon="mdi-share-variant-outline" class="text-none rounded-lg elevation-0 font-weight-bold" height="42">Share</v-btn>
       </div>
@@ -19,8 +19,8 @@
           <v-card class="card-box-shadow rounded-lg">
             <v-card min-height="350" elevation="0" rounded="0" class="bg-box-gradient d-flex justify-center align-center position-relative" style="font-size: 8.0rem;line-height: 1;">
               🏠
-              <v-btn v-if="$route.name == 'buy-property-id'" :color="propertyObj.type == 'FOR SALE' ? 'success' : 'primary'" class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 left-0 mt-4 ms-4" height="" density="comfortable">{{ propertyObj.type }}</v-btn>
-              <v-btn v-if="$route.name == 'buy-property-id'" color="white" :icon="propertyObj.saved ? 'mdi-heart' : 'mdi-heart-outline'" class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 right-0 mt-4 mr-4">
+              <v-btn v-if="$route.name.includes('/buy/')" :color="propertyObj.type == 'FOR SALE' ? 'success' : 'primary'" class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 left-0 mt-4 ms-4" height="" density="comfortable">{{ propertyObj.type }}</v-btn>
+              <v-btn v-if="$route.name.includes('/buy/')" color="white" :icon="propertyObj.saved ? 'mdi-heart' : 'mdi-heart-outline'" class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 right-0 mt-4 mr-4">
                 <v-icon :color="propertyObj.saved ? 'red' : 'black'">{{ propertyObj.saved ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
               </v-btn>
             </v-card>
@@ -46,7 +46,7 @@
           </v-card>
         </v-col>
 
-        <v-col v-if="$route.name == 'property-id'" cols="12" lg="3">
+        <v-col v-if="!$route.name.includes('/buy/')" cols="12" lg="3">
           <v-card class="card-box-shadow rounded-lg pa-4">
             <p class="text-h4 font-weight-bold text-primary mb-4">{{ propertyObj.amount }}</p>
             <v-btn :color="propertyObj.type == 'FOR SALE' ? 'success' : 'primary'" variant="tonal" class="text-none rounded-pill elevation-0 font-weight-bold" height="" density="comfortable">{{ propertyObj.type }}</v-btn>
@@ -68,13 +68,13 @@
       </v-row>
     </div>
 
-    <div v-if="$route.name == 'property-id'" class="d-flex justify-space-between pa-6 pb-0">
+    <div v-if="!$route.name.includes('/buy/')" class="d-flex justify-space-between pa-6 pb-0">
       <div class="">
         <h3 class="text-h5 font-weight-bold">QR Code & Analytics</h3>
       </div>
     </div>
 
-    <div v-if="$route.name == 'property-id'" class="pa-4 mb-10">
+    <div v-if="!$route.name.includes('/buy/')" class="pa-4 mb-10">
       <v-row>
         <v-col cols="12" md="6">
           <v-card class="card-box-shadow rounded-lg pa-6">
