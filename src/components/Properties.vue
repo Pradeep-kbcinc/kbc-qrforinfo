@@ -14,7 +14,22 @@
       </v-row>
     </div>
 
-    <div class="pa-4">
+    <div class="px-4">
+      <v-row justify="space-between" class="">
+        <v-col cols="auto">
+          <v-btn @click="$router.push('/add-new-property')" rounded="lg" height="42" variant="outlined" prepend-icon="mdi-filter-cog-outline" class="elevation-0 text-none font-weight-bold" color="primary">
+            Filter
+          </v-btn>
+        </v-col>
+        <v-col cols="auto">
+          <v-btn @click="$router.push('/add-new-property')" rounded="lg" height="42" class="elevation-0 text-none font-weight-bold" color="primary">
+            <v-icon>mdi-plus</v-icon> Add Property
+          </v-btn>
+        </v-col>
+      </v-row>
+    </div>
+
+    <div class="pa-4 pt-0">
       <v-row>
         <v-col v-for="propertyObj in propertyArr">
           <PropertyCard :propertyObj="propertyObj" />

@@ -66,8 +66,9 @@
             <h3 class="text-h6 font-weight-bold mb-2">QR Code</h3>
             <v-card min-height="400" elevation="0" rounded="lg" class="bg-grey-lighten-4 d-flex ga-4 flex-column justify-center align-center position-relative" style="font-size: 8.0rem;line-height: 1;">
               <v-btn :color="propertyObj.type == 'FOR SALE' ? 'success' : 'primary'" class="text-none rounded-pill elevation-0 font-weight-bold" height="" density="comfortable">{{ propertyObj.type }}</v-btn>
-              <v-card class="bg-grey-lighten-1 pa-6 rounded-lg">
-                <img contain height="200" src="@/assets/QR_white.svg">
+              <v-card class="bg-white pa-6 rounded-lg card-box-shadow" elevation="0">
+                <!-- <img contain height="200" src="@/assets/QR_white.svg"> -->
+                <qrcode-vue :value="`property/${$route.params.id}`" :size="200" level="H" background="transparent" />
               </v-card>
 
               <div class="">
@@ -108,6 +109,7 @@
 
 <script setup>
 import PropertyCard from './PropertyCard.vue';
+import QrcodeVue from 'qrcode.vue'
 
 const route = useRoute()
 const propertyObj = ref({});
