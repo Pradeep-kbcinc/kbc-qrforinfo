@@ -172,7 +172,7 @@ onMounted(() => {
   let tmpArr = route.path.split('/');
   const id = tmpArr[tmpArr.length - 1]
   console.log('--->', id);
-  let selectedId = route.params?.id || 1
+  let selectedId = route.params?.id || id || 1
   selectedId = selectedId > 3 ? 3 : selectedId
   propertyObj.value = propertyArr.value.find((obj) => obj.id == id || selectedId);
 })
@@ -208,7 +208,7 @@ const shareAction = async (propertyObj) => {
     const shareData = {
       title: propertyObj.title,
       text: propertyObj.description,
-      url: `/buy/property/${id || selectedId}`,
+      url: `/buy/property/${propertyObj.id}`,
     };
     await navigator.share(shareData);
     // resultPara.textContent = "MDN shared successfully";
