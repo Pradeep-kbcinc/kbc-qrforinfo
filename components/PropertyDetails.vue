@@ -1,5 +1,5 @@
 <template>
-  <Header v-if="route.name == 'BuyPropertyDetails'" />
+  <!-- <Header v-if="route.name == 'BuyPropertyDetails'" /> -->
    
   <div :class="route.name == 'BuyPropertyDetails' ? 'mt-16' : ''">
     <div class="d-flex justify-space-between pa-6 pb-0">
@@ -110,7 +110,7 @@
 
 <script setup>
 import PropertyCard from './PropertyCard.vue';
-import Header from '@/layouts/header.vue'
+// import Header from '@/layouts/header.vue'
 const route = useRoute()
 const propertyObj = ref({});
 const propertyArr = ref([
