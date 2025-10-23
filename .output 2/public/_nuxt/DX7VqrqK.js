@@ -1,0 +1,1 @@
+import{a2 as o,z as _,D as t,C as a,aO as n}from"#entry";import{V as r,a as p}from"./Di2eS3fT.js";import"./DYcEsToo.js";import"./BNMpVtW_.js";const x={__name:"auth",setup(s){return(c,u)=>{const e=n;return _(),o(p,null,{default:t(()=>[a(r,null,{default:t(()=>[a(e)]),_:1})]),_:1})}}};export{x as default};

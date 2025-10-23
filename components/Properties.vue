@@ -32,7 +32,7 @@
 
     <div class="pa-4 pt-0">
       <v-row>
-        <v-col v-for="propertyObj in propertyArr">
+        <v-col cols="12" md="6" lg="4" v-for="propertyObj in propertyArr">
           <PropertyCard :propertyObj="propertyObj" />
 
         </v-col>
@@ -76,6 +76,8 @@ const propertyArr = ref([
 onMounted(() => {
   console.log('--->',);
   // getProperties()
+  // https://devui.qrforinfo.com/buy/property/1
+  // https://devui.qrforinfo.com/buy/property/1
 })
 //------------------------------------------------------------------------------
 const getProperties = async () => {
