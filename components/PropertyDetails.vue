@@ -1,15 +1,15 @@
 <template>
   <!-- <Header v-if="route.name == 'BuyPropertyDetails'" /> -->
-   
+
   <div :class="route.name == 'BuyPropertyDetails' ? 'mt-16' : ''">
-    <div class="d-flex justify-space-between pa-6 pb-0">
+    <div class="d-flex align-center justify-space-between pa-6 pb-0">
       <div class="">
         <h3 class="text-h4 font-weight-bold">{{ propertyObj.title }}</h3>
         <p><v-icon>mdi-map-marker-outline</v-icon> {{ propertyObj.city }}</p>
       </div>
-      <div class="d-flex ga-4">
-        <v-btn variant="outlined" prependIcon="mdi-square-edit-outline" class="text-none rounded-lg elevation-0 font-weight-bold" height="42">Edit</v-btn>
-        <v-btn color="primary" prependIcon="mdi-share-variant-outline" class="text-none rounded-lg elevation-0 font-weight-bold" height="42">Share</v-btn>
+      <div v-if="$route.name == 'property-id'" class="d-flex ga-4">
+        <v-btn @click="$router.push('/add-new-property')" variant="outlined" prependIcon="mdi-square-edit-outline" class="text-none rounded-lg elevation-0 font-weight-bold" height="42">Edit</v-btn>
+        <v-btn @click="shareAction(propertyObj)" color="primary" prependIcon="mdi-share-variant-outline" class="text-none rounded-lg elevation-0 font-weight-bold" height="42">Share</v-btn>
       </div>
     </div>
 
@@ -19,10 +19,14 @@
           <v-card class="card-box-shadow rounded-lg">
             <v-card min-height="350" elevation="0" rounded="0" class="bg-box-gradient d-flex justify-center align-center position-relative" style="font-size: 8.0rem;line-height: 1;">
               🏠
+              <v-btn v-if="$route.name == 'buy-property-id'" :color="propertyObj.type == 'FOR SALE' ? 'success' : 'primary'" class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 left-0 mt-4 ms-4" height="" density="comfortable">{{ propertyObj.type }}</v-btn>
+              <v-btn v-if="$route.name == 'buy-property-id'" color="white" :icon="propertyObj.saved ? 'mdi-heart' : 'mdi-heart-outline'" class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 right-0 mt-4 mr-4">
+                <v-icon :color="propertyObj.saved ? 'red' : 'black'">{{ propertyObj.saved ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
+              </v-btn>
             </v-card>
             <div class="pa-4">
               <p class="text-h6">Details</p>
-              <div class="mt-4 d-flex ga-4 flex-wrap w-100">
+              <div class="my-4 d-flex ga-4 flex-wrap w-100">
                 <div class="" style="min-width: 200px;">
                   <p class="text-grey-darken-1">Bedrooms</p>
                   <p class="text-h6">3</p>
@@ -37,11 +41,12 @@
                   </p>
                 </div>
               </div>
+              <p class="mt-6">{{ propertyObj.description }}</p>
             </div>
           </v-card>
         </v-col>
 
-        <v-col cols="3">
+        <v-col v-if="$route.name == 'property-id'" cols="3">
           <v-card class="card-box-shadow rounded-lg pa-4">
             <p class="text-h4 font-weight-bold text-primary mb-4">{{ propertyObj.amount }}</p>
             <v-btn :color="propertyObj.type == 'FOR SALE' ? 'success' : 'primary'" variant="tonal" class="text-none rounded-pill elevation-0 font-weight-bold" height="" density="comfortable">{{ propertyObj.type }}</v-btn>
@@ -52,24 +57,41 @@
             <v-btn color="red" variant="tonal" class="text-none rounded-lg elevation-0 font-weight-bold w-100 mt-8" height="45">Mark as Sold</v-btn>
           </v-card>
         </v-col>
+        <v-col v-else cols="3">
+          <v-card class="card-box-shadow rounded-lg pa-6">
+            <p class="text-h4 font-weight-bold text-primary mb-6">{{ propertyObj.amount }}</p>
+            <v-btn color="primary" class="text-none rounded-lg elevation-0 font-weight-bold w-100" height="50" prepend-icon="mdi-comment-outline">Contact Owner</v-btn>
+            <v-btn @click="propertyObj.saved == propertyObj.saved" color="red" variant="outlined" class="text-none rounded-lg elevation-0 font-weight-bold w-100 mt-3" :prepend-icon="propertyObj.saved ? 'mdi-heart' : 'mdi-heart-outline'" height="50">{{ propertyObj.saved ? 'Saved to Favorites' : 'Save to Favorites' }}</v-btn>
+            <v-btn @click="shareAction(propertyObj)" variant="outlined" class="text-none rounded-lg elevation-0 font-weight-bold w-100 mt-3" prepend-icon="mdi-share-variant-outline" height="50">Share Property</v-btn>
+          </v-card>
+        </v-col>
       </v-row>
     </div>
 
-    <div class="d-flex justify-space-between pa-6 pb-0">
+    <div v-if="$route.name == 'property-id'" class="d-flex justify-space-between pa-6 pb-0">
       <div class="">
         <h3 class="text-h5 font-weight-bold">QR Code & Analytics</h3>
       </div>
     </div>
 
-    <div class="pa-4 mb-10">
+    <div v-if="$route.name == 'property-id'" class="pa-4 mb-10">
       <v-row>
         <v-col cols="6">
           <v-card class="card-box-shadow rounded-lg pa-6">
             <h3 class="text-h6 font-weight-bold mb-2">QR Code</h3>
-            <v-card min-height="400" elevation="0" rounded="lg" class="bg-grey-lighten-4 d-flex ga-4 flex-column justify-center align-center position-relative" style="font-size: 8.0rem;line-height: 1;">
+            <v-card id="reportContent" min-height="400" elevation="0" rounded="lg" class="bg-grey-lighten-4 d-flex ga-4 flex-column justify-center align-center position-relative" style="font-size: 8.0rem;line-height: 1;">
               <v-btn :color="propertyObj.type == 'FOR SALE' ? 'success' : 'primary'" class="text-none rounded-pill elevation-0 font-weight-bold" height="" density="comfortable">{{ propertyObj.type }}</v-btn>
-              <v-card class="bg-grey-lighten-1 pa-6 rounded-lg">
-                <img contain height="200" src="@/assets/QR_white.svg">
+              <v-card class="bg-white pa-6 rounded-lg card-box-shadow">
+                <!-- <img contain height="200" src="@/assets/QR_white.svg"> -->
+                <ClientOnly fallback-tag="span">
+                  <!-- <pre class="text-body-2">
+                    {{ useRequestURL().origin }}
+                    {{ $route }}
+                    {{ `${useRequestURL().origin}/buy/property/${$route.params.id}` }}
+                  </pre> -->
+                  <qrcode-vue :value="`${useRequestURL().origin}/buy/property/${$route.params.id}`" :size="200" level="H" background="transparent" foreground="black" />
+
+                </ClientOnly>
               </v-card>
 
               <div class="">
@@ -79,8 +101,8 @@
             </v-card>
             <div class="pa-4">
               <div class="d-flex ga-4">
-                <v-btn color="primary" prependIcon="mdi-download" class="text-none rounded-lg elevation-0 font-weight-bold flex-1-1" height="42">Download</v-btn>
-                <v-btn variant="outlined" prependIcon="mdi-share-variant-outline" class="text-none rounded-lg elevation-0 font-weight-bold flex-1-1" height="42">Share</v-btn>
+                <v-btn @click="downloadPDF(propertyObj)" color="primary" prependIcon="mdi-download" class="text-none rounded-lg elevation-0 font-weight-bold flex-1-1" height="42">Download</v-btn>
+                <v-btn @click="shareAction(propertyObj)" variant="outlined" prependIcon="mdi-share-variant-outline" class="text-none rounded-lg elevation-0 font-weight-bold flex-1-1" height="42">Share</v-btn>
               </div>
             </div>
           </v-card>
@@ -110,6 +132,8 @@
 
 <script setup>
 import PropertyCard from './PropertyCard.vue';
+import QrcodeVue from 'qrcode.vue';
+
 // import Header from '@/layouts/header.vue'
 const route = useRoute()
 const propertyObj = ref({});
@@ -121,6 +145,7 @@ const propertyArr = ref([
     amount: '$450,000',
     type: 'FOR SALE',
     saved: true,
+    description: 'Beautiful modern apartment in prime location with high-end finishes.',
   },
   {
     id: 2,
@@ -128,7 +153,8 @@ const propertyArr = ref([
     city: 'New York, NY',
     amount: '$1,800/mo',
     type: 'FOR RENT',
-    saved: true,
+    saved: false,
+    description: 'Beautiful modern apartment in prime location with high-end finishes.',
   },
   {
     id: 3,
@@ -137,14 +163,49 @@ const propertyArr = ref([
     amount: '$650,000',
     type: 'FOR SALE',
     saved: true,
+    description: 'Beautiful modern apartment in prime location with high-end finishes.',
   },
 ])
-
+//------------------------------------------------------------------------------
 onMounted(() => {
   console.log('--->route', route);
   const selectedId = route.params?.id || ''
   propertyObj.value = propertyArr.value.find((obj) => obj.id == selectedId);
 })
+//------------------------------------------------------------------------------
+const downloadPDF = async (propertyObj) => {
+  const prtHtml = document.getElementById('reportContent') // Reference to form container
+  console.log('--->prtHtml', document.getElementById('reportContent'));
+  console.log('--->prtHtml', prtHtml);
+  console.log('--->propertyObj', propertyObj);
+  const html2pdf = (await import('html2pdf.js')).default;
+  console.log('--->html2pdf', html2pdf);
+
+  let fileName = `${propertyObj.title}`
+  const options = {
+    margin: 0.5,
+    filename: fileName + '.pdf',
+    image: { type: 'jpeg', quality: 1 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+  }
+  html2pdf().from(prtHtml).set(options).save()
+}
+//------------------------------------------------------------------------------
+const shareAction = async (propertyObj) => {
+  try {
+    const shareData = {
+      title: propertyObj.title,
+      text: propertyObj.description,
+      url: `/buy/property/${route.params.id}`,
+    };
+    await navigator.share(shareData);
+    // resultPara.textContent = "MDN shared successfully";
+  } catch (err) {
+    console.log('--->err', err);
+  }
+}
+//------------------------------------------------------------------------------
 </script>
 
 <style scoped>

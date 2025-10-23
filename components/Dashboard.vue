@@ -16,44 +16,32 @@
           <v-card class="rounded-lg card-box-shadow">
             <v-card-text>
               <p>Active Listings</p>
-              <h5 class="text-primary text-h4 font-weight-bold mt-1">
-                12
-              </h5>
+              <h5 class="text-primary text-h4 font-weight-bold mt-1">12</h5>
             </v-card-text>
-
           </v-card>
         </v-col>
         <v-col>
           <v-card class="rounded-lg card-box-shadow">
             <v-card-text>
               <p>Total Views</p>
-              <h5 class="text-green text-h4 font-weight-bold mt-1">
-                1,247
-              </h5>
+              <h5 class="text-green text-h4 font-weight-bold mt-1">1,247</h5>
             </v-card-text>
-
           </v-card>
         </v-col>
         <v-col>
           <v-card class="rounded-lg card-box-shadow">
             <v-card-text>
               <p>Messages</p>
-              <h5 class="text-purple text-h4 font-weight-bold mt-1">
-                28
-              </h5>
+              <h5 class="text-purple text-h4 font-weight-bold mt-1">28</h5>
             </v-card-text>
-
           </v-card>
         </v-col>
         <v-col>
           <v-card class="rounded-lg card-box-shadow">
             <v-card-text>
               <p>Drafts</p>
-              <h5 class="text-lightBlack text-h4 font-weight-bold mt-1">
-                3
-              </h5>
+              <h5 class="text-lightBlack text-h4 font-weight-bold mt-1">3</h5>
             </v-card-text>
-
           </v-card>
         </v-col>
       </v-row>
@@ -70,7 +58,7 @@
 
           <v-list class="py-0">
             <div v-for="(property, i) in properties" :key="i">
-              <v-list-item class="px-2 my-2 pointer">
+              <v-list-item @click="$router.push('/property/' + property.id)" class="px-2 my-2 pointer">
                 <template #prepend>
                   <v-avatar size="82" rounded="lg" class="mr-4 bg-grey-lighten-4 text-h4">
                     <!-- <v-img :src="property.image" cover /> -->
@@ -106,6 +94,7 @@
 const router = useRouter()
 const properties = [
   {
+    id: 1,
     title: 'Modern 3BR Apartment',
     location: 'New York',
     price: '$450,000',
@@ -114,6 +103,7 @@ const properties = [
     image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQp7-a_VsyHwiODqLFYJ_Zbp0eOeGJQp4y5hA&s',
   },
   {
+    id: 2,
     title: 'Downtown Studio',
     location: 'Brooklyn',
     price: '$195,000',
@@ -122,6 +112,7 @@ const properties = [
     image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQp7-a_VsyHwiODqLFYJ_Zbp0eOeGJQp4y5hA&s',
   },
   {
+    id: 3,
     title: 'Suburban House',
     location: 'Queens',
     price: '$650,000',

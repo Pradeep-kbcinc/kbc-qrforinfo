@@ -1,9 +1,8 @@
 <template>
-<properties/>
+  <properties />
 </template>
 <script setup>
 import properties from '../properties.vue';
 definePageMeta({
-  layout: 'auth' 
-})
+  layout: 'auth'})
 </script>

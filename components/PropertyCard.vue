@@ -5,7 +5,7 @@
       🏠
 
       <v-btn :color="propertyObj.type == 'FOR SALE' ? 'success' : 'primary'" class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 left-0 mt-4 ms-4" height="" density="comfortable">{{ propertyObj.type }}</v-btn>
-      <v-btn color="white" :icon="propertyObj.saved ? 'mdi-heart' : 'mdi-heart-outline'" class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 right-0 mt-4 mr-4">
+      <v-btn @click.stop="propertyObj.saved = !propertyObj.saved" color="white" :icon="propertyObj.saved ? 'mdi-heart' : 'mdi-heart-outline'" class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 right-0 mt-4 mr-4">
         <v-icon :color="propertyObj.saved ? 'red' : 'black'">{{ propertyObj.saved ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
       </v-btn>
     </v-card>

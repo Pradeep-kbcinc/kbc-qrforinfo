@@ -15,7 +15,22 @@
       </v-row>
     </div>
 
-    <div class="pa-4">
+    <div class="pa-4 pb-0 pt-2">
+      <v-row justify="space-between">
+        <v-col cols="auto">
+          <v-btn height="42" rounded="lg" variant="outlined" class="elevation-0 text-none font-weight-bold" color="primary">
+            <v-icon>mdi-filter-outline</v-icon> Filters
+          </v-btn>
+        </v-col>
+        <v-col v-if="$route.name == 'properties'" cols="auto">
+          <v-btn @click="$router.push('/add-new-property')" height="42" rounded="lg" class="elevation-0 text-none font-weight-bold" color="primary">
+            <v-icon>mdi-plus</v-icon> Add Property
+          </v-btn>
+        </v-col>
+      </v-row>
+    </div>
+
+    <div class="pa-4 pt-0">
       <v-row>
         <v-col v-for="propertyObj in propertyArr">
           <PropertyCard :propertyObj="propertyObj" />
@@ -27,6 +42,7 @@
 </template>
 
 <script setup>
+import propertyService from '../src/services/propertyService';
 import PropertyCard from './PropertyCard.vue';
 
 const route = useRoute()
@@ -56,7 +72,24 @@ const propertyArr = ref([
     saved: false,
   },
 ])
-
+//------------------------------------------------------------------------------
+onMounted(() => {
+  console.log('--->',);
+  // getProperties()
+})
+//------------------------------------------------------------------------------
+const getProperties = async () => {
+  try {
+    console.log('--->', 12312);
+    const data = {
+      "ACTION_TYPE": "SELECT",  //SELECT
+    }
+    const res = await propertyService.LLPropertyMasterCrud(data)
+  } catch (error) {
+    console.log('--->err', error);
+  }
+}
+//------------------------------------------------------------------------------
 </script>
 
 <style scoped>
