@@ -173,8 +173,9 @@ onMounted(() => {
   const id = tmpArr[tmpArr.length - 1]
   console.log('--->', id);
   let selectedId = route.params?.id || id || 1
+  console.log('--->selectedId', selectedId);
   selectedId = selectedId > 3 ? 3 : selectedId
-  propertyObj.value = propertyArr.value.find((obj) => obj.id == id || selectedId);
+  propertyObj.value = propertyArr.value.find((obj) => obj.id == selectedId);
 })
 //------------------------------------------------------------------------------
 const downloadPDF = async (propertyObj) => {
