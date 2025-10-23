@@ -89,7 +89,7 @@
                     {{ $route }}
                     {{ `${useRequestURL().origin}/buy/property/${$route.params.id}` }}
                   </pre> -->
-                  <qrcode-vue :value="`${useRequestURL().origin}/buy/property/${$route.params.id}`" :size="200" level="H" background="transparent" foreground="black" />
+                  <qrcode-vue :value="`${useRequestURL().origin}/buy/property/${propertyObj.id}`" :size="200" level="H" background="transparent" foreground="black" />
 
                 </ClientOnly>
               </v-card>
@@ -198,10 +198,17 @@ const downloadPDF = async (propertyObj) => {
 //------------------------------------------------------------------------------
 const shareAction = async (propertyObj) => {
   try {
+    console.log('--->route', route.params);
+    let tmpArr = route.path.split('/');
+    const id = tmpArr[tmpArr.length - 1]
+    console.log('--->', id);
+    let selectedId = route.params?.id || 1
+    selectedId = selectedId > 3 ? 3 : selectedId
+
     const shareData = {
       title: propertyObj.title,
       text: propertyObj.description,
-      url: `/buy/property/${route.params.id}`,
+      url: `/buy/property/${id || selectedId}`,
     };
     await navigator.share(shareData);
     // resultPara.textContent = "MDN shared successfully";
