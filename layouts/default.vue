@@ -1,13 +1,26 @@
 <template>
-      <v-app>
+  <v-app>
+    <Transition name="slide-fade" mode="out-in">
+      <div v-if="show" class="full-layout">
         <v-main>
-            <Mainheader/> 
-            <NuxtPage />
-            <sidebar/>
+          <Mainheader />
+          <sidebar />
+          <NuxtPage />
         </v-main>
-      </v-app>
-  </template>
-  <script setup>
-import Mainheader from '~/components/header.vue';
-import sidebar from '~/components/sidebar.vue';
+      </div>
+    </Transition>
+  </v-app>
+</template>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import Mainheader from '~/components/header.vue'
+import sidebar from '~/components/sidebar.vue'
+
+const show = ref(false)
+
+onMounted(() => {
+  setTimeout(() => (show.value = true), 100)
+})
 </script>
+
