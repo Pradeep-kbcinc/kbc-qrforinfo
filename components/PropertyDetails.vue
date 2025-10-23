@@ -89,7 +89,7 @@
                     {{ $route }}
                     {{ `${useRequestURL().origin}/buy/property/${$route.params.id}` }}
                   </pre> -->
-                  <qrcode-vue :value="`${useRequestURL().origin}/buy/property/${$route.params.id}`" :size="200" level="H" background="transparent" foreground="black" />
+                  <qrcode-vue :value="`${useRequestURL().origin}/buy/property/${propertyObj.id}`" :size="200" level="H" background="transparent" foreground="black" />
 
                 </ClientOnly>
               </v-card>
