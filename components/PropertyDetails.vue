@@ -15,7 +15,7 @@
 
     <div class="pa-4">
       <v-row>
-        <v-col cols="9">
+        <v-col cols="12" lg="9">
           <v-card class="card-box-shadow rounded-lg">
             <v-card min-height="350" elevation="0" rounded="0" class="bg-box-gradient d-flex justify-center align-center position-relative" style="font-size: 8.0rem;line-height: 1;">
               🏠
@@ -46,7 +46,7 @@
           </v-card>
         </v-col>
 
-        <v-col v-if="$route.name == 'property-id'" cols="3">
+        <v-col v-if="$route.name == 'property-id'" cols="12" lg="3">
           <v-card class="card-box-shadow rounded-lg pa-4">
             <p class="text-h4 font-weight-bold text-primary mb-4">{{ propertyObj.amount }}</p>
             <v-btn :color="propertyObj.type == 'FOR SALE' ? 'success' : 'primary'" variant="tonal" class="text-none rounded-pill elevation-0 font-weight-bold" height="" density="comfortable">{{ propertyObj.type }}</v-btn>
@@ -57,7 +57,7 @@
             <v-btn color="red" variant="tonal" class="text-none rounded-lg elevation-0 font-weight-bold w-100 mt-8" height="45">Mark as Sold</v-btn>
           </v-card>
         </v-col>
-        <v-col v-else cols="3">
+        <v-col v-else cols="12" lg="3">
           <v-card class="card-box-shadow rounded-lg pa-6">
             <p class="text-h4 font-weight-bold text-primary mb-6">{{ propertyObj.amount }}</p>
             <v-btn color="primary" class="text-none rounded-lg elevation-0 font-weight-bold w-100" height="50" prepend-icon="mdi-comment-outline">Contact Owner</v-btn>
@@ -76,7 +76,7 @@
 
     <div v-if="$route.name == 'property-id'" class="pa-4 mb-10">
       <v-row>
-        <v-col cols="6">
+        <v-col cols="12" md="6">
           <v-card class="card-box-shadow rounded-lg pa-6">
             <h3 class="text-h6 font-weight-bold mb-2">QR Code</h3>
             <v-card id="reportContent" min-height="400" elevation="0" rounded="lg" class="bg-grey-lighten-4 d-flex ga-4 flex-column justify-center align-center position-relative" style="font-size: 8.0rem;line-height: 1;">
@@ -108,7 +108,7 @@
           </v-card>
         </v-col>
 
-        <v-col cols="6" class="h-100">
+        <v-col cols="12" md="6" class="h-100">
           <v-card class="card-box-shadow rounded-lg pa-4">
             <h3 class="text-h6 font-weight-bold mb-2">Statistics</h3>
             <div class="border-b d-flex justify-space-between ga-4 py-4">

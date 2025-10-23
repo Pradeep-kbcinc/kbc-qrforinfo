@@ -1,0 +1,416 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><script type="importmap">{"imports":{"#entry":"/_nuxt/BiI4FlQ3.js"}}</script><script src async defer></script><style id="vuetify-theme-stylesheet">:root {
+      --v-theme-background: 255,255,255;
+      --v-theme-background-overlay-multiplier: 1;
+      --v-theme-surface: 255,255,255;
+      --v-theme-surface-overlay-multiplier: 1;
+      --v-theme-surface-bright: 255,255,255;
+      --v-theme-surface-bright-overlay-multiplier: 1;
+      --v-theme-surface-light: 238,238,238;
+      --v-theme-surface-light-overlay-multiplier: 1;
+      --v-theme-surface-variant: 66,66,66;
+      --v-theme-surface-variant-overlay-multiplier: 2;
+      --v-theme-on-surface-variant: 238,238,238;
+      --v-theme-primary: 38,99,235;
+      --v-theme-primary-overlay-multiplier: 2;
+      --v-theme-primary-darken-1: 31,85,146;
+      --v-theme-primary-darken-1-overlay-multiplier: 2;
+      --v-theme-secondary: 108,117,125;
+      --v-theme-secondary-overlay-multiplier: 2;
+      --v-theme-secondary-darken-1: 1,135,134;
+      --v-theme-secondary-darken-1-overlay-multiplier: 1;
+      --v-theme-error: 255,82,82;
+      --v-theme-error-overlay-multiplier: 1;
+      --v-theme-info: 33,150,243;
+      --v-theme-info-overlay-multiplier: 1;
+      --v-theme-success: 76,175,80;
+      --v-theme-success-overlay-multiplier: 1;
+      --v-theme-warning: 251,140,0;
+      --v-theme-warning-overlay-multiplier: 1;
+      --v-theme-lightBlack: 120,128,138;
+      --v-theme-lightBlack-overlay-multiplier: 1;
+      --v-theme-grey: 231,233,236;
+      --v-theme-grey-overlay-multiplier: 1;
+      --v-theme-accent: 130,177,255;
+      --v-theme-accent-overlay-multiplier: 1;
+      --v-theme-on-background: 0,0,0;
+      --v-theme-on-surface: 0,0,0;
+      --v-theme-on-surface-bright: 0,0,0;
+      --v-theme-on-surface-light: 0,0,0;
+      --v-theme-on-primary: 255,255,255;
+      --v-theme-on-primary-darken-1: 255,255,255;
+      --v-theme-on-secondary: 255,255,255;
+      --v-theme-on-secondary-darken-1: 255,255,255;
+      --v-theme-on-error: 255,255,255;
+      --v-theme-on-info: 255,255,255;
+      --v-theme-on-success: 255,255,255;
+      --v-theme-on-warning: 255,255,255;
+      --v-theme-on-lightBlack: 255,255,255;
+      --v-theme-on-grey: 0,0,0;
+      --v-theme-on-accent: 0,0,0;
+      --v-border-color: 0, 0, 0;
+      --v-border-opacity: 0.12;
+      --v-high-emphasis-opacity: 0.87;
+      --v-medium-emphasis-opacity: 0.6;
+      --v-disabled-opacity: 0.38;
+      --v-idle-opacity: 0.04;
+      --v-hover-opacity: 0.04;
+      --v-focus-opacity: 0.12;
+      --v-selected-opacity: 0.08;
+      --v-activated-opacity: 0.12;
+      --v-pressed-opacity: 0.12;
+      --v-dragged-opacity: 0.08;
+      --v-theme-kbd: 238, 238, 238;
+      --v-theme-on-kbd: 0, 0, 0;
+      --v-theme-code: 245, 245, 245;
+      --v-theme-on-code: 0, 0, 0;
+    }
+    .v-theme--light {
+      color-scheme: normal;
+      --v-theme-background: 255,255,255;
+      --v-theme-background-overlay-multiplier: 1;
+      --v-theme-surface: 255,255,255;
+      --v-theme-surface-overlay-multiplier: 1;
+      --v-theme-surface-bright: 255,255,255;
+      --v-theme-surface-bright-overlay-multiplier: 1;
+      --v-theme-surface-light: 238,238,238;
+      --v-theme-surface-light-overlay-multiplier: 1;
+      --v-theme-surface-variant: 66,66,66;
+      --v-theme-surface-variant-overlay-multiplier: 2;
+      --v-theme-on-surface-variant: 238,238,238;
+      --v-theme-primary: 38,99,235;
+      --v-theme-primary-overlay-multiplier: 2;
+      --v-theme-primary-darken-1: 31,85,146;
+      --v-theme-primary-darken-1-overlay-multiplier: 2;
+      --v-theme-secondary: 108,117,125;
+      --v-theme-secondary-overlay-multiplier: 2;
+      --v-theme-secondary-darken-1: 1,135,134;
+      --v-theme-secondary-darken-1-overlay-multiplier: 1;
+      --v-theme-error: 255,82,82;
+      --v-theme-error-overlay-multiplier: 1;
+      --v-theme-info: 33,150,243;
+      --v-theme-info-overlay-multiplier: 1;
+      --v-theme-success: 76,175,80;
+      --v-theme-success-overlay-multiplier: 1;
+      --v-theme-warning: 251,140,0;
+      --v-theme-warning-overlay-multiplier: 1;
+      --v-theme-lightBlack: 120,128,138;
+      --v-theme-lightBlack-overlay-multiplier: 1;
+      --v-theme-grey: 231,233,236;
+      --v-theme-grey-overlay-multiplier: 1;
+      --v-theme-accent: 130,177,255;
+      --v-theme-accent-overlay-multiplier: 1;
+      --v-theme-on-background: 0,0,0;
+      --v-theme-on-surface: 0,0,0;
+      --v-theme-on-surface-bright: 0,0,0;
+      --v-theme-on-surface-light: 0,0,0;
+      --v-theme-on-primary: 255,255,255;
+      --v-theme-on-primary-darken-1: 255,255,255;
+      --v-theme-on-secondary: 255,255,255;
+      --v-theme-on-secondary-darken-1: 255,255,255;
+      --v-theme-on-error: 255,255,255;
+      --v-theme-on-info: 255,255,255;
+      --v-theme-on-success: 255,255,255;
+      --v-theme-on-warning: 255,255,255;
+      --v-theme-on-lightBlack: 255,255,255;
+      --v-theme-on-grey: 0,0,0;
+      --v-theme-on-accent: 0,0,0;
+      --v-border-color: 0, 0, 0;
+      --v-border-opacity: 0.12;
+      --v-high-emphasis-opacity: 0.87;
+      --v-medium-emphasis-opacity: 0.6;
+      --v-disabled-opacity: 0.38;
+      --v-idle-opacity: 0.04;
+      --v-hover-opacity: 0.04;
+      --v-focus-opacity: 0.12;
+      --v-selected-opacity: 0.08;
+      --v-activated-opacity: 0.12;
+      --v-pressed-opacity: 0.12;
+      --v-dragged-opacity: 0.08;
+      --v-theme-kbd: 238, 238, 238;
+      --v-theme-on-kbd: 0, 0, 0;
+      --v-theme-code: 245, 245, 245;
+      --v-theme-on-code: 0, 0, 0;
+    }
+    .v-theme--dark {
+      color-scheme: dark;
+      --v-theme-background: 18,18,18;
+      --v-theme-background-overlay-multiplier: 1;
+      --v-theme-surface: 33,33,33;
+      --v-theme-surface-overlay-multiplier: 1;
+      --v-theme-surface-bright: 204,191,214;
+      --v-theme-surface-bright-overlay-multiplier: 2;
+      --v-theme-surface-light: 66,66,66;
+      --v-theme-surface-light-overlay-multiplier: 1;
+      --v-theme-surface-variant: 200,200,200;
+      --v-theme-surface-variant-overlay-multiplier: 2;
+      --v-theme-on-surface-variant: 0,0,0;
+      --v-theme-primary: 33,150,243;
+      --v-theme-primary-overlay-multiplier: 2;
+      --v-theme-primary-darken-1: 39,124,193;
+      --v-theme-primary-darken-1-overlay-multiplier: 2;
+      --v-theme-secondary: 84,182,178;
+      --v-theme-secondary-overlay-multiplier: 2;
+      --v-theme-secondary-darken-1: 72,169,166;
+      --v-theme-secondary-darken-1-overlay-multiplier: 2;
+      --v-theme-error: 207,102,121;
+      --v-theme-error-overlay-multiplier: 2;
+      --v-theme-info: 33,150,243;
+      --v-theme-info-overlay-multiplier: 2;
+      --v-theme-success: 76,175,80;
+      --v-theme-success-overlay-multiplier: 2;
+      --v-theme-warning: 251,140,0;
+      --v-theme-warning-overlay-multiplier: 2;
+      --v-theme-on-background: 255,255,255;
+      --v-theme-on-surface: 255,255,255;
+      --v-theme-on-surface-bright: 0,0,0;
+      --v-theme-on-surface-light: 255,255,255;
+      --v-theme-on-primary: 255,255,255;
+      --v-theme-on-primary-darken-1: 255,255,255;
+      --v-theme-on-secondary: 255,255,255;
+      --v-theme-on-secondary-darken-1: 255,255,255;
+      --v-theme-on-error: 255,255,255;
+      --v-theme-on-info: 255,255,255;
+      --v-theme-on-success: 255,255,255;
+      --v-theme-on-warning: 255,255,255;
+      --v-border-color: 255, 255, 255;
+      --v-border-opacity: 0.12;
+      --v-high-emphasis-opacity: 1;
+      --v-medium-emphasis-opacity: 0.7;
+      --v-disabled-opacity: 0.5;
+      --v-idle-opacity: 0.1;
+      --v-hover-opacity: 0.04;
+      --v-focus-opacity: 0.12;
+      --v-selected-opacity: 0.08;
+      --v-activated-opacity: 0.12;
+      --v-pressed-opacity: 0.16;
+      --v-dragged-opacity: 0.08;
+      --v-theme-kbd: 66, 66, 66;
+      --v-theme-on-kbd: 255, 255, 255;
+      --v-theme-code: 52, 52, 52;
+      --v-theme-on-code: 204, 204, 204;
+    }
+    .bg-background {
+      --v-theme-overlay-multiplier: var(--v-theme-background-overlay-multiplier);
+      background-color: rgb(var(--v-theme-background)) !important;
+      color: rgb(var(--v-theme-on-background)) !important;
+    }
+    .bg-surface {
+      --v-theme-overlay-multiplier: var(--v-theme-surface-overlay-multiplier);
+      background-color: rgb(var(--v-theme-surface)) !important;
+      color: rgb(var(--v-theme-on-surface)) !important;
+    }
+    .bg-surface-bright {
+      --v-theme-overlay-multiplier: var(--v-theme-surface-bright-overlay-multiplier);
+      background-color: rgb(var(--v-theme-surface-bright)) !important;
+      color: rgb(var(--v-theme-on-surface-bright)) !important;
+    }
+    .bg-surface-light {
+      --v-theme-overlay-multiplier: var(--v-theme-surface-light-overlay-multiplier);
+      background-color: rgb(var(--v-theme-surface-light)) !important;
+      color: rgb(var(--v-theme-on-surface-light)) !important;
+    }
+    .bg-surface-variant {
+      --v-theme-overlay-multiplier: var(--v-theme-surface-variant-overlay-multiplier);
+      background-color: rgb(var(--v-theme-surface-variant)) !important;
+      color: rgb(var(--v-theme-on-surface-variant)) !important;
+    }
+    .bg-primary {
+      --v-theme-overlay-multiplier: var(--v-theme-primary-overlay-multiplier);
+      background-color: rgb(var(--v-theme-primary)) !important;
+      color: rgb(var(--v-theme-on-primary)) !important;
+    }
+    .bg-primary-darken-1 {
+      --v-theme-overlay-multiplier: var(--v-theme-primary-darken-1-overlay-multiplier);
+      background-color: rgb(var(--v-theme-primary-darken-1)) !important;
+      color: rgb(var(--v-theme-on-primary-darken-1)) !important;
+    }
+    .bg-secondary {
+      --v-theme-overlay-multiplier: var(--v-theme-secondary-overlay-multiplier);
+      background-color: rgb(var(--v-theme-secondary)) !important;
+      color: rgb(var(--v-theme-on-secondary)) !important;
+    }
+    .bg-secondary-darken-1 {
+      --v-theme-overlay-multiplier: var(--v-theme-secondary-darken-1-overlay-multiplier);
+      background-color: rgb(var(--v-theme-secondary-darken-1)) !important;
+      color: rgb(var(--v-theme-on-secondary-darken-1)) !important;
+    }
+    .bg-error {
+      --v-theme-overlay-multiplier: var(--v-theme-error-overlay-multiplier);
+      background-color: rgb(var(--v-theme-error)) !important;
+      color: rgb(var(--v-theme-on-error)) !important;
+    }
+    .bg-info {
+      --v-theme-overlay-multiplier: var(--v-theme-info-overlay-multiplier);
+      background-color: rgb(var(--v-theme-info)) !important;
+      color: rgb(var(--v-theme-on-info)) !important;
+    }
+    .bg-success {
+      --v-theme-overlay-multiplier: var(--v-theme-success-overlay-multiplier);
+      background-color: rgb(var(--v-theme-success)) !important;
+      color: rgb(var(--v-theme-on-success)) !important;
+    }
+    .bg-warning {
+      --v-theme-overlay-multiplier: var(--v-theme-warning-overlay-multiplier);
+      background-color: rgb(var(--v-theme-warning)) !important;
+      color: rgb(var(--v-theme-on-warning)) !important;
+    }
+    .bg-lightBlack {
+      --v-theme-overlay-multiplier: var(--v-theme-lightBlack-overlay-multiplier);
+      background-color: rgb(var(--v-theme-lightBlack)) !important;
+      color: rgb(var(--v-theme-on-lightBlack)) !important;
+    }
+    .bg-grey {
+      --v-theme-overlay-multiplier: var(--v-theme-grey-overlay-multiplier);
+      background-color: rgb(var(--v-theme-grey)) !important;
+      color: rgb(var(--v-theme-on-grey)) !important;
+    }
+    .bg-accent {
+      --v-theme-overlay-multiplier: var(--v-theme-accent-overlay-multiplier);
+      background-color: rgb(var(--v-theme-accent)) !important;
+      color: rgb(var(--v-theme-on-accent)) !important;
+    }
+    .text-background {
+      color: rgb(var(--v-theme-background)) !important;
+    }
+    .border-background {
+      --v-border-color: var(--v-theme-background);
+    }
+    .text-surface {
+      color: rgb(var(--v-theme-surface)) !important;
+    }
+    .border-surface {
+      --v-border-color: var(--v-theme-surface);
+    }
+    .text-surface-bright {
+      color: rgb(var(--v-theme-surface-bright)) !important;
+    }
+    .border-surface-bright {
+      --v-border-color: var(--v-theme-surface-bright);
+    }
+    .text-surface-light {
+      color: rgb(var(--v-theme-surface-light)) !important;
+    }
+    .border-surface-light {
+      --v-border-color: var(--v-theme-surface-light);
+    }
+    .text-surface-variant {
+      color: rgb(var(--v-theme-surface-variant)) !important;
+    }
+    .border-surface-variant {
+      --v-border-color: var(--v-theme-surface-variant);
+    }
+    .on-surface-variant {
+      color: rgb(var(--v-theme-on-surface-variant)) !important;
+    }
+    .text-primary {
+      color: rgb(var(--v-theme-primary)) !important;
+    }
+    .border-primary {
+      --v-border-color: var(--v-theme-primary);
+    }
+    .text-primary-darken-1 {
+      color: rgb(var(--v-theme-primary-darken-1)) !important;
+    }
+    .border-primary-darken-1 {
+      --v-border-color: var(--v-theme-primary-darken-1);
+    }
+    .text-secondary {
+      color: rgb(var(--v-theme-secondary)) !important;
+    }
+    .border-secondary {
+      --v-border-color: var(--v-theme-secondary);
+    }
+    .text-secondary-darken-1 {
+      color: rgb(var(--v-theme-secondary-darken-1)) !important;
+    }
+    .border-secondary-darken-1 {
+      --v-border-color: var(--v-theme-secondary-darken-1);
+    }
+    .text-error {
+      color: rgb(var(--v-theme-error)) !important;
+    }
+    .border-error {
+      --v-border-color: var(--v-theme-error);
+    }
+    .text-info {
+      color: rgb(var(--v-theme-info)) !important;
+    }
+    .border-info {
+      --v-border-color: var(--v-theme-info);
+    }
+    .text-success {
+      color: rgb(var(--v-theme-success)) !important;
+    }
+    .border-success {
+      --v-border-color: var(--v-theme-success);
+    }
+    .text-warning {
+      color: rgb(var(--v-theme-warning)) !important;
+    }
+    .border-warning {
+      --v-border-color: var(--v-theme-warning);
+    }
+    .text-lightBlack {
+      color: rgb(var(--v-theme-lightBlack)) !important;
+    }
+    .border-lightBlack {
+      --v-border-color: var(--v-theme-lightBlack);
+    }
+    .text-grey {
+      color: rgb(var(--v-theme-grey)) !important;
+    }
+    .border-grey {
+      --v-border-color: var(--v-theme-grey);
+    }
+    .text-accent {
+      color: rgb(var(--v-theme-accent)) !important;
+    }
+    .border-accent {
+      --v-border-color: var(--v-theme-accent);
+    }
+    .on-background {
+      color: rgb(var(--v-theme-on-background)) !important;
+    }
+    .on-surface {
+      color: rgb(var(--v-theme-on-surface)) !important;
+    }
+    .on-surface-bright {
+      color: rgb(var(--v-theme-on-surface-bright)) !important;
+    }
+    .on-surface-light {
+      color: rgb(var(--v-theme-on-surface-light)) !important;
+    }
+    .on-primary {
+      color: rgb(var(--v-theme-on-primary)) !important;
+    }
+    .on-primary-darken-1 {
+      color: rgb(var(--v-theme-on-primary-darken-1)) !important;
+    }
+    .on-secondary {
+      color: rgb(var(--v-theme-on-secondary)) !important;
+    }
+    .on-secondary-darken-1 {
+      color: rgb(var(--v-theme-on-secondary-darken-1)) !important;
+    }
+    .on-error {
+      color: rgb(var(--v-theme-on-error)) !important;
+    }
+    .on-info {
+      color: rgb(var(--v-theme-on-info)) !important;
+    }
+    .on-success {
+      color: rgb(var(--v-theme-on-success)) !important;
+    }
+    .on-warning {
+      color: rgb(var(--v-theme-on-warning)) !important;
+    }
+    .on-lightBlack {
+      color: rgb(var(--v-theme-on-lightBlack)) !important;
+    }
+    .on-grey {
+      color: rgb(var(--v-theme-on-grey)) !important;
+    }
+    .on-accent {
+      color: rgb(var(--v-theme-on-accent)) !important;
+    }
+</style><link rel="stylesheet" href="/_nuxt/entry.DhHlAxup.css" crossorigin><link rel="stylesheet" href="/_nuxt/VMain.CIHyq0hg.css" crossorigin><link rel="stylesheet" href="/_nuxt/index.ERxzxBMz.css" crossorigin><link rel="stylesheet" href="/_nuxt/VRow.7zN8MVSi.css" crossorigin><link rel="stylesheet" href="/_nuxt/VBtn.FZoI3fxP.css" crossorigin><link rel="stylesheet" href="/_nuxt/VTextField.DMMo9REb.css" crossorigin><link rel="preload" as="fetch" crossorigin="anonymous" href="/_payload.json?77329ba6-b127-4504-b2b9-cfe5df0a3f27"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/BiI4FlQ3.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/DX7VqrqK.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/Di2eS3fT.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/DYcEsToo.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/BNMpVtW_.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/Bk0RPuFY.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/BAWLWkTo.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/BS5857rw.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/BZxy-PXV.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/ygjCVNG8.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/XlJrbQWL.js"><link rel="modulepreload" as="script" crossorigin href="/_nuxt/v41_TFkQ.js"><link rel="preload" as="fetch" fetchpriority="low" crossorigin="anonymous" href="/_nuxt/builds/meta/77329ba6-b127-4504-b2b9-cfe5df0a3f27.json"><link rel="prefetch" as="style" crossorigin href="/_nuxt/default.CpEaquV5.css"><link rel="prefetch" as="style" crossorigin href="/_nuxt/VList.CtjaUpfX.css"><link rel="prefetch" as="style" crossorigin href="/_nuxt/VDivider.DBONV6LQ.css"><link rel="prefetch" as="script" crossorigin href="/_nuxt/CxNTJIL_.js"><link rel="prefetch" as="script" crossorigin href="/_nuxt/BXOCS74C.js"><link rel="prefetch" as="script" crossorigin href="/_nuxt/5zZ1xFAJ.js"><link rel="prefetch" as="script" crossorigin href="/_nuxt/u3SEg1BW.js"><link rel="prefetch" as="script" crossorigin href="/_nuxt/-DF5rN5h.js"><link rel="prefetch" as="script" crossorigin href="/_nuxt/C3KZPqYj.js"><script type="module" src="/_nuxt/BiI4FlQ3.js" crossorigin></script></head><body><div id="__nuxt"><div class="v-application v-theme--light v-layout v-layout--full-height v-locale--is-ltr" style=""><div class="v-application__wrap"><!--[--><main class="v-main" style="--v-layout-left:0px;--v-layout-right:0px;--v-layout-top:0px;--v-layout-bottom:0px;transition:none !important;"><!--[--><div><div class="v-row" style=""><div class="v-col-md-6 v-col-12 right-col d-flex flex-column justify-center align-center" style=""><div><div class="v-avatar v-theme--light bg-white v-avatar--density-default v-avatar--variant-flat" style="width:100px;height:100px;"><!--[--><!--[--><img contain src="data:image/svg+xml,%3csvg%20xmlns=&#39;http://www.w3.org/2000/svg&#39;%20width=&#39;48&#39;%20height=&#39;48&#39;%20viewBox=&#39;0%200%2024%2024&#39;%20fill=&#39;none&#39;%20stroke=&#39;%232663eb&#39;%20stroke-width=&#39;2&#39;%20stroke-linecap=&#39;round&#39;%20stroke-linejoin=&#39;round&#39;%20class=&#39;lucide%20lucide-qr-code%20text-blue-600&#39;%3e%3crect%20width=&#39;5&#39;%20height=&#39;5&#39;%20x=&#39;3&#39;%20y=&#39;3&#39;%20rx=&#39;1&#39;%3e%3c/rect%3e%3crect%20width=&#39;5&#39;%20height=&#39;5&#39;%20x=&#39;16&#39;%20y=&#39;3&#39;%20rx=&#39;1&#39;%3e%3c/rect%3e%3crect%20width=&#39;5&#39;%20height=&#39;5&#39;%20x=&#39;3&#39;%20y=&#39;16&#39;%20rx=&#39;1&#39;%3e%3c/rect%3e%3cpath%20d=&#39;M21%2016h-3a2%202%200%200%200-2%202v3&#39;%3e%3c/path%3e%3cpath%20d=&#39;M21%2021v.01&#39;%3e%3c/path%3e%3cpath%20d=&#39;M12%207v3a2%202%200%200%201-2%202H7&#39;%3e%3c/path%3e%3cpath%20d=&#39;M3%2012h.01&#39;%3e%3c/path%3e%3cpath%20d=&#39;M12%203h.01&#39;%3e%3c/path%3e%3cpath%20d=&#39;M12%2016v.01&#39;%3e%3c/path%3e%3cpath%20d=&#39;M16%2012h1&#39;%3e%3c/path%3e%3cpath%20d=&#39;M21%2012v.01&#39;%3e%3c/path%3e%3cpath%20d=&#39;M12%2021v-1&#39;%3e%3c/path%3e%3c/svg%3e"><!--]--><!--]--><!--[--><!----><span class="v-avatar__underlay"></span><!--]--></div></div><h1>QRForInfo</h1><h5 class="font-weight-medium my-4">Simplify property listings with QR codes</h5><div class="mt-4"><div class="d-flex align-center"><i class="mdi-check mdi v-icon notranslate v-theme--light v-icon--size-default mr-2" style="" aria-hidden="true"></i><h6 class="font-weight-medium"> Generate QR codes instantly </h6></div><div class="d-flex align-center my-4"><i class="mdi-check mdi v-icon notranslate v-theme--light v-icon--size-default mr-2" style="" aria-hidden="true"></i><h6 class="font-weight-medium"> Track property views </h6></div><div class="d-flex align-center"><i class="mdi-check mdi v-icon notranslate v-theme--light v-icon--size-default mr-2" style="" aria-hidden="true"></i><h6 class="font-weight-medium"> Direct buyer-seller messaging </h6></div></div></div><div class="v-col-md-6 v-col-12 d-flex flex-column align-left justify-center px-16" style=""><div class="v-container v-locale--is-ltr" style="max-width:500px;"><h2>Welcome Back</h2><p class="">Sign in to your account</p><div class="mt-6"><p class="text-body-2">Phone Number</p><div class="v-input v-input--horizontal v-input--center-affix v-input--density-default v-theme--light v-locale--is-ltr v-text-field" style="max-width:500px;"><!----><div class="v-input__control"><!--[--><div class="v-field v-field--center-affix v-field--no-label v-field--variant-outlined v-theme--light rounded-lg v-locale--is-ltr" style=""><div class="v-field__overlay"></div><div class="v-field__loader"><div class="v-progress-linear v-theme--light v-locale--is-ltr" style="top:0;height:0;--v-progress-linear-height:2px;" role="progressbar" aria-hidden="true" aria-valuemin="0" aria-valuemax="100"><!----><div class="v-progress-linear__background" style="opacity:NaN;"></div><div class="v-progress-linear__buffer" style="opacity:NaN;width:0%;"></div><div class="v-progress-linear__indeterminate"><!--[--><div class="v-progress-linear__indeterminate long" style=""></div><div class="v-progress-linear__indeterminate short" style=""></div><!--]--></div><!----></div></div><!----><div class="v-field__field" data-no-activator><!----><!----><!--[--><!--[--><!----><input value placeholder="+91 987643210" size="1" type="text" id="input-v-0-1" aria-describedby="input-v-0-1-messages" class="v-field__input"><!----><!--]--><!--]--></div><!----><!----><div class="v-field__outline" style=""><!--[--><div class="v-field__outline__start"></div><!----><div class="v-field__outline__end"></div><!--]--><!----></div></div><!--]--></div><!----><div id="input-v-0-1-messages" class="v-input__details" role="alert" aria-live="polite"><div class="v-messages" style=""></div><!----></div></div><button type="button" class="v-btn v-btn--disabled v-theme--light v-btn--density-default elevation-0 rounded-lg v-btn--size-large v-btn--variant-elevated text-none font-weight-bold" style="background-color:#2663eb;color:#fff;caret-color:#fff;height:48px;width:500px;" disabled><!--[--><span class="v-btn__overlay"></span><span class="v-btn__underlay"></span><!--]--><!----><span class="v-btn__content" data-no-activator><!--[--><!--[--> Send OTP Code <!--]--><!--]--></span><!----><!----></button><p class="text-center mt-4">Don&#39;t have an account ? <span class="text-primary font-weight-bold ml-2">Sign Up</span></p></div></div></div></div></div><!--]--></main><!--]--></div></div></div><div id="teleports"></div><script type="application/json" data-nuxt-data="nuxt-app" data-ssr="true" id="__NUXT_DATA__" data-src="/_payload.json?77329ba6-b127-4504-b2b9-cfe5df0a3f27">[{"state":1,"once":3,"_errors":4,"serverRendered":6,"path":7,"pinia":8,"prerenderedAt":9},["Reactive",2],{},["Set"],["ShallowReactive",5],{},true,"/",{},1761235613199]</script><script>window.__NUXT__={};window.__NUXT__.config={public:{apiBase:""},app:{baseURL:"/",buildId:"77329ba6-b127-4504-b2b9-cfe5df0a3f27",buildAssetsDir:"/_nuxt/",cdnURL:""}}</script></body></html>

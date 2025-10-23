@@ -12,7 +12,7 @@
     </div>
     <section class="py-4">
       <v-row>
-        <v-col>
+        <v-col cols="6" md="3">
           <v-card class="rounded-lg card-box-shadow">
             <v-card-text>
               <p>Active Listings</p>
@@ -20,7 +20,7 @@
             </v-card-text>
           </v-card>
         </v-col>
-        <v-col>
+        <v-col cols="6" md="3">
           <v-card class="rounded-lg card-box-shadow">
             <v-card-text>
               <p>Total Views</p>
@@ -28,7 +28,7 @@
             </v-card-text>
           </v-card>
         </v-col>
-        <v-col>
+        <v-col cols="6" md="3">
           <v-card class="rounded-lg card-box-shadow">
             <v-card-text>
               <p>Messages</p>
@@ -36,7 +36,7 @@
             </v-card-text>
           </v-card>
         </v-col>
-        <v-col>
+        <v-col cols="6" md="3">
           <v-card class="rounded-lg card-box-shadow">
             <v-card-text>
               <p>Drafts</p>
