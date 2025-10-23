@@ -168,9 +168,13 @@ const propertyArr = ref([
 ])
 //------------------------------------------------------------------------------
 onMounted(() => {
-  console.log('--->route', route);
-  const selectedId = route.params?.id || ''
-  propertyObj.value = propertyArr.value.find((obj) => obj.id == selectedId);
+  console.log('--->route', route.params);
+  let tmpArr = route.path.split('/');
+  const id = tmpArr[tmpArr.length - 1]
+  console.log('--->', id);
+  let selectedId = route.params?.id || 1
+  selectedId = selectedId > 3 ? 3 : selectedId
+  propertyObj.value = propertyArr.value.find((obj) => obj.id == id || selectedId);
 })
 //------------------------------------------------------------------------------
 const downloadPDF = async (propertyObj) => {
