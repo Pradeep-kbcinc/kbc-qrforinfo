@@ -1,6 +1,15 @@
 import axios from "axios";
+import { env } from "@/config/appVersion";
 
-const BASE_URL = 'https://devapi.qrforinfo.com/api';
+let BASE_URL = '';
+
+if (env=='DEV') {
+  BASE_URL = 'https://devapi.qrforinfo.com/api';
+} else if (env=='DEMO') {
+  BASE_URL = 'https://demoapi.qrforinfo.com/api';
+} else {
+  BASE_URL = 'https://liveapi.qrforinfo.com/api';
+}
 
 export default {
   // api/LLPropertyMasterCrud

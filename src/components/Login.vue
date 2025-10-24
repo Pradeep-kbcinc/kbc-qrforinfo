@@ -40,10 +40,10 @@
           <div class="mt-6">
             <p class="text-body-2">Phone Number</p>
             <v-text-field v-model="phoneNumber" rounded="lg" placeholder="+91 987643210" max-width="500" label="" variant="outlined"></v-text-field>
-            <v-btn @click="isVerfiyOTP = true" :disabled="!phoneNumber.length" class="text-none font-weight-bold" height="48" width="500" size="large" rounded="lg" color="#2663eb" elevation="0">
+            <v-btn @click="sendOtpToLogin" :disabled="!phoneNumber.length" class="text-none font-weight-bold" height="48" width="500" size="large" rounded="lg" color="#2663eb" elevation="0">
               Send OTP Code
             </v-btn>
-            <p class="text-center mt-4">Don't have an account ? <span class="text-primary font-weight-bold ml-2">Sign Up</span> </p>
+            <p class="text-center mt-4">Don't have an account ? <span class="text-primary font-weight-bold ml-2 cursor-pointer" @click="$router.push('/signup')">Sign Up</span> </p>
           </div>
         </v-container>
         <v-container v-else max-width="500">
@@ -69,7 +69,17 @@
 </template>
 
 <script setup>
+import propertyService from '@/services/propertyService.js'
 const isVerfiyOTP = ref(false)
 const phoneNumber = ref('')
 const otpCode = ref('')
+
+const sendOtpToLogin = () => {
+  isVerfiyOTP.value = true
+  let data = {
+    MOBILE_NUMBER: phoneNumber.value
+  }
+
+  let res = propertyService.GetLoginOTP(data)
+}
 </script>
