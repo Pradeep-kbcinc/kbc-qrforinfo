@@ -6,7 +6,7 @@
       <v-list-item prepend-icon="mdi-home-outline" title="Dashboard" @click="gotoMenu('/home')" :class="isRouteActive('/home') ? 'active-item text-primary' : ''"></v-list-item>
 
       <!-- Properties -->
-      <v-list-item prepend-icon="mdi-chart-bar" title="Properties" @click="gotoMenu('/properties')" :class="isRouteActive('/properties') ? 'active-item text-primary' : ''"></v-list-item>
+      <v-list-item prepend-icon="mdi-chart-bar" title="Properties dsa" @click="gotoMenu('/dasd')" :class="isRouteActive('/properties') ? 'active-item text-primary' : ''"></v-list-item>
 
       <!-- Messages -->
       <v-list-item prepend-icon="mdi-message-outline" title="Messages" @click="gotoMenu('/messages')" :class="isRouteActive('/messages') ? 'active-item text-primary' : ''">

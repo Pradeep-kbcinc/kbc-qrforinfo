@@ -8,7 +8,7 @@
         <p><v-icon>mdi-map-marker-outline</v-icon> {{ propertyObj.city }}</p>
       </div>
       <div v-if="!$route.fullPath.includes('/buy/')" class="d-flex ga-4">
-        <v-btn @click="$router.push('/add-new-property')" variant="outlined" prependIcon="mdi-square-edit-outline" class="text-none rounded-lg elevation-0 font-weight-bold" height="42">Edit</v-btn>
+        <v-btn @click="$router.push('/edit-property')" variant="outlined" prependIcon="mdi-square-edit-outline" class="text-none rounded-lg elevation-0 font-weight-bold" height="42">Edit</v-btn>
         <v-btn @click="shareAction(propertyObj)" color="primary" prependIcon="mdi-share-variant-outline" class="text-none rounded-lg elevation-0 font-weight-bold" height="42">Share</v-btn>
       </div>
     </div>
@@ -222,7 +222,7 @@ const shareAction = async (propertyObj) => {
 
 <style scoped>
 .bg-box-gradient {
-  background-image: linear-gradient(to bottom right, #e9d5ff, #bfdbfe);
+  background-image: linear-gradient(to bottom right, #bfdbfe, #e9d5ff);
   color: white;
 }
 </style>

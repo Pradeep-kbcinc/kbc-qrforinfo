@@ -40,10 +40,10 @@
           <div class="mt-6">
             <p class="text-body-2">Phone Number</p>
             <v-text-field v-model="phoneNumber" rounded="lg" placeholder="+91 987643210" max-width="500" label="" variant="outlined"></v-text-field>
-            <v-btn @click="isVerfiyOTP = true" :disabled="!phoneNumber.length" class="text-none font-weight-bold" height="48" width="500" size="large" rounded="lg" color="#2663eb" elevation="0">
+            <v-btn @click="getOtpLogin()" :disabled="!phoneNumber.length" class="text-none font-weight-bold" height="48" width="500" size="large" rounded="lg" color="#2663eb" elevation="0">
               Send OTP Code
             </v-btn>
-            <p class="text-center mt-4">Don't have an account ? <span class="text-primary font-weight-bold ml-2">Sign Up</span> </p>
+            <p class="text-center mt-4">Don't have an account ? <span @click="$router.push('/signup')" class="text-primary font-weight-bold ml-2 cursor-pointer">Sign Up</span> </p>
           </div>
         </v-container>
         <v-container v-else max-width="500">
@@ -57,7 +57,7 @@
               <v-btn @click="isVerfiyOTP = false; otpCode = ''" class="text-none font-weight-bold" height="48" size="large" rounded="lg" color="secondary" elevation="0">
                 Cancel
               </v-btn>
-              <v-btn @click="$router.push('/home')" :disabled="otpCode.length < 4" class="text-none font-weight-bold px-16" height="48" size="large" rounded="lg" color="#2663eb" elevation="0">
+              <v-btn @click="verifyOtp()" :disabled="otpCode.length < 4" class="text-none font-weight-bold px-16" height="48" size="large" rounded="lg" color="#2663eb" elevation="0">
                 Confirm
               </v-btn>
             </div>
@@ -69,7 +69,45 @@
 </template>
 
 <script setup>
+import propertyService from '~/src/services/propertyService'
+
+//..............................................................................
+const route = useRoute()
+const router = useRouter()
 const isVerfiyOTP = ref(false)
 const phoneNumber = ref('')
 const otpCode = ref('')
+//..............................................................................
+
+//------------------------------------------------------------------------------
+const getOtpLogin = async () => {
+  try {
+    const data = {
+      Mobile_Number: phoneNumber.value
+    }
+    const res = await propertyService.GetLoginOTP(data)
+    console.log('--->', res);
+
+  } catch (error) {
+    console.log('--->err', error);
+  } finally {
+    isVerfiyOTP.value = true
+  }
+}
+//------------------------------------------------------------------------------
+const verifyOtp = async () => {
+  try {
+    const data = {
+      Mobile_Number: phoneNumber.value,
+      OTP: otpCode.value
+    }
+    const res = await propertyService.VerifyOtp(data)
+
+  } catch (error) {
+    console.log('--->err', error);
+  } finally {
+    router.push('/home')
+  }
+}
+//------------------------------------------------------------------------------
 </script>

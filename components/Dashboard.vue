@@ -91,6 +91,8 @@
   </v-container>
 </template>
 <script setup>
+import propertyService from '~/src/services/propertyService';
+
 const router = useRouter()
 const properties = [
   {
@@ -121,4 +123,22 @@ const properties = [
     image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQp7-a_VsyHwiODqLFYJ_Zbp0eOeGJQp4y5hA&s',
   },
 ]
+
+//------------------------------------------------------------------------------
+onMounted(() => {
+  getProperties()
+})
+//------------------------------------------------------------------------------
+const getProperties = async () => {
+  try {
+    console.log('--->', 12312);
+    const data = {
+      "ACTION_TYPE": "SELECT",  //SELECT
+    }
+    const res = await propertyService.LLPropertyListingCrud(data)
+  } catch (error) {
+    console.log('--->err', error);
+  }
+}
+//------------------------------------------------------------------------------
 </script>

@@ -16,8 +16,10 @@
 </template>
 
 <script setup>
+import propertyService from '~/src/services/propertyService';
 import PropertyCard from './PropertyCard.vue';
 
+const isLoading = ref(false);
 const propertyArr = ref([
   {
     id: 1,
@@ -44,11 +46,27 @@ const propertyArr = ref([
     saved: true,
   },
 ])
+
+//------------------------------------------------------------------------------
+onMounted(() => {
+  getFavProperties()
+})
+//------------------------------------------------------------------------------
+const getFavProperties = async () => {
+  try {
+    isLoading.value = true;
+    const data = {
+      ACTION_TYPE: "SELECT",
+      USER_ID: 0,
+    }
+    const res = await propertyService.PropertyFavoriteTxnCrud(data)
+  } catch (error) {
+
+  } finally {
+    isLoading.value = false;
+  }
+}
+//------------------------------------------------------------------------------
 </script>
 
-<style scoped>
-.bg-gradient {
-  background-image: linear-gradient(to bottom right, #2563eb, #9333ea);
-  color: white;
-}
-</style>
+<style scoped></style>

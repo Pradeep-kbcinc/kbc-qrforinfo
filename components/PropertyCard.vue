@@ -32,7 +32,7 @@ defineProps({
 
 <style scoped>
 .bg-box-gradient {
-  background-image: linear-gradient(to bottom right, #e9d5ff, #bfdbfe);
+  background-image: linear-gradient(to bottom right, #bfdbfe, #e9d5ff);
   color: white;
 }
 </style>

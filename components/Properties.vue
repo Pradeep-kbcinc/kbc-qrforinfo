@@ -74,10 +74,7 @@ const propertyArr = ref([
 ])
 //------------------------------------------------------------------------------
 onMounted(() => {
-  console.log('--->',);
-  // getProperties()
-  // https://devui.qrforinfo.com/buy/property/1
-  // https://devui.qrforinfo.com/buy/property/1
+  getProperties()
 })
 //------------------------------------------------------------------------------
 const getProperties = async () => {

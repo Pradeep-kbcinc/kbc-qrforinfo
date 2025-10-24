@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = 'https://atschoolapi.kbcinc.cloud/api';
+const BASE_URL = 'https://devapi.qrforinfo.com/api';
 
 export default {
   // api/LLPropertyMasterCrud
@@ -50,7 +50,35 @@ export default {
   //   "IS_ACTIVE_FLG": 1
   // }
 
+  async GetLoginOTP(data){
+    return axios.post(`${BASE_URL}/GetLoginOTP`, data)
+  },
+
+  async VerifyOtp(data){
+    return axios.post(`${BASE_URL}/VerifyOtp`, data)
+  },
+
+  async UserInfoCrud(data){
+    return axios.post(`${BASE_URL}/UserInfoCrud`, data)
+  },
+
+  async LLPropertyListingCrud(data){
+    return axios.post(`${BASE_URL}/LLPropertyListingCrud`, data)
+  },
+
   async LLPropertyMasterCrud(data){
     return axios.post(`${BASE_URL}/LLPropertyMasterCrud`, data)
-  }
+  },
+
+  async LLPropertyImageCrud(data){
+    return axios.post(`${BASE_URL}/LLPropertyImageCrud`, data)
+  },
+
+  async PropertyQRMstCrud(data){
+    return axios.post(`${BASE_URL}/PropertyQRMstCrud`, data)
+  },
+
+  async PropertyFavoriteTxnCrud(data){
+    return axios.post(`${BASE_URL}/PropertyFavoriteTxnCrud`, data)
+  },
 }

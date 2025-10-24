@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <h3>Add New Property
+    <h3>Edit Property
     </h3>
     <v-card class="mt-4 card-box-shadow rounded-lg pa-4">
       <v-card-text>
