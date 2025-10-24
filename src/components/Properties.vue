@@ -1,5 +1,5 @@
 <template>
-  <Header v-if="route.name == 'BuyProperties'" />
+  <!-- <Header v-if="route.name == 'BuyProperties'" /> -->
   <div :class="route.name == 'BuyProperties' ? 'mt-16' : ''">
     <div class="bg-gradient pa-6">
       <v-row>
@@ -15,9 +15,24 @@
       </v-row>
     </div>
 
-    <div class="pa-4">
+    <div class="pa-4 pb-0 pt-2">
+      <v-row justify="space-between">
+        <v-col cols="auto">
+          <v-btn height="42" rounded="lg" variant="outlined" class="elevation-0 text-none font-weight-bold" color="primary">
+            <v-icon>mdi-filter-outline</v-icon> Filters
+          </v-btn>
+        </v-col>
+        <v-col v-if="$route.name == 'properties'" cols="auto">
+          <v-btn @click="$router.push('/add-new-property')" height="42" rounded="lg" class="elevation-0 text-none font-weight-bold" color="primary">
+            <v-icon>mdi-plus</v-icon> Add Property
+          </v-btn>
+        </v-col>
+      </v-row>
+    </div>
+
+    <div class="pa-4 pt-0">
       <v-row>
-        <v-col v-for="propertyObj in propertyArr">
+        <v-col cols="12" md="6" lg="4" v-for="propertyObj in propertyArr">
           <PropertyCard :propertyObj="propertyObj" />
 
         </v-col>
@@ -27,8 +42,9 @@
 </template>
 
 <script setup>
+import propertyService from '../services/propertyService';
 import PropertyCard from './PropertyCard.vue';
-import Header from '@/layouts/header.vue'
+
 const route = useRoute()
 const propertyArr = ref([
   {
@@ -56,7 +72,26 @@ const propertyArr = ref([
     saved: false,
   },
 ])
-
+//------------------------------------------------------------------------------
+onMounted(() => {
+  console.log('--->',);
+  // getProperties()
+  // https://devui.qrforinfo.com/buy/property/1
+  // https://devui.qrforinfo.com/buy/property/1
+})
+//------------------------------------------------------------------------------
+const getProperties = async () => {
+  try {
+    console.log('--->', 12312);
+    const data = {
+      "ACTION_TYPE": "SELECT",  //SELECT
+    }
+    const res = await propertyService.LLPropertyMasterCrud(data)
+  } catch (error) {
+    console.log('--->err', error);
+  }
+}
+//------------------------------------------------------------------------------
 </script>
 
 <style scoped>

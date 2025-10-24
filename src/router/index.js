@@ -10,6 +10,7 @@ import Settings from "@/components/Settings.vue"
 import SavedProperties from "@/components/SavedProperties.vue";
 import Messages from "@/components/Messages.vue";
 import PropertyDetails from "@/components/PropertyDetails.vue";
+import Signup from "@/components/Signup.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -61,6 +62,12 @@ const router = createRouter({
       name: "Login",
       component: Login,
     },
+    {
+      path: "/signup",
+      name: "SignUp",
+      component: Signup,
+    },
+    
     {
       path: "/buy/properties",
       name: "BuyProperties",

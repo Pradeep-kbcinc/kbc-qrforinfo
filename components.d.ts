@@ -26,5 +26,6 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     SavedProperties: typeof import('./src/components/SavedProperties.vue')['default']
     Settings: typeof import('./src/components/Settings.vue')['default']
+    Signup: typeof import('./src/components/Signup.vue')['default']
   }
 }
