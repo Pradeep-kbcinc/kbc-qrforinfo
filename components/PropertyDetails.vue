@@ -4,7 +4,7 @@
   <div :class="route.fullPath == 'BuyPropertyDetails' ? 'mt-16' : ''">
     <div class="d-flex align-center justify-space-between pa-6 pb-0">
       <div class="">
-        <h3 class="text-h4 font-weight-bold">{{ propertyObj.title }}</h3>
+        <h3 class="font-weight-bold">{{ propertyObj.title }}</h3>
         <p><v-icon>mdi-map-marker-outline</v-icon> {{ propertyObj.city }}</p>
       </div>
       <div v-if="!$route.fullPath.includes('/buy/')" class="d-flex ga-4">
@@ -253,20 +253,16 @@ const downloadPDF = async (propertyObj) => {
 //------------------------------------------------------------------------------
 const shareAction = async (propertyObj) => {
   try {
-    console.log('--->route', route.params);
     let tmpArr = route.path.split('/');
     const id = tmpArr[tmpArr.length - 1]
-    console.log('--->', id);
     let selectedId = route.params?.id || 1
     selectedId = selectedId > 3 ? 3 : selectedId
-
     const shareData = {
       title: propertyObj.title,
       text: propertyObj.description,
       url: `/buy/property/${id || selectedId}`,
     };
     await navigator.share(shareData);
-    // resultPara.textContent = "MDN shared successfully";
   } catch (err) {
     console.log('--->err', err);
   }

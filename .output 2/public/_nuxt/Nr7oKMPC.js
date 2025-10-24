@@ -1,1 +1,0 @@
-import r from"./Doj6iE4U.js";import{a2 as o,z as t}from"#entry";import"./DACdEPWr.js";import"./Dzie2mVI.js";import"./DYcEsToo.js";import"./5zZ1xFAJ.js";import"./BS5857rw.js";import"./BAWLWkTo.js";import"./ygjCVNG8.js";import"./XlJrbQWL.js";const x={__name:"properties",setup(p){return(m,i)=>(t(),o(r))}};export{x as default};

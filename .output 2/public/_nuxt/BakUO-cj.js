@@ -1,1 +1,0 @@
-import{P as r}from"./aF0PuvXz.js";import{a2 as t,z as o}from"#entry";import"./BS5857rw.js";import"./DYcEsToo.js";import"./BAWLWkTo.js";import"./Dzie2mVI.js";import"./5zZ1xFAJ.js";const l={__name:"[id]",setup(p){return(e,a)=>(o(),t(r))}};export{l as default};

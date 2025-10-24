@@ -1,15 +1,20 @@
 <template>
   <v-container fluid>
-    <div class="mt-1 d-flex align-center">
-      <div>
-        <h3 class="font-weight-bold">Dashboard</h3>
-        <p>Welcome Back, Abhijit Debnath</p>
-      </div>
-      <v-spacer></v-spacer>
-      <v-btn @click="router.push('/add-new-property')" height="48" rounded="lg" class="elevation-0 text-none font-weight-bold" color="primary">
-        <v-icon>mdi-plus</v-icon> Add Property
-      </v-btn>
-    </div>
+    <v-row >
+      <v-col cols="12" md="6">
+        <div>
+          <h3 class="font-weight-bold">Dashboard</h3>
+          <p>Welcome Back, Abhijit Debnath</p>
+        </div>
+      </v-col>
+      <!-- <v-spacer></v-spacer> -->
+      <v-col cols="12" md="6 d-flex justify-end">
+        <v-btn @click="router.push('/add-new-property')" height="48" rounded="lg"
+          class="elevation-0 text-none font-weight-bold" color="primary">
+          <v-icon>mdi-plus</v-icon> Add Property
+        </v-btn>
+      </v-col>
+    </v-row>
     <section class="py-4">
       <v-row>
         <v-col cols="6" md="3">
@@ -73,7 +78,8 @@
                 <template #append>
                   <div class="text-end">
 
-                    <v-chip :color="property.statusColor" class="mt-1" size="small" variant="flat" text-color="green-lighten-2 text-none">
+                    <v-chip :color="property.statusColor" class="mt-1" size="small" variant="flat"
+                      text-color="green-lighten-2 text-none">
                       {{ property.status }}
                     </v-chip>
                   </div>
