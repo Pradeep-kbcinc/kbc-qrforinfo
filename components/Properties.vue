@@ -42,7 +42,7 @@
 </template>
 
 <script setup>
-import propertyService from '../src/services/propertyService';
+import propertyService from '../services/propertyService';
 import PropertyCard from './PropertyCard.vue';
 
 const route = useRoute()
