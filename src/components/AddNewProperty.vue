@@ -70,7 +70,7 @@ import propertyService from '@/services/propertyService.js'
 import { useVuelidate } from '@vuelidate/core'
 import { required, helpers, minLength, maxLength, numeric, email } from '@vuelidate/validators'
 import { toast } from 'vue3-toastify';
-import { fa } from 'vuetify/locale';
+
 
 const state = ref({
   ACTION_TYPE: "CREATE",
