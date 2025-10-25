@@ -4,7 +4,7 @@ import { env } from "@/config/appVersion";
 let BASE_URL = '';
 
 if (env=='DEV') {
-  BASE_URL = 'https://devapi.qrforinfo.com/api';
+  BASE_URL = 'https://devapi.qrforinfo.com/api/v1';
 } else if (env=='DEMO') {
   BASE_URL = 'https://demoapi.qrforinfo.com/api';
 } else {
