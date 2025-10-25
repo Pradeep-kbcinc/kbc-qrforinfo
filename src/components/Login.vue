@@ -98,7 +98,6 @@ const initialState = ref({
 })
 const rules = {
   phoneNumber: { required, numeric },
-
 }
 const v$ = useVuelidate(rules, initialState.value)
 

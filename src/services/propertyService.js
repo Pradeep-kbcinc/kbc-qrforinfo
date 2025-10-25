@@ -33,4 +33,8 @@ export default {
   async PropertyFavoriteTxnCrud(data){
     return axios.post(`/PropertyFavoriteTxnCrud`, data)
   },
+
+  async signUp(data){
+    return axios.post(`/UserInfoCrud`, data)
+  },
 }
