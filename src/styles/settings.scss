@@ -16,7 +16,18 @@
     -moz-osx-font-smoothing: grayscale;
     
   }
-  
+  .slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: all 0.9s ease;
+}
+.slide-fade-enter-from {
+  opacity: 0;
+  transform: translateY(20px);
+}
+.slide-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
   // h1, h2, h3, h4, h5, h6 {
   //   font-family: var(--font-heading);
   //   font-weight: 600;

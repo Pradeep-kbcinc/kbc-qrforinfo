@@ -1,5 +1,6 @@
 import axios from "axios";
 
+<<<<<<< HEAD
 const BASE_URL = 'https://devapi.qrforinfo.com/api';
 
 export default {
@@ -80,5 +81,43 @@ export default {
 
   async PropertyFavoriteTxnCrud(data){
     return axios.post(`${BASE_URL}/PropertyFavoriteTxnCrud`, data)
+=======
+export default {
+  
+  async GetLoginOTP(data){
+    return axios.post(`/GetLoginOTP`, data)
+  },
+
+  async VerifyOtp(data){
+    return axios.post(`/VerifyOtp`, data)
+  },
+
+  async UserInfoCrud(data){
+    return axios.post(`/UserInfoCrud`, data)
+  },
+
+  async LLPropertyListingCrud(data){
+    return axios.post(`/LLPropertyListingCrud`, data)
+  },
+
+  async LLPropertyMasterCrud(data){
+    return axios.post(`/LLPropertyMasterCrud`, data)
+  },
+
+  async LLPropertyImageCrud(data){
+    return axios.post(`/LLPropertyImageCrud`, data)
+  },
+
+  async PropertyQRMstCrud(data){
+    return axios.post(`/PropertyQRMstCrud`, data)
+  },
+
+  async PropertyFavoriteTxnCrud(data){
+    return axios.post(`/PropertyFavoriteTxnCrud`, data)
+  },
+
+  async signUp(data){
+    return axios.post(`/UserInfoCrud`, data)
+>>>>>>> 6696825df6b6ab317c6146607edc5f98fae1f152
   },
 }
