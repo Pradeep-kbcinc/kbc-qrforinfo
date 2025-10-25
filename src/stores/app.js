@@ -4,21 +4,14 @@ import axios from "axios"
 import {appAuthUrl} from '@/config/appVersion';
 export const useAuthStore = defineStore("app", {
   state: () => ({
-    user: undefined,
+    token: localStorage.getItem("access_token") || null,
   }),
   getters: {
     isAuthenticated: (state) => {
-      if (!state.user) {
-        const userCookie = Cookies.get("user");
-        if (userCookie) {
-          const val = JSON.parse(userCookie);
-          state.user = val.token ? val.token : null;
-          if (state.user) {
-            return !!state.user;
-          }
-        }
+      if (!state.token || state.token == null) {
+        return false
       } else {
-        return !!state.user;
+        return true
       }
     },
   },

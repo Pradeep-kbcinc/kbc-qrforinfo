@@ -101,7 +101,7 @@ async function routeGuard(to, from, next) {
       const response = localStorage.getItem('userDetails')
       if (response) {
         const res = JSON.parse(response)
-        authStore.userLoginVerify(res)
+        // authStore.userLoginVerify(res)
       } else {
         // console.log('not verified verifyUser 1')
         // next({ name: 'PageNotFound' })
@@ -115,21 +115,21 @@ async function routeGuard(to, from, next) {
       console.log(e)
     }
   }
-}
 
-//   if (isAuthenticated && authStore.userDetails) {
-//     if (to.meta.role == 'ALL') {
-//       next()
-//     } else if (authStore.userDetails.USER_ROLE.some((value) => value.USER_ROLE !== to.meta.role)) {
-//       // Redirect to unauthorized page or some other route
-//       next({ name: 'PageNotFound' })
-//     } else {
-//       next()
-//     }
-//   } else {
-//     next({ name: 'Login' })
-//   }
-// }
+
+  if (isAuthenticated && authStore.userDetails) {
+    if (to.meta.role == 'ALL') {
+      next()
+    } else if (authStore.userDetails.USER_ROLE.some((value) => value.USER_ROLE !== to.meta.role)) {
+      // Redirect to unauthorized page or some other route
+      next({ name: 'PageNotFound' })
+    } else {
+      next()
+    }
+  } else {
+    next({ name: 'Login' })
+  }
+}
 
 function checkLoggedInRouteGuard(to, from, next) {
   const authStore = useAuthStore()
