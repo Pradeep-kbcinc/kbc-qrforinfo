@@ -6,14 +6,14 @@
         <p>Welcome Back, Abhijit Debnath</p>
       </div>
       <v-spacer></v-spacer>
-      <v-btn @click="router.push('/add-new-property')" height="48" rounded="lg" class="elevation-0 text-none font-weight-bold" color="primary">
+      <v-btn @click="router.push('/add-new-property')" :height="!mobile ? 48 : 38" :width="mobile ? '140' : ''" rounded="lg" class="elevation-0 text-none font-weight-bold" color="primary">
         <v-icon>mdi-plus</v-icon> Add Property
       </v-btn>
     </div>
     <section class="py-4">
       <v-row>
-        <v-col>
-          <v-card class="rounded-lg card-box-shadow">
+        <v-col cols="6" md="3">
+          <v-card height="100%" class="rounded-lg card-box-shadow">
             <v-card-text>
               <p>Active Listings</p>
               <h5 class="text-primary text-h4 font-weight-bold mt-1">
@@ -23,8 +23,8 @@
 
           </v-card>
         </v-col>
-        <v-col>
-          <v-card class="rounded-lg card-box-shadow">
+        <v-col cols="6" md="3">
+          <v-card height="100%" class="rounded-lg card-box-shadow">
             <v-card-text>
               <p>Total Views</p>
               <h5 class="text-green text-h4 font-weight-bold mt-1">
@@ -34,8 +34,8 @@
 
           </v-card>
         </v-col>
-        <v-col>
-          <v-card class="rounded-lg card-box-shadow">
+        <v-col cols="6" md="3">
+          <v-card height="100%" class="rounded-lg card-box-shadow">
             <v-card-text>
               <p>Messages</p>
               <h5 class="text-purple text-h4 font-weight-bold mt-1">
@@ -45,7 +45,7 @@
 
           </v-card>
         </v-col>
-        <v-col>
+        <v-col cols="6" md="3">
           <v-card class="rounded-lg card-box-shadow">
             <v-card-text>
               <p>Drafts</p>
@@ -103,6 +103,8 @@
   </v-container>
 </template>
 <script setup>
+import { useDisplay } from 'vuetify'
+const { mobile } = useDisplay()
 const router = useRouter()
 const properties = [
   {

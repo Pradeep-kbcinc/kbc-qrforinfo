@@ -32,11 +32,17 @@ const sidebarToggle = ref(true)
 const router = useRouter()
 const route = useRoute()
 
+
 const gotoMenu = (path) => {
   router.push(path)
 }
 
 const isRouteActive = (path) => route.path === path
+const toggleSidebar = ()=>{
+  sidebarToggle.value = !sidebarToggle.value
+}
+
+defineExpose({toggleSidebar})
 </script>
 
 <style scoped>

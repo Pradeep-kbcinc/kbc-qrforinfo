@@ -7,7 +7,7 @@
         <h3 class="font-weight-bold">Profile Information
         </h3>
         <v-row class="mt-4">
-          <v-col>
+          <v-col cols="12" md="4">
             <div>
               <p>First Name</p>
               <v-text-field :error-messages="v$.FNAME.$errors.map(e => e.$message)" @blur="v$.FNAME.$touch"
@@ -15,7 +15,7 @@
                 placeholder="Modern 3BR Apartment"></v-text-field>
             </div>
           </v-col>
-          <v-col>
+          <v-col cols="12" md="4">
             <div>
               <p>Middle Name</p>
               <v-text-field :error-messages="v$.MNAME.$errors.map(e => e.$message)" @blur="v$.MNAME.$touch"
@@ -23,7 +23,7 @@
                 placeholder="Modern 3BR Apartment"></v-text-field>
             </div>
           </v-col>
-          <v-col>
+          <v-col cols="12" md="4">
             <div>
               <p>Last Name</p>
               <v-text-field :error-messages="v$.LNAME.$errors.map(e => e.$message)" @blur="v$.LNAME.$touch"

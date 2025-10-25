@@ -4,7 +4,6 @@
   <v-main>
     <Header />
     <router-view />
-    <Sidebar />
   </v-main>
   </div>
   </Transition>
@@ -12,7 +11,7 @@
 
 <script setup>
 import Header from './header.vue'
-import Sidebar from './sidebar.vue'
+
 const show = ref(false)
 
 onMounted(() => {
