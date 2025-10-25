@@ -5,6 +5,7 @@ env = 'DEV'
 // env = 'LIVE'
 
 appAuthUrl = 'https://devapi.qrforinfo.com/api/v1'
+// appAuthUrl = 'http://demoapi.qrforinfo.com/api/v1'
 export {
   env, appAuthUrl
 }

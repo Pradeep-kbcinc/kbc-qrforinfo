@@ -75,7 +75,7 @@ const propertyArr = ref([
 //------------------------------------------------------------------------------
 onMounted(() => {
   console.log('--->',);
-  // getProperties()
+  getProperties()
   // https://devui.qrforinfo.com/buy/property/1
   // https://devui.qrforinfo.com/buy/property/1
 })
@@ -85,8 +85,11 @@ const getProperties = async () => {
     console.log('--->', 12312);
     const data = {
       "ACTION_TYPE": "SELECT",  //SELECT
+      "LISTING_STATUS": "ACTIVE",
+      "PROPERTY_STATUS": "ACTIVE",
+      // "NOTES": "nitial listing created",
     }
-    const res = await propertyService.LLPropertyMasterCrud(data)
+    const res = await propertyService.LLPropertyListingCrud(data)
   } catch (error) {
     console.log('--->err', error);
   }
