@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHashHistory, createWebHistory } from "vue-router";
 import { setupLayouts } from "virtual:generated-layouts";
 import { routes } from "vue-router/auto-routes";
 import Layout from "@/layouts/default.vue";
@@ -11,8 +11,8 @@ import SavedProperties from "@/components/SavedProperties.vue";
 import Messages from "@/components/Messages.vue";
 import PropertyDetails from "@/components/PropertyDetails.vue";
 import Signup from "@/components/Signup.vue";
+import { useAuthStore } from '@/stores/app'
 const router = createRouter({
-  // history: createWebHistory(import.meta.env.BASE_URL),
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
@@ -24,42 +24,53 @@ const router = createRouter({
           path: "/home",
           name: "Dashboard",
           component: Dashboard,
+          // beforeEnter: routeGuard,
         },
         {
           path: "/properties",
           name: "Properties",
           component: Properties,
+          // beforeEnter: routeGuard,
         },
         {
           path: "/property/:id",
           name: "Property",
           component: PropertyDetails,
+          // beforeEnter: routeGuard,
         },
         {
           path: "/saved",
           name: "Saved",
           component: SavedProperties,
+          // beforeEnter: routeGuard,
         },
         {
           path: "/messages",
           name: "Messages",
           component: Messages,
+          // beforeEnter: routeGuard,
         },
         {
           path: "/add-new-property",
           name: "AddNewProperty",
           component: AddNewProperty,
+          // beforeEnter: routeGuard,
         },
         {
           path: "/settings",
           name: "Settings",
           component: Settings,
+          // beforeEnter: routeGuard,
         },
 
       ],
     },
     {
-      path: "/",
+      path: '/',
+      redirect: '/buy/properties', // 👈 redirect root to this
+    },
+    {
+      path: "/login",
       name: "Login",
       component: Login,
     },
@@ -82,51 +93,52 @@ const router = createRouter({
   ],
 });
 
-// async function routeGuard(to, from, next) {
-//   const authStore = useAuthStore()
-//   const isAuthenticated = authStore.isAuthenticated
-//   if (isAuthenticated && !authStore.userDetails) {
-//     try {
-//       const response = localStorage.getItem('userDetails')
-//       if (response) {
-//         const res = JSON.parse(response)
-//         authStore.userLoginVerify(res)
-//       } else {
-//         // console.log('not verified verifyUser 1')
-//         // next({ name: 'PageNotFound' })
-//         authStore.logout()
-//         // authStore.userLoginVerify(undefined)
-//         // console.log('not verified verifyUser')
-//       }
-//     } catch (e) {
-//       next({ name: 'PageNotFound' })
-//       authStore.logout()
-//       console.log(e)
-//     }
-//   }
+async function routeGuard(to, from, next) {
+  const authStore = useAuthStore()
+  const isAuthenticated = authStore.isAuthenticated
+  if (isAuthenticated && !authStore.userDetails) {
+    try {
+      const response = localStorage.getItem('userDetails')
+      if (response) {
+        const res = JSON.parse(response)
+        // authStore.userLoginVerify(res)
+      } else {
+        // console.log('not verified verifyUser 1')
+        // next({ name: 'PageNotFound' })
+        authStore.logout()
+        // authStore.userLoginVerify(undefined)
+        // console.log('not verified verifyUser')
+      }
+    } catch (e) {
+      next({ name: 'PageNotFound' })
+      authStore.logout()
+      console.log(e)
+    }
+  }
 
-//   if (isAuthenticated && authStore.userDetails) {
-//     if (to.meta.role == 'ALL') {
-//       next()
-//     } else if (authStore.userDetails.USER_ROLE.some((value) => value.USER_ROLE !== to.meta.role)) {
-//       // Redirect to unauthorized page or some other route
-//       next({ name: 'PageNotFound' })
-//     } else {
-//       next()
-//     }
-//   } else {
-//     next({ name: 'Login' })
-//   }
-// }
 
-// function checkLoggedInRouteGuard(to, from, next) {
-//   const authStore = useAuthStore()
-//   const isAuthenticated = authStore.isAuthenticated
-//   if (isAuthenticated) {
-//     next({ name: 'Home' })
-//   } else {
-//     next()
-//   }
-// }
+  if (isAuthenticated && authStore.userDetails) {
+    if (to.meta.role == 'ALL') {
+      next()
+    } else if (authStore.userDetails.USER_ROLE.some((value) => value.USER_ROLE !== to.meta.role)) {
+      // Redirect to unauthorized page or some other route
+      next({ name: 'PageNotFound' })
+    } else {
+      next()
+    }
+  } else {
+    next({ name: 'Login' })
+  }
+}
+
+function checkLoggedInRouteGuard(to, from, next) {
+  const authStore = useAuthStore()
+  const isAuthenticated = authStore.isAuthenticated
+  if (isAuthenticated) {
+    next({ name: 'Home' })
+  } else {
+    next()
+  }
+}
 
 export default router;

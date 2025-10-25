@@ -1,7 +1,7 @@
 <template>
-  <!-- <Header v-if="route.fullPath == 'BuyPropertyDetails'" /> -->
+  <Header :genarelPurpose="true" v-if="route.name == 'BuyPropertyDetails'" />
 
-  <div :class="route.fullPath == 'BuyPropertyDetails' ? 'mt-16' : ''">
+  <div :class="route.name == 'BuyPropertyDetails' ? 'mt-16' : ''">
     <div class="d-flex align-center justify-space-between pa-6 pb-0">
       <div class="">
         <h3 class="font-weight-bold">{{ propertyObj.title }}</h3>
@@ -184,7 +184,7 @@
 import PropertyCard from './PropertyCard.vue';
 import QrcodeVue from 'qrcode.vue';
 
-// import Header from '@/layouts/header.vue'
+import Header from '@/layouts/header.vue'
 const route = useRoute()
 const propertyObj = ref({});
 const propertyArr = ref([
