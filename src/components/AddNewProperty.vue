@@ -9,16 +9,16 @@
           <p class="mt-6">Listing Type</p>
           <v-row>
             <v-col>
-              <v-btn color="primary" style="background-color: #f0f6ff;border: 2px solid;" variant="outlined" block
+              <v-btn @click="state.LISTING_TYPE = 'For Sale'" :color="state.LISTING_TYPE == 'For Sale' ? 'primary' : ''" :class="state.LISTING_TYPE == 'For Sale' ?  'selectedCard' : ''" variant="outlined" block
                 size="x-large" rounded="lg" class="text-none elevation-0 text-body-1">
                 For Sale</v-btn>
             </v-col>
             <v-col>
-              <v-btn variant="outlined" block size="x-large" rounded="lg" class="text-none elevation-0 text-body-1">
+              <v-btn @click="state.LISTING_TYPE = 'For Rent'" variant="outlined" :color="state.LISTING_TYPE == 'For Rent' ? 'primary' : ''" block size="x-large" :class="state.LISTING_TYPE == 'For Rent' ?  'selectedCard' : ''" rounded="lg" class="text-none elevation-0 text-body-1">
                 For Rent</v-btn>
             </v-col>
             <v-col>
-              <v-btn variant="outlined" block size="x-large" rounded="lg" class="text-none elevation-0 text-body-1">
+              <v-btn @click="state.LISTING_TYPE = 'Build to Suit'" variant="outlined" :color="state.LISTING_TYPE == 'Build to Suit' ? 'primary' : ''" block size="x-large" :class="state.LISTING_TYPE == 'Build to Suit' ?  'selectedCard' : ''" rounded="lg" class="text-none elevation-0 text-body-1">
                 Build to Suit</v-btn>
             </v-col>
           </v-row>
@@ -76,6 +76,7 @@ const state = ref({
   ACTION_TYPE: "CREATE",
   PROPERTY_ID: 0,
   SELLER_USER_ID: 0,
+  LISTING_TYPE:'For Sale',
   TITLE: "",
   PROPERTY_DESC: "",
   PROPERTY_KIND: "",
@@ -118,6 +119,7 @@ const state = ref({
   IS_ACTIVE_FLG: 1
 })
 const rules = {
+  LISTING_TYPE:{required: helpers.withMessage('Property Listing type is required', required)},
   TITLE: {
     required: helpers.withMessage('Property title is required', required)
   },
@@ -160,3 +162,9 @@ const saveProperty = async () => {
   }
 }
 </script>
+
+<style scoped lang="scss">
+.selectedCard{
+  background-color: #f0f6ff;border: 2px solid;
+}
+</style>
