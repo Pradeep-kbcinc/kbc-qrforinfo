@@ -39,20 +39,15 @@
           <p class="">Sign in to your account</p>
           <div class="mt-6">
             <p class="text-body-2">Phone Number</p>
-            <v-text-field v-model="initialState.phoneNumber" rounded="lg"
-              :error-messages="v$.phoneNumber.$errors.map(e => e.$message)" @blur="v$.phoneNumber.$touch" @input="v$.phoneNumber.$touch"
-              placeholder="+91 987643210" max-width="500" label="" variant="outlined">
+            <v-text-field v-model="initialState.phoneNumber" rounded="lg" :error-messages="v$.phoneNumber.$errors.map(e => e.$message)" @blur="v$.phoneNumber.$touch" @input="v$.phoneNumber.$touch" placeholder="+91 987643210" max-width="500" label="" variant="outlined">
 
             </v-text-field>
 
 
-            <v-btn @click="sendOtpToLogin" :loading="btnLoader" :disabled="initialState.phoneNumber.length < 10"
-              class="text-none font-weight-bold" height="48" width="500" size="large" rounded="lg" color="#2663eb"
-              elevation="0">
+            <v-btn @click="sendOtpToLogin()" :loading="btnLoader" :disabled="initialState.phoneNumber.length < 10" class="text-none font-weight-bold" height="48" width="500" size="large" rounded="lg" color="#2663eb" elevation="0">
               Send OTP Code
             </v-btn>
-            <p class="text-center mt-4">Don't have an account ? <span
-                class="text-primary font-weight-bold ml-2 cursor-pointer" @click="$router.push('/signup')">Sign
+            <p class="text-center mt-4">Don't have an account ? <span class="text-primary font-weight-bold ml-2 cursor-pointer" @click="$router.push('/signup')">Sign
                 Up</span> </p>
           </div>
         </v-container>
@@ -64,13 +59,10 @@
             <!-- <v-text-field rounded="lg" placeholder="+91 987643210" max-width="500" label="" variant="outlined"></v-text-field> -->
             <v-otp-input v-model="otpCode" :length="4" class="w-100 justify-start ps-0"></v-otp-input>
             <div class="d-flex ga-4">
-              <v-btn @click="isVerfiyOTP = false; otpCode = ''" class="text-none font-weight-bold" height="48"
-                size="large" rounded="lg" color="secondary" elevation="0">
+              <v-btn @click="isVerfiyOTP = false; otpCode = ''" class="text-none font-weight-bold" height="48" size="large" rounded="lg" color="secondary" elevation="0">
                 Cancel
               </v-btn>
-              <v-btn @click="$router.push('/home')" :disabled="otpCode.length < 4"
-                class="text-none font-weight-bold px-16" height="48" size="large" rounded="lg" color="#2663eb"
-                elevation="0">
+              <v-btn @click="verifyOtp()" :loading="btnLoader" :disabled="otpCode.length < 4" class="text-none font-weight-bold px-16" height="48" size="large" rounded="lg" color="#2663eb" elevation="0">
                 Confirm
               </v-btn>
             </div>
@@ -87,11 +79,11 @@ import { useVuelidate } from '@vuelidate/core'
 import { required, helpers, minLength, maxLength, numeric, email } from '@vuelidate/validators'
 import { toast } from 'vue3-toastify';
 import { useAuthStore } from '@/stores/app'
+
+//..............................................................................
+const router = useRouter()
 const isVerfiyOTP = ref(false)
-
 const otpCode = ref('')
-
-
 
 const initialState = ref({
   phoneNumber: '',
@@ -100,20 +92,36 @@ const rules = {
   phoneNumber: { required, numeric },
 }
 const v$ = useVuelidate(rules, initialState.value)
-
-
 const btnLoader = ref(false)
 const authStore = useAuthStore()
+//..............................................................................
+
+//------------------------------------------------------------------------------
 const sendOtpToLogin = async () => {
   const isFormCorrect = await v$.value.$validate();
   if (!isFormCorrect) {
     return;
   } else {
-    btnLoader.value = true
-   let data = {
+    try {
+      btnLoader.value = true
+      let data = {
         MOBILE_NUMBER: initialState.value.phoneNumber
       }
-    authStore.loginUser(data)
+      const res = await authStore.loginUser(data)
+      isVerfiyOTP.value = true
+    } catch (error) {
+      console.log('--->err', error);
+    } finally {
+      btnLoader.value = false
+    }
+    // fetch('https://devapi.qrforinfo.com/api/v1/GetLoginOTP', {
+    //   method: 'POST',
+    //   body: JSON.stringify({ MOBILE_NUMBER: initialState.value.phoneNumber }),
+    //   // headers: {
+    //   //   "Content-Type": "application/json",
+    //   // },
+    // })
+
     // try {
     //   let data = {
     //     MOBILE_NUMBER: initialState.value.phoneNumber
@@ -132,7 +140,27 @@ const sendOtpToLogin = async () => {
     //   btnLoader.value = false
     // }
   }
-
-
 }
+//------------------------------------------------------------------------------
+const verifyOtp = async () => {
+  try {
+    btnLoader.value = true
+    const data = {
+      MOBILE_NUMBER: initialState.value.phoneNumber,
+      OTP: otpCode.value
+    }
+    const res = await propertyService.VerifyOtp(data)
+    console.log('--->', res);
+    if (res.data.Result.TOKEN && res.data.Result.USER) {
+      authStore.login(res.data.Result.USER, res.data.Result.TOKEN)
+      // localStorage.setItem("access_token", res.data)
+      router.push('/home')
+    }
+  } catch (error) {
+    console.log('--->', error);
+  } finally {
+    btnLoader.value = false
+  }
+}
+//------------------------------------------------------------------------------
 </script>

@@ -17,8 +17,8 @@ axios.interceptors.request.use(
     function (config) {
         const token = localStorage.getItem('access_token');
         const val = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : ''
-        const tokenVal = val && val.token ? val.token : null
-        config.headers['Authorization'] = `Bearer ${tokenVal}`;
+        // const tokenVal = val && val.token ? val.token : null
+        config.headers['Authorization'] = `Bearer ${token}`;
         config.headers['source'] = '@School';
         // config.headers['apiKey'] = 'secretkey';
         config.headers['Access-Control-Allow-Origin'] = '*';
@@ -38,7 +38,7 @@ axios.interceptors.response.use(
         return response;
     },
     async function (error) {
-        if (error && error.response.status === 401) {
+        if (error && error?.response?.status === 401) {
             // alert('Session Expired');
             // window.location.href = '/login';
             // console.log(error.response)
