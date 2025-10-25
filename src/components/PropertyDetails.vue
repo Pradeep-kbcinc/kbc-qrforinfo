@@ -107,7 +107,7 @@
               <v-card class="bg-white pa-6 rounded-lg card-box-shadow">
               
 
-                <qrcode-vue :value="`${baseUrl}/buy/property/${propertyObj.id}?qr=1`" :size="200" level="H"
+                <qrcode-vue :value="`${baseUrl}/#/buy/property/${propertyObj.id}?qr=1`" :size="200" level="H"
                   background="transparent" foreground="black" />
 
                
