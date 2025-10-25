@@ -6,7 +6,7 @@
 
 // Plugins
 import { registerPlugins } from '@/plugins'
-
+import './config/axios-interceptor'
 // Components
 import App from './App.vue'
 

@@ -1,9 +1,10 @@
 var env = null
-
+var appAuthUrl
 env = 'DEV'
 // env = 'DEMO'
 // env = 'LIVE'
 
+appAuthUrl = 'https://devapi.qrforinfo.com/api/v1'
 export {
-  env
+  env, appAuthUrl
 }

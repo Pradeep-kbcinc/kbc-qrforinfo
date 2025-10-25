@@ -40,27 +40,33 @@
           <div class="mt-6">
             <div class="">
               <p class="text-body-2">First Name</p>
-              <v-text-field v-model="propertyObj.firstName" rounded="lg" placeholder="Enter first name" max-width="500" label="" variant="outlined"></v-text-field>
+              <v-text-field v-model="propertyObj.firstName" rounded="lg" placeholder="Enter first name" max-width="500"
+                label="" variant="outlined"></v-text-field>
             </div>
             <div class="">
               <p class="text-body-2">Last Name</p>
-              <v-text-field v-model="propertyObj.lastName" rounded="lg" placeholder="Enter last name" max-width="500" label="" variant="outlined"></v-text-field>
+              <v-text-field v-model="propertyObj.lastName" rounded="lg" placeholder="Enter last name" max-width="500"
+                label="" variant="outlined"></v-text-field>
             </div>
             <div class="">
               <p class="text-body-2">Phone Number</p>
-              <v-text-field v-model="propertyObj.phoneNumber" rounded="lg" placeholder="+91 987643210" max-width="500" label="" variant="outlined"></v-text-field>
+              <v-text-field v-model="propertyObj.phoneNumber" rounded="lg" placeholder="+91 987643210" max-width="500"
+                label="" variant="outlined"></v-text-field>
             </div>
             <div class="">
               <p class="text-body-2">Email (Optional)</p>
-              <v-text-field v-model="propertyObj.email" rounded="lg" placeholder="your@email.com" max-width="500" label="" variant="outlined" :rules="[
-                v => !!v || 'Email is required',
-                v => /.+@.+\..+/.test(v) || 'Email must be valid'
-              ]"></v-text-field>
+              <v-text-field v-model="propertyObj.email" rounded="lg" placeholder="your@email.com" max-width="500"
+                label="" variant="outlined" :rules="[
+                  v => !!v || 'Email is required',
+                  v => /.+@.+\..+/.test(v) || 'Email must be valid'
+                ]"></v-text-field>
             </div>
-            <v-btn @click="$router.push('/')" class="text-none font-weight-bold mt-3" height="48" width="500" size="large" rounded="lg" color="#2663eb" elevation="0">
-              Create
+            <v-btn @click="registerNow" :loading="btnLoader" class="text-none font-weight-bold mt-3" height="48"
+              width="500" size="large" rounded="lg" color="#2663eb" elevation="0">
+              SingUp
             </v-btn>
-            <p class="text-center mt-4">Already have an account ? <span @click="$router.push('/')" class="text-primary font-weight-bold ml-2 cursor-pointer">Login</span> </p>
+            <p class="text-center mt-4">Already have an account ? <span @click="$router.push('/login')"
+                class="text-primary font-weight-bold ml-2 cursor-pointer">Login</span> </p>
           </div>
         </v-container>
       </v-col>
@@ -74,4 +80,14 @@ const firstName = ref('')
 const lastName = ref('')
 const phoneNumber = ref('')
 const email = ref('')
+const btnLoader = ref(false)
+import propertyService from '@/services/propertyService'
+
+const registerNow = async () => {
+  try {
+    let res = await propertyService.signUp()
+  } catch (error) {
+    console.log(error)
+  }
+}
 </script>
