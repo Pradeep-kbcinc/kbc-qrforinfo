@@ -7,6 +7,7 @@
 // Plugins
 import { registerPlugins } from '@/plugins'
 import './config/axios-interceptor'
+import 'vue3-toastify/dist/index.css';
 // Components
 import App from './App.vue'
 

@@ -24,7 +24,7 @@
         </v-avatar>
       </div>
     </v-app-bar>
-    <Sidebar ref="sidebarPanel" />
+    <Sidebar v-if="route.name !== 'BuyProperties' &&  route.name !== 'BuyPropertyDetails'" ref="sidebarPanel" />
   </div>
 </template>
 <script setup>
@@ -33,6 +33,7 @@ import { useDisplay } from 'vuetify'
 const { mobile } = useDisplay()
 import Sidebar from './sidebar.vue'
 const router = useRouter()
+const route = useRoute()
 const props = defineProps({
   genarelPurpose: {
     type: Boolean,

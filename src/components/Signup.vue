@@ -84,6 +84,7 @@ import { useVuelidate } from '@vuelidate/core'
 import { required, helpers, minLength, maxLength, numeric, email } from '@vuelidate/validators'
 import propertyService from '@/services/propertyService'
 import { toast } from 'vue3-toastify'
+const router = useRouter()
 const propertyObj = ref({
   ACTION_TYPE: "CREATE",
   USER_ID: 0,
@@ -129,18 +130,19 @@ const btnLoader = ref(false)
 
 const registerNow = async () => {
   const isFormCorrect = await v$.value.$validate();
-  console.log(await v$.value, 'isFormCorrect')
   if (!isFormCorrect) {
     return;
   } else {
     btnLoader.value = true
     try {
       let res = await propertyService.signUp(propertyObj.value)
-      if (res) {
+      if (res.data.ERR_CODE == 0) {
+        console.log(res)
         btnLoader.value = false
         toast.success('Registration Successfull', {
         autoClose: 4000,
       });
+      router.push('/login')
       }else{
         btnLoader.value = false
         toast.error('Something Went Wrong', {

@@ -163,4 +163,8 @@ const verifyOtp = async () => {
   }
 }
 //------------------------------------------------------------------------------
+
+toast.success('Registration Successfull', {
+        autoClose: 4000,
+      });
 </script>
