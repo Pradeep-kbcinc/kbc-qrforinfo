@@ -12,7 +12,7 @@
         <p v-if="propertyObj.COUNTRY && propertyObj.STATE && propertyObj.CITY"><v-icon>mdi-map-marker-outline</v-icon> {{ propertyObj.COUNTRY }}, {{ propertyObj.STATE }}, {{ propertyObj.CITY }}</p>
       </div>
       <div v-if="!$route.fullPath.includes('/buy/')" class="d-flex ga-4">
-        <v-btn @click="$router.push(`/add-new-property/${propertyObj.PROPERTY_ID}`)" variant="outlined" prependIcon="mdi-square-edit-outline" class="text-none rounded-lg elevation-0 font-weight-bold" height="42">Edit</v-btn>
+        <v-btn v-if="propertyObj.SELLER_USER_ID == authStore?.userDetails?.USER_ID" @click="$router.push(`/add-new-property/${propertyObj.PROPERTY_ID}`)" variant="outlined" prependIcon="mdi-square-edit-outline" class="text-none rounded-lg elevation-0 font-weight-bold" height="42">Edit</v-btn>
         <v-btn @click="shareAction(propertyObj)" color="primary" prependIcon="mdi-share-variant-outline" class="text-none rounded-lg elevation-0 font-weight-bold" height="42">Share</v-btn>
       </div>
     </div>
@@ -185,8 +185,10 @@ import PropertyCard from './PropertyCard.vue';
 import QrcodeVue from 'qrcode.vue';
 import Header from '@/layouts/header.vue'
 import propertyService from '@/services/propertyService';
+import { useAuthStore } from '@/stores/app';
 
 //..............................................................................
+const authStore = useAuthStore()
 const route = useRoute()
 const propertyObj = ref({});
 const qrCodeValue = ref({});
