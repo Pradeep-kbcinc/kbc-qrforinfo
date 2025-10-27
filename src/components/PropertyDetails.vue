@@ -70,7 +70,7 @@
               <p class="ttext-grey-darken-1">Status</p>
               <p class="text-success">Active</p>
             </div> -->
-            <v-btn color="red" variant="tonal" class="text-none rounded-lg elevation-0 font-weight-bold w-100 mt-8" height="45">Mark as Sold</v-btn>
+            <v-btn v-if="propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID" color="red" variant="tonal" class="text-none rounded-lg elevation-0 font-weight-bold w-100 mt-8" height="45">Mark as Sold</v-btn>
           </v-card>
         </v-col>
         <v-col v-else cols="12" lg="3">
