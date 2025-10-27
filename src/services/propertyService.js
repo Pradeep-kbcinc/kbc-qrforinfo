@@ -49,4 +49,8 @@ export default {
   async GetPropertyDetail(data){
     return axios.post(`/GetPropertyDetail`, data)
   },
+
+  async GetPropertyDetailPublic(data){
+    return axios.post(`/GetPropertyDetailPublic`, data)
+  },
 }

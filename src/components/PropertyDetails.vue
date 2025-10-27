@@ -217,7 +217,13 @@ const fetchPropertyDetail = async () => {
       POSTAL_CODE: "",
       COUNTRY: ""
     }
-    const res = await propertyService.GetPropertyDetail(data);
+    let res;
+    console.log('--->route.name', route.name);
+    if (route.name == 'BuyPropertyDetails') {
+      res = await propertyService.GetPropertyDetailPublic(data);
+    } else {
+      res = await propertyService.GetPropertyDetail(data);
+    }
     propertyObj.value = res.data?.FetchData?.PROPERTY_DETAILS?.[0] || {}
     qrCodeValue.value = res.data?.FetchData?.PROPERTY_DETAILS?.[0] || {}
   } catch (error) {

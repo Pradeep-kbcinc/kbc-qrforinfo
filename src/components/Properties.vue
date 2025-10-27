@@ -54,7 +54,6 @@ const isLoading = ref(false)
 const propertyArr = ref([])
 //------------------------------------------------------------------------------
 onMounted(() => {
-  console.log('--->',);
   getProperties()
   // https://devui.qrforinfo.com/buy/property/1
   // https://devui.qrforinfo.com/buy/property/1
@@ -72,8 +71,12 @@ const getProperties = async () => {
       POSTAL_CODE: "",
       COUNTRY: ""
     }
-
-    const res = await propertyService.GetPropertyDetail(data)
+    let res;
+    if (route.name == 'BuyProperties') {
+      res = await propertyService.GetPropertyDetailPublic(data)
+    } else {
+      res = await propertyService.GetPropertyDetail(data)
+    }
     propertyArr.value = res?.data?.FetchData?.PROPERTY_DETAILS || [];
   } catch (error) {
     console.log('--->err', error);
