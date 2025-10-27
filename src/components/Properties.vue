@@ -32,9 +32,13 @@
 
     <div class="pa-4 pt-0">
       <v-row>
-        <v-col cols="12" md="6" lg="4" v-for="propertyObj in propertyArr">
+        <template v-if="isLoading">
+          <v-col><v-skeleton-loader class="mx-auto border" type="image, article"></v-skeleton-loader></v-col>
+          <v-col><v-skeleton-loader class="mx-auto border" type="image, article"></v-skeleton-loader></v-col>
+          <v-col><v-skeleton-loader class="mx-auto border" type="image, article"></v-skeleton-loader></v-col>
+        </template>
+        <v-col v-else cols="12" md="6" lg="4" v-for="propertyObj in propertyArr">
           <PropertyCard :propertyObj="propertyObj" />
-
         </v-col>
       </v-row>
     </div>
@@ -46,32 +50,8 @@ import propertyService from '../services/propertyService';
 import PropertyCard from './PropertyCard.vue';
 import Header from '@/layouts/header.vue';
 const route = useRoute()
-const propertyArr = ref([
-  {
-    id: 1,
-    title: 'Modern Apartment',
-    city: 'New York, NY',
-    amount: '$450,000',
-    type: 'FOR SALE',
-    saved: false,
-  },
-  {
-    id: 2,
-    title: 'Downtown Studio',
-    city: 'New York, NY',
-    amount: '$1,800/mo',
-    type: 'FOR RENT',
-    saved: false,
-  },
-  {
-    id: 3,
-    title: 'Suburban House',
-    city: 'New York, NY',
-    amount: '$650,000',
-    type: 'FOR SALE',
-    saved: false,
-  },
-])
+const isLoading = ref(false)
+const propertyArr = ref([])
 //------------------------------------------------------------------------------
 onMounted(() => {
   console.log('--->',);
@@ -82,16 +62,23 @@ onMounted(() => {
 //------------------------------------------------------------------------------
 const getProperties = async () => {
   try {
+    isLoading.value = true;
     console.log('--->', 12312);
+
     const data = {
-      "ACTION_TYPE": "SELECT",  //SELECT
-      "LISTING_STATUS": "ACTIVE",
-      "PROPERTY_STATUS": "ACTIVE",
-      // "NOTES": "nitial listing created",
+      PROPERTY_ID: 0,
+      CITY: "",
+      STATE: "",
+      POSTAL_CODE: "",
+      COUNTRY: ""
     }
-    const res = await propertyService.LLPropertyListingCrud(data)
+
+    const res = await propertyService.GetPropertyDetail(data)
+    propertyArr.value = res?.data?.FetchData?.PROPERTY_DETAILS || [];
   } catch (error) {
     console.log('--->err', error);
+  } finally {
+    isLoading.value = false;
   }
 }
 //------------------------------------------------------------------------------

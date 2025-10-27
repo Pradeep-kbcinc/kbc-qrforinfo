@@ -79,6 +79,7 @@ import { useVuelidate } from '@vuelidate/core'
 import { required, helpers, minLength, maxLength, numeric, email } from '@vuelidate/validators'
 import { toast } from 'vue3-toastify';
 import { useAuthStore } from '@/stores/app'
+import { useRouter, useRoute } from 'vue-router'
 
 //..............................................................................
 const router = useRouter()
@@ -152,6 +153,7 @@ const verifyOtp = async () => {
     const res = await propertyService.VerifyOtp(data)
     console.log('--->', res);
     if (res.data.Result.TOKEN && res.data.Result.USER) {
+      console.log('--->router', router);
       authStore.login(res.data.Result.USER, res.data.Result.TOKEN)
       // localStorage.setItem("access_token", res.data)
       router.push('/home')

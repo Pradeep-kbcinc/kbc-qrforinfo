@@ -5,7 +5,7 @@ import {appAuthUrl} from '@/config/appVersion';
 export const useAuthStore = defineStore("app", {
   state: () => ({
     token: localStorage.getItem("access_token") || null,
-    // user: localStorage.getItem("user") || null,
+    userDetails: JSON.parse(localStorage.getItem("userDetails")) || null,
   }),
   getters: {
     isAuthenticated: (state) => {
@@ -17,12 +17,12 @@ export const useAuthStore = defineStore("app", {
     },
   },
   actions: {
-    login(user, token) {
-      localStorage.setItem('user', JSON.stringify(user));
+    login(userDetails, token) {
+      localStorage.setItem('userDetails', JSON.stringify(userDetails));
       localStorage.setItem('access_token', token);
-      this.user = user;
+      this.userDetails = userDetails;
       this.token = token;
-      // Cookies.set("user", JSON.stringify(user), { secure: true, expires: 7 }); // Set cookie with a 7-day expiration
+      // Cookies.set("userDetails", JSON.stringify(userDetails), { secure: true, expires: 7 }); // Set cookie with a 7-day expiration
     },
 
     async loginUser(data) {

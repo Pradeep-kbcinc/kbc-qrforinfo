@@ -16,44 +16,32 @@
           <v-card height="100%" class="rounded-lg card-box-shadow">
             <v-card-text>
               <p>Active Listings</p>
-              <h5 class="text-primary text-h4 font-weight-bold mt-1">
-                12
-              </h5>
+              <h5 class="text-primary text-h4 font-weight-bold mt-1">12</h5>
             </v-card-text>
-
           </v-card>
         </v-col>
         <v-col cols="6" md="3">
           <v-card height="100%" class="rounded-lg card-box-shadow">
             <v-card-text>
               <p>Total Views</p>
-              <h5 class="text-green text-h4 font-weight-bold mt-1">
-                1,247
-              </h5>
+              <h5 class="text-green text-h4 font-weight-bold mt-1">1,247</h5>
             </v-card-text>
-
           </v-card>
         </v-col>
         <v-col cols="6" md="3">
           <v-card height="100%" class="rounded-lg card-box-shadow">
             <v-card-text>
               <p>Messages</p>
-              <h5 class="text-purple text-h4 font-weight-bold mt-1">
-                28
-              </h5>
+              <h5 class="text-purple text-h4 font-weight-bold mt-1">28</h5>
             </v-card-text>
-
           </v-card>
         </v-col>
         <v-col cols="6" md="3">
           <v-card class="rounded-lg card-box-shadow">
             <v-card-text>
               <p>Drafts</p>
-              <h5 class="text-lightBlack text-h4 font-weight-bold mt-1">
-                3
-              </h5>
+              <h5 class="text-lightBlack text-h4 font-weight-bold mt-1">3</h5>
             </v-card-text>
-
           </v-card>
         </v-col>
       </v-row>
@@ -68,9 +56,15 @@
 
           <v-divider class="my-4"></v-divider>
 
-          <v-list class="py-0">
-            <div v-for="(property, i) in properties" :key="i">
-              <v-list-item class="px-2 my-2 pointer">
+          <div v-if="isLoading" class="">
+            <v-skeleton-loader class="mx-auto border" type="article"></v-skeleton-loader>
+            <v-skeleton-loader class="mx-auto border mt-4" type="article"></v-skeleton-loader>
+            <v-skeleton-loader class="mx-auto border mt-4" type="article"></v-skeleton-loader>
+          </div>
+
+          <v-list v-else class="py-0">
+            <div v-for="(propertyObj, i) in propertyArr" :key="i">
+              <v-list-item @click="$router.push('/property/' + propertyObj.PROPERTY_ID)" class="px-2 my-2 pointer">
                 <template #prepend>
                   <v-avatar size="82" rounded="lg" class="mr-4 bg-grey-lighten-4 text-h4">
                     <!-- <v-img :src="property.image" cover /> -->
@@ -78,16 +72,17 @@
                   </v-avatar>
                 </template>
 
-                <v-list-item-title class="font-weight-bold text-grey-darken-3">{{ property.title }}</v-list-item-title>
-                <v-list-item-subtitle>{{ property.location }}</v-list-item-subtitle>
-                <div class="text-primary font-weight-bold text-subtitle-1">{{ property.price }}</div>
+                <v-list-item-title class="font-weight-bold text-grey-darken-3">{{ propertyObj.TITLE }}</v-list-item-title>
+                <!-- <v-list-item-subtitle>{{ property.location }}</v-list-item-subtitle> -->
+                <v-list-item-subtitle v-if="propertyObj?.COUNTRY && propertyObj?.STATE && propertyObj?.CITY" class="mt-1"><v-icon>mdi-map-marker-outline</v-icon>{{ propertyObj.COUNTRY }}, {{ propertyObj.STATE }}, {{ propertyObj.CITY }}</v-list-item-subtitle>
+                <div class="text-primary font-weight-bold text-subtitle-1">{{ propertyObj.price }}</div>
 
                 <template #append>
                   <div class="text-end">
 
-                    <v-chip :color="property.statusColor" class="mt-1" size="small" variant="flat" text-color="green-lighten-2 text-none">
-                      {{ property.status }}
-                    </v-chip>
+                    <!-- <v-chip :color="propertyObj.statusColor" class="mt-1" size="small" variant="flat" text-color="green-lighten-2 text-none">
+                      {{ propertyObj.status }}
+                    </v-chip> -->
                   </div>
                 </template>
 
@@ -103,9 +98,12 @@
   </v-container>
 </template>
 <script setup>
+import propertyService from '@/services/propertyService'
 import { useDisplay } from 'vuetify'
 const { mobile } = useDisplay()
 const router = useRouter()
+const isLoading = ref(false)
+const propertyArr = ref([])
 const properties = [
   {
     title: 'Modern 3BR Apartment',
@@ -132,4 +130,33 @@ const properties = [
     image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQp7-a_VsyHwiODqLFYJ_Zbp0eOeGJQp4y5hA&s',
   },
 ]
+
+
+//------------------------------------------------------------------------------
+onMounted(() => {
+  getProperties()
+})
+//------------------------------------------------------------------------------
+const getProperties = async () => {
+  try {
+    isLoading.value = true;
+    console.log('--->', 12312);
+
+    const data = {
+      PROPERTY_ID: 0,
+      CITY: "",
+      STATE: "",
+      POSTAL_CODE: "",
+      COUNTRY: ""
+    }
+
+    const res = await propertyService.GetPropertyDetail(data)
+    propertyArr.value = res?.data?.FetchData?.PROPERTY_DETAILS || [];
+  } catch (error) {
+    console.log('--->err', error);
+  } finally {
+    isLoading.value = false;
+  }
+}
+//------------------------------------------------------------------------------
 </script>

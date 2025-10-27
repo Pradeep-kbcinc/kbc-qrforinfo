@@ -6,7 +6,12 @@
 
     <div class="pa-4">
       <v-row>
-        <v-col v-for="propertyObj in propertyArr">
+        <template v-if="isLoading">
+          <v-col><v-skeleton-loader class="mx-auto border" type="image, article"></v-skeleton-loader></v-col>
+          <v-col><v-skeleton-loader class="mx-auto border" type="image, article"></v-skeleton-loader></v-col>
+          <v-col><v-skeleton-loader class="mx-auto border" type="image, article"></v-skeleton-loader></v-col>
+        </template>
+        <v-col v-else cols="12" md="6" lg="4" v-for="propertyObj in propertyArr">
           <PropertyCard :propertyObj="propertyObj" />
 
         </v-col>
@@ -16,34 +21,42 @@
 </template>
 
 <script setup>
+import propertyService from '@/services/propertyService';
 import PropertyCard from './PropertyCard.vue';
 
-const propertyArr = ref([
-  {
-    id: 1,
-    title: 'Modern Apartment',
-    city: 'New York, NY',
-    amount: '$450,000',
-    type: 'FOR SALE',
-    saved: true,
-  },
-  {
-    id: 2,
-    title: 'Downtown Studio',
-    city: 'New York, NY',
-    amount: '$1,800/mo',
-    type: 'FOR RENT',
-    saved: true,
-  },
-  {
-    id: 3,
-    title: 'Suburban House',
-    city: 'New York, NY',
-    amount: '$650,000',
-    type: 'FOR SALE',
-    saved: true,
-  },
-])
+const propertyArr = ref([])
+const isLoading = ref(false)
+
+//------------------------------------------------------------------------------
+onMounted(() => {
+  console.log('--->',);
+  getProperties()
+  // https://devui.qrforinfo.com/buy/property/1
+  // https://devui.qrforinfo.com/buy/property/1
+})
+//------------------------------------------------------------------------------
+const getProperties = async () => {
+  try {
+    isLoading.value = true;
+    console.log('--->', 12312);
+
+    const data = {
+      PROPERTY_ID: 0,
+      CITY: "",
+      STATE: "",
+      POSTAL_CODE: "",
+      COUNTRY: ""
+    }
+
+    const res = await propertyService.GetPropertyDetail(data)
+    propertyArr.value = res?.data?.FetchData?.PROPERTY_DETAILS || [];
+  } catch (error) {
+    console.log('--->err', error);
+  } finally {
+    isLoading.value = false;
+  }
+}
+//------------------------------------------------------------------------------
 </script>
 
 <style scoped>

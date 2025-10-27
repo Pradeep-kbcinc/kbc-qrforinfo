@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export default {
-  
+
   async GetLoginOTP(data){
     return axios.post(`/GetLoginOTP`, data)
   },
@@ -36,5 +36,17 @@ export default {
 
   async signUp(data){
     return axios.post(`/UserInfoCrud`, data)
+  },
+
+  // api/v1/GetPropertyDetail
+  // {
+  //   "PROPERTY_ID": 1,
+  //   "CITY": "",
+  //   "STATE": "",
+  //   "POSTAL_CODE": "",
+  //   "COUNTRY": ""
+  // }
+  async GetPropertyDetail(data){
+    return axios.post(`/GetPropertyDetail`, data)
   },
 }

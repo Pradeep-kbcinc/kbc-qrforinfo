@@ -51,7 +51,7 @@ const router = createRouter({
           beforeEnter: routeGuard,
         },
         {
-          path: "/add-new-property",
+          path: "/add-new-property/:id?",
           name: "AddNewProperty",
           component: AddNewProperty,
           beforeEnter: routeGuard,
@@ -75,11 +75,16 @@ const router = createRouter({
       component: Login,
     },
     {
+      path: "/404",
+      name: "PageNotFound",
+      component: Login,
+    },
+    {
       path: "/signup",
       name: "SignUp",
       component: Signup,
     },
-    
+
     {
       path: "/buy/properties",
       name: "BuyProperties",
@@ -96,9 +101,11 @@ const router = createRouter({
 async function routeGuard(to, from, next) {
   const authStore = useAuthStore()
   const isAuthenticated = authStore.isAuthenticated
+
   if (isAuthenticated && !authStore.userDetails) {
+    console.log('--->', 11111);
     try {
-      const response = localStorage.getItem('userDetails')
+      const response = localStorage.getItem('userDetails') || null
       if (response) {
         const res = JSON.parse(response)
         // authStore.userLoginVerify(res)
@@ -111,22 +118,26 @@ async function routeGuard(to, from, next) {
       }
     } catch (e) {
       next({ name: 'PageNotFound' })
+      // next({ name: 'Login' })
       authStore.logout()
       console.log(e)
     }
   }
 
 
-  if (isAuthenticated && authStore.userDetails) {
+  else if (isAuthenticated && authStore.userDetails) {
+    console.log('--->', 222222);
     if (to.meta.role == 'ALL') {
       next()
-    } else if (authStore.userDetails.USER_ROLE.some((value) => value.USER_ROLE !== to.meta.role)) {
+    } else if (authStore.userDetails?.USER_ROLE?.some((value) => value?.USER_ROLE !== to?.meta?.role)) {
       // Redirect to unauthorized page or some other route
       next({ name: 'PageNotFound' })
+      // next({ name: 'Login' })
     } else {
       next()
     }
   } else {
+    console.log('--->', 33333);
     next({ name: 'Login' })
   }
 }
