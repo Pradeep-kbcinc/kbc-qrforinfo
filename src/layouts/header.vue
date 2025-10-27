@@ -13,15 +13,36 @@
             <v-icon>mdi-plus</v-icon> Add Property
           </v-btn>
       </div>
-      <div v-else>
+      <div v-else class="d-flex align-center">
         <v-badge location="top right" color="red" dot>
           <v-btn icon size="small">
             <v-icon size="x-large" color="lightBlack" icon="mdi-bell-outline" class="pointer"></v-icon>
           </v-btn>
         </v-badge>
-        <v-avatar color="grey" class="pointer ml-4">
-          <v-icon color="lightBlack">mdi-account-outline</v-icon>
-        </v-avatar>
+        <v-menu
+    location="bottom end"
+    offset="8"
+  >
+    <template #activator="{ props }">
+      <v-avatar
+        v-bind="props"
+        color="grey"
+        class="pointer ml-4"
+      >
+        <v-icon color="lightBlack">mdi-account-outline</v-icon>
+      </v-avatar>
+    </template>
+
+    <v-list density="compact" min-width="150">
+      <v-list-item @click="router.push('/settings')">
+        <v-list-item-title class="font-weight-medium">My Profile</v-list-item-title>
+      </v-list-item>
+      <v-divider></v-divider>
+      <v-list-item @click="logout">
+        <v-list-item-title class="text-error font-weight-medium">Logout</v-list-item-title>
+      </v-list-item>
+    </v-list>
+  </v-menu>
       </div>
     </v-app-bar>
     <Sidebar v-if="route.name !== 'BuyProperties' &&  route.name !== 'BuyPropertyDetails'" ref="sidebarPanel" />
@@ -48,5 +69,10 @@ onMounted(()=>{
 const sidebarPanel = ref(null)
 const toggleSidebar = ()=>{
   sidebarPanel.value.toggleSidebar()
+}
+
+const logout = ()=>{
+  localStorage.clear()
+router.push('/login')
 }
 </script>
