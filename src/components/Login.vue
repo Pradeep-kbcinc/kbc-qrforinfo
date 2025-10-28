@@ -164,12 +164,15 @@ const verifyOtp = async () => {
       OTP: otpCode.value
     }
     const res = await propertyService.VerifyOtp(data)
-    console.log('--->', res);
+   
     if (res.data.Result.TOKEN && res.data.Result.USER) {
-      console.log('--->router', router);
       authStore.login(res.data.Result.USER, res.data.Result.TOKEN)
       // localStorage.setItem("access_token", res.data)
       router.push('/home')
+    }else{
+        toast.error(res.data?.Result?.MESSAGE, {
+        autoClose: 4000,
+      });
     }
   } catch (error) {
     console.log('--->', error);

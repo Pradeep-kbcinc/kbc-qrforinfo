@@ -9,11 +9,16 @@
     <div class="d-flex align-center justify-space-between pa-6 pb-0">
       <div class="">
         <h3 class="text-h5 font-weight-bold font-weight-bold">{{ propertyObj.TITLE }}</h3>
-        <p v-if="propertyObj.COUNTRY && propertyObj.STATE && propertyObj.CITY"><v-icon>mdi-map-marker-outline</v-icon> {{ propertyObj.COUNTRY }}, {{ propertyObj.STATE }}, {{ propertyObj.CITY }}</p>
+        <p v-if="propertyObj.COUNTRY && propertyObj.STATE && propertyObj.CITY"><v-icon>mdi-map-marker-outline</v-icon>
+          {{ propertyObj.COUNTRY }}, {{ propertyObj.STATE }}, {{ propertyObj.CITY }}</p>
       </div>
       <div v-if="!$route.fullPath.includes('/buy/')" class="d-flex ga-4">
-        <v-btn v-if="propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID" @click="$router.push(`/add-new-property/${propertyObj.PROPERTY_ID}`)" variant="outlined" prependIcon="mdi-square-edit-outline" class="text-none rounded-lg elevation-0 font-weight-bold" height="42">Edit</v-btn>
-        <v-btn @click="shareAction(propertyObj)" color="primary" prependIcon="mdi-share-variant-outline" class="text-none rounded-lg elevation-0 font-weight-bold" height="42">Share</v-btn>
+        <v-btn v-if="propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID"
+          @click="$router.push(`/add-new-property/${propertyObj.PROPERTY_ID}`)" variant="outlined"
+          prependIcon="mdi-square-edit-outline" class="text-none rounded-lg elevation-0 font-weight-bold"
+          height="42">Edit</v-btn>
+        <v-btn @click="shareAction(propertyObj)" color="primary" prependIcon="mdi-share-variant-outline"
+          class="text-none rounded-lg elevation-0 font-weight-bold" height="42">Share</v-btn>
       </div>
     </div>
 
@@ -21,11 +26,19 @@
       <v-row>
         <v-col cols="12" lg="9">
           <v-card class="card-box-shadow rounded-lg">
-            <v-card min-height="350" elevation="0" rounded="0" class="bg-box-gradient d-flex justify-center align-center position-relative" style="font-size: 8.0rem;line-height: 1;">
+            <v-card min-height="350" elevation="0" rounded="0"
+              class="bg-box-gradient d-flex justify-center align-center position-relative"
+              style="font-size: 8.0rem;line-height: 1;">
               🏠
-              <v-btn v-if="$route.fullPath.includes('/buy/') && propertyObj.LISTING_TYPE" :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'" class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 left-0 mt-4 ms-4" height="" density="comfortable">{{ propertyObj.LISTING_TYPE }}</v-btn>
-              <v-btn v-if="$route.fullPath.includes('/buy/')" color="white" :icon="propertyObj.IS_FAV ? 'mdi-heart' : 'mdi-heart-outline'" class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 right-0 mt-4 mr-4">
-                <v-icon :color="propertyObj.IS_FAV ? 'red' : 'black'">{{ propertyObj.IS_FAV ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
+              <v-btn v-if="$route.fullPath.includes('/buy/') && propertyObj.LISTING_TYPE"
+                :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'"
+                class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 left-0 mt-4 ms-4"
+                height="" density="comfortable">{{ propertyObj.LISTING_TYPE }}</v-btn>
+              <v-btn v-if="$route.fullPath.includes('/buy/')" color="white"
+                :icon="propertyObj.IS_FAV ? 'mdi-heart' : 'mdi-heart-outline'"
+                class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 right-0 mt-4 mr-4">
+                <v-icon :color="propertyObj.IS_FAV ? 'red' : 'black'">{{ propertyObj.IS_FAV ? 'mdi-heart' :
+                  'mdi-heart-outline' }}</v-icon>
               </v-btn>
             </v-card>
             <div class="pa-4">
@@ -64,13 +77,16 @@
               }) }}
               <!-- {{ propertyObj.CURRENCY_CODE }} -->
             </p>
-            <v-btn v-if="propertyObj.LISTING_TYPE" :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'" variant="tonal" class="text-none rounded-pill elevation-0 font-weight-bold" height="" density="comfortable">{{
-              propertyObj.LISTING_TYPE }}</v-btn>
+            <v-btn v-if="propertyObj.LISTING_TYPE"
+              :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'" variant="tonal"
+              class="text-none rounded-pill elevation-0 font-weight-bold" height="" density="comfortable">{{
+                propertyObj.LISTING_TYPE }}</v-btn>
             <!-- <div class="d-flex justify-space-between ga-4 w-100 mt-4">
               <p class="ttext-grey-darken-1">Status</p>
               <p class="text-success">Active</p>
             </div> -->
-            <v-btn v-if="propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID" color="red" variant="tonal" class="text-none rounded-lg elevation-0 font-weight-bold w-100 mt-8" height="45">Mark as Sold</v-btn>
+            <v-btn v-if="propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID" color="red" variant="tonal"
+              class="text-none rounded-lg elevation-0 font-weight-bold w-100 mt-8" height="45">Mark as Sold</v-btn>
           </v-card>
         </v-col>
         <v-col v-else cols="12" lg="3">
@@ -86,16 +102,101 @@
                 // useGrouping: 'false'
               }) }}
               {{ propertyObj.CURRENCY_CODE }}</p>
-            <v-btn color="primary" class="text-none rounded-lg elevation-0 font-weight-bold w-100" height="50" prepend-icon="mdi-comment-outline">Contact Owner</v-btn>
-            <v-btn @click="propertyObj.IS_FAV == propertyObj.IS_FAV" color="red" variant="outlined" class="text-none rounded-lg elevation-0 font-weight-bold w-100 mt-3" :prepend-icon="propertyObj.IS_FAV ? 'mdi-heart' : 'mdi-heart-outline'" height="50">{{ propertyObj.IS_FAV ?
-              'Saved to Favorites' : 'Save to Favorites' }}</v-btn>
-            <v-btn @click="shareAction(propertyObj)" variant="outlined" class="text-none rounded-lg elevation-0 font-weight-bold w-100 mt-3" prepend-icon="mdi-share-variant-outline" height="50">Share Property</v-btn>
+            <v-btn color="primary" class="text-none rounded-lg elevation-0 font-weight-bold w-100" height="50"
+              prepend-icon="mdi-comment-outline">Contact Owner</v-btn>
+            <v-btn @click="propertyObj.IS_FAV == propertyObj.IS_FAV" color="red" variant="outlined"
+              class="text-none rounded-lg elevation-0 font-weight-bold w-100 mt-3"
+              :prepend-icon="propertyObj.IS_FAV ? 'mdi-heart' : 'mdi-heart-outline'" height="50">{{ propertyObj.IS_FAV ?
+                'Saved to Favorites' : 'Save to Favorites' }}</v-btn>
+            <v-btn @click="shareAction(propertyObj)" variant="outlined"
+              class="text-none rounded-lg elevation-0 font-weight-bold w-100 mt-3"
+              prepend-icon="mdi-share-variant-outline" height="50">Share Property</v-btn>
           </v-card>
         </v-col>
       </v-row>
     </div>
 
-    <div v-if="!$route.fullPath.includes('/buy/') && propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID" class="d-flex justify-space-between pa-6 pb-0">
+
+
+    <div>
+      <v-container fluid>
+        <v-expansion-panels
+        elevation="0"
+        color="blue-lighten-5"
+        rounded="lg"
+        class="rbox-shadow elevation-0 card-box-shadow"
+          v-if="!$route.fullPath.includes('/buy/') && propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID">
+          <v-expansion-panel  class="box-shadow elevation-0">
+            <v-expansion-panel-title >
+              <h3 class="font-weight-black">QR Code & Analytics</h3>
+            </v-expansion-panel-title>
+            <v-expansion-panel-text>
+              <div
+                v-if="!$route.fullPath.includes('/buy/') && propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID"
+                class="pa-4 mb-10">
+                <v-row>
+                  <v-col cols="12" md="6">
+                    <v-card class="card-box-shadow rounded-lg pa-6">
+                      <h3 class="text-h6 font-weight-bold mb-2">QR Code</h3>
+                      <v-card id="reportContent" min-height="400" elevation="0" rounded="lg"
+                        class="bg-grey-lighten-4 d-flex ga-4 flex-column justify-center align-center position-relative"
+                        style="font-size: 8.0rem;line-height: 1;">
+                        <v-btn v-if="propertyObj.LISTING_TYPE"
+                          :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'"
+                          class="text-none rounded-pill elevation-0 font-weight-bold" height="" density="comfortable">{{
+                            propertyObj.LISTING_TYPE }}</v-btn>
+                        <v-card class="bg-white pa-6 rounded-lg card-box-shadow">
+
+
+                          <qrcode-vue :value="`${baseUrl}/#/buy/property/${propertyObj.PROPERTY_ID}?qr=1`" :size="200"
+                            level="H" background="transparent" foreground="black" />
+
+
+                        </v-card>
+
+                        <div class="">
+                          <p class="text-body-2 text-grey-darken-1 mb-0">Powered By</p>
+                          <p class="text-primary text-body-1 font-weight-bold">QRForInfo</p>
+                        </div>
+                      </v-card>
+                      <div class="pa-4">
+                        <div class="d-flex ga-4">
+                          <v-btn @click="downloadPDF(propertyObj)" color="primary" prependIcon="mdi-download"
+                            class="text-none rounded-lg elevation-0 font-weight-bold flex-1-1"
+                            height="42">Download</v-btn>
+                          <v-btn @click="shareAction(propertyObj)" variant="outlined"
+                            prependIcon="mdi-share-variant-outline"
+                            class="text-none rounded-lg elevation-0 font-weight-bold flex-1-1" height="42">Share</v-btn>
+                        </div>
+                      </div>
+                    </v-card>
+                  </v-col>
+
+                  <v-col cols="12" md="6" class="h-100">
+                    <v-card class="card-box-shadow rounded-lg pa-4">
+                      <h3 class="text-h6 font-weight-bold mb-2">Statistics</h3>
+                      <div class="border-b d-flex justify-space-between ga-4 py-4">
+                        <p>Total Scans</p>
+                        <p class="text-h5 text-primary font-weight-bold">45</p>
+                      </div>
+                      <div class="border-b d-flex justify-space-between ga-4 py-4">
+                        <p>Unique Visitors</p>
+                        <p class="text-h6">38</p>
+                      </div>
+                      <div class="d-flex justify-space-between ga-4 py-4">
+                        <p>Conversions</p>
+                        <p class="text-h6">8 messages</p>
+                      </div>
+                    </v-card>
+                  </v-col>
+                </v-row>
+              </div>
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+        </v-expansion-panels>
+      </v-container>
+    </div>
+    <!-- <div v-if="!$route.fullPath.includes('/buy/') && propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID" class="d-flex justify-space-between pa-6 pb-0">
       <div class="">
         <h3 class="text-h5 font-weight-bold">QR Code & Analytics</h3>
       </div>
@@ -149,7 +250,7 @@
           </v-card>
         </v-col>
       </v-row>
-    </div>
+    </div> -->
   </div>
 
 
@@ -165,13 +266,15 @@
       </v-card-text>
       <v-row>
         <v-col>
-          <v-btn @click="warningPopUp = false" rounded="xl" height="48" color="secondary" width="100%" class="text-none elevation-0 font-weight-bold">
+          <v-btn @click="warningPopUp = false" rounded="xl" height="48" color="secondary" width="100%"
+            class="text-none elevation-0 font-weight-bold">
             <v-icon class="mr-1" color="">mdi-web</v-icon> Continue Web
           </v-btn>
         </v-col>
         <v-col>
           <!-- https://apps.apple.com/in/app/school/id1528665599 -->
-          <v-btn @click="openMobileApp" rounded="xl" height="48" color="primary" width="100%" class="text-none elevation-0 font-weight-bold">
+          <v-btn @click="openMobileApp" rounded="xl" height="48" color="primary" width="100%"
+            class="text-none elevation-0 font-weight-bold">
             <v-icon class="mr-1" color="">mdi-cellphone</v-icon> Download App
           </v-btn>
         </v-col>
@@ -273,6 +376,7 @@ const openMobileApp = () => {
   window.open('https://apps.apple.com/in/app/school/id1528665599')
 }
 //------------------------------------------------------------------------------
+const panel = ref([0])
 </script>
 
 <style scoped lang="scss">

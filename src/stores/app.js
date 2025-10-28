@@ -15,6 +15,7 @@ export const useAuthStore = defineStore("app", {
         return true
       }
     },
+    getUserDetails: (state)=> state.userDetails
   },
   actions: {
     login(userDetails, token) {

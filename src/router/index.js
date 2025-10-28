@@ -73,6 +73,7 @@ const router = createRouter({
       path: "/login",
       name: "Login",
       component: Login,
+      beforeEnter: checkLoggedInRouteGuard
     },
     {
       path: "/404",
@@ -83,6 +84,7 @@ const router = createRouter({
       path: "/signup",
       name: "SignUp",
       component: Signup,
+      beforeEnter: checkLoggedInRouteGuard
     },
 
     {
@@ -101,43 +103,9 @@ const router = createRouter({
 async function routeGuard(to, from, next) {
   const authStore = useAuthStore()
   const isAuthenticated = authStore.isAuthenticated
-
-  if (isAuthenticated && !authStore.userDetails) {
-    console.log('--->', 11111);
-    try {
-      const response = localStorage.getItem('userDetails') || null
-      if (response) {
-        const res = JSON.parse(response)
-        // authStore.userLoginVerify(res)
-      } else {
-        // console.log('not verified verifyUser 1')
-        // next({ name: 'PageNotFound' })
-        authStore.logout()
-        // authStore.userLoginVerify(undefined)
-        // console.log('not verified verifyUser')
-      }
-    } catch (e) {
-      next({ name: 'PageNotFound' })
-      // next({ name: 'Login' })
-      authStore.logout()
-      console.log(e)
-    }
-  }
-
-
-  else if (isAuthenticated && authStore.userDetails) {
-    console.log('--->', 222222);
-    if (to.meta.role == 'ALL') {
-      next()
-    } else if (authStore.userDetails?.USER_ROLE?.some((value) => value?.USER_ROLE !== to?.meta?.role)) {
-      // Redirect to unauthorized page or some other route
-      next({ name: 'PageNotFound' })
-      // next({ name: 'Login' })
-    } else {
-      next()
-    }
-  } else {
-    console.log('--->', 33333);
+  if (isAuthenticated && authStore.userDetails) {
+    next()
+  }else {
     next({ name: 'Login' })
   }
 }
@@ -146,7 +114,7 @@ function checkLoggedInRouteGuard(to, from, next) {
   const authStore = useAuthStore()
   const isAuthenticated = authStore.isAuthenticated
   if (isAuthenticated) {
-    next({ name: 'Home' })
+    next({ name: 'Dashboard' })
   } else {
     next()
   }

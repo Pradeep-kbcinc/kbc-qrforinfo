@@ -49,7 +49,7 @@
   </div>
 </template>
 <script setup>
-import { defineProps } from 'vue';
+import { defineProps, nextTick } from 'vue';
 import { useDisplay } from 'vuetify'
 const { mobile } = useDisplay()
 import Sidebar from './sidebar.vue'
@@ -71,8 +71,9 @@ const toggleSidebar = ()=>{
   sidebarPanel.value.toggleSidebar()
 }
 
-const logout = ()=>{
-  localStorage.clear()
+const logout = async()=>{
+  await nextTick()
+localStorage.clear()
 router.push('/login')
 }
 </script>

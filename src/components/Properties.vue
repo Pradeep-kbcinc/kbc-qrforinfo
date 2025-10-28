@@ -33,9 +33,7 @@
     <div class="pa-4 pt-0">
       <v-row>
         <template v-if="isLoading">
-          <v-col><v-skeleton-loader class="mx-auto border" type="image, article"></v-skeleton-loader></v-col>
-          <v-col><v-skeleton-loader class="mx-auto border" type="image, article"></v-skeleton-loader></v-col>
-          <v-col><v-skeleton-loader class="mx-auto border" type="image, article"></v-skeleton-loader></v-col>
+          <v-col cols="12" md="4" v-for="value in 10"><v-skeleton-loader class="mx-auto border" type="image, article"></v-skeleton-loader></v-col>
         </template>
         <v-col v-else cols="12" md="6" lg="4" v-for="propertyObj in propertyArr">
           <PropertyCard :propertyObj="propertyObj" />
@@ -72,11 +70,12 @@ const getProperties = async () => {
       COUNTRY: ""
     }
     let res;
-    if (route.name == 'BuyProperties') {
-      res = await propertyService.GetPropertyDetailPublic(data)
-    } else {
-      res = await propertyService.GetPropertyDetail(data)
-    }
+    // if (route.name == 'BuyProperties') {
+    //   res = await propertyService.GetPropertyDetailPublic(data)
+    // } else {
+    //   res = await propertyService.GetPropertyDetail(data)
+    // }
+    res = await propertyService.GetPropertyDetailPublic(data)
     propertyArr.value = res?.data?.FetchData?.PROPERTY_DETAILS || [];
   } catch (error) {
     console.log('--->err', error);

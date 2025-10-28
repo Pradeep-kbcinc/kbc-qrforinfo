@@ -4,7 +4,7 @@
       🏠
 
       <v-btn v-if="propertyObj.LISTING_TYPE" :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'" class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 left-0 mt-4 ms-4" height="" density="comfortable">{{ propertyObj.LISTING_TYPE }}</v-btn>
-      <v-btn v-if="propertyObj.IS_FAV" color="white" :icon="propertyObj.IS_FAV ? 'mdi-heart' : 'mdi-heart-outline'" class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 right-0 mt-4 mr-4">
+      <v-btn @click.stop="makeFev" color="white" :icon="propertyObj.IS_FAV ? 'mdi-heart' : 'mdi-heart-outline'" class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 right-0 mt-4 mr-4">
         <v-icon :color="propertyObj.IS_FAV ? 'red' : 'black'">{{ propertyObj.IS_FAV ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
       </v-btn>
     </v-card>
@@ -24,13 +24,19 @@
           }) }}
           <!-- {{ propertyObj.CURRENCY_CODE }} -->
         </p>
-        <v-btn variant="text" class="font-weight-bold">Save</v-btn>
+        <div v-if="authStore.isAuthenticated">
+          <v-btn elevation="0" v-if="propertyObj.SELLER_USER_ID === authStore.getUserDetails.USER_ID" variant="elevated" color="success" class="font-weight-bold text-none">Edit</v-btn>
+        </div>
+        
       </div>
     </div>
   </v-card>
 </template>
 
 <script setup>
+import { useAuthStore } from '@/stores/app';
+const authStore = useAuthStore()
+
 const route = useRoute()
 defineProps({
   propertyObj: {
@@ -38,6 +44,10 @@ defineProps({
     required: true
   }
 })
+
+const makeFev = ()=>{
+
+}
 </script>
 
 <style scoped>
