@@ -3,7 +3,7 @@
     <div class="mt-1 d-flex align-center">
       <div>
         <h3 class="font-weight-bold">Dashboard</h3>
-        <p>Welcome Back, Abhijit Debnath</p>
+        <p>Welcome Back, {{ authStore?.userDetails?.FNAME }} {{ authStore?.userDetails?.MNAME }} {{ authStore?.userDetails?.LNAME }}</p>
       </div>
       <v-spacer></v-spacer>
       <v-btn @click="router.push('/add-new-property')" :height="!mobile ? 48 : 38" :width="mobile ? '140' : ''" rounded="lg" class="elevation-0 text-none font-weight-bold" color="primary">
@@ -99,7 +99,11 @@
 </template>
 <script setup>
 import propertyService from '@/services/propertyService'
+import { useAuthStore } from '@/stores/app'
 import { useDisplay } from 'vuetify'
+
+//..............................................................................
+const authStore = useAuthStore()
 const { mobile } = useDisplay()
 const router = useRouter()
 const isLoading = ref(false)
@@ -130,7 +134,7 @@ const properties = [
     image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQp7-a_VsyHwiODqLFYJ_Zbp0eOeGJQp4y5hA&s',
   },
 ]
-
+//..............................................................................
 
 //------------------------------------------------------------------------------
 onMounted(() => {

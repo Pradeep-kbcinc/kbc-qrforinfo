@@ -95,13 +95,13 @@
       </v-row>
     </div>
 
-    <div v-if="!$route.fullPath.includes('/buy/')" class="d-flex justify-space-between pa-6 pb-0">
+    <div v-if="!$route.fullPath.includes('/buy/') && propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID" class="d-flex justify-space-between pa-6 pb-0">
       <div class="">
         <h3 class="text-h5 font-weight-bold">QR Code & Analytics</h3>
       </div>
     </div>
 
-    <div v-if="!$route.fullPath.includes('/buy/')" class="pa-4 mb-10">
+    <div v-if="!$route.fullPath.includes('/buy/') && propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID" class="pa-4 mb-10">
       <v-row>
         <v-col cols="12" md="6">
           <v-card class="card-box-shadow rounded-lg pa-6">
@@ -151,6 +151,8 @@
       </v-row>
     </div>
   </div>
+
+
   <v-dialog max-width="400" persistent v-model="warningPopUp">
     <v-toolbar density="compact" rounded="t-xl" class="px-4">
       <v-spacer></v-spacer>

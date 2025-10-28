@@ -29,7 +29,7 @@
               Direct buyer-seller messaging
             </h6>
           </div>
-
+          <p class="text-center mt-4">V : {{ version }}</p>
         </div>
       </v-col>
 
@@ -80,6 +80,7 @@ import { required, helpers, minLength, maxLength, numeric, email } from '@vuelid
 import { toast } from 'vue3-toastify';
 import { useAuthStore } from '@/stores/app'
 import { useRouter, useRoute } from 'vue-router'
+import { version } from '../../package.json'
 
 //..............................................................................
 const router = useRouter()
@@ -109,9 +110,21 @@ const sendOtpToLogin = async () => {
         MOBILE_NUMBER: initialState.value.phoneNumber
       }
       const res = await authStore.loginUser(data)
-      isVerfiyOTP.value = true
+      console.log('--->res', res?.response?.data?.MESSAGE);
+      if (!res?.response?.data?.ERR_CODE) isVerfiyOTP.value = true
+      else if (res?.response?.data?.MESSAGE == 'No user found for this mobile no') {
+        setTimeout(() => {
+          toast.error('No user found for this mobile no', { autoClose: 4000, });
+        }, 100);
+
+        router.push('/signup')
+      }
+      else { throw new Error(res?.response?.data?.MESSAGE || 'Something went wrong') }
     } catch (error) {
       console.log('--->err', error);
+      toast.error(error || 'Something went wrong', {
+        autoClose: 4000,
+      });
     } finally {
       btnLoader.value = false
     }

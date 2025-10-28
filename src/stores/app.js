@@ -44,6 +44,7 @@ export const useAuthStore = defineStore("app", {
         }
       } catch (e) {
         console.log("Invalid credentials", "error", e);
+        return e;
       }
     },
   },

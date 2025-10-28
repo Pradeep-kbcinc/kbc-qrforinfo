@@ -29,7 +29,7 @@
               Direct buyer-seller messaging
             </h6>
           </div>
-
+          <p class="text-center mt-4">V : {{ version }}</p>
         </div>
       </v-col>
 
@@ -40,38 +40,31 @@
           <div class="mt-6">
             <div class="">
               <p class="text-body-2">First Name</p>
-              <v-text-field :error-messages="v$.FNAME.$errors.map(e => e.$message)" @blur="v$.FNAME.$touch" @input="v$.FNAME.$touch" v-model="propertyObj.FNAME" rounded="lg" placeholder="Enter first name" max-width="500"
-                label="" variant="outlined"></v-text-field>
+              <v-text-field :error-messages="v$.FNAME.$errors.map(e => e.$message)" @blur="v$.FNAME.$touch" @input="v$.FNAME.$touch" v-model="propertyObj.FNAME" rounded="lg" placeholder="Enter first name" max-width="500" label="" variant="outlined"></v-text-field>
             </div>
             <div class="">
               <p class="text-body-2">Middle Name (Optional)</p>
-              <v-text-field :error-messages="v$.MNAME.$errors.map(e => e.$message)" @blur="v$.MNAME.$touch" @input="v$.MNAME.$touch" v-model="propertyObj.MNAME" rounded="lg" placeholder="Enter first name" max-width="500"
-                label="" variant="outlined"></v-text-field>
+              <v-text-field :error-messages="v$.MNAME.$errors.map(e => e.$message)" @blur="v$.MNAME.$touch" @input="v$.MNAME.$touch" v-model="propertyObj.MNAME" rounded="lg" placeholder="Enter first name" max-width="500" label="" variant="outlined"></v-text-field>
             </div>
             <div class="">
               <p class="text-body-2">Last Name</p>
-              <v-text-field :error-messages="v$.LNAME.$errors.map(e => e.$message)" @blur="v$.LNAME.$touch" @input="v$.LNAME.$touch" v-model="propertyObj.LNAME" rounded="lg" placeholder="Enter last name" max-width="500"
-                label="" variant="outlined"></v-text-field>
+              <v-text-field :error-messages="v$.LNAME.$errors.map(e => e.$message)" @blur="v$.LNAME.$touch" @input="v$.LNAME.$touch" v-model="propertyObj.LNAME" rounded="lg" placeholder="Enter last name" max-width="500" label="" variant="outlined"></v-text-field>
             </div>
             <div class="">
               <p class="text-body-2">Phone Number</p>
-              <v-text-field :error-messages="v$.MOBILE_PHONE.$errors.map(e => e.$message)" @blur="v$.MOBILE_PHONE.$touch" @input="v$.MOBILE_PHONE.$touch" v-model="propertyObj.MOBILE_PHONE" rounded="lg" placeholder="+91 987643210" max-width="500"
-                label="" variant="outlined"></v-text-field>
+              <v-text-field :error-messages="v$.MOBILE_PHONE.$errors.map(e => e.$message)" @blur="v$.MOBILE_PHONE.$touch" @input="v$.MOBILE_PHONE.$touch" v-model="propertyObj.MOBILE_PHONE" rounded="lg" placeholder="+91 987643210" max-width="500" label="" variant="outlined"></v-text-field>
             </div>
             <div class="">
               <p class="text-body-2">Email (Optional)</p>
-              <v-text-field :error-messages="v$.EMAIL.$errors.map(e => e.$message)" @blur="v$.EMAIL.$touch" @input="v$.EMAIL.$touch" v-model="propertyObj.EMAIL" rounded="lg" placeholder="your@email.com" max-width="500"
-                label="" variant="outlined" :rules="[
-                  v => !!v || 'Email is required',
-                  v => /.+@.+\..+/.test(v) || 'Email must be valid'
-                ]"></v-text-field>
+              <v-text-field :error-messages="v$.EMAIL.$errors.map(e => e.$message)" @blur="v$.EMAIL.$touch" @input="v$.EMAIL.$touch" v-model="propertyObj.EMAIL" rounded="lg" placeholder="your@email.com" max-width="500" label="" variant="outlined" :rules="[
+                v => !!v || 'Email is required',
+                v => /.+@.+\..+/.test(v) || 'Email must be valid'
+              ]"></v-text-field>
             </div>
-            <v-btn @click="registerNow" :loading="btnLoader" class="text-none font-weight-bold mt-3" height="48"
-              width="500" size="large" rounded="lg" color="#2663eb" elevation="0">
+            <v-btn @click="registerNow" :loading="btnLoader" class="text-none font-weight-bold mt-3" height="48" width="500" size="large" rounded="lg" color="#2663eb" elevation="0">
               SignUp
             </v-btn>
-            <p class="text-center mt-4">Already have an account ? <span @click="$router.push('/login')"
-                class="text-primary font-weight-bold ml-2 cursor-pointer">Login</span> </p>
+            <p class="text-center mt-4">Already have an account ? <span @click="$router.push('/login')" class="text-primary font-weight-bold ml-2 cursor-pointer">Login</span> </p>
           </div>
         </v-container>
       </v-col>
@@ -84,13 +77,16 @@ import { useVuelidate } from '@vuelidate/core'
 import { required, helpers, minLength, maxLength, numeric, email } from '@vuelidate/validators'
 import propertyService from '@/services/propertyService'
 import { toast } from 'vue3-toastify'
+import { version } from '../../package.json'
+
+//..............................................................................
 const router = useRouter()
 const propertyObj = ref({
   ACTION_TYPE: "CREATE",
   USER_ID: 0,
   MOBILE_PHONE: "",
   FNAME: "",
-  MNAME:"",
+  MNAME: "",
   LNAME: "",
   GENDER: "",
   EMAIL: "",
@@ -109,7 +105,7 @@ const rules = {
   USER_ID: {},
   MOBILE_PHONE: { required, numeric },
   FNAME: { required },
-  MNAME: {  },
+  MNAME: {},
   LNAME: { required },
   GENDER: {},
   EMAIL: { email },
@@ -122,12 +118,11 @@ const rules = {
   IS_MOBILE_VERIFIED_FLG: {},
   IS_EMAIL_VERIFIED_FLG: {}
 }
-
 const v$ = useVuelidate(rules, propertyObj.value)
-
 const btnLoader = ref(false)
+//..............................................................................
 
-
+//------------------------------------------------------------------------------
 const registerNow = async () => {
   const isFormCorrect = await v$.value.$validate();
   if (!isFormCorrect) {
@@ -140,14 +135,14 @@ const registerNow = async () => {
         console.log(res)
         btnLoader.value = false
         toast.success('Registration Successfull', {
-        autoClose: 4000,
-      });
-      router.push('/login')
-      }else{
+          autoClose: 4000,
+        });
+        router.push('/login')
+      } else {
         btnLoader.value = false
         toast.error('Something Went Wrong', {
-        autoClose: 4000,
-      });
+          autoClose: 4000,
+        });
       }
     } catch (error) {
       toast.error('Something Went Wrong', {
@@ -158,4 +153,5 @@ const registerNow = async () => {
     }
   }
 }
+//------------------------------------------------------------------------------
 </script>
