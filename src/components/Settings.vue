@@ -151,10 +151,21 @@ const rules = {
 }
 const v$ = useVuelidate(rules, state.value)
 
+
+const fetchUserDetails = async()=>{
+  try {
+    let res = await propertyService.fetchUserDetail()
+    if(res.data.ERR_CODE == 0){
+
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 const updateProfileLoader = ref(false)
 const updateProfile = async () => {
   const isFormCorrect = await v$.value.$validate();
-  console.log(await v$.value, 'isFormCorrect')
   if (!isFormCorrect) {
     return;
   } else {
@@ -165,6 +176,7 @@ const updateProfile = async () => {
         toast.success('Profile Updated', {
           autoClose: 4000,
         });
+        fetchUserDetails()
         updateProfileLoader.value = false
       } else {
         toast.error('Something went wrong', {

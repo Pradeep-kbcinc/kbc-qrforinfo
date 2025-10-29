@@ -209,10 +209,6 @@ onMounted(() => {
 //------------------------------------------------------------------------------
 const saveProperty = async () => {
   const isFormCorrect = await v$.value.$validate();
-  console.log(await v$.value, 'isFormCorrect')
-  console.log('--->isFormCorrect', isFormCorrect);
-  console.log('--->authStore?.userDetails', authStore?.userDetails);
-  console.log('--->state', state.value);
   if (!isFormCorrect) {
     return;
   } else {
@@ -296,7 +292,10 @@ const fetchPropertyDetail = async () => {
       CITY: "",
       STATE: "",
       POSTAL_CODE: "",
-      COUNTRY: ""
+      COUNTRY: "",
+      PAGE_NO: 1,
+      PAGE_SIZE:10, 
+      SEARCH:''
     }
     const res = await propertyService.GetPropertyDetail(data);
     // state.value = { ...state.value, ...res?.data?.FetchData?.PROPERTY_DETAILS?.[0] } || {}

@@ -53,4 +53,10 @@ export default {
   async GetPropertyDetailPublic(data){
     return axios.post(`/GetPropertyDetailPublic`, data)
   },
+
+  // user details  
+  
+  async fetchUserDetail(){
+    return axios.get(`/GetUserDetail`)
+  },
 }

@@ -12,7 +12,7 @@
         <p v-if="propertyObj.COUNTRY && propertyObj.STATE && propertyObj.CITY"><v-icon>mdi-map-marker-outline</v-icon>
           {{ propertyObj.COUNTRY }}, {{ propertyObj.STATE }}, {{ propertyObj.CITY }}</p>
       </div>
-      <div v-if="!$route.fullPath.includes('/buy/')" class="d-flex ga-4">
+      <div v-if="authStore.isAuthenticated" class="d-flex ga-4">
         <v-btn v-if="propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID"
           @click="$router.push(`/add-new-property/${propertyObj.PROPERTY_ID}`)" variant="outlined"
           prependIcon="mdi-square-edit-outline" class="text-none rounded-lg elevation-0 font-weight-bold"
@@ -102,11 +102,11 @@
                 // useGrouping: 'false'
               }) }}
               {{ propertyObj.CURRENCY_CODE }}</p>
-            <v-btn color="primary" class="text-none rounded-lg elevation-0 font-weight-bold w-100" height="50"
+            <v-btn v-if="authStore.userDetails.USER_ID !== propertyObj.SELLER_USER_ID" color="primary" class="text-none rounded-lg elevation-0 font-weight-bold w-100" height="50"
               prepend-icon="mdi-comment-outline">Contact Owner</v-btn>
-            <v-btn @click="propertyObj.IS_FAV == propertyObj.IS_FAV" color="red" variant="outlined"
+            <v-btn @click="makeFev" :loading="makeFevLoader" color="red" variant="outlined"
               class="text-none rounded-lg elevation-0 font-weight-bold w-100 mt-3"
-              :prepend-icon="propertyObj.IS_FAV ? 'mdi-heart' : 'mdi-heart-outline'" height="50">{{ propertyObj.IS_FAV ?
+              :prepend-icon="propertyObj.IS_FAVOURITE == 1 ? 'mdi-heart' : 'mdi-heart-outline'" height="50">{{ propertyObj.IS_FAV ?
                 'Saved to Favorites' : 'Save to Favorites' }}</v-btn>
             <v-btn @click="shareAction(propertyObj)" variant="outlined"
               class="text-none rounded-lg elevation-0 font-weight-bold w-100 mt-3"
@@ -291,7 +291,7 @@ import QrcodeVue from 'qrcode.vue';
 import Header from '@/layouts/header.vue'
 import propertyService from '@/services/propertyService';
 import { useAuthStore } from '@/stores/app';
-
+import { toast } from 'vue3-toastify';
 //..............................................................................
 const authStore = useAuthStore()
 const route = useRoute()
@@ -384,6 +384,33 @@ const openMobileApp = () => {
 }
 //------------------------------------------------------------------------------
 const panel = ref([0])
+
+const makeFevLoader = ref(false)
+const makeFev = async()=>{
+  if(authStore.isAuthenticated){
+    makeFevLoader.value = true
+  try {
+    let data = {
+      "ACTION_TYPE": "CREATE",
+      "FAV_ID": 0,
+      "USER_ID": authStore.getUserDetails.USER_ID,
+      "PROPERTY_ID": route.params.id
+    }
+    let res = await propertyService.PropertyFavoriteTxnCrud(data)
+    if(res.data.ERR_CODE == 0){
+      toast.success('Property added to your saved list', {
+          autoClose: 4000,
+        });
+      makeFevLoader.value = false
+    }
+  } catch (error) {
+    makeFevLoader.value = false
+    console.log(error)
+  }
+  }else{
+    router.push('/login')
+  }
+}
 </script>
 
 <style scoped lang="scss">
