@@ -50,7 +50,7 @@
       <v-card class="card-box-shadow rounded-lg">
         <v-card-text>
           <v-row align="center" justify="space-between" class="px-2 mb-2">
-            <h3 class="text-h6">Recent Properties</h3>
+            <h3 class="text-h6">My Properties</h3>
             <v-btn variant="text" color="primary" class="text-capitalize">View All</v-btn>
           </v-row>
 
@@ -151,7 +151,10 @@ const getProperties = async () => {
       CITY: "",
       STATE: "",
       POSTAL_CODE: "",
-      COUNTRY: ""
+      COUNTRY: "",
+      SEARCH:"", 
+      PAGE_NO: 1, 
+      PAGE_SIZE: 10
     }
 
     const res = await propertyService.GetPropertyDetail(data)

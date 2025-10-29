@@ -1,11 +1,20 @@
 <template>
-  <v-card @click="route.name !== 'BuyProperties' ? $router.push('/property/' + propertyObj.PROPERTY_ID) : $router.push('/buy/property/' + propertyObj.PROPERTY_ID)" class="card-box-shadow rounded-lg">
+  <v-card @click="
+  $router.push({
+    path: route.name !== 'BuyProperties'
+      ? `/property/${propertyObj.PROPERTY_ID}`
+      : `/buy/property/${propertyObj.PROPERTY_ID}`,
+    query: {
+      createdBy: propertyObj.SELLER_USER_ID === authStore.getUserDetails.USER_ID
+    }
+  })
+" class="card-box-shadow rounded-lg">
     <v-card min-height="250" elevation="0" rounded="0" class="bg-box-gradient d-flex justify-center align-center position-relative" style="font-size: 5.0rem;line-height: 1;">
       🏠
 
       <v-btn v-if="propertyObj.LISTING_TYPE" :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'" class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 left-0 mt-4 ms-4" height="" density="comfortable">{{ propertyObj.LISTING_TYPE }}</v-btn>
-      <v-btn @click.stop="makeFev" color="white" :icon="propertyObj.IS_FAV ? 'mdi-heart' : 'mdi-heart-outline'" class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 right-0 mt-4 mr-4">
-        <v-icon :color="propertyObj.IS_FAV ? 'red' : 'black'">{{ propertyObj.IS_FAV ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
+      <v-btn :loading="makeFevLoader" @click.stop="makeFev(propertyObj.PROPERTY_ID)" color="white" :icon="propertyObj.IS_FAV ? 'mdi-heart' : 'mdi-heart-outline'" class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 right-0 mt-4 mr-4">
+        <v-icon :color="propertyObj.IS_FAVOURITE ? 'red' : 'black'">{{ propertyObj.IS_FAVOURITE ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
       </v-btn>
     </v-card>
     <div class="pa-4">
@@ -34,7 +43,10 @@
 </template>
 
 <script setup>
+import propertyService from '@/services/propertyService';
 import { useAuthStore } from '@/stores/app';
+import { toast } from 'vue3-toastify';
+
 const authStore = useAuthStore()
 
 const route = useRoute()
@@ -45,8 +57,27 @@ defineProps({
   }
 })
 
-const makeFev = ()=>{
-
+const makeFevLoader = ref(false)
+const makeFev = async(id)=>{
+  makeFevLoader.value = true
+  try {
+    let data = {
+      "ACTION_TYPE": "CREATE",
+      "FAV_ID": 0,
+      "USER_ID": authStore.getUserDetails.USER_ID,
+      "PROPERTY_ID": id
+    }
+    let res = await propertyService.PropertyFavoriteTxnCrud(data)
+    if(res.data.ERR_CODE == 0){
+      toast.success('Property added to your saved list', {
+          autoClose: 4000,
+        });
+      makeFevLoader.value = false
+    }
+  } catch (error) {
+    makeFevLoader.value = false
+    console.log(error)
+  }
 }
 </script>
 

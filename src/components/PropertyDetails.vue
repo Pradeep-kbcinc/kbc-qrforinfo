@@ -322,13 +322,20 @@ const fetchPropertyDetail = async () => {
       CITY: "",
       STATE: "",
       POSTAL_CODE: "",
-      COUNTRY: ""
+      COUNTRY: "",
+      SEARCH:"", 
+      PAGE_NO: 1, 
+      PAGE_SIZE: 10,
     }
     let res;
-    console.log('--->route.name', route.name);
-    if (route.name == 'BuyPropertyDetails') {
+    console.log(route.query.createdBy, 'route.query.createdBy')
+    if(route.query.createdBy ===  'false'){
+      console.log('1')
       res = await propertyService.GetPropertyDetailPublic(data);
-    } else {
+    }else if (route.name == 'BuyPropertyDetails') {
+      console.log('2')
+      res = await propertyService.GetPropertyDetailPublic(data);
+    } else if(route.query.createdBy) {
       res = await propertyService.GetPropertyDetail(data);
     }
     propertyObj.value = res.data?.FetchData?.PROPERTY_DETAILS?.[0] || {}

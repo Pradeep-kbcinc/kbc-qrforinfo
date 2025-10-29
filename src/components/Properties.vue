@@ -67,7 +67,8 @@ const getProperties = async () => {
       CITY: "",
       STATE: "",
       POSTAL_CODE: "",
-      COUNTRY: ""
+      COUNTRY: "",
+      SEARCH:""
     }
     let res;
     // if (route.name == 'BuyProperties') {

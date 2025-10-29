@@ -80,7 +80,7 @@
             </v-col>
             <v-col>
               <p>Bathrooms</p>
-              <v-text-field v-model="state.NO_BEDROOMS" class="mt-1" rounded="lg" variant="outlined" placeholder="3"></v-text-field>
+              <v-text-field v-model="state.NO_BATHROOMS" class="mt-1" rounded="lg" variant="outlined" placeholder="3"></v-text-field>
             </v-col>
           </v-row>
 
