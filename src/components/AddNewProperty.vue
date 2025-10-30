@@ -10,7 +10,7 @@
         </pre> -->
         <h3 class="font-weight-bold">Basic Information</h3>
         <div>
-          <p class="mt-6">Listing Type</p>
+          <p class="mt-6 font-weight-bold">Listing Type</p>
           <v-row>
             <v-col>
               <v-btn @click="state.LISTING_TYPE = 'For Sale'" :color="state.LISTING_TYPE == 'For Sale' ? 'primary' : ''" :class="state.LISTING_TYPE == 'For Sale' ? 'selectedCard' : ''" variant="outlined" block size="x-large" rounded="lg" class="text-none elevation-0 text-body-1">
@@ -57,67 +57,71 @@
         </v-row>
 
         <div>
-          <p>Property Title</p>
+          <p class="font-weight-bold">Property Title</p>
           <v-text-field :error-messages="v$.TITLE.$errors.map(e => e.$message)" @blur="v$.TITLE.$touch" @input="v$.TITLE.$touch" v-model="state.TITLE" class="mt-1" rounded="lg" variant="outlined" placeholder="Modern 3BR Apartment"></v-text-field>
         </div>
         <div>
-          <p class="mb-2">Property Description</p>
+          <p class="mb-2 font-weight-bold">Property Description</p>
           <!-- <v-textarea :error-messages="v$.PROPERTY_DESC.$errors.map(e => e.$message)" @blur="v$.PROPERTY_DESC.$touch" @input="v$.PROPERTY_DESC.$touch" v-model="state.PROPERTY_DESC" class="mt-1" rounded="lg" variant="outlined" placeholder="Modern 3BR Apartment"></v-textarea> -->
 
           <QuillEditor
               style="height: 150px"
               theme="snow"
               contentType="html"
-              placeholder="2500 characters"
-               v-model:content="state.PROPERTY_DESC"
+              placeholder="Property Description"
+              v-model:content="state.PROPERTY_DESC"
+               @blur="v$.PROPERTY_DESC.$touch" @input="v$.PROPERTY_DESC.$touch"
             />
+            <small v-if="v$.PROPERTY_DESC.$error" class="text-error">
+    {{ v$.PROPERTY_DESC.$errors[0].$message }}
+  </small>
         </div>
         <div>
           <v-row align="end">
             <v-col>
-              <p>Price</p>
+              <p class="font-weight-bold">Price</p>
               <v-text-field :error-messages="v$.PRICE_AMOUNT.$errors.map(e => e.$message)" @blur="v$.PRICE_AMOUNT.$touch" @input="v$.PRICE_AMOUNT.$touch" v-model="state.PRICE_AMOUNT" class="mt-1" rounded="lg" variant="outlined" placeholder="450,000"></v-text-field>
             </v-col>
             <v-col cols="auto">
-              <p class="pr-4">Currency Code</p>
+              <p class="pr-4 font-weight-bold mb-1">Currency Code</p>
               <v-select v-model="state.CURRENCY_CODE" variant="outlined" class="mt-auto" :items="['INR', 'USD']" rounded="lg"></v-select>
             </v-col>
             <v-col>
-              <p>Bedrooms</p>
+              <p class="font-weight-bold">Bedrooms</p>
               <v-text-field :error-messages="v$.NO_BEDROOMS.$errors.map(e => e.$message)" @blur="v$.NO_BEDROOMS.$touch" @input="v$.NO_BEDROOMS.$touch" v-model="state.NO_BEDROOMS" class="mt-1" rounded="lg" variant="outlined" placeholder="3"></v-text-field>
             </v-col>
             <v-col>
-              <p>Bathrooms</p>
+              <p class="font-weight-bold">Bathrooms</p>
               <v-text-field v-model="state.NO_BATHROOMS" class="mt-1" rounded="lg" variant="outlined" placeholder="3"></v-text-field>
             </v-col>
           </v-row>
 
           <v-row align="end">
             <v-col>
-              <p>Country</p>
+              <p class="font-weight-bold">Country</p>
               <v-text-field :error-messages="v$.COUNTRY.$errors.map(e => e.$message)" @blur="v$.COUNTRY.$touch" @input="v$.COUNTRY.$touch" v-model="state.COUNTRY" class="mt-1" rounded="lg" variant="outlined" placeholder="India"></v-text-field>
             </v-col>
             <v-col>
-              <p>State</p>
+              <p class="font-weight-bold">State</p>
               <v-text-field :error-messages="v$.STATE.$errors.map(e => e.$message)" @blur="v$.STATE.$touch" @input="v$.STATE.$touch" v-model="state.STATE" class="mt-1" rounded="lg" variant="outlined" placeholder="Delhi"></v-text-field>
             </v-col>
             <v-col>
-              <p>City</p>
+              <p class="font-weight-bold">City</p>
               <v-text-field :error-messages="v$.CITY.$errors.map(e => e.$message)" @blur="v$.CITY.$touch" @input="v$.CITY.$touch" v-model="state.CITY" class="mt-1" rounded="lg" variant="outlined" placeholder="New Delhi"></v-text-field>
             </v-col>
             <v-col>
-              <p>Postal Code</p>
+              <p class="font-weight-bold">Postal Code</p>
               <v-text-field v-model="state.POSTAL_CODE" class="mt-1" rounded="lg" variant="outlined" placeholder="Postal Code"></v-text-field>
             </v-col>
           </v-row>
 
           <v-row align="end">
             <v-col>
-              <p>Area</p>
+              <p class="font-weight-bold">Area</p>
               <v-text-field :error-messages="v$.AREA.$errors.map(e => e.$message)" @blur="v$.AREA.$touch" @input="v$.AREA.$touch" v-model="state.AREA" class="mt-1" rounded="lg" variant="outlined" placeholder="Area"></v-text-field>
             </v-col>
             <v-col cols="auto">
-              <p class="pr-4">Area Unit</p>
+              <p class="pr-4 font-weight-bold">Area Unit</p>
               <v-select v-model="state.AREA_UNIT" variant="outlined" class="mt-auto" :items="['SQFT', 'SQYD', 'SQM', 'ACRE', 'HECTARE']" rounded="lg"></v-select>
             </v-col>
           </v-row>
