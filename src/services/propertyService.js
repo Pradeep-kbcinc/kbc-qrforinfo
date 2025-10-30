@@ -59,4 +59,9 @@ export default {
   async fetchUserDetail(){
     return axios.get(`/GetUserDetail`)
   },
+  // message 
+  async message(data){
+    return axios.post(`/MessageTxnCrud`, data)
+  },
+  
 }
