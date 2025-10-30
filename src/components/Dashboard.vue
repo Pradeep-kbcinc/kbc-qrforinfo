@@ -60,7 +60,7 @@
 
           <div v-if="isLoading" class="">
             <v-skeleton-loader class="mx-auto border" type="article"></v-skeleton-loader>
-            <v-skeleton-loader v-for="item in 5" :key="item" class="mx-auto border mt-4"
+            <v-skeleton-loader v-for="item in 2" :key="item" class="mx-auto border mt-4"
               type="article"></v-skeleton-loader>
 
           </div>
@@ -102,6 +102,11 @@
 
           </v-list>
         </v-card-text>
+        <v-pagination
+              v-model="currentPage"
+              :length="totalPages"
+              class="my-4"
+            ></v-pagination>
       </v-card>
     </section>
   </v-container>
@@ -136,6 +141,8 @@ const router = useRouter()
 const isLoading = ref(false)
 const propertyArr = ref([])
 const uploadImageModal = ref(false)
+const currentPage = ref(1)
+const totalPages = ref(null)
 const properties = [
   {
     title: 'Modern 3BR Apartment',
@@ -168,12 +175,13 @@ const properties = [
 onMounted(() => {
   getProperties()
 })
+watch(currentPage,(val)=>{
+  getProperties()
+})
 //------------------------------------------------------------------------------
 const getProperties = async () => {
   try {
     isLoading.value = true;
-    console.log('--->', 12312);
-
     const data = {
       PROPERTY_ID: 0,
       CITY: "",
@@ -181,12 +189,16 @@ const getProperties = async () => {
       POSTAL_CODE: "",
       COUNTRY: "",
       SEARCH: "",
-      PAGE_NO: 1,
-      PAGE_SIZE: 10
+      PAGE_NO: currentPage.value,
+      PAGE_SIZE: 6
     }
 
     const res = await propertyService.GetPropertyDetail(data)
-    propertyArr.value = res?.data?.FetchData?.PROPERTY_DETAILS || [];
+    if(res.data.ERR_CODE == 0){
+      totalPages.value = res.data.FetchData.TOTAL_PAGE
+      propertyArr.value = res?.data?.FetchData?.PROPERTY_DETAILS || [];
+    }
+  
   } catch (error) {
     console.log('--->err', error);
   } finally {

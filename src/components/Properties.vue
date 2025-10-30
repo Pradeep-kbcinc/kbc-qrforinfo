@@ -8,8 +8,11 @@
         </v-col>
         <v-col cols="12">
           <div class="position-relative d-flex align-center">
-            <v-text-field v-model="searchVal" placeholder="Search Properties..." hide-details variant="solo-filled" rounded="lg"></v-text-field>
-            <v-btn @click="searchNow" color="primary" class="text-none rounded-lg elevation-0 font-weight-bold position-absolute top-0 right-0 mt-2 mr-2" height="42"> <v-icon size="large" class="mr-2 mt-1">mdi-magnify</v-icon> Search</v-btn>
+            <v-text-field v-model="searchVal" placeholder="Search Properties..." hide-details variant="solo-filled"
+              rounded="lg"></v-text-field>
+            <v-btn @click="searchNow" color="primary"
+              class="text-none rounded-lg elevation-0 font-weight-bold position-absolute top-0 right-0 mt-2 mr-2"
+              height="42"> <v-icon size="large" class="mr-2 mt-1">mdi-magnify</v-icon> Search</v-btn>
           </div>
         </v-col>
       </v-row>
@@ -18,12 +21,14 @@
     <div class="pa-4 pb-0 pt-2">
       <v-row justify="space-between">
         <v-col cols="auto">
-          <v-btn height="42" rounded="lg" variant="outlined" class="elevation-0 text-none font-weight-bold" color="primary">
+          <v-btn height="42" rounded="lg" variant="outlined" class="elevation-0 text-none font-weight-bold"
+            color="primary">
             <v-icon>mdi-filter-outline</v-icon> Filters
           </v-btn>
         </v-col>
         <v-col v-if="$route.name == 'properties'" cols="auto">
-          <v-btn @click="$router.push('/add-new-property')" height="42" rounded="lg" class="elevation-0 text-none font-weight-bold" color="primary">
+          <v-btn @click="$router.push('/add-new-property')" height="42" rounded="lg"
+            class="elevation-0 text-none font-weight-bold" color="primary">
             <v-icon>mdi-plus</v-icon> Add Property
           </v-btn>
         </v-col>
@@ -33,13 +38,15 @@
     <div class="pa-4 pt-0">
       <v-row>
         <template v-if="isLoading">
-          <v-col cols="12" md="4" v-for="value in 10"><v-skeleton-loader class="mx-auto border" type="image, article"></v-skeleton-loader></v-col>
+          <v-col cols="12" md="4" v-for="value in 6"><v-skeleton-loader class="mx-auto border"
+              type="image, article"></v-skeleton-loader></v-col>
         </template>
         <v-col v-else cols="12" md="6" lg="4" v-for="propertyObj in propertyArr">
           <PropertyCard :propertyObj="propertyObj" />
         </v-col>
       </v-row>
     </div>
+    <v-pagination v-model="currentPage" :length="totalPages" class="my-4"></v-pagination>
   </div>
 </template>
 
@@ -51,7 +58,9 @@ const route = useRoute()
 const isLoading = ref(false)
 const propertyArr = ref([])
 const searchVal = ref('')
-
+const currentPage = ref(1)
+const pageLimit = ref(6)
+const totalPages = ref(null)
 onMounted(() => {
   getProperties()
 })
@@ -67,9 +76,9 @@ const getProperties = async () => {
       STATE: "",
       POSTAL_CODE: "",
       COUNTRY: "",
-      SEARCH: searchVal.value, 
-      PAGE_NO: 1, 
-      PAGE_SIZE: 10
+      SEARCH: searchVal.value,
+      PAGE_NO: currentPage.value,
+      PAGE_SIZE: pageLimit.value
     }
     let res;
     // if (route.name == 'BuyProperties') {
@@ -78,6 +87,7 @@ const getProperties = async () => {
     //   res = await propertyService.GetPropertyDetail(data)
     // }
     res = await propertyService.GetPropertyDetailPublic(data)
+    totalPages.value = res.data.FetchData.TOTAL_PAGE
     propertyArr.value = res?.data?.FetchData?.PROPERTY_DETAILS || [];
   } catch (error) {
     console.log('--->err', error);
@@ -85,9 +95,13 @@ const getProperties = async () => {
     isLoading.value = false;
   }
 }
-const searchNow = ()=>{
+const searchNow = () => {
   getProperties()
 }
+
+watch(() => {
+  getProperties()
+})
 </script>
 
 <style scoped>
