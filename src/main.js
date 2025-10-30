@@ -8,6 +8,8 @@
 import { registerPlugins } from '@/plugins'
 import './config/axios-interceptor'
 import 'vue3-toastify/dist/index.css';
+import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.snow.css'
 // Components
 import App from './App.vue'
 
@@ -20,5 +22,6 @@ import 'unfonts.css'
 const app = createApp(App)
 
 registerPlugins(app)
-
+app.component('QuillEditor', QuillEditor)
 app.mount('#app')
+

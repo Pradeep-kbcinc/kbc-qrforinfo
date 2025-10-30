@@ -72,8 +72,8 @@
                   </div>
                 </v-col>
               </v-row>
-
-              <p class="mt-6">{{ propertyObj.PROPERTY_DESC }}</p>
+              <v-divider></v-divider>
+              <p class="mt-6" v-html="propertyObj.PROPERTY_DESC"></p>
             </div>
           </v-card>
         </v-col>
