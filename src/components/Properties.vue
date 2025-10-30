@@ -99,7 +99,7 @@ const searchNow = () => {
   getProperties()
 }
 
-watch(() => {
+watch(currentPage,(val) => {
   getProperties()
 })
 </script>

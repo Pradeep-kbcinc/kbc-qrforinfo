@@ -196,7 +196,7 @@ const rules = {
   STATE: { required: helpers.withMessage('State is required', required) },
   CITY: { required: helpers.withMessage('City is required', required) },
   AREA: { required: helpers.withMessage('Area is required', required) },
-  NO_BEDROOMS: { required: helpers.withMessage('Number of bedrooms is required', required) },
+  NO_BEDROOMS: {  },
 }
 const v$ = useVuelidate(rules, state)
 const saveBtnLoader = ref(false)

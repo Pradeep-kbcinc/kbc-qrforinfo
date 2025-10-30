@@ -156,7 +156,16 @@ const fetchUserDetails = async()=>{
   try {
     let res = await propertyService.fetchUserDetail()
     if(res.data.ERR_CODE == 0){
-
+       state.value.FNAME = res.data.FetchData.USER_DETAILS[0]?.FNAME
+      state.value.MNAME = res.data.FetchData.USER_DETAILS[0]?.MNAME
+      state.value.LNAME = res.data.FetchData.USER_DETAILS[0]?.LNAME
+      state.value.EMAIL = res.data.FetchData.USER_DETAILS[0]?.EMAIL
+      state.value.GENDER = res.data.FetchData.USER_DETAILS[0]?.GENDER
+      state.value.MOBILE_PHONE = res.data.FetchData.USER_DETAILS[0]?.MOBILE_PHONE
+      state.value.ADDRESS = res.data.FetchData.USER_DETAILS[0]?.ADDRESS
+      state.value.CITY = res.data.FetchData.USER_DETAILS[0]?.CITY
+      state.value.STATE = res.data.FetchData.USER_DETAILS[0]?.STATE
+      state.value.USER_ID = res.data.FetchData.USER_DETAILS[0]?.USER_ID
     }
   } catch (error) {
     console.log(error)
@@ -194,16 +203,17 @@ const updateProfile = async () => {
   }
 }
 onMounted(() => {
-  state.value.FNAME = authStore.getUserDetails.FNAME
-  state.value.MNAME = authStore.getUserDetails.MNAME
-  state.value.LNAME = authStore.getUserDetails.LNAME
-  state.value.EMAIL = authStore.getUserDetails.EMAIL
-  state.value.GENDER = authStore.getUserDetails.GENDER
-  state.value.MOBILE_PHONE = authStore.getUserDetails.MOBILE_PHONE
-  state.value.ADDRESS = authStore.getUserDetails.ADDRESS
-  state.value.CITY = authStore.getUserDetails.CITY
-  state.value.STATE = authStore.getUserDetails.STATE
-  state.value.USER_ID = authStore.getUserDetails.USER_ID
+  // state.value.FNAME = authStore.getUserDetails.FNAME
+  // state.value.MNAME = authStore.getUserDetails.MNAME
+  // state.value.LNAME = authStore.getUserDetails.LNAME
+  // state.value.EMAIL = authStore.getUserDetails.EMAIL
+  // state.value.GENDER = authStore.getUserDetails.GENDER
+  // state.value.MOBILE_PHONE = authStore.getUserDetails.MOBILE_PHONE
+  // state.value.ADDRESS = authStore.getUserDetails.ADDRESS
+  // state.value.CITY = authStore.getUserDetails.CITY
+  // state.value.STATE = authStore.getUserDetails.STATE
+  // state.value.USER_ID = authStore.getUserDetails.USER_ID
+  fetchUserDetails()
 })
 
 </script>
