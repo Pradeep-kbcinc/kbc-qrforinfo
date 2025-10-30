@@ -102,6 +102,12 @@ const searchNow = () => {
 watch(currentPage,(val) => {
   getProperties()
 })
+
+watch(searchVal, (val)=>{
+  if(!val){
+    getProperties()
+  }
+})
 </script>
 
 <style scoped>
