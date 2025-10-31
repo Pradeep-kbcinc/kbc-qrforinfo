@@ -27,36 +27,30 @@ import PropertyCard from './PropertyCard.vue';
 const propertyArr = ref([])
 const isLoading = ref(false)
 
-//------------------------------------------------------------------------------
-onMounted(() => {
-  console.log('--->',);
-  getProperties()
-  // https://devui.qrforinfo.com/buy/property/1
-  // https://devui.qrforinfo.com/buy/property/1
-})
-//------------------------------------------------------------------------------
 const getProperties = async () => {
   try {
     isLoading.value = true;
-    console.log('--->', 12312);
-
-    const data = {
-      PROPERTY_ID: 0,
-      CITY: "",
-      STATE: "",
-      POSTAL_CODE: "",
-      COUNTRY: ""
+    let data = {
+      "ACTION_TYPE": "SELECT",
+      "FAV_ID": 0,
+      "USER_ID": 0,
+      "PROPERTY_ID": 0
     }
-
-    const res = await propertyService.GetPropertyDetail(data)
-    propertyArr.value = res?.data?.FetchData?.PROPERTY_DETAILS || [];
+    let res = await propertyService.PropertyFavoriteTxnCrud(data)
+    if(res.data.ERR_CODE == 0){
+      propertyArr.value = res?.data?.FetchData || [];
+    }
+    
   } catch (error) {
     console.log('--->err', error);
   } finally {
     isLoading.value = false;
   }
 }
-//------------------------------------------------------------------------------
+onMounted(() => {
+  getProperties()
+})
+
 </script>
 
 <style scoped>

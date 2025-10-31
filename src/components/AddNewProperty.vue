@@ -80,7 +80,7 @@
             </v-col>
             <v-col>
               <p>Bathrooms</p>
-              <v-text-field v-model="state.NO_BEDROOMS" class="mt-1" rounded="lg" variant="outlined" placeholder="3"></v-text-field>
+              <v-text-field v-model="state.NO_BATHROOMS" class="mt-1" rounded="lg" variant="outlined" placeholder="3"></v-text-field>
             </v-col>
           </v-row>
 
@@ -209,10 +209,6 @@ onMounted(() => {
 //------------------------------------------------------------------------------
 const saveProperty = async () => {
   const isFormCorrect = await v$.value.$validate();
-  console.log(await v$.value, 'isFormCorrect')
-  console.log('--->isFormCorrect', isFormCorrect);
-  console.log('--->authStore?.userDetails', authStore?.userDetails);
-  console.log('--->state', state.value);
   if (!isFormCorrect) {
     return;
   } else {
@@ -296,7 +292,10 @@ const fetchPropertyDetail = async () => {
       CITY: "",
       STATE: "",
       POSTAL_CODE: "",
-      COUNTRY: ""
+      COUNTRY: "",
+      PAGE_NO: 1,
+      PAGE_SIZE:10, 
+      SEARCH:''
     }
     const res = await propertyService.GetPropertyDetail(data);
     // state.value = { ...state.value, ...res?.data?.FetchData?.PROPERTY_DETAILS?.[0] } || {}

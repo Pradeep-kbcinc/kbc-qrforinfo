@@ -3,10 +3,12 @@
     <div class="mt-1 d-flex align-center">
       <div>
         <h3 class="font-weight-bold">Dashboard</h3>
-        <p>Welcome Back, {{ authStore?.userDetails?.FNAME }} {{ authStore?.userDetails?.MNAME }} {{ authStore?.userDetails?.LNAME }}</p>
+        <p>Welcome Back, {{ authStore?.userDetails?.FNAME }} {{ authStore?.userDetails?.MNAME }} {{
+          authStore?.userDetails?.LNAME }}</p>
       </div>
       <v-spacer></v-spacer>
-      <v-btn @click="router.push('/add-new-property')" :height="!mobile ? 48 : 38" :width="mobile ? '140' : ''" rounded="lg" class="elevation-0 text-none font-weight-bold" color="primary">
+      <v-btn @click="router.push('/add-new-property')" :height="!mobile ? 48 : 38" :width="mobile ? '140' : ''"
+        rounded="lg" class="elevation-0 text-none font-weight-bold" color="primary">
         <v-icon>mdi-plus</v-icon> Add Property
       </v-btn>
     </div>
@@ -50,21 +52,26 @@
       <v-card class="card-box-shadow rounded-lg">
         <v-card-text>
           <v-row align="center" justify="space-between" class="px-2 mb-2">
-            <h3 class="text-h6">Recent Properties</h3>
-            <v-btn variant="text" color="primary" class="text-capitalize">View All</v-btn>
+            <h3 class="text-h6">My Properties</h3>
+            <!-- <v-btn variant="text" color="primary" class="text-capitalize">View All</v-btn> -->
           </v-row>
 
           <v-divider class="my-4"></v-divider>
 
           <div v-if="isLoading" class="">
             <v-skeleton-loader class="mx-auto border" type="article"></v-skeleton-loader>
-            <v-skeleton-loader class="mx-auto border mt-4" type="article"></v-skeleton-loader>
-            <v-skeleton-loader class="mx-auto border mt-4" type="article"></v-skeleton-loader>
+            <v-skeleton-loader v-for="item in 5" :key="item" class="mx-auto border mt-4"
+              type="article"></v-skeleton-loader>
+
           </div>
 
           <v-list v-else class="py-0">
-            <div v-for="(propertyObj, i) in propertyArr" :key="i">
-              <v-list-item @click="$router.push('/property/' + propertyObj.PROPERTY_ID)" class="px-2 my-2 pointer">
+            <div v-for="(propertyObj, i) in propertyArr" :key="i" class="rounded-lg">
+              <v-list-item @click="$router.push({
+                path: '/property/' + propertyObj.PROPERTY_ID, query: {
+                  createdBy: propertyObj.SELLER_USER_ID === authStore.getUserDetails.USER_ID
+                }
+              })" class="px-2 my-2 pointer">
                 <template #prepend>
                   <v-avatar size="82" rounded="lg" class="mr-4 bg-grey-lighten-4 text-h4">
                     <!-- <v-img :src="property.image" cover /> -->
@@ -72,17 +79,19 @@
                   </v-avatar>
                 </template>
 
-                <v-list-item-title class="font-weight-bold text-grey-darken-3">{{ propertyObj.TITLE }}</v-list-item-title>
+                <v-list-item-title class="font-weight-bold text-grey-darken-3">{{ propertyObj.TITLE
+                  }}</v-list-item-title>
                 <!-- <v-list-item-subtitle>{{ property.location }}</v-list-item-subtitle> -->
-                <v-list-item-subtitle v-if="propertyObj?.COUNTRY && propertyObj?.STATE && propertyObj?.CITY" class="mt-1"><v-icon>mdi-map-marker-outline</v-icon>{{ propertyObj.COUNTRY }}, {{ propertyObj.STATE }}, {{ propertyObj.CITY }}</v-list-item-subtitle>
+                <v-list-item-subtitle v-if="propertyObj?.COUNTRY && propertyObj?.STATE && propertyObj?.CITY"
+                  class="mt-1"><v-icon>mdi-map-marker-outline</v-icon>{{ propertyObj.COUNTRY }}, {{ propertyObj.STATE
+                  }}, {{
+                  propertyObj.CITY }}</v-list-item-subtitle>
                 <div class="text-primary font-weight-bold text-subtitle-1">{{ propertyObj.price }}</div>
 
                 <template #append>
                   <div class="text-end">
-
-                    <!-- <v-chip :color="propertyObj.statusColor" class="mt-1" size="small" variant="flat" text-color="green-lighten-2 text-none">
-                      {{ propertyObj.status }}
-                    </v-chip> -->
+                    <v-btn @click.stop="openModal" rounded="lg" class="text-none font-weight-bold text-subtitle-1"
+                      min-width="100" height="48" color="primary" elevation="0">Add Images</v-btn>
                   </div>
                 </template>
 
@@ -96,6 +105,24 @@
       </v-card>
     </section>
   </v-container>
+  <v-dialog max-width="800" v-model="uploadImageModal">
+    <v-toolbar color="" rounded="t-lg" class="px-4">
+      <h6>Upload Images</h6>
+      <v-spacer></v-spacer>
+      <v-btn @click="uploadImageModal = false" icon>
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
+     
+    </v-toolbar>
+    <v-card rounded="t-0 b-lg">
+      <v-card-text>
+        <v-file-upload clearable multiple density="default"></v-file-upload>
+        <div class="d-flex justify-end">
+          <v-btn size="large" class="text-none rounded-lg" elevation="0" min-width="200" color="primary">Save</v-btn>
+        </div>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
 </template>
 <script setup>
 import propertyService from '@/services/propertyService'
@@ -108,6 +135,7 @@ const { mobile } = useDisplay()
 const router = useRouter()
 const isLoading = ref(false)
 const propertyArr = ref([])
+const uploadImageModal = ref(false)
 const properties = [
   {
     title: 'Modern 3BR Apartment',
@@ -151,7 +179,10 @@ const getProperties = async () => {
       CITY: "",
       STATE: "",
       POSTAL_CODE: "",
-      COUNTRY: ""
+      COUNTRY: "",
+      SEARCH: "",
+      PAGE_NO: 1,
+      PAGE_SIZE: 10
     }
 
     const res = await propertyService.GetPropertyDetail(data)
@@ -162,5 +193,8 @@ const getProperties = async () => {
     isLoading.value = false;
   }
 }
-//------------------------------------------------------------------------------
+
+const openModal = () => {
+  uploadImageModal.value = true
+}
 </script>

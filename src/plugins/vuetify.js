@@ -3,11 +3,15 @@
 // Styles
 import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/styles'
+import { VFileUpload } from 'vuetify/labs/VFileUpload'
 
 // Composables
 import { createVuetify } from 'vuetify'
 
 export default createVuetify({
+  components: {
+    VFileUpload,
+  },
   theme: {
     defaultTheme: 'light', 
     themes: {

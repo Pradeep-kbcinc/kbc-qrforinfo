@@ -8,8 +8,8 @@
         </v-col>
         <v-col cols="12">
           <div class="position-relative d-flex align-center">
-            <v-text-field placeholder="Search Properties..." hide-details variant="solo-filled" rounded="lg"></v-text-field>
-            <v-btn color="primary" class="text-none rounded-lg elevation-0 font-weight-bold position-absolute top-0 right-0 mt-2 mr-2" height="42"> <v-icon size="large" class="mr-2 mt-1">mdi-magnify</v-icon> Search</v-btn>
+            <v-text-field v-model="searchVal" placeholder="Search Properties..." hide-details variant="solo-filled" rounded="lg"></v-text-field>
+            <v-btn @click="searchNow" color="primary" class="text-none rounded-lg elevation-0 font-weight-bold position-absolute top-0 right-0 mt-2 mr-2" height="42"> <v-icon size="large" class="mr-2 mt-1">mdi-magnify</v-icon> Search</v-btn>
           </div>
         </v-col>
       </v-row>
@@ -50,13 +50,12 @@ import Header from '@/layouts/header.vue';
 const route = useRoute()
 const isLoading = ref(false)
 const propertyArr = ref([])
-//------------------------------------------------------------------------------
+const searchVal = ref('')
+
 onMounted(() => {
   getProperties()
-  // https://devui.qrforinfo.com/buy/property/1
-  // https://devui.qrforinfo.com/buy/property/1
 })
-//------------------------------------------------------------------------------
+
 const getProperties = async () => {
   try {
     isLoading.value = true;
@@ -68,10 +67,9 @@ const getProperties = async () => {
       STATE: "",
       POSTAL_CODE: "",
       COUNTRY: "",
-      SEARCH: "",
-      "PAGE_NO": 1,
-      "PAGE_SIZE": 10
-
+      SEARCH: searchVal.value,
+      PAGE_NO: 1,
+      PAGE_SIZE: 10
     }
     let res;
     // if (route.name == 'BuyProperties') {
@@ -87,7 +85,9 @@ const getProperties = async () => {
     isLoading.value = false;
   }
 }
-//------------------------------------------------------------------------------
+const searchNow = () => {
+  getProperties()
+}
 </script>
 
 <style scoped>

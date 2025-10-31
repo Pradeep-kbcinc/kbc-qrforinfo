@@ -12,7 +12,7 @@
         <p v-if="propertyObj.COUNTRY && propertyObj.STATE && propertyObj.CITY"><v-icon>mdi-map-marker-outline</v-icon>
           {{ propertyObj.COUNTRY }}, {{ propertyObj.STATE }}, {{ propertyObj.CITY }}</p>
       </div>
-      <div v-if="!$route.fullPath.includes('/buy/')" class="d-flex ga-4">
+      <div v-if="authStore.isAuthenticated" class="d-flex ga-4">
         <v-btn v-if="propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID" @click="$router.push(`/add-new-property/${propertyObj.PROPERTY_ID}`)" variant="outlined" prependIcon="mdi-square-edit-outline" class="text-none rounded-lg elevation-0 font-weight-bold" height="42">Edit</v-btn>
         <v-btn @click="shareAction(propertyObj)" color="primary" prependIcon="mdi-share-variant-outline" class="text-none rounded-lg elevation-0 font-weight-bold" height="42">Share</v-btn>
       </div>
@@ -32,50 +32,40 @@
             </v-card>
             <div class="pa-4">
               <p class="text-h6">Details</p>
-              <div class="my-4 d-flex ga-4 flex-wrap w-100">
-                <div class="" style="min-width: 200px;">
-                  <p class="text-grey-darken-1">Bedrooms</p>
-                  <p class="text-h6">{{ propertyObj.NO_BEDROOMS }}</p>
-                </div>
-                <div class="" style="min-width: 200px;">
-                  <p class="text-grey-darken-1">Bathrooms</p>
-                  <p class="text-h6">{{ propertyObj.NO_BATHROOMS }}</p>
-                </div>
-                <div class="" style="min-width: 200px;">
-                  <p class="text-grey-darken-1">Area</p>
-                  <p class="text-h6">{{ propertyObj.AREA }} {{ propertyObj.AREA_UNIT }}
-                  </p>
-                </div>
-              </div>
+              <v-row>
+                <v-col>
+                  <div class="">
+                    <p class="text-grey-darken-1">Bedrooms</p>
+                    <p class="text-h6">{{ propertyObj.NO_BEDROOMS }}</p>
+                  </div>
+                </v-col>
+                <v-col>
+                  <div class="">
+                    <p class="text-grey-darken-1">Bathrooms</p>
+                    <p class="text-h6">{{ propertyObj.NO_BATHROOMS }}</p>
+                  </div>
+                </v-col>
+                <v-col>
+                  <div class="">
+                    <p class="text-grey-darken-1">Area</p>
+                    <p class="text-h6">{{ propertyObj.AREA }} {{ propertyObj.AREA_UNIT }}
+                    </p>
+                  </div>
+                </v-col>
+                <v-col v-if="!$route.fullPath.includes('/buy/') && propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID">
+                  <div class="d-flex justify-end">
+                    <v-btn @click="qrModal = true" rounded="lg" width="200" min-height="48" class="text-none d-flex align-center" elevation="0" color="primary"> <v-icon class="mr-2">mdi-eye</v-icon> QR Code</v-btn>
+                  </div>
+                </v-col>
+              </v-row>
+
               <p class="mt-6">{{ propertyObj.PROPERTY_DESC }}</p>
             </div>
           </v-card>
         </v-col>
 
-        <v-col v-if="!$route.fullPath.includes('/buy/')" cols="12" lg="3">
-          <v-card class="card-box-shadow rounded-lg pa-4">
-            <p class="text-h4 font-weight-bold text-primary mb-4">
-              {{ propertyObj?.PRICE_AMOUNT?.toLocaleString('en-IN', {
-                style: 'currency',
-                currency: propertyObj.CURRENCY_CODE,
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 2,
-                notation: 'compact',
-                compactDisplay: 'long',
-                // useGrouping: 'false'
-              }) }}
-              <!-- {{ propertyObj.CURRENCY_CODE }} -->
-            </p>
-            <v-btn v-if="propertyObj.LISTING_TYPE" :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'" variant="tonal" class="text-none rounded-pill elevation-0 font-weight-bold" height="" density="comfortable">{{
-              propertyObj.LISTING_TYPE }}</v-btn>
-            <!-- <div class="d-flex justify-space-between ga-4 w-100 mt-4">
-              <p class="ttext-grey-darken-1">Status</p>
-              <p class="text-success">Active</p>
-            </div> -->
-            <v-btn v-if="propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID" color="red" variant="tonal" class="text-none rounded-lg elevation-0 font-weight-bold w-100 mt-8" height="45">Mark as Sold</v-btn>
-          </v-card>
-        </v-col>
-        <v-col v-else cols="12" lg="3">
+
+        <v-col cols="12" lg="3">
           <v-card class="card-box-shadow rounded-lg pa-6">
             <p class="text-h4 font-weight-bold text-primary mb-6">
               {{ propertyObj?.PRICE_AMOUNT?.toLocaleString('en-IN', {
@@ -88,88 +78,43 @@
                 // useGrouping: 'false'
               }) }}
               {{ propertyObj.CURRENCY_CODE }}</p>
-            <v-btn color="primary" class="text-none rounded-lg elevation-0 font-weight-bold w-100" height="50" prepend-icon="mdi-comment-outline">Contact Owner</v-btn>
-            <v-btn @click="propertyObj.IS_FAV == propertyObj.IS_FAV" color="red" variant="outlined" class="text-none rounded-lg elevation-0 font-weight-bold w-100 mt-3" :prepend-icon="propertyObj.IS_FAV ? 'mdi-heart' : 'mdi-heart-outline'" height="50">{{ propertyObj.IS_FAV ?
-              'Saved to Favorites' : 'Save to Favorites' }}</v-btn>
+            <v-btn @click="contactOwner" v-if="authStore.userDetails.USER_ID !== propertyObj.SELLER_USER_ID" color="primary" class="text-none rounded-lg elevation-0 font-weight-bold w-100" height="50" prepend-icon="mdi-comment-outline">Contact Owner</v-btn>
+            <v-btn @click="makeFev" :loading="makeFevLoader" color="red" variant="outlined" class="text-none rounded-lg elevation-0 font-weight-bold w-100 mt-3" :prepend-icon="propertyObj.IS_FAVOURITE == 1 ? 'mdi-heart' : 'mdi-heart-outline'" height="50">{{
+              propertyObj.IS_FAV ?
+                'Saved to Favorites' : 'Save to Favorites' }}</v-btn>
             <v-btn @click="shareAction(propertyObj)" variant="outlined" class="text-none rounded-lg elevation-0 font-weight-bold w-100 mt-3" prepend-icon="mdi-share-variant-outline" height="50">Share Property</v-btn>
+            <v-card class="card-box-shadow rounded-lg pa-4 mt-5">
+              <h3 class="text-h6 font-weight-bold mb-2">Statistics</h3>
+              <div class="border-b d-flex justify-space-between ga-4 py-4">
+                <p>Total QR Scans</p>
+                <p class="text-h5 text-primary font-weight-bold">45</p>
+              </div>
+              <div class="border-b d-flex justify-space-between ga-4 py-4">
+                <p>Unique Visitors</p>
+                <p class="text-h6">38</p>
+              </div>
+              <div class="d-flex justify-space-between ga-4 py-4">
+                <p>Conversions</p>
+                <p class="text-h6">8 messages</p>
+              </div>
+            </v-card>
           </v-card>
         </v-col>
       </v-row>
     </div>
 
+  </div>
 
 
-    <div>
-      <v-container fluid>
-        <v-expansion-panels elevation="0" color="blue-lighten-5" rounded="lg" class="rbox-shadow elevation-0 card-box-shadow" v-if="!$route.fullPath.includes('/buy/') && propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID">
-          <v-expansion-panel class="box-shadow elevation-0">
-            <v-expansion-panel-title>
-              <h3 class="font-weight-black">QR Code & Analytics</h3>
-            </v-expansion-panel-title>
-            <v-expansion-panel-text>
-              <div v-if="!$route.fullPath.includes('/buy/') && propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID" class="pa-4 mb-10">
-                <v-row>
-                  <v-col cols="12" md="6">
-                    <v-card class="card-box-shadow rounded-lg pa-6">
-                      <h3 class="text-h6 font-weight-bold mb-2">QR Code</h3>
-                      <v-card id="reportContent" min-height="400" elevation="0" rounded="lg" class="bg-grey-lighten-4 d-flex ga-4 flex-column justify-center align-center position-relative" style="font-size: 8.0rem;line-height: 1;">
-                        <v-btn v-if="propertyObj.LISTING_TYPE" :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'" class="text-none rounded-pill elevation-0 font-weight-bold" height="" density="comfortable">{{
-                          propertyObj.LISTING_TYPE }}</v-btn>
-                        <v-card class="bg-white pa-6 rounded-lg card-box-shadow">
-
-
-                          <qrcode-vue :value="`${baseUrl}/#/buy/property/${propertyObj.PROPERTY_ID}?qr=1`" :size="200" level="H" background="transparent" foreground="black" />
-
-
-                        </v-card>
-
-                        <div class="">
-                          <p class="text-body-2 text-grey-darken-1 mb-0">Powered By</p>
-                          <p class="text-primary text-body-1 font-weight-bold">QRForInfo</p>
-                        </div>
-                      </v-card>
-                      <div class="pa-4">
-                        <div class="d-flex ga-4">
-                          <v-btn @click="downloadPDF(propertyObj)" color="primary" prependIcon="mdi-download" class="text-none rounded-lg elevation-0 font-weight-bold flex-1-1" height="42">Download</v-btn>
-                          <v-btn @click="shareAction(propertyObj)" variant="outlined" prependIcon="mdi-share-variant-outline" class="text-none rounded-lg elevation-0 font-weight-bold flex-1-1" height="42">Share</v-btn>
-                        </div>
-                      </div>
-                    </v-card>
-                  </v-col>
-
-                  <v-col cols="12" md="6" class="h-100">
-                    <v-card class="card-box-shadow rounded-lg pa-4">
-                      <h3 class="text-h6 font-weight-bold mb-2">Statistics</h3>
-                      <div class="border-b d-flex justify-space-between ga-4 py-4">
-                        <p>Total Scans</p>
-                        <p class="text-h5 text-primary font-weight-bold">45</p>
-                      </div>
-                      <div class="border-b d-flex justify-space-between ga-4 py-4">
-                        <p>Unique Visitors</p>
-                        <p class="text-h6">38</p>
-                      </div>
-                      <div class="d-flex justify-space-between ga-4 py-4">
-                        <p>Conversions</p>
-                        <p class="text-h6">8 messages</p>
-                      </div>
-                    </v-card>
-                  </v-col>
-                </v-row>
-              </div>
-            </v-expansion-panel-text>
-          </v-expansion-panel>
-        </v-expansion-panels>
-      </v-container>
-    </div>
-    <!-- <div v-if="!$route.fullPath.includes('/buy/') && propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID" class="d-flex justify-space-between pa-6 pb-0">
-      <div class="">
-        <h3 class="text-h5 font-weight-bold">QR Code & Analytics</h3>
-      </div>
-    </div>
-
-    <div v-if="!$route.fullPath.includes('/buy/') && propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID" class="pa-4 mb-10">
-      <v-row>
-        <v-col cols="12" md="6">
+  <v-dialog max-width="600" v-model="qrModal">
+    <v-toolbar rounded="t-lg b-0" class="px-4">
+      <h5>QR Code & Analytics</h5>
+      <v-spacer></v-spacer>
+      <v-btn @click="qrModal = false" icon><v-icon>mdi-close</v-icon></v-btn>
+    </v-toolbar>
+    <v-card rounded="b-lg t-0">
+      <v-card-text>
+        <div class="pa-4 mb-10">
           <v-card class="card-box-shadow rounded-lg pa-6">
             <h3 class="text-h6 font-weight-bold mb-2">QR Code</h3>
             <v-card id="reportContent" min-height="400" elevation="0" rounded="lg" class="bg-grey-lighten-4 d-flex ga-4 flex-column justify-center align-center position-relative" style="font-size: 8.0rem;line-height: 1;">
@@ -195,29 +140,10 @@
               </div>
             </div>
           </v-card>
-        </v-col>
-
-        <v-col cols="12" md="6" class="h-100">
-          <v-card class="card-box-shadow rounded-lg pa-4">
-            <h3 class="text-h6 font-weight-bold mb-2">Statistics</h3>
-            <div class="border-b d-flex justify-space-between ga-4 py-4">
-              <p>Total Scans</p>
-              <p class="text-h5 text-primary font-weight-bold">45</p>
-            </div>
-            <div class="border-b d-flex justify-space-between ga-4 py-4">
-              <p>Unique Visitors</p>
-              <p class="text-h6">38</p>
-            </div>
-            <div class="d-flex justify-space-between ga-4 py-4">
-              <p>Conversions</p>
-              <p class="text-h6">8 messages</p>
-            </div>
-          </v-card>
-        </v-col>
-      </v-row>
-    </div> -->
-  </div>
-
+        </div>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
 
   <v-dialog max-width="400" persistent v-model="warningPopUp">
     <v-toolbar density="compact" rounded="t-xl" class="px-4">
@@ -254,7 +180,8 @@ import QrcodeVue from 'qrcode.vue';
 import Header from '@/layouts/header.vue'
 import propertyService from '@/services/propertyService';
 import { useAuthStore } from '@/stores/app';
-
+import { toast } from 'vue3-toastify';
+import { fa } from 'vuetify/locale';
 //..............................................................................
 const authStore = useAuthStore()
 const route = useRoute()
@@ -263,8 +190,9 @@ const qrCodeValue = ref({});
 const warningPopUp = ref(false)
 const isLoading = ref(false)
 const baseUrl = ref('')
+const qrModal = ref(false)
 //..............................................................................
-
+const router = useRouter()
 //------------------------------------------------------------------------------
 onMounted(() => {
   baseUrl.value = window.location.origin
@@ -287,14 +215,18 @@ const fetchPropertyDetail = async () => {
       POSTAL_CODE: "",
       COUNTRY: "",
       SEARCH: "",
-      "PAGE_NO": 1,
-      "PAGE_SIZE": 10
+      PAGE_NO: 1,
+      PAGE_SIZE: 10,
     }
     let res;
-    console.log('--->route.name', route.name);
-    if (route.name == 'BuyPropertyDetails') {
+    console.log(route.query.createdBy, 'route.query.createdBy')
+    if (route.query.createdBy === 'false') {
+      console.log('1')
       res = await propertyService.GetPropertyDetailPublic(data);
-    } else {
+    } else if (route.name == 'BuyPropertyDetails') {
+      console.log('2')
+      res = await propertyService.GetPropertyDetailPublic(data);
+    } else if (route.query.createdBy) {
       res = await propertyService.GetPropertyDetail(data);
     }
     propertyObj.value = res.data?.FetchData?.PROPERTY_DETAILS?.[0] || {}
@@ -343,6 +275,41 @@ const openMobileApp = () => {
 }
 //------------------------------------------------------------------------------
 const panel = ref([0])
+
+const makeFevLoader = ref(false)
+const makeFev = async () => {
+  if (authStore.isAuthenticated) {
+    makeFevLoader.value = true
+    try {
+      let data = {
+        "ACTION_TYPE": "CREATE",
+        "FAV_ID": 0,
+        "USER_ID": authStore.getUserDetails.USER_ID,
+        "PROPERTY_ID": route.params.id
+      }
+      let res = await propertyService.PropertyFavoriteTxnCrud(data)
+      if (res.data.ERR_CODE == 0) {
+        toast.success('Property added to your saved list', {
+          autoClose: 4000,
+        });
+        makeFevLoader.value = false
+      }
+    } catch (error) {
+      makeFevLoader.value = false
+      console.log(error)
+    }
+  } else {
+    router.push('/login')
+  }
+}
+
+const contactOwner = () => {
+  if (authStore.isAuthenticated) {
+    router.push(`/messages?user_id=${propertyObj.SELLER_USER_ID}&property_id=${propertyObj.PROPERTY_ID}`)
+  } else {
+    router.push('/login')
+  }
+}
 </script>
 
 <style scoped lang="scss">
