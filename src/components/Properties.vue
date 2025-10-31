@@ -42,7 +42,7 @@
               type="image, article"></v-skeleton-loader></v-col>
         </template>
         <v-col v-else cols="12" md="6" lg="4" v-for="propertyObj in propertyArr">
-          <PropertyCard :propertyObj="propertyObj" />
+          <PropertyCard @recall="getProperties()" :propertyObj="propertyObj" />
         </v-col>
       </v-row>
     </div>

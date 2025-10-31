@@ -48,7 +48,7 @@ import { useAuthStore } from '@/stores/app';
 import { toast } from 'vue3-toastify';
 
 const authStore = useAuthStore()
-
+const emit = defineEmits('recall')
 const route = useRoute()
 defineProps({
   propertyObj: {
@@ -61,17 +61,28 @@ const makeFevLoader = ref(false)
 const makeFev = async(id)=>{
   makeFevLoader.value = true
   try {
-    let data = {
-      "ACTION_TYPE": "CREATE",
-      "FAV_ID": 0,
-      "USER_ID": authStore.getUserDetails.USER_ID,
-      "PROPERTY_ID": id
+    let data 
+    if(propertyObj.IS_FAVOURITE == 0){
+        data = {
+        "ACTION_TYPE": "CREATE",
+        "FAV_ID": 0,
+        "USER_ID": authStore.getUserDetails.USER_ID,
+        "PROPERTY_ID": id
+      }
+    }else{
+      data = {
+        "ACTION_TYPE": "DELETE",
+        "FAV_ID": 0,
+        "USER_ID": authStore.getUserDetails.USER_ID,
+        "PROPERTY_ID": id
+      }
     }
     let res = await propertyService.PropertyFavoriteTxnCrud(data)
     if(res.data.ERR_CODE == 0){
       toast.success('Property added to your saved list', {
           autoClose: 4000,
         });
+        emit('recall')
       makeFevLoader.value = false
     }
   } catch (error) {

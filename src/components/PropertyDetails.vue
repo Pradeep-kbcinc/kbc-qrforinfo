@@ -396,7 +396,7 @@ const sendMessage = async()=>{
       "MESSAGE_BODY": newMessage.value,
       "READ_ON": "2025-10-29",
       "PROPERTY_ID": property_id.value,
-      "LAST_MESSAGE_ON": ""
+      "LAST_MESSAGE_ON": new Date()
     }
     let res = await propertyService.message(data)
     if(res.data.ERR_CODE == 0){
