@@ -67,7 +67,11 @@ const getProperties = async () => {
       CITY: "",
       STATE: "",
       POSTAL_CODE: "",
-      COUNTRY: ""
+      COUNTRY: "",
+      SEARCH: "",
+      "PAGE_NO": 1,
+      "PAGE_SIZE": 10
+
     }
     let res;
     // if (route.name == 'BuyProperties') {
