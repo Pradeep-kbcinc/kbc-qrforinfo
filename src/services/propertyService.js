@@ -75,7 +75,10 @@ export default {
     return axios.post(`/UpdatePropertyDraft`, data)
   },
   
-
+  // image upload API  
+  async uploadPropertyImage(data){
+    return axios.post(`/LLPropertyImageCrud`, data)
+  },
 
   
   
