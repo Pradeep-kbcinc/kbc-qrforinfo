@@ -63,5 +63,11 @@ export default {
   async message(data){
     return axios.post(`/MessageTxnCrud`, data)
   },
+
+  async fetchAllDrafts(data){
+    return axios.get(`/GetPropertyDraft`, data)
+  },
   
+  
+
 }

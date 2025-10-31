@@ -129,10 +129,10 @@
         </div>
         <v-divider></v-divider>
         <div class="d-flex mt-4">
-          <v-btn variant="outlined" class="text-none rounded-lg elevation-0 font-weight-bold" height="42">Save
+          <v-btn color="grey" class="text-none rounded-lg box-shadow font-weight-bold" height="42"> <v-icon class="mr-2">mdi-file-sign</v-icon> Save
             Draft</v-btn>
           <v-spacer></v-spacer>
-          <v-btn @click="saveProperty" :loading="saveBtnLoader" color="primary" class="text-none rounded-lg elevation-0 font-weight-bold" height="42">Continue</v-btn>
+          <v-btn @click="saveProperty" :loading="saveBtnLoader" color="primary" class="text-none rounded-lg elevation-0 font-weight-bold" height="42"><v-icon class="mr-2">mdi-check</v-icon> Save Property</v-btn>
         </div>
       </v-card-text>
 
@@ -216,7 +216,15 @@ const saveBtnLoader = ref(false)
 
 //------------------------------------------------------------------------------
 onMounted(() => {
-  fetchPropertyDetail()
+  if(route.query.draft){
+    Object.assign(state, { ...state, ...authStore.getTemporaryPropertyDetails });
+  }else{
+    fetchPropertyDetail()
+  }
+})
+
+onBeforeUnmount(()=>{
+  localStorage.removeItem('tempoPropertyData')
 })
 //------------------------------------------------------------------------------
 const saveProperty = async () => {

@@ -50,7 +50,7 @@ import { toast } from 'vue3-toastify';
 const authStore = useAuthStore()
 const emit = defineEmits('recall')
 const route = useRoute()
-defineProps({
+const props = defineProps({
   propertyObj: {
     type: Object,
     required: true
@@ -62,7 +62,7 @@ const makeFev = async(id)=>{
   makeFevLoader.value = true
   try {
     let data 
-    if(propertyObj.IS_FAVOURITE == 0){
+    if(props.propertyObj.IS_FAVOURITE == 0){
         data = {
         "ACTION_TYPE": "CREATE",
         "FAV_ID": 0,

@@ -10,11 +10,11 @@
           </div>
 
           <div class="border-t">
-            <v-card v-for="msgObj in msgArr" @click="selectedMsgObj = msgObj" class="border-b pa-4" elevation="0" rounded="0" :color="selectedMsgObj.id == msgObj.id ? '#f0f6ff' : ''">
+            <v-card v-for="(msgObj, index) in msgArr" @click="selectedMsgObj = msgObj" class="border-b pa-4" elevation="0" rounded="0" :color="selectedMsgObj.id == msgObj.id ? '#f0f6ff' : ''">
               <div class="d-flex justify-space-between">
                 <div class="">
-                  <h6>{{ msgObj.name }}</h6>
-                  <p class="text-grey-darken-1">{{ msgObj.lastMsg }}</p>
+                  <h6>Pradeep Kumar</h6>
+                  <p class="text-grey-darken-1 text-subtitle-2"> (🏠 Abhi's Property {{ index+1 }} )</p>
 
                 </div>
                 <p>{{ msgObj.lastActive }}</p>
@@ -26,12 +26,12 @@
       <v-col cols="8" class="pa-0">
         <div class="bg-grey-lighten-4" style="height: calc(100dvh - 65px)">
           <div v-if="!selectedMsgObj.id" class="d-flex justify-center align-center w-100 h-100">
-            <p class="text-grey-darken-1">Select user to view Messages</p>
+            <p class="text-grey-darken-1">Select channel to view Messages</p>
           </div>
           <div v-else class="d-flex justify-center align-center w-100 h-100 flex-column">
             <div class="pa-4 bg-white border-b w-100">
-              <h5>{{ selectedMsgObj.name }}</h5>
-              <p>{{ selectedMsgObj.propertyName }}</p>
+              <h5>Pradeep Kumar</h5>
+              <p>Abhi's Property</p>
             </div>
             <div class="w-100 h-100 overflow-y-scroll">
               <div class="pa-4">
