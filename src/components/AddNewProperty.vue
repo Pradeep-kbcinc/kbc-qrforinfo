@@ -447,10 +447,16 @@ const saveDraft = async()=>{
         router.push('/home')
       } else {
         throw new Error('Could not add Property')
+        toast.error('Something went wrong', {
+          autoClose: 4000,
+        });
         draftLoader.value = false
       }
   } catch (error) {
     console.log(error)
+    toast.error('Something went wrong', {
+          autoClose: 4000,
+        });
     draftLoader.value = false
   }
 }
