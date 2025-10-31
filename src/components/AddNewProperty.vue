@@ -129,7 +129,7 @@
         </div>
         <v-divider></v-divider>
         <div class="d-flex mt-4">
-          <v-btn color="grey" class="text-none rounded-lg box-shadow font-weight-bold" height="42"> <v-icon class="mr-2">mdi-file-sign</v-icon> Save
+          <v-btn @click="saveDraft" :loading="draftLoader" color="grey" class="text-none rounded-lg box-shadow font-weight-bold" height="42"> <v-icon class="mr-2">mdi-file-sign</v-icon> Save
             Draft</v-btn>
           <v-spacer></v-spacer>
           <v-btn @click="saveProperty" :loading="saveBtnLoader" color="primary" class="text-none rounded-lg elevation-0 font-weight-bold" height="42"><v-icon class="mr-2">mdi-check</v-icon> Save Property</v-btn>
@@ -333,6 +333,127 @@ const fetchPropertyDetail = async () => {
   }
 }
 //------------------------------------------------------------------------------
+const draftLoader = ref(false)
+const saveDraft = async()=>{
+  draftLoader.value = true
+  try {
+    let data
+    let res
+    if(route.query.draft){
+      data = {
+        ...state,
+        DRAFT_ID: authStore.getTemporaryPropertyDetails.DRAFT_ID,
+        SELLER_USER_ID: state.SELLER_USER_ID || authStore?.userDetails?.USER_ID || 0,
+        PROPERTY_ID: state.PROPERTY_ID || 0,
+        LISTING_TYPE: state.LISTING_TYPE || '',
+        TITLE: state.TITLE || '',
+        PROPERTY_DESC: state.PROPERTY_DESC || '',
+        PROPERTY_KIND: state.PROPERTY_KIND || 'LAND',
+        TYPE_CODE: state.TYPE_CODE || '',
+        PROPERTY_TYPE_ID: state.PROPERTY_TYPE_ID || 0,
+        DIMENSIONS: state.DIMENSIONS || '',
+        AREA: state.AREA || 0,
+        AREA_UNIT: state.AREA_UNIT || 'SQFT',
+        BUILTUP_AREA: state.BUILTUP_AREA || 0,
+        BUILTUP_AREA_UNIT: state.BUILTUP_AREA_UNIT || 'SQFT',
+        CARPET_AREA: state.CARPET_AREA || 0,
+        CARPET_AREA_UNIT: state.CARPET_AREA_UNIT || 'SQFT',
+        PRICE_AMOUNT: state.PRICE_AMOUNT || 0,
+        CURRENCY_CODE: state.CURRENCY_CODE || 'INR',
+        NO_BEDROOMS: state.NO_BEDROOMS || 0,
+        NO_BATHROOMS: state.NO_BATHROOMS || 0,
+        FURNISHING_TYPE: state.FURNISHING_TYPE || 'UNFURNISHED',
+        IS_PARKING_SPACE_AVAILABLE: state.IS_PARKING_SPACE_AVAILABLE || 0,
+        BUILT_YEAR: state.BUILT_YEAR || 0,
+        UNIT_NO: state.UNIT_NO || '',
+        BUILDING_NAME: state.BUILDING_NAME || '',
+        BLOCK_TOWER: state.BLOCK_TOWER || '',
+        FLOOR_NO: state.FLOOR_NO || 0,
+        TOTAL_FLOORS: state.TOTAL_FLOORS || 0,
+        MAINTENANCE_FEE: state.MAINTENANCE_FEE || 0,
+        LAND_USE: state.LAND_USE || 'RESIDENTIAL',
+        FRONTAGE_M: state.FRONTAGE_M || 0,
+        DEPTH_M: state.DEPTH_M || 0,
+        ROAD_WIDTH_M: state.ROAD_WIDTH_M || 0,
+        CORNER_PLOT: state.CORNER_PLOT || 0,
+        FEATURES_JSON: state.FEATURES_JSON || '[]',
+        LATITUDE: state.LATITUDE || 0,
+        LONGITUDE: state.LONGITUDE || 0,
+        ADDRESS_LINE1: state.ADDRESS_LINE1 || '',
+        ADDRESS_LINE2: state.ADDRESS_LINE2 || '',
+        CITY: state.CITY || '',
+        STATE: state.STATE || '',
+        POSTAL_CODE: state.POSTAL_CODE || '',
+        COUNTRY: state.COUNTRY || '',
+        IS_ACTIVE_FLG: state.IS_ACTIVE_FLG || 1,
+      }
+      res = await propertyService.updatePropertyDraft(data)
+    }else{
+      data = {
+        ...state,
+
+        SELLER_USER_ID: state.SELLER_USER_ID || authStore?.userDetails?.USER_ID || 0,
+        PROPERTY_ID: state.PROPERTY_ID || 0,
+        LISTING_TYPE: state.LISTING_TYPE || '',
+        TITLE: state.TITLE || '',
+        PROPERTY_DESC: state.PROPERTY_DESC || '',
+        PROPERTY_KIND: state.PROPERTY_KIND || 'LAND',
+        TYPE_CODE: state.TYPE_CODE || '',
+        PROPERTY_TYPE_ID: state.PROPERTY_TYPE_ID || 0,
+        DIMENSIONS: state.DIMENSIONS || '',
+        AREA: state.AREA || 0,
+        AREA_UNIT: state.AREA_UNIT || 'SQFT',
+        BUILTUP_AREA: state.BUILTUP_AREA || 0,
+        BUILTUP_AREA_UNIT: state.BUILTUP_AREA_UNIT || 'SQFT',
+        CARPET_AREA: state.CARPET_AREA || 0,
+        CARPET_AREA_UNIT: state.CARPET_AREA_UNIT || 'SQFT',
+        PRICE_AMOUNT: state.PRICE_AMOUNT || 0,
+        CURRENCY_CODE: state.CURRENCY_CODE || 'INR',
+        NO_BEDROOMS: state.NO_BEDROOMS || 0,
+        NO_BATHROOMS: state.NO_BATHROOMS || 0,
+        FURNISHING_TYPE: state.FURNISHING_TYPE || 'UNFURNISHED',
+        IS_PARKING_SPACE_AVAILABLE: state.IS_PARKING_SPACE_AVAILABLE || 0,
+        BUILT_YEAR: state.BUILT_YEAR || 0,
+        UNIT_NO: state.UNIT_NO || '',
+        BUILDING_NAME: state.BUILDING_NAME || '',
+        BLOCK_TOWER: state.BLOCK_TOWER || '',
+        FLOOR_NO: state.FLOOR_NO || 0,
+        TOTAL_FLOORS: state.TOTAL_FLOORS || 0,
+        MAINTENANCE_FEE: state.MAINTENANCE_FEE || 0,
+        LAND_USE: state.LAND_USE || 'RESIDENTIAL',
+        FRONTAGE_M: state.FRONTAGE_M || 0,
+        DEPTH_M: state.DEPTH_M || 0,
+        ROAD_WIDTH_M: state.ROAD_WIDTH_M || 0,
+        CORNER_PLOT: state.CORNER_PLOT || 0,
+        FEATURES_JSON: state.FEATURES_JSON || '[]',
+        LATITUDE: state.LATITUDE || 0,
+        LONGITUDE: state.LONGITUDE || 0,
+        ADDRESS_LINE1: state.ADDRESS_LINE1 || '',
+        ADDRESS_LINE2: state.ADDRESS_LINE2 || '',
+        CITY: state.CITY || '',
+        STATE: state.STATE || '',
+        POSTAL_CODE: state.POSTAL_CODE || '',
+        COUNTRY: state.COUNTRY || '',
+        IS_ACTIVE_FLG: state.IS_ACTIVE_FLG || 1,
+      }
+      res = await propertyService.addPropertyToDraft(data)
+    }
+    if (res?.data?.ERR_CODE == 0) {
+        saveBtnLoader.value = false
+        toast.success('Property added to draft', {
+          autoClose: 4000,
+        });
+        draftLoader.value = false
+        router.push('/home')
+      } else {
+        throw new Error('Could not add Property')
+        draftLoader.value = false
+      }
+  } catch (error) {
+    console.log(error)
+    draftLoader.value = false
+  }
+}
 </script>
 
 <style scoped lang="scss">

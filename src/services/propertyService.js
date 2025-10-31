@@ -67,6 +67,16 @@ export default {
   async fetchAllDrafts(data){
     return axios.get(`/GetPropertyDraft`, data)
   },
+
+  async addPropertyToDraft(data){
+    return axios.post(`/AddPropertyDraft`, data)
+  },
+  async updatePropertyDraft(data){
+    return axios.post(`/UpdatePropertyDraft`, data)
+  },
+  
+
+
   
   
 
