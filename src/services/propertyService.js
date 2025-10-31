@@ -59,4 +59,28 @@ export default {
   async fetchUserDetail(){
     return axios.get(`/GetUserDetail`)
   },
+  // message 
+  async message(data){
+    return axios.post(`/MessageTxnCrud`, data)
+  },
+
+  async fetchAllDrafts(data){
+    return axios.get(`/GetPropertyDraft`, data)
+  },
+
+  async addPropertyToDraft(data){
+    return axios.post(`/AddPropertyDraft`, data)
+  },
+  async updatePropertyDraft(data){
+    return axios.post(`/UpdatePropertyDraft`, data)
+  },
+  
+  // image upload API  
+  async uploadPropertyImage(data){
+    return axios.post(`/LLPropertyImageCrud`, data)
+  },
+
+  
+  
+
 }

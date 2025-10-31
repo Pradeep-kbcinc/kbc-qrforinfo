@@ -6,6 +6,7 @@ export const useAuthStore = defineStore("app", {
   state: () => ({
     token: localStorage.getItem("access_token") || null,
     userDetails: JSON.parse(localStorage.getItem("userDetails")) || null,
+    propertyDetailsTempo : localStorage.getItem('tempoPropertyData') || {}
   }),
   getters: {
     isAuthenticated: (state) => {
@@ -15,7 +16,8 @@ export const useAuthStore = defineStore("app", {
         return true
       }
     },
-    getUserDetails: (state)=> state.userDetails
+    getUserDetails: (state)=> state.userDetails, 
+    getTemporaryPropertyDetails: (state)=> state.propertyDetailsTempo
   },
   actions: {
     login(userDetails, token) {
@@ -48,5 +50,11 @@ export const useAuthStore = defineStore("app", {
         return e;
       }
     },
+
+    setTempPropertyDetails(data){
+      localStorage.setItem('tempoPropertyData', JSON.stringify(data))
+      this.propertyDetailsTempo = data
+    }
+
   },
 });

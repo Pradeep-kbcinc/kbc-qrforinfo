@@ -10,7 +10,7 @@
         </pre> -->
         <h3 class="font-weight-bold">Basic Information</h3>
         <div>
-          <p class="mt-6">Listing Type</p>
+          <p class="mt-6 font-weight-bold">Listing Type</p>
           <v-row>
             <v-col>
               <v-btn @click="state.LISTING_TYPE = 'For Sale'" :color="state.LISTING_TYPE == 'For Sale' ? 'primary' : ''" :class="state.LISTING_TYPE == 'For Sale' ? 'selectedCard' : ''" variant="outlined" block size="x-large" rounded="lg" class="text-none elevation-0 text-body-1">
@@ -57,59 +57,71 @@
         </v-row>
 
         <div>
-          <p>Property Title</p>
+          <p class="font-weight-bold">Property Title</p>
           <v-text-field :error-messages="v$.TITLE.$errors.map(e => e.$message)" @blur="v$.TITLE.$touch" @input="v$.TITLE.$touch" v-model="state.TITLE" class="mt-1" rounded="lg" variant="outlined" placeholder="Modern 3BR Apartment"></v-text-field>
         </div>
         <div>
-          <p>Property Description</p>
-          <v-textarea :error-messages="v$.PROPERTY_DESC.$errors.map(e => e.$message)" @blur="v$.PROPERTY_DESC.$touch" @input="v$.PROPERTY_DESC.$touch" v-model="state.PROPERTY_DESC" class="mt-1" rounded="lg" variant="outlined" placeholder="Modern 3BR Apartment"></v-textarea>
+          <p class="mb-2 font-weight-bold">Property Description</p>
+          <!-- <v-textarea :error-messages="v$.PROPERTY_DESC.$errors.map(e => e.$message)" @blur="v$.PROPERTY_DESC.$touch" @input="v$.PROPERTY_DESC.$touch" v-model="state.PROPERTY_DESC" class="mt-1" rounded="lg" variant="outlined" placeholder="Modern 3BR Apartment"></v-textarea> -->
+
+          <QuillEditor
+              style="height: 150px"
+              theme="snow"
+              contentType="html"
+              placeholder="Property Description"
+              v-model:content="state.PROPERTY_DESC"
+               @blur="v$.PROPERTY_DESC.$touch" @input="v$.PROPERTY_DESC.$touch"
+            />
+            <small v-if="v$.PROPERTY_DESC.$error" class="text-error">
+    {{ v$.PROPERTY_DESC.$errors[0].$message }}
+  </small>
         </div>
         <div>
           <v-row align="end">
             <v-col>
-              <p>Price</p>
+              <p class="font-weight-bold">Price</p>
               <v-text-field :error-messages="v$.PRICE_AMOUNT.$errors.map(e => e.$message)" @blur="v$.PRICE_AMOUNT.$touch" @input="v$.PRICE_AMOUNT.$touch" v-model="state.PRICE_AMOUNT" class="mt-1" rounded="lg" variant="outlined" placeholder="450,000"></v-text-field>
             </v-col>
             <v-col cols="auto">
-              <p class="pr-4">Currency Code</p>
+              <p class="pr-4 font-weight-bold mb-1">Currency Code</p>
               <v-select v-model="state.CURRENCY_CODE" variant="outlined" class="mt-auto" :items="['INR', 'USD']" rounded="lg"></v-select>
             </v-col>
             <v-col>
-              <p>Bedrooms</p>
+              <p class="font-weight-bold">Bedrooms</p>
               <v-text-field :error-messages="v$.NO_BEDROOMS.$errors.map(e => e.$message)" @blur="v$.NO_BEDROOMS.$touch" @input="v$.NO_BEDROOMS.$touch" v-model="state.NO_BEDROOMS" class="mt-1" rounded="lg" variant="outlined" placeholder="3"></v-text-field>
             </v-col>
             <v-col>
-              <p>Bathrooms</p>
+              <p class="font-weight-bold">Bathrooms</p>
               <v-text-field v-model="state.NO_BATHROOMS" class="mt-1" rounded="lg" variant="outlined" placeholder="3"></v-text-field>
             </v-col>
           </v-row>
 
           <v-row align="end">
             <v-col>
-              <p>Country</p>
+              <p class="font-weight-bold">Country</p>
               <v-text-field :error-messages="v$.COUNTRY.$errors.map(e => e.$message)" @blur="v$.COUNTRY.$touch" @input="v$.COUNTRY.$touch" v-model="state.COUNTRY" class="mt-1" rounded="lg" variant="outlined" placeholder="India"></v-text-field>
             </v-col>
             <v-col>
-              <p>State</p>
+              <p class="font-weight-bold">State</p>
               <v-text-field :error-messages="v$.STATE.$errors.map(e => e.$message)" @blur="v$.STATE.$touch" @input="v$.STATE.$touch" v-model="state.STATE" class="mt-1" rounded="lg" variant="outlined" placeholder="Delhi"></v-text-field>
             </v-col>
             <v-col>
-              <p>City</p>
+              <p class="font-weight-bold">City</p>
               <v-text-field :error-messages="v$.CITY.$errors.map(e => e.$message)" @blur="v$.CITY.$touch" @input="v$.CITY.$touch" v-model="state.CITY" class="mt-1" rounded="lg" variant="outlined" placeholder="New Delhi"></v-text-field>
             </v-col>
             <v-col>
-              <p>Postal Code</p>
+              <p class="font-weight-bold">Postal Code</p>
               <v-text-field v-model="state.POSTAL_CODE" class="mt-1" rounded="lg" variant="outlined" placeholder="Postal Code"></v-text-field>
             </v-col>
           </v-row>
 
           <v-row align="end">
             <v-col>
-              <p>Area</p>
+              <p class="font-weight-bold">Area</p>
               <v-text-field :error-messages="v$.AREA.$errors.map(e => e.$message)" @blur="v$.AREA.$touch" @input="v$.AREA.$touch" v-model="state.AREA" class="mt-1" rounded="lg" variant="outlined" placeholder="Area"></v-text-field>
             </v-col>
             <v-col cols="auto">
-              <p class="pr-4">Area Unit</p>
+              <p class="pr-4 font-weight-bold">Area Unit</p>
               <v-select v-model="state.AREA_UNIT" variant="outlined" class="mt-auto" :items="['SQFT', 'SQYD', 'SQM', 'ACRE', 'HECTARE']" rounded="lg"></v-select>
             </v-col>
           </v-row>
@@ -117,10 +129,10 @@
         </div>
         <v-divider></v-divider>
         <div class="d-flex mt-4">
-          <v-btn variant="outlined" class="text-none rounded-lg elevation-0 font-weight-bold" height="42">Save
+          <v-btn @click="saveDraft" :loading="draftLoader" color="grey" class="text-none rounded-lg box-shadow font-weight-bold" height="42"> <v-icon class="mr-2">mdi-file-sign</v-icon> Save
             Draft</v-btn>
           <v-spacer></v-spacer>
-          <v-btn @click="saveProperty" :loading="saveBtnLoader" color="primary" class="text-none rounded-lg elevation-0 font-weight-bold" height="42">Continue</v-btn>
+          <v-btn @click="saveProperty" :loading="saveBtnLoader" color="primary" class="text-none rounded-lg elevation-0 font-weight-bold" height="42"><v-icon class="mr-2">mdi-check</v-icon> Save Property</v-btn>
         </div>
       </v-card-text>
 
@@ -196,7 +208,7 @@ const rules = {
   STATE: { required: helpers.withMessage('State is required', required) },
   CITY: { required: helpers.withMessage('City is required', required) },
   AREA: { required: helpers.withMessage('Area is required', required) },
-  NO_BEDROOMS: { required: helpers.withMessage('Number of bedrooms is required', required) },
+  NO_BEDROOMS: {  },
 }
 const v$ = useVuelidate(rules, state)
 const saveBtnLoader = ref(false)
@@ -204,7 +216,15 @@ const saveBtnLoader = ref(false)
 
 //------------------------------------------------------------------------------
 onMounted(() => {
-  fetchPropertyDetail()
+  if(route.query.draft){
+    Object.assign(state, { ...state, ...authStore.getTemporaryPropertyDetails });
+  }else{
+    fetchPropertyDetail()
+  }
+})
+
+onBeforeUnmount(()=>{
+  localStorage.removeItem('tempoPropertyData')
 })
 //------------------------------------------------------------------------------
 const saveProperty = async () => {
@@ -313,6 +333,133 @@ const fetchPropertyDetail = async () => {
   }
 }
 //------------------------------------------------------------------------------
+const draftLoader = ref(false)
+const saveDraft = async()=>{
+  draftLoader.value = true
+  try {
+    let data
+    let res
+    if(route.query.draft){
+      data = {
+        ...state,
+        DRAFT_ID: authStore.getTemporaryPropertyDetails.DRAFT_ID,
+        SELLER_USER_ID: state.SELLER_USER_ID || authStore?.userDetails?.USER_ID || 0,
+        PROPERTY_ID: state.PROPERTY_ID || 0,
+        LISTING_TYPE: state.LISTING_TYPE || '',
+        TITLE: state.TITLE || '',
+        PROPERTY_DESC: state.PROPERTY_DESC || '',
+        PROPERTY_KIND: state.PROPERTY_KIND || 'LAND',
+        TYPE_CODE: state.TYPE_CODE || '',
+        PROPERTY_TYPE_ID: state.PROPERTY_TYPE_ID || 0,
+        DIMENSIONS: state.DIMENSIONS || '',
+        AREA: state.AREA || 0,
+        AREA_UNIT: state.AREA_UNIT || 'SQFT',
+        BUILTUP_AREA: state.BUILTUP_AREA || 0,
+        BUILTUP_AREA_UNIT: state.BUILTUP_AREA_UNIT || 'SQFT',
+        CARPET_AREA: state.CARPET_AREA || 0,
+        CARPET_AREA_UNIT: state.CARPET_AREA_UNIT || 'SQFT',
+        PRICE_AMOUNT: state.PRICE_AMOUNT || 0,
+        CURRENCY_CODE: state.CURRENCY_CODE || 'INR',
+        NO_BEDROOMS: state.NO_BEDROOMS || 0,
+        NO_BATHROOMS: state.NO_BATHROOMS || 0,
+        FURNISHING_TYPE: state.FURNISHING_TYPE || 'UNFURNISHED',
+        IS_PARKING_SPACE_AVAILABLE: state.IS_PARKING_SPACE_AVAILABLE || 0,
+        BUILT_YEAR: state.BUILT_YEAR || 0,
+        UNIT_NO: state.UNIT_NO || '',
+        BUILDING_NAME: state.BUILDING_NAME || '',
+        BLOCK_TOWER: state.BLOCK_TOWER || '',
+        FLOOR_NO: state.FLOOR_NO || 0,
+        TOTAL_FLOORS: state.TOTAL_FLOORS || 0,
+        MAINTENANCE_FEE: state.MAINTENANCE_FEE || 0,
+        LAND_USE: state.LAND_USE || 'RESIDENTIAL',
+        FRONTAGE_M: state.FRONTAGE_M || 0,
+        DEPTH_M: state.DEPTH_M || 0,
+        ROAD_WIDTH_M: state.ROAD_WIDTH_M || 0,
+        CORNER_PLOT: state.CORNER_PLOT || 0,
+        FEATURES_JSON: state.FEATURES_JSON || '[]',
+        LATITUDE: state.LATITUDE || 0,
+        LONGITUDE: state.LONGITUDE || 0,
+        ADDRESS_LINE1: state.ADDRESS_LINE1 || '',
+        ADDRESS_LINE2: state.ADDRESS_LINE2 || '',
+        CITY: state.CITY || '',
+        STATE: state.STATE || '',
+        POSTAL_CODE: state.POSTAL_CODE || '',
+        COUNTRY: state.COUNTRY || '',
+        IS_ACTIVE_FLG: state.IS_ACTIVE_FLG || 1,
+      }
+      res = await propertyService.updatePropertyDraft(data)
+    }else{
+      data = {
+        ...state,
+
+        SELLER_USER_ID: state.SELLER_USER_ID || authStore?.userDetails?.USER_ID || 0,
+        PROPERTY_ID: state.PROPERTY_ID || 0,
+        LISTING_TYPE: state.LISTING_TYPE || '',
+        TITLE: state.TITLE || '',
+        PROPERTY_DESC: state.PROPERTY_DESC || '',
+        PROPERTY_KIND: state.PROPERTY_KIND || 'LAND',
+        TYPE_CODE: state.TYPE_CODE || '',
+        PROPERTY_TYPE_ID: state.PROPERTY_TYPE_ID || 0,
+        DIMENSIONS: state.DIMENSIONS || '',
+        AREA: state.AREA || 0,
+        AREA_UNIT: state.AREA_UNIT || 'SQFT',
+        BUILTUP_AREA: state.BUILTUP_AREA || 0,
+        BUILTUP_AREA_UNIT: state.BUILTUP_AREA_UNIT || 'SQFT',
+        CARPET_AREA: state.CARPET_AREA || 0,
+        CARPET_AREA_UNIT: state.CARPET_AREA_UNIT || 'SQFT',
+        PRICE_AMOUNT: state.PRICE_AMOUNT || 0,
+        CURRENCY_CODE: state.CURRENCY_CODE || 'INR',
+        NO_BEDROOMS: state.NO_BEDROOMS || 0,
+        NO_BATHROOMS: state.NO_BATHROOMS || 0,
+        FURNISHING_TYPE: state.FURNISHING_TYPE || 'UNFURNISHED',
+        IS_PARKING_SPACE_AVAILABLE: state.IS_PARKING_SPACE_AVAILABLE || 0,
+        BUILT_YEAR: state.BUILT_YEAR || 0,
+        UNIT_NO: state.UNIT_NO || '',
+        BUILDING_NAME: state.BUILDING_NAME || '',
+        BLOCK_TOWER: state.BLOCK_TOWER || '',
+        FLOOR_NO: state.FLOOR_NO || 0,
+        TOTAL_FLOORS: state.TOTAL_FLOORS || 0,
+        MAINTENANCE_FEE: state.MAINTENANCE_FEE || 0,
+        LAND_USE: state.LAND_USE || 'RESIDENTIAL',
+        FRONTAGE_M: state.FRONTAGE_M || 0,
+        DEPTH_M: state.DEPTH_M || 0,
+        ROAD_WIDTH_M: state.ROAD_WIDTH_M || 0,
+        CORNER_PLOT: state.CORNER_PLOT || 0,
+        FEATURES_JSON: state.FEATURES_JSON || '[]',
+        LATITUDE: state.LATITUDE || 0,
+        LONGITUDE: state.LONGITUDE || 0,
+        ADDRESS_LINE1: state.ADDRESS_LINE1 || '',
+        ADDRESS_LINE2: state.ADDRESS_LINE2 || '',
+        CITY: state.CITY || '',
+        STATE: state.STATE || '',
+        POSTAL_CODE: state.POSTAL_CODE || '',
+        COUNTRY: state.COUNTRY || '',
+        IS_ACTIVE_FLG: state.IS_ACTIVE_FLG || 1,
+      }
+      res = await propertyService.addPropertyToDraft(data)
+    }
+    if (res?.data?.ERR_CODE == 0) {
+        saveBtnLoader.value = false
+        toast.success('Property added to draft', {
+          autoClose: 4000,
+        });
+        draftLoader.value = false
+        router.push('/home')
+      } else {
+        throw new Error('Could not add Property')
+        toast.error('Something went wrong', {
+          autoClose: 4000,
+        });
+        draftLoader.value = false
+      }
+  } catch (error) {
+    console.log(error)
+    toast.error('Something went wrong', {
+          autoClose: 4000,
+        });
+    draftLoader.value = false
+  }
+}
 </script>
 
 <style scoped lang="scss">

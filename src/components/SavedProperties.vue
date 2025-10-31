@@ -16,6 +16,7 @@
 
         </v-col>
       </v-row>
+      <v-pagination v-model="currentPage" :length="totalPages" class="my-4"></v-pagination>
     </div>
   </div>
 </template>
@@ -26,7 +27,8 @@ import PropertyCard from './PropertyCard.vue';
 
 const propertyArr = ref([])
 const isLoading = ref(false)
-
+const currentPage = ref(1)
+const totalPages = ref(null)
 const getProperties = async () => {
   try {
     isLoading.value = true;
@@ -38,6 +40,7 @@ const getProperties = async () => {
     }
     let res = await propertyService.PropertyFavoriteTxnCrud(data)
     if(res.data.ERR_CODE == 0){
+      totalPages.value = res.data.FetchData.TOTAL_PAGE
       propertyArr.value = res?.data?.FetchData || [];
     }
     
@@ -48,6 +51,10 @@ const getProperties = async () => {
   }
 }
 onMounted(() => {
+  getProperties()
+})
+
+watch(currentPage,(val)=>{
   getProperties()
 })
 

@@ -6,6 +6,7 @@
   </div>
 
   <div v-else :class="route.name == 'BuyPropertyDetails' ? 'mt-16' : ''">
+    
     <div class="d-flex align-center justify-space-between pa-6 pb-0">
       <div class="">
         <h3 class="text-h5 font-weight-bold font-weight-bold">{{ propertyObj.TITLE }}</h3>
@@ -13,8 +14,12 @@
           {{ propertyObj.COUNTRY }}, {{ propertyObj.STATE }}, {{ propertyObj.CITY }}</p>
       </div>
       <div v-if="authStore.isAuthenticated" class="d-flex ga-4">
-        <v-btn v-if="propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID" @click="$router.push(`/add-new-property/${propertyObj.PROPERTY_ID}`)" variant="outlined" prependIcon="mdi-square-edit-outline" class="text-none rounded-lg elevation-0 font-weight-bold" height="42">Edit</v-btn>
-        <v-btn @click="shareAction(propertyObj)" color="primary" prependIcon="mdi-share-variant-outline" class="text-none rounded-lg elevation-0 font-weight-bold" height="42">Share</v-btn>
+        <v-btn v-if="propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID"
+          @click="$router.push(`/add-new-property/${propertyObj.PROPERTY_ID}`)" variant="outlined"
+          prependIcon="mdi-square-edit-outline" class="text-none rounded-lg elevation-0 font-weight-bold"
+          height="42">Edit</v-btn>
+        <v-btn @click="shareAction(propertyObj)" color="primary" prependIcon="mdi-share-variant-outline"
+          class="text-none rounded-lg elevation-0 font-weight-bold" height="42">Share</v-btn>
       </div>
     </div>
 
@@ -22,10 +27,17 @@
       <v-row>
         <v-col cols="12" lg="9">
           <v-card class="card-box-shadow rounded-lg">
-            <v-card min-height="350" elevation="0" rounded="0" class="bg-box-gradient d-flex justify-center align-center position-relative" style="font-size: 8.0rem;line-height: 1;">
+            <v-card min-height="350" elevation="0" rounded="0"
+              class="bg-box-gradient d-flex justify-center align-center position-relative"
+              style="font-size: 8.0rem;line-height: 1;">
               🏠
-              <v-btn v-if="$route.fullPath.includes('/buy/') && propertyObj.LISTING_TYPE" :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'" class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 left-0 mt-4 ms-4" height="" density="comfortable">{{ propertyObj.LISTING_TYPE }}</v-btn>
-              <v-btn v-if="$route.fullPath.includes('/buy/')" color="white" :icon="propertyObj.IS_FAV ? 'mdi-heart' : 'mdi-heart-outline'" class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 right-0 mt-4 mr-4">
+              <v-btn v-if="$route.fullPath.includes('/buy/') && propertyObj.LISTING_TYPE"
+                :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'"
+                class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 left-0 mt-4 ms-4"
+                height="" density="comfortable">{{ propertyObj.LISTING_TYPE }}</v-btn>
+              <v-btn v-if="$route.fullPath.includes('/buy/')" color="white"
+                :icon="propertyObj.IS_FAV ? 'mdi-heart' : 'mdi-heart-outline'"
+                class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 right-0 mt-4 mr-4">
                 <v-icon :color="propertyObj.IS_FAV ? 'red' : 'black'">{{ propertyObj.IS_FAV ? 'mdi-heart' :
                   'mdi-heart-outline' }}</v-icon>
               </v-btn>
@@ -54,12 +66,14 @@
                 </v-col>
                 <v-col v-if="!$route.fullPath.includes('/buy/') && propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID">
                   <div class="d-flex justify-end">
-                    <v-btn @click="qrModal = true" rounded="lg" width="200" min-height="48" class="text-none d-flex align-center" elevation="0" color="primary"> <v-icon class="mr-2">mdi-eye</v-icon> QR Code</v-btn>
+                    <v-btn  @click="qrModal = true" rounded="lg" width="200" min-height="48"
+                      class="text-none d-flex align-center" elevation="0" color="primary"> <v-icon
+                        class="mr-2">mdi-eye</v-icon> QR Code</v-btn>
                   </div>
                 </v-col>
               </v-row>
-
-              <p class="mt-6">{{ propertyObj.PROPERTY_DESC }}</p>
+              <v-divider></v-divider>
+              <p class="mt-6" v-html="propertyObj.PROPERTY_DESC"></p>
             </div>
           </v-card>
         </v-col>
@@ -78,11 +92,19 @@
                 // useGrouping: 'false'
               }) }}
               {{ propertyObj.CURRENCY_CODE }}</p>
-            <v-btn @click="contactOwner" v-if="authStore.userDetails.USER_ID !== propertyObj.SELLER_USER_ID" color="primary" class="text-none rounded-lg elevation-0 font-weight-bold w-100" height="50" prepend-icon="mdi-comment-outline">Contact Owner</v-btn>
-            <v-btn @click="makeFev" :loading="makeFevLoader" color="red" variant="outlined" class="text-none rounded-lg elevation-0 font-weight-bold w-100 mt-3" :prepend-icon="propertyObj.IS_FAVOURITE == 1 ? 'mdi-heart' : 'mdi-heart-outline'" height="50">{{
-              propertyObj.IS_FAV ?
-                'Saved to Favorites' : 'Save to Favorites' }}</v-btn>
-            <v-btn @click="shareAction(propertyObj)" variant="outlined" class="text-none rounded-lg elevation-0 font-weight-bold w-100 mt-3" prepend-icon="mdi-share-variant-outline" height="50">Share Property</v-btn>
+
+            <v-btn @click="contactOwner" v-if="authStore.userDetails.USER_ID !== propertyObj.SELLER_USER_ID"
+              color="primary" class="text-none rounded-lg elevation-0 font-weight-bold w-100" height="50"
+              prepend-icon="mdi-comment-outline">Contact Owner</v-btn>
+
+            <v-btn @click="makeFev" :loading="makeFevLoader" color="red" variant="outlined"
+              class="text-none rounded-lg elevation-0 font-weight-bold w-100 mt-3"
+              :prepend-icon="propertyObj.IS_FAVOURITE == 1 ? 'mdi-heart' : 'mdi-heart-outline'" height="50">{{
+                propertyObj.IS_FAV ?
+                  'Saved to Favorites' : 'Save to Favorites' }}</v-btn>
+            <v-btn @click="shareAction(propertyObj)" variant="outlined"
+              class="text-none rounded-lg elevation-0 font-weight-bold w-100 mt-3"
+              prepend-icon="mdi-share-variant-outline" height="50">Share Property</v-btn>
             <v-card class="card-box-shadow rounded-lg pa-4 mt-5">
               <h3 class="text-h6 font-weight-bold mb-2">Statistics</h3>
               <div class="border-b d-flex justify-space-between ga-4 py-4">
@@ -108,38 +130,46 @@
 
   <v-dialog max-width="600" v-model="qrModal">
     <v-toolbar rounded="t-lg b-0" class="px-4">
-      <h5>QR Code & Analytics</h5>
+      <h5>QR Code & Analytics</h5> 
       <v-spacer></v-spacer>
       <v-btn @click="qrModal = false" icon><v-icon>mdi-close</v-icon></v-btn>
     </v-toolbar>
     <v-card rounded="b-lg t-0">
       <v-card-text>
-        <div class="pa-4 mb-10">
+        <div
+          class="pa-4 mb-10">
           <v-card class="card-box-shadow rounded-lg pa-6">
-            <h3 class="text-h6 font-weight-bold mb-2">QR Code</h3>
-            <v-card id="reportContent" min-height="400" elevation="0" rounded="lg" class="bg-grey-lighten-4 d-flex ga-4 flex-column justify-center align-center position-relative" style="font-size: 8.0rem;line-height: 1;">
-              <v-btn v-if="propertyObj.LISTING_TYPE" :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'" class="text-none rounded-pill elevation-0 font-weight-bold" height="" density="comfortable">{{
-                propertyObj.LISTING_TYPE }}</v-btn>
-              <v-card class="bg-white pa-6 rounded-lg card-box-shadow">
+                <h3 class="text-h6 font-weight-bold mb-2">QR Code</h3>
+                <v-card id="reportContent" min-height="400" elevation="0" rounded="lg"
+                  class="bg-grey-lighten-4 d-flex ga-4 flex-column justify-center align-center position-relative"
+                  style="font-size: 8.0rem;line-height: 1;">
+                  <v-btn v-if="propertyObj.LISTING_TYPE"
+                    :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'"
+                    class="text-none rounded-pill elevation-0 font-weight-bold" height="" density="comfortable">{{
+                      propertyObj.LISTING_TYPE }}</v-btn>
+                  <v-card class="bg-white pa-6 rounded-lg card-box-shadow">
 
 
-                <qrcode-vue :value="`${baseUrl}/#/buy/property/${propertyObj.PROPERTY_ID}?qr=1`" :size="200" level="H" background="transparent" foreground="black" />
+                    <qrcode-vue :value="`${baseUrl}/#/buy/property/${propertyObj.PROPERTY_ID}?qr=1`" :size="200"
+                      level="H" background="transparent" foreground="black" />
 
 
+                  </v-card>
+
+                  <div class="">
+                    <p class="text-body-2 text-grey-darken-1 mb-0">Powered By</p>
+                    <p class="text-primary text-body-1 font-weight-bold">QRForInfo</p>
+                  </div>
+                </v-card>
+                <div class="pa-4">
+                  <div class="d-flex ga-4">
+                    <v-btn @click="downloadPDF(propertyObj)" color="primary" prependIcon="mdi-download"
+                      class="text-none rounded-lg elevation-0 font-weight-bold flex-1-1" height="42">Download</v-btn>
+                    <v-btn @click="shareAction(propertyObj)" variant="outlined" prependIcon="mdi-share-variant-outline"
+                      class="text-none rounded-lg elevation-0 font-weight-bold flex-1-1" height="42">Share</v-btn>
+                  </div>
+                </div>
               </v-card>
-
-              <div class="">
-                <p class="text-body-2 text-grey-darken-1 mb-0">Powered By</p>
-                <p class="text-primary text-body-1 font-weight-bold">QRForInfo</p>
-              </div>
-            </v-card>
-            <div class="pa-4">
-              <div class="d-flex ga-4">
-                <v-btn @click="downloadPDF(propertyObj)" color="primary" prependIcon="mdi-download" class="text-none rounded-lg elevation-0 font-weight-bold flex-1-1" height="42">Download</v-btn>
-                <v-btn @click="shareAction(propertyObj)" variant="outlined" prependIcon="mdi-share-variant-outline" class="text-none rounded-lg elevation-0 font-weight-bold flex-1-1" height="42">Share</v-btn>
-              </div>
-            </div>
-          </v-card>
         </div>
       </v-card-text>
     </v-card>
@@ -157,13 +187,15 @@
       </v-card-text>
       <v-row>
         <v-col>
-          <v-btn @click="warningPopUp = false" rounded="xl" height="48" color="secondary" width="100%" class="text-none elevation-0 font-weight-bold">
+          <v-btn @click="warningPopUp = false" rounded="xl" height="48" color="secondary" width="100%"
+            class="text-none elevation-0 font-weight-bold">
             <v-icon class="mr-1" color="">mdi-web</v-icon> Continue Web
           </v-btn>
         </v-col>
         <v-col>
           <!-- https://apps.apple.com/in/app/school/id1528665599 -->
-          <v-btn @click="openMobileApp" rounded="xl" height="48" color="primary" width="100%" class="text-none elevation-0 font-weight-bold">
+          <v-btn @click="openMobileApp" rounded="xl" height="48" color="primary" width="100%"
+            class="text-none elevation-0 font-weight-bold">
             <v-icon class="mr-1" color="">mdi-cellphone</v-icon> Download App
           </v-btn>
         </v-col>
@@ -172,6 +204,50 @@
 
     </v-card>
   </v-dialog>
+
+  <v-dialog v-model="msgDialog" max-width="650">
+    <v-toolbar class="" rounded="t-lg b-0">
+      <v-spacer></v-spacer>
+      <v-btn icon @click="msgDialog = false"><v-icon>mdi-close</v-icon></v-btn>
+    </v-toolbar>
+    <v-card class="d-flex flex-column" min-height="400" rounded="b-lg t-0">
+      <!-- Messages Section -->
+      <v-card-text class="overflow-y-auto px-4 py-2">
+        <div v-for="(msg, i) in messages" :key="i" class="mb-3 d-flex">
+          <div
+            :class="[
+              'pa-3 rounded-lg d-inline-block',
+              msg.sender === 'me'
+                ? 'bg-primary text-white ml-auto'
+                : 'bg-grey-lighten-3 text-black mr-auto'
+            ]"
+            
+            style="max-width: 80%; white-space: pre-wrap;"
+          >
+            {{ msg.text }}
+          </div>
+        </div>
+      </v-card-text>
+
+      <!-- Input Section -->
+      <v-divider></v-divider>
+      <v-card-actions class="px-4 py-3">
+        <v-text-field
+          v-model="newMessage"
+          placeholder="Type your message..."
+          variant="outlined"
+          density="comfortable"
+          hide-details
+          clearable
+          @keyup.enter="sendMessage"
+        ></v-text-field>
+        <v-btn icon color="primary" :loading="msgSentLoader" @click="sendMessage">
+          <v-icon>mdi-send</v-icon>
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+  
 </template>
 
 <script setup>
@@ -209,7 +285,7 @@ const fetchPropertyDetail = async () => {
 
     isLoading.value = true;
     const data = {
-      PROPERTY_ID: Number(route.params.id),
+      PROPERTY_ID: route.params.id,
       CITY: "",
       STATE: "",
       POSTAL_CODE: "",
@@ -303,13 +379,71 @@ const makeFev = async () => {
   }
 }
 
+const msgDialog = ref(false)
+const sender_id = ref()
+const receiver_id = ref()
+const property_id = ref()
+const msgSentLoader = ref(false)
+const sendMessage = async()=>{
+  if(newMessage.value && newMessage.value.length){
+    msgSentLoader.value = true
+    try {
+    let data = {
+      "ACTION_TYPE": "CREATE",
+      "MESSAGE_ID": 0,
+      "SENDER_USER_ID": sender_id.value,
+      "RECEIVER_USER_ID": receiver_id.value,
+      "MESSAGE_BODY": newMessage.value,
+      "READ_ON": "2025-10-29",
+      "PROPERTY_ID": property_id.value,
+      "LAST_MESSAGE_ON": new Date()
+    }
+    let res = await propertyService.message(data)
+    if(res.data.ERR_CODE == 0){
+      msgSentLoader.value = false
+      messages.value.push({ sender: 'me', text: newMessage.value.trim() })
+      newMessage.value = ''
+    }
+  } catch (error) {
+    console.log(error)
+  }
+  }
+ 
+}
 const contactOwner = () => {
   if (authStore.isAuthenticated) {
-    router.push(`/messages?user_id=${propertyObj.SELLER_USER_ID}&property_id=${propertyObj.PROPERTY_ID}`)
+    // router.push(`/messages?user_id=${propertyObj.SELLER_USER_ID}&property_id=${propertyObj.PROPERTY_ID}`)
+    sender_id.value = authStore.getUserDetails.USER_ID
+    receiver_id.value = propertyObj.value.SELLER_USER_ID
+    property_id.value = propertyObj.value.PROPERTY_ID
+    msgDialog.value = true
   } else {
     router.push('/login')
   }
 }
+
+const newMessage = ref('')
+const messages = ref([
+  // { sender: 'other', text: 'Hey there! How can I help you today?' },
+  // { sender: 'me', text: 'Hi! I wanted to ask about the new property listings.' },
+  // { sender: 'other', text: 'Hey there! How can I help you today?' },
+  // { sender: 'me', text: 'Hi! I wanted to ask about the new property listings.' },
+  // { sender: 'other', text: 'Hey there! How can I help you today?' },
+  // { sender: 'me', text: 'Hi! I wanted to ask about the new property listings.' },
+  // { sender: 'other', text: 'Hey there! How can I help you today?' },
+  // { sender: 'me', text: 'Hi! I wanted to ask about the new property listings.' },
+  
+])
+
+// const sendMessage = () => {
+//   if (!newMessage.value.trim()) return
+//   messages.value.push({ sender: 'me', text: newMessage.value.trim() })
+//   newMessage.value = ''
+//   setTimeout(() => {
+//     messages.value.push({ sender: 'other', text: 'Sure! I’ll share the latest ones shortly.' })
+//   }, 1000)
+// }
+
 </script>
 
 <style scoped lang="scss">

@@ -7,6 +7,10 @@
           authStore?.userDetails?.LNAME }}</p>
       </div>
       <v-spacer></v-spacer>
+      <v-btn @click="openDraftList" :height="!mobile ? 48 : 38" :width="mobile ? '140' : ''" rounded="lg"
+        class="elevation-0 text-none font-weight-bold mr-2" color="info">
+        <v-icon class="mr-2">mdi-file-sign</v-icon>Saved Drafts
+      </v-btn>
       <v-btn @click="router.push('/add-new-property')" :height="!mobile ? 48 : 38" :width="mobile ? '140' : ''"
         rounded="lg" class="elevation-0 text-none font-weight-bold" color="primary">
         <v-icon>mdi-plus</v-icon> Add Property
@@ -60,7 +64,7 @@
 
           <div v-if="isLoading" class="">
             <v-skeleton-loader class="mx-auto border" type="article"></v-skeleton-loader>
-            <v-skeleton-loader v-for="item in 5" :key="item" class="mx-auto border mt-4"
+            <v-skeleton-loader v-for="item in 2" :key="item" class="mx-auto border mt-4"
               type="article"></v-skeleton-loader>
 
           </div>
@@ -85,12 +89,13 @@
                 <v-list-item-subtitle v-if="propertyObj?.COUNTRY && propertyObj?.STATE && propertyObj?.CITY"
                   class="mt-1"><v-icon>mdi-map-marker-outline</v-icon>{{ propertyObj.COUNTRY }}, {{ propertyObj.STATE
                   }}, {{
-                  propertyObj.CITY }}</v-list-item-subtitle>
+                    propertyObj.CITY }}</v-list-item-subtitle>
                 <div class="text-primary font-weight-bold text-subtitle-1">{{ propertyObj.price }}</div>
 
                 <template #append>
                   <div class="text-end">
-                    <v-btn @click.stop="openModal" rounded="lg" class="text-none font-weight-bold text-subtitle-1"
+                  
+                    <v-btn @click.stop="openModal(propertyObj)" rounded="lg" class="text-none font-weight-bold text-subtitle-1"
                       min-width="100" height="48" color="primary" elevation="0">Add Images</v-btn>
                   </div>
                 </template>
@@ -102,23 +107,71 @@
 
           </v-list>
         </v-card-text>
+        <v-pagination v-model="currentPage" :length="totalPages" class="my-4"></v-pagination>
       </v-card>
     </section>
   </v-container>
   <v-dialog max-width="800" v-model="uploadImageModal">
-    <v-toolbar color="" rounded="t-lg" class="px-4">
+    <v-toolbar density="compact" color="" rounded="t-lg" class="px-4">
       <h6>Upload Images</h6>
       <v-spacer></v-spacer>
       <v-btn @click="uploadImageModal = false" icon>
         <v-icon>mdi-close</v-icon>
       </v-btn>
-     
+
     </v-toolbar>
     <v-card rounded="t-0 b-lg">
       <v-card-text>
-        <v-file-upload clearable multiple density="default"></v-file-upload>
-        <div class="d-flex justify-end">
-          <v-btn size="large" class="text-none rounded-lg" elevation="0" min-width="200" color="primary">Save</v-btn>
+        <v-file-upload v-model="addedImagesArr" clearable multiple density="default"></v-file-upload>
+        <div class="d-flex justify-end mt-4">
+          <v-btn size="large" class="text-none rounded-lg" @click="uploadImages" :loading="uploadImagesLoader"
+            elevation="0" min-width="200" color="primary">Save</v-btn>
+        </div>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
+  <v-dialog max-width="800" v-model="draftModal">
+    <v-toolbar density="compact" rounded="t-lg" class="px-2">
+      <h5>Draft List</h5>
+      <v-spacer></v-spacer>
+      <v-btn @click="draftModal = false" icon><v-icon>mdi-close</v-icon></v-btn>
+    </v-toolbar>
+    <v-card rounded="b-lg t-0" min-height="400">
+      <v-card-text>
+        <div v-if="draftLoader" v-for="value in 4" :key="value">
+          <v-skeleton-loader type="list-item-avatar"></v-skeleton-loader>
+        </div>
+        <div v-else>
+
+          <div v-for="(propertyObj, i) in draftsArr" :key="i" class="rounded-lg">
+            <v-list-item class="px-2 my-2 pointer">
+              <template #prepend>
+                <v-avatar size="82" rounded="lg" class="mr-4 bg-grey-lighten-4 text-h4">
+                  <!-- <v-img :src="property.image" cover /> -->
+                  🏠
+                </v-avatar>
+              </template>
+
+              <v-list-item-title class="font-weight-bold text-grey-darken-3">{{ propertyObj.TITLE
+                }}</v-list-item-title>
+              <!-- <v-list-item-subtitle>{{ property.location }}</v-list-item-subtitle> -->
+              <v-list-item-subtitle v-if="propertyObj?.COUNTRY && propertyObj?.STATE && propertyObj?.CITY"
+                class="mt-1"><v-icon>mdi-map-marker-outline</v-icon>{{ propertyObj.COUNTRY }}, {{ propertyObj.STATE
+                }}, {{
+                  propertyObj.CITY }}</v-list-item-subtitle>
+              <div class="text-primary font-weight-bold text-subtitle-1">{{ propertyObj.price }}</div>
+
+              <template #append>
+                <div class="text-end">
+                  <v-btn @click.stop="gotoDraftEdit(propertyObj)" rounded="lg"
+                    class="text-none font-weight-bold text-subtitle-1" color="success" elevation="0">
+                    <v-icon>mdi-pencil</v-icon> Edit</v-btn>
+                </div>
+              </template>
+
+            </v-list-item>
+            <v-divider v-for="(p, i) in properties.slice(0, -1)" :key="'divider-' + i"></v-divider>
+          </div>
         </div>
       </v-card-text>
     </v-card>
@@ -128,7 +181,7 @@
 import propertyService from '@/services/propertyService'
 import { useAuthStore } from '@/stores/app'
 import { useDisplay } from 'vuetify'
-
+import { toast } from 'vue3-toastify';
 //..............................................................................
 const authStore = useAuthStore()
 const { mobile } = useDisplay()
@@ -136,6 +189,8 @@ const router = useRouter()
 const isLoading = ref(false)
 const propertyArr = ref([])
 const uploadImageModal = ref(false)
+const currentPage = ref(1)
+const totalPages = ref(null)
 const properties = [
   {
     title: 'Modern 3BR Apartment',
@@ -168,12 +223,13 @@ const properties = [
 onMounted(() => {
   getProperties()
 })
+watch(currentPage, (val) => {
+  getProperties()
+})
 //------------------------------------------------------------------------------
 const getProperties = async () => {
   try {
     isLoading.value = true;
-    console.log('--->', 12312);
-
     const data = {
       PROPERTY_ID: 0,
       CITY: "",
@@ -181,12 +237,16 @@ const getProperties = async () => {
       POSTAL_CODE: "",
       COUNTRY: "",
       SEARCH: "",
-      PAGE_NO: 1,
-      PAGE_SIZE: 10
+      PAGE_NO: currentPage.value,
+      PAGE_SIZE: 6
     }
 
     const res = await propertyService.GetPropertyDetail(data)
-    propertyArr.value = res?.data?.FetchData?.PROPERTY_DETAILS || [];
+    if (res.data.ERR_CODE == 0) {
+      totalPages.value = res.data.FetchData.TOTAL_PAGE
+      propertyArr.value = res?.data?.FetchData?.PROPERTY_DETAILS || [];
+    }
+
   } catch (error) {
     console.log('--->err', error);
   } finally {
@@ -194,7 +254,71 @@ const getProperties = async () => {
   }
 }
 
-const openModal = () => {
+const selectedPropertyId = ref(null)
+const openModal = (data) => {
+  selectedPropertyId.value = data.PROPERTY_ID
   uploadImageModal.value = true
+}
+
+const draftModal = ref(false)
+const draftsArr = ref([])
+const draftLoader = ref(false)
+const fetchDraft = async () => {
+  draftLoader.value = true
+  try {
+    let res = await propertyService.fetchAllDrafts()
+    if (res.data.ERR_CODE == 0) {
+      draftsArr.value = res.data.FetchData.PROPERTY_DRAFT_DETAILS
+      draftLoader.value = false
+    }
+  } catch (error) {
+    draftLoader.value = false
+    console.log(error)
+  }
+}
+const openDraftList = () => {
+  draftLoader.value = true
+  draftModal.value = true
+  fetchDraft()
+}
+
+const gotoDraftEdit = (data) => {
+  authStore.setTempPropertyDetails(data)
+  router.push({
+    path: `/add-new-property`, query: {
+      draft: true
+    }
+  })
+}
+
+
+const addedImagesArr = ref([])
+const uploadImagesLoader = ref(false)
+const uploadImages = async () => {
+  uploadImagesLoader.value = true
+  try {
+    for (let i = 0; i < addedImagesArr.value.length; i++) {
+      const file = addedImagesArr.value[i]
+      const formData = new FormData()
+      formData.append('ACTION_TYPE', 'CREATE')
+      formData.append('IMAGE_ID', 0),
+      formData.append('PROPERTY_ID', selectedPropertyId.value),
+      formData.append('IMAGE_URL', file)
+      formData.append('IS_PRIMARY', 0)
+      formData.append('SEQ_NO', i + 1)
+      formData.append('ALT_TEXT', `Image ${i + 1}`)
+      formData.append('IS_ACTIVE_FLG', 1)
+      await propertyService.uploadPropertyImage(formData)
+    }
+    uploadImagesLoader.value = false
+    addedImagesArr.value = [] // clear array
+    uploadImageModal.value = false
+    toast.success('All images uploaded successfully', {
+      autoClose: 4000,
+    });
+    getProperties()
+  } catch (error) {
+    console.log(error)
+  }
 }
 </script>
