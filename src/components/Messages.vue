@@ -17,7 +17,7 @@
               elevation="0" rounded="0" :color="selectedMsgObj.THREAD_ID == msgObj.THREAD_ID ? '#f0f6ff' : ''">
               <div class="d-flex align-center">
                 <v-avatar size="60" class="mr-2">
-                  <v-img alt="John" src="https://cdn.vuetifyjs.com/images/john.jpg"></v-img>
+                  <v-img alt="John" src="@/assets/dummy_profile.webp"></v-img>
                 </v-avatar>
                 <div class="">
                   <h6>{{ msgObj.RECEIVER_USER_NAME }}</h6>
@@ -39,7 +39,7 @@
           </div>
           <div v-else class="d-flex justify-center align-center w-100 h-100 flex-column">
             <div class="pa-4 bg-white border-b w-100">
-              <h5>{{selectedMsgObj.RECEIVER_USER_NAME}}</h5>
+              <h5>{{ selectedMsgObj.RECEIVER_USER_NAME }}</h5>
               <p>Property Name</p>
             </div>
             <div class="w-100 h-100 overflow-y-scroll">
@@ -47,18 +47,23 @@
                 <div v-if="messageLoader">
                   <v-skeleton-loader class="my-2" v-for="item in 4" type="paragraph"></v-skeleton-loader>
                 </div>
-                <v-card v-else v-for="msgObj in allMessages" class="pa-4 card-box-shadow mb-4 rounded-lg"
-                  :class="{ 'ms-auto': msgObj.self }" :color="msgObj.self ? 'primary' : ''" style="width: fit-content;">
-                  <p>{{ msgObj.MESSAGE_BODY }}</p>
-                  <p class="mt-2 text-body-2 text-grey-lighten-1">{{ moment(msgObj.SENT_ON).format('Do MMM, YYYY') }}</p>
-                </v-card>
+                <div v-else v-for="(msgObj, index) in allMessages" :key="index"
+                  :class="`d-flex ${msgObj.position == 'right' ? 'justify-end' : ''}`">
+                  <v-card class="pa-4 card-box-shadow mb-4 rounded-lg"
+                    :color="msgObj.position == 'right' ? 'primary' : ''" :class="{ 'ms-auto': msgObj.self }"
+                    style="width: fit-content;">
+                    <p>{{ msgObj.MESSAGE_BODY }}</p>
+                    <p class="mt-2 text-body-2 ">{{ moment(msgObj.SENT_ON).format('Do MMM, YYYY') }}</p>
+                  </v-card>
+                </div>
+
               </div>
             </div>
             <div class="bg-white d-flex ga-4 pa-4 w-100">
-              <v-text-field placeholder="Type Message..." v-model="msgVal" @keyup.enter="sendMessage" hide-details variant="outlined" rounded="lg"
-                density="comfortable"></v-text-field>
-              <v-btn color="primary" class="text-none rounded-lg elevation-0 font-weight-bold" @click="sendMessage" :loading="msgSentLoader" height="52"
-                icon="mdi-send-outline"></v-btn>
+              <v-text-field placeholder="Type Message..." v-model="newMessage" @keyup.enter="sendMessage" hide-details
+                variant="outlined" rounded="lg" density="comfortable"></v-text-field>
+              <v-btn color="primary" class="text-none rounded-lg elevation-0 font-weight-bold" @click="sendMessage"
+                :loading="msgSentLoader" height="52" icon="mdi-send-outline"></v-btn>
             </div>
           </div>
         </div>
@@ -71,6 +76,8 @@
 <script setup>
 import propertyService from '@/services/propertyService'
 import moment from 'moment'
+import { useAuthStore } from '@/stores/app'
+const authStore = useAuthStore()
 const msgArr = ref([
   {
     id: 1,
@@ -158,12 +165,15 @@ onMounted(() => {
 
 const messageLoader = ref(false)
 const allMessages = ref([])
-const fetchMassges = async(id)=>{
+const fetchMassges = async (id) => {
   messageLoader.value = true
   try {
     let res = await propertyService.fetchMessages(id)
-    if(res.data.ERR_CODE == 0){
-      allMessages.value = res.data.FetchData?.PROPERTY_MSG_DETAIL_SPECIFIC
+    if (res.data.ERR_CODE == 0) {
+      allMessages.value = res.data.FetchData?.PROPERTY_MSG_DETAIL_SPECIFIC.map((item) => {
+        return { ...item, position: item.SENDER_USER_ID == authStore.getUserDetails.USER_ID ? 'right' : 'left' }
+      })
+
       messageLoader.value = false
     }
   } catch (error) {
@@ -171,38 +181,46 @@ const fetchMassges = async(id)=>{
     console.log(error)
   }
 }
-const selectChannel = (data)=>{
+const selectChannel = (data) => {
   selectedMsgObj.value = data
   fetchMassges(data.THREAD_ID)
 }
 
-const msgVal = ref('')
+const newMessage = ref('')
 const msgSentLoader = ref(false)
-const sendMessage = async()=>{
-  if(newMessage.value && newMessage.value.length){
+const sendMessage = async () => {
+  if (newMessage.value && newMessage.value.length) {
     msgSentLoader.value = true
     try {
-    let data = {
-      "ACTION_TYPE": "CREATE",
-      "MESSAGE_ID": 0,
-      "SENDER_USER_ID": selectedMsgObj.value.SENDER_USER_ID,
-      "RECEIVER_USER_ID": selectedMsgObj.value.RECEIVER_USER_ID,
-      "MESSAGE_BODY": msgVal.value,
-      "READ_ON": new Date(),
-      "PROPERTY_ID": selectedMsgObj.value.PROPERTY_ID,
-      "LAST_MESSAGE_ON": new Date()
+      let data = {
+        "ACTION_TYPE": "CREATE",
+        "MESSAGE_ID": 0,
+        "SENDER_USER_ID": selectedMsgObj.value.SENDER_USER_ID,
+        "RECEIVER_USER_ID": selectedMsgObj.value.RECEIVER_USER_ID,
+        "MESSAGE_BODY": newMessage.value,
+        "READ_ON": new Date(),
+        "PROPERTY_ID": selectedMsgObj.value.PROPERTY_ID,
+        "LAST_MESSAGE_ON": new Date()
+      }
+      let res = await propertyService.message(data)
+      if (res.data.ERR_CODE == 0) {
+        msgSentLoader.value = false
+        allMessages.value.push({
+          IS_ACTIVE_FLG: 1,
+          IS_DELETED_BY_RECEIVER: 0,
+          IS_DELETED_BY_SENDER: 0,
+          MESSAGE_BODY: newMessage.value,
+          SENDER_USER_ID: selectedMsgObj.value.SENDER_USER_ID,
+          RECEIVER_USER_ID: selectedMsgObj.value.RECEIVER_USER_ID,
+          position: 'right'
+        })
+        newMessage.value = ''
+      }
+    } catch (error) {
+      console.log(error)
     }
-    let res = await propertyService.message(data)
-    if(res.data.ERR_CODE == 0){
-      msgSentLoader.value = false
-      messages.value.push({ sender: 'me', text: newMessage.value.trim() })
-      newMessage.value = ''
-    }
-  } catch (error) {
-    console.log(error)
   }
-  }
- 
+
 }
 </script>
 

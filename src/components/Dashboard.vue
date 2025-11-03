@@ -22,7 +22,7 @@
           <v-card height="100%" class="rounded-lg card-box-shadow">
             <v-card-text>
               <p>Active Listings</p>
-              <h5 class="text-primary text-h4 font-weight-bold mt-1">12</h5>
+              <h5 class="text-primary text-h4 font-weight-bold mt-1">{{ statisticsData[0]?.METRIC_VALUE || 0 }}</h5>
             </v-card-text>
           </v-card>
         </v-col>
@@ -30,7 +30,7 @@
           <v-card height="100%" class="rounded-lg card-box-shadow">
             <v-card-text>
               <p>Total Views</p>
-              <h5 class="text-green text-h4 font-weight-bold mt-1">1,247</h5>
+              <h5 class="text-green text-h4 font-weight-bold mt-1">{{statisticsData[3]?.METRIC_VALUE || 0}}</h5>
             </v-card-text>
           </v-card>
         </v-col>
@@ -38,7 +38,7 @@
           <v-card height="100%" class="rounded-lg card-box-shadow">
             <v-card-text>
               <p>Messages</p>
-              <h5 class="text-purple text-h4 font-weight-bold mt-1">28</h5>
+              <h5 class="text-purple text-h4 font-weight-bold mt-1">{{statisticsData[2]?.METRIC_VALUE || 0}}</h5>
             </v-card-text>
           </v-card>
         </v-col>
@@ -46,7 +46,7 @@
           <v-card class="rounded-lg card-box-shadow">
             <v-card-text>
               <p>Drafts</p>
-              <h5 class="text-lightBlack text-h4 font-weight-bold mt-1">3</h5>
+              <h5 class="text-lightBlack text-h4 font-weight-bold mt-1">{{ statisticsData[1]?.METRIC_VALUE || 0 }}</h5>
             </v-card-text>
           </v-card>
         </v-col>
@@ -220,8 +220,23 @@ const properties = [
 //..............................................................................
 
 //------------------------------------------------------------------------------
+
+const statisticsData = ref({})
+const fetchStatistics = async()=>{
+  try {
+    let res = await propertyService.getDashboardStatistics()
+    if(res.data.ERR_CODE == 0){
+      let response = res.data.FetchData
+      statisticsData.value = response.PROPERTY_MESSAGE_DETAILS
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 onMounted(() => {
   getProperties()
+  fetchStatistics()
 })
 watch(currentPage, (val) => {
   getProperties()

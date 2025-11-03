@@ -45,6 +45,24 @@
             <div class="pa-4">
               <p class="text-h6">Details</p>
               <v-row>
+                  <v-col>
+                    <div class="">
+                    <p class="text-grey-darken-1">Property Dimensions</p>
+                    <p class="text-h6">{{ propertyObj.DIMENSIONS }}
+                    </p>
+                  </div>
+                  </v-col>
+                  <v-col>
+                    <div class="">
+                    <p class="text-grey-darken-1">Property Type</p>
+                    <p class="text-h6">{{ propertyObj.PROPERTY_KIND }}
+                    </p>
+                  </div>
+                  </v-col>
+                  
+
+              </v-row>
+              <v-row>
                 <v-col>
                   <div class="">
                     <p class="text-grey-darken-1">Bedrooms</p>
@@ -72,6 +90,8 @@
                   </div>
                 </v-col>
               </v-row>
+              
+             
               <v-divider></v-divider>
               <p class="mt-6" v-html="propertyObj.PROPERTY_DESC"></p>
             </div>
@@ -91,8 +111,8 @@
                 compactDisplay: 'long',
                 // useGrouping: 'false'
               }) }}
-              {{ propertyObj.CURRENCY_CODE }}</p>
-
+             </p>
+             <!-- {{ propertyObj.CURRENCY_CODE }} -->
             <v-btn @click="contactOwner" v-if="authStore.userDetails?.USER_ID !== propertyObj.SELLER_USER_ID"
               color="primary" class="text-none rounded-lg elevation-0 font-weight-bold w-100" height="50"
               prepend-icon="mdi-comment-outline">Contact Owner</v-btn>
@@ -111,10 +131,10 @@
                 <p>Total QR Scans</p>
                 <p class="text-h5 text-primary font-weight-bold">45</p>
               </div>
-              <div class="border-b d-flex justify-space-between ga-4 py-4">
+              <!-- <div class="border-b d-flex justify-space-between ga-4 py-4">
                 <p>Unique Visitors</p>
                 <p class="text-h6">38</p>
-              </div>
+              </div> -->
               <div class="d-flex justify-space-between ga-4 py-4">
                 <p>Conversions</p>
                 <p class="text-h6">8 messages</p>
@@ -388,9 +408,9 @@ const makeFev = async () => {
         "PROPERTY_ID": route.params.id
       }
     }
-
       let res = await propertyService.PropertyFavoriteTxnCrud(data)
       if (res.data.ERR_CODE == 0) {
+        fetchPropertyDetail()
         if(propertyObj.value.IS_FAVOURITE == 0){
           toast.success('Property added to saved list', {
           autoClose: 4000,
@@ -399,6 +419,7 @@ const makeFev = async () => {
           toast.success('Property removed from saved list', {
           autoClose: 4000,
         });
+       
       }
         // toast.success('Property added to your saved list', {
         //   autoClose: 4000,

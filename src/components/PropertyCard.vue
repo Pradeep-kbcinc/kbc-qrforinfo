@@ -28,7 +28,16 @@
           <v-img v-else cover src="@/assets/property_placeholder.webp" alt="" />
         </v-carousel-item>
       </v-carousel>
-      <v-carousel @click.stop v-else hide-delimiters :show-arrows="propertyObj.IMAGES?.length > 1" height="250">
+      <v-carousel @click.stop="
+    $router.push({
+      path: route.name !== 'BuyProperties'
+        ? `/property/${propertyObj.PROPERTY_ID}`
+        : `/buy/property/${propertyObj.PROPERTY_ID}`,
+      query: {
+        createdBy: propertyObj.SELLER_USER_ID === authStore.getUserDetails?.USER_ID
+      }
+    })
+    " v-else hide-delimiters :show-arrows="propertyObj.IMAGES?.length > 1" height="250">
         <v-carousel-item>
 
           <v-img cover :src="findImageType(propertyObj.PROPERTY_KIND)" alt="" />

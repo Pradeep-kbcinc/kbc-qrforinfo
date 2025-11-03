@@ -94,8 +94,12 @@ export default {
   
   async addView(data){
     return axios.post(`/AddPropertyViewDetail`, data)
-  }
+  },
 
+  // get statistics
   
+  async getDashboardStatistics(){
+    return axios.get(`/GetPropertyDashboardCount`)
+  }
 
 }
