@@ -93,7 +93,7 @@
               }) }}
               {{ propertyObj.CURRENCY_CODE }}</p>
 
-            <v-btn @click="contactOwner" v-if="authStore.userDetails.USER_ID !== propertyObj.SELLER_USER_ID"
+            <v-btn @click="contactOwner" v-if="authStore.userDetails?.USER_ID !== propertyObj.SELLER_USER_ID"
               color="primary" class="text-none rounded-lg elevation-0 font-weight-bold w-100" height="50"
               prepend-icon="mdi-comment-outline">Contact Owner</v-btn>
 
@@ -270,6 +270,18 @@ const qrModal = ref(false)
 //..............................................................................
 const router = useRouter()
 //------------------------------------------------------------------------------
+
+const updateStatistics = async()=>{
+  try {
+    let data = {
+      "PROPERTY_ID": propertyObj.value.PROPERTY_ID,
+      "USER_ID": authStore.isAuthenticated ? authStore.userDetails.USER_ID : 0
+    }
+    let res = await propertyService.addView(data)
+  } catch (error) {
+    console.log(error)
+  }
+}
 onMounted(() => {
   baseUrl.value = window.location.origin
   if (route.query.qr) {
@@ -277,6 +289,7 @@ onMounted(() => {
   }
 
   fetchPropertyDetail()
+  
 })
 //------------------------------------------------------------------------------
 const fetchPropertyDetail = async () => {
@@ -307,6 +320,7 @@ const fetchPropertyDetail = async () => {
     }
     propertyObj.value = res.data?.FetchData?.PROPERTY_DETAILS?.[0] || {}
     qrCodeValue.value = res.data?.FetchData?.PROPERTY_DETAILS?.[0] || {}
+    updateStatistics()
   } catch (error) {
 
   } finally {

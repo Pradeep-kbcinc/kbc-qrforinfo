@@ -5,7 +5,7 @@
         ? `/property/${propertyObj.PROPERTY_ID}`
         : `/buy/property/${propertyObj.PROPERTY_ID}`,
       query: {
-        createdBy: propertyObj.SELLER_USER_ID === authStore.getUserDetails.USER_ID
+        createdBy: propertyObj.SELLER_USER_ID === authStore.getUserDetails?.USER_ID
       }
     })
     " class="card-box-shadow rounded-lg">

@@ -89,6 +89,13 @@ export default {
     return axios.get(`/GetPropertyMsgDetailSpecific?ThreadId=${id}`)
   },
   
+
+  // total view update 
+  
+  async addView(data){
+    return axios.post(`/AddPropertyViewDetail`, data)
+  }
+
   
 
 }

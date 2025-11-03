@@ -55,9 +55,9 @@
               </div>
             </div>
             <div class="bg-white d-flex ga-4 pa-4 w-100">
-              <v-text-field placeholder="Type Message..." hide-details variant="outlined" rounded="lg"
+              <v-text-field placeholder="Type Message..." v-model="msgVal" @keyup.enter="sendMessage" hide-details variant="outlined" rounded="lg"
                 density="comfortable"></v-text-field>
-              <v-btn color="primary" class="text-none rounded-lg elevation-0 font-weight-bold" height="52"
+              <v-btn color="primary" class="text-none rounded-lg elevation-0 font-weight-bold" @click="sendMessage" :loading="msgSentLoader" height="52"
                 icon="mdi-send-outline"></v-btn>
             </div>
           </div>
@@ -174,6 +174,35 @@ const fetchMassges = async(id)=>{
 const selectChannel = (data)=>{
   selectedMsgObj.value = data
   fetchMassges(data.THREAD_ID)
+}
+
+const msgVal = ref('')
+const msgSentLoader = ref(false)
+const sendMessage = async()=>{
+  if(newMessage.value && newMessage.value.length){
+    msgSentLoader.value = true
+    try {
+    let data = {
+      "ACTION_TYPE": "CREATE",
+      "MESSAGE_ID": 0,
+      "SENDER_USER_ID": selectedMsgObj.value.SENDER_USER_ID,
+      "RECEIVER_USER_ID": selectedMsgObj.value.RECEIVER_USER_ID,
+      "MESSAGE_BODY": msgVal.value,
+      "READ_ON": new Date(),
+      "PROPERTY_ID": selectedMsgObj.value.PROPERTY_ID,
+      "LAST_MESSAGE_ON": new Date()
+    }
+    let res = await propertyService.message(data)
+    if(res.data.ERR_CODE == 0){
+      msgSentLoader.value = false
+      messages.value.push({ sender: 'me', text: newMessage.value.trim() })
+      newMessage.value = ''
+    }
+  } catch (error) {
+    console.log(error)
+  }
+  }
+ 
 }
 </script>
 
