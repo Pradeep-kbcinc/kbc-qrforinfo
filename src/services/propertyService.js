@@ -80,6 +80,14 @@ export default {
     return axios.post(`/LLPropertyImageCrud`, data)
   },
 
+  // get channel list 
+  async fetchAllChannelList(){
+    return axios.get(`/GetAllPropertyMsgDetail`)
+  },
+
+  async fetchMessages(id){
+    return axios.get(`/GetPropertyMsgDetailSpecific?ThreadId=${id}`)
+  },
   
   
 

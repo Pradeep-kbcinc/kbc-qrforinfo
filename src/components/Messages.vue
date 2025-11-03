@@ -10,40 +10,55 @@
           </div>
 
           <div class="border-t">
-            <v-card v-for="(msgObj, index) in msgArr" @click="selectedMsgObj = msgObj" class="border-b pa-4" elevation="0" rounded="0" :color="selectedMsgObj.id == msgObj.id ? '#f0f6ff' : ''">
-              <div class="d-flex justify-space-between">
+            <div v-if="channelLoader">
+              <v-skeleton-loader class="my-2" v-for="item in 4" type="list-item-avatar"></v-skeleton-loader>
+            </div>
+            <v-card v-else v-for="(msgObj, index) in channels" @click="selectChannel(msgObj)" class="border-b pa-4"
+              elevation="0" rounded="0" :color="selectedMsgObj.THREAD_ID == msgObj.THREAD_ID ? '#f0f6ff' : ''">
+              <div class="d-flex align-center">
+                <v-avatar size="60" class="mr-2">
+                  <v-img alt="John" src="https://cdn.vuetifyjs.com/images/john.jpg"></v-img>
+                </v-avatar>
                 <div class="">
-                  <h6>Pradeep Kumar</h6>
-                  <p class="text-grey-darken-1 text-subtitle-2"> (🏠 Abhi's Property {{ index+1 }} )</p>
+                  <h6>{{ msgObj.RECEIVER_USER_NAME }}</h6>
+                  <p class="text-grey-darken-1 text-subtitle-2"> ({{ moment(msgObj.SENT_ON).format('Do MMM, YYYY') }}
+                    )
+                  </p>
 
                 </div>
-                <p>{{ msgObj.lastActive }}</p>
               </div>
+              <!-- <p>{{ msgObj.MESSAGE_BODY }}</p> -->
             </v-card>
           </div>
         </div>
       </v-col>
       <v-col cols="8" class="pa-0">
         <div class="bg-grey-lighten-4" style="height: calc(100dvh - 65px)">
-          <div v-if="!selectedMsgObj.id" class="d-flex justify-center align-center w-100 h-100">
+          <div v-if="!selectedMsgObj.THREAD_ID" class="d-flex justify-center align-center w-100 h-100">
             <p class="text-grey-darken-1">Select channel to view Messages</p>
           </div>
           <div v-else class="d-flex justify-center align-center w-100 h-100 flex-column">
             <div class="pa-4 bg-white border-b w-100">
-              <h5>Pradeep Kumar</h5>
-              <p>Abhi's Property</p>
+              <h5>{{selectedMsgObj.RECEIVER_USER_NAME}}</h5>
+              <p>Property Name</p>
             </div>
             <div class="w-100 h-100 overflow-y-scroll">
               <div class="pa-4">
-                <v-card v-for="msgObj in selectedMsgObj.msgArr" class="pa-4 card-box-shadow mb-4 rounded-lg" :class="{ 'ms-auto': msgObj.self }" :color="msgObj.self ? 'primary' : ''" style="width: fit-content;">
-                  <p>{{ msgObj.message }}</p>
-                  <p class="mt-2 text-body-2 text-grey-lighten-1">{{ msgObj.time }}</p>
+                <div v-if="messageLoader">
+                  <v-skeleton-loader class="my-2" v-for="item in 4" type="paragraph"></v-skeleton-loader>
+                </div>
+                <v-card v-else v-for="msgObj in allMessages" class="pa-4 card-box-shadow mb-4 rounded-lg"
+                  :class="{ 'ms-auto': msgObj.self }" :color="msgObj.self ? 'primary' : ''" style="width: fit-content;">
+                  <p>{{ msgObj.MESSAGE_BODY }}</p>
+                  <p class="mt-2 text-body-2 text-grey-lighten-1">{{ moment(msgObj.SENT_ON).format('Do MMM, YYYY') }}</p>
                 </v-card>
               </div>
             </div>
             <div class="bg-white d-flex ga-4 pa-4 w-100">
-              <v-text-field placeholder="Type Message..." hide-details variant="outlined" rounded="lg" density="comfortable"></v-text-field>
-              <v-btn color="primary" class="text-none rounded-lg elevation-0 font-weight-bold" height="52" icon="mdi-send-outline"></v-btn>
+              <v-text-field placeholder="Type Message..." hide-details variant="outlined" rounded="lg"
+                density="comfortable"></v-text-field>
+              <v-btn color="primary" class="text-none rounded-lg elevation-0 font-weight-bold" height="52"
+                icon="mdi-send-outline"></v-btn>
             </div>
           </div>
         </div>
@@ -54,6 +69,8 @@
 </template>
 
 <script setup>
+import propertyService from '@/services/propertyService'
+import moment from 'moment'
 const msgArr = ref([
   {
     id: 1,
@@ -115,6 +132,49 @@ const msgArr = ref([
 ])
 
 const selectedMsgObj = ref({})
+const channels = ref([])
+const channelLoader = ref(false)
+const getAllChannels = async () => {
+  channelLoader.value = true
+  try {
+    let res = await propertyService.fetchAllChannelList()
+    if (res.data.ERR_CODE == 0) {
+      let response = res.data.FetchData
+      if (response) {
+        channels.value = response.PROPERTY_MESSAGE_DETAILS
+        channelLoader.value = false
+      }
+    }
+  } catch (error) {
+    channelLoader.value = false
+    console.log(error)
+  }
+
+
+}
+onMounted(() => {
+  getAllChannels()
+})
+
+const messageLoader = ref(false)
+const allMessages = ref([])
+const fetchMassges = async(id)=>{
+  messageLoader.value = true
+  try {
+    let res = await propertyService.fetchMessages(id)
+    if(res.data.ERR_CODE == 0){
+      allMessages.value = res.data.FetchData?.PROPERTY_MSG_DETAIL_SPECIFIC
+      messageLoader.value = false
+    }
+  } catch (error) {
+    messageLoader.value = false
+    console.log(error)
+  }
+}
+const selectChannel = (data)=>{
+  selectedMsgObj.value = data
+  fetchMassges(data.THREAD_ID)
+}
 </script>
 
 <style scoped>
