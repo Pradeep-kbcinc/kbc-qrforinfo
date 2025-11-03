@@ -80,7 +80,7 @@
           <v-row align="end">
             <v-col>
               <p class="font-weight-bold">Price</p>
-              <v-text-field :error-messages="v$.PRICE_AMOUNT.$errors.map(e => e.$message)" @blur="v$.PRICE_AMOUNT.$touch" @input="v$.PRICE_AMOUNT.$touch" v-model="state.PRICE_AMOUNT" class="mt-1" rounded="lg" variant="outlined" placeholder="450,000"></v-text-field>
+              <v-text-field :error-messages="v$.PRICE_AMOUNT.$errors.map(e => e.$message)" @blur="v$.PRICE_AMOUNT.$touch" @input="v$.PRICE_AMOUNT.$touch" v-model="state.PRICE_AMOUNT" class="mt-1" rounded="lg" variant="outlined" placeholder="450000"></v-text-field>
             </v-col>
             <v-col cols="auto">
               <p class="pr-4 font-weight-bold mb-1">Currency Code</p>
@@ -280,6 +280,9 @@ const saveProperty = async () => {
         POSTAL_CODE: state.POSTAL_CODE || '',
         COUNTRY: state.COUNTRY || '',
         IS_ACTIVE_FLG: state.IS_ACTIVE_FLG || 1,
+      }
+      if(authStore.getTemporaryPropertyDetails.DRAFT_ID){
+        data.DRAFT_ID = authStore.getTemporaryPropertyDetails.DRAFT_ID
       }
       const res = await propertyService.LLPropertyMasterCrud(data)
       if (!res?.data?.ERR_CODE) {

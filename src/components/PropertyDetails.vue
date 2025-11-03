@@ -371,17 +371,38 @@ const makeFev = async () => {
   if (authStore.isAuthenticated) {
     makeFevLoader.value = true
     try {
-      let data = {
+      let data 
+
+      if (propertyObj.value.IS_FAVOURITE == 0) {
+      data = {
         "ACTION_TYPE": "CREATE",
         "FAV_ID": 0,
         "USER_ID": authStore.getUserDetails.USER_ID,
         "PROPERTY_ID": route.params.id
       }
+    } else {
+      data = {
+        "ACTION_TYPE": "DELETE",
+        "FAV_ID": 0,
+        "USER_ID": authStore.getUserDetails.USER_ID,
+        "PROPERTY_ID": route.params.id
+      }
+    }
+
       let res = await propertyService.PropertyFavoriteTxnCrud(data)
       if (res.data.ERR_CODE == 0) {
-        toast.success('Property added to your saved list', {
+        if(propertyObj.value.IS_FAVOURITE == 0){
+          toast.success('Property added to saved list', {
+          autoClose: 4000,
+          });
+        }else{
+          toast.success('Property removed from saved list', {
           autoClose: 4000,
         });
+      }
+        // toast.success('Property added to your saved list', {
+        //   autoClose: 4000,
+        // });
         makeFevLoader.value = false
       }
     } catch (error) {

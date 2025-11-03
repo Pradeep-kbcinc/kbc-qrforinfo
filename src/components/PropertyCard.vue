@@ -13,37 +13,28 @@
     <v-card height="250" elevation="0" rounded="0"
       class="bg-box-gradient d-flex justify-center align-center position-relative"
       style="font-size: 5.0rem;line-height: 1;">
-      <v-carousel
-  @click.stop
-  hide-delimiters
-  :show-arrows="propertyObj.IMAGES?.length > 1"
-  height="250"
->
-  <v-carousel-item
-    v-for="(image, i) in propertyObj.IMAGES"
-    :key="i"
-  >
-    <v-img
-      :src="image?.IMAGE_URL"
-      lazy-src="@/assets/property_placeholder.webp"
-      cover
-      height="250"
-      class="rounded-lg"
-    >
-      <template #placeholder>
-        <div
-          class="d-flex fill-height align-center justify-center"
-          style="background-color: #f2f2f2;"
-        >
-          <v-progress-circular
-            indeterminate
-            color="primary"
-          ></v-progress-circular>
-        </div>
-      </template>
-    </v-img>
-  </v-carousel-item>
-</v-carousel>
+      <v-carousel @click.stop v-if="propertyObj.IMAGES && propertyObj.IMAGES?.length > 1" hide-delimiters
+        :show-arrows="propertyObj.IMAGES?.length > 1" height="250">
+        <v-carousel-item v-for="(image, i) in propertyObj.IMAGES" :key="i">
+          <v-img v-if="image?.IMAGE_URL"
+            :src="image?.IMAGE_URL ? image.IMAGE_URL : `@/assets/property_placeholder.webp`"
+            lazy-src="@/assets/property_placeholder.webp" cover height="250" class="rounded-lg">
+            <template #placeholder>
+              <div class="d-flex fill-height align-center justify-center" style="background-color: #f2f2f2;">
+                <v-progress-circular indeterminate color="primary"></v-progress-circular>
+              </div>
+            </template>
+          </v-img>
+          <v-img v-else cover src="@/assets/property_placeholder.webp" alt="" />
+        </v-carousel-item>
+      </v-carousel>
+      <v-carousel @click.stop v-else hide-delimiters :show-arrows="propertyObj.IMAGES?.length > 1" height="250">
+        <v-carousel-item>
+
+          <v-img cover :src="findImageType(propertyObj.PROPERTY_KIND)" alt="" />
+        </v-carousel-item>
+      </v-carousel>
+
 
       <v-btn v-if="propertyObj.LISTING_TYPE" :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'"
         class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 left-0 mt-4 ms-4" height=""
@@ -59,7 +50,8 @@
       <p class="text-h6">{{ propertyObj.TITLE }}</p>
       <p v-if="propertyObj.COUNTRY && propertyObj.STATE && propertyObj.CITY" class="mt-1">
         <v-icon>mdi-map-marker-outline</v-icon>{{ propertyObj.COUNTRY }}, {{ propertyObj.STATE }}, {{ propertyObj.CITY
-        }}</p>
+        }}
+      </p>
       <div class="d-flex justify-space-between align-center text-primary mt-3">
         <p class="text-h5 font-weight-bold">
           {{ propertyObj?.PRICE_AMOUNT?.toLocaleString('en-IN', {
@@ -87,6 +79,11 @@
 import propertyService from '@/services/propertyService';
 import { useAuthStore } from '@/stores/app';
 import { toast } from 'vue3-toastify';
+
+import DummyHouse from '@/assets/dummy_house.webp'
+import DummyApartment from '@/assets/dummy_apartment.webp'
+import DummyLand from '@/assets/dummy_land.webp'
+
 
 const authStore = useAuthStore()
 const emit = defineEmits('recall')
@@ -120,15 +117,32 @@ const makeFev = async (id) => {
     }
     let res = await propertyService.PropertyFavoriteTxnCrud(data)
     if (res.data.ERR_CODE == 0) {
-      toast.success('Property added to your saved list', {
+      if(props.propertyObj.IS_FAVOURITE == 0){
+        toast.success('Property added to saved list', {
         autoClose: 4000,
       });
+      }else{
+        toast.success('Property removed from saved list', {
+        autoClose: 4000,
+      });
+      }
+      
       emit('recall')
       makeFevLoader.value = false
     }
   } catch (error) {
     makeFevLoader.value = false
     console.log(error)
+  }
+}
+
+const findImageType = (type) => {
+  if (type == 'APARTMENT') {
+    return DummyApartment
+  } else if (type == 'LAND') {
+    return DummyLand
+  } else {
+    return DummyHouse
   }
 }
 </script>

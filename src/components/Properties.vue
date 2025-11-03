@@ -21,10 +21,10 @@
     <div class="pa-4 pb-0 pt-2">
       <v-row justify="space-between">
         <v-col cols="auto">
-          <v-btn height="42" rounded="lg" variant="outlined" class="elevation-0 text-none font-weight-bold"
+          <!-- <v-btn height="42" rounded="lg" variant="outlined" class="elevation-0 text-none font-weight-bold"
             color="primary">
             <v-icon>mdi-filter-outline</v-icon> Filters
-          </v-btn>
+          </v-btn> -->
         </v-col>
         <v-col v-if="$route.name == 'properties'" cols="auto">
           <v-btn @click="$router.push('/add-new-property')" height="42" rounded="lg"
