@@ -224,26 +224,16 @@
   </v-dialog>
 
   <v-dialog max-width="430" persistent v-model="warningPopUp">
-    <v-card class="rounded-xl pa-1">
-      <!-- <v-card-text>
-        <p class="font-weight-bold">You can continue right here in your browser or download our app for a faster and
-          more optimized experience !</p>
-      </v-card-text>
-      <v-row>
-        <v-col>
-          <v-btn @click="warningPopUp = false" rounded="xl" height="48" color="secondary" width="100%"
-            class="text-none elevation-0 font-weight-bold">
-            <v-icon class="mr-1" color="">mdi-web</v-icon> View Detail
-          </v-btn>
-        </v-col>
-        <v-col>
-          
-          <v-btn @click="openMobileApp" rounded="xl" height="48" color="primary" width="100%"
-            class="text-none elevation-0 font-weight-bold">
-            <v-icon class="mr-1" color="">mdi-cellphone</v-icon> Open in App
-          </v-btn>
-        </v-col>
-      </v-row> -->
+    <v-card min-height="400" class="rounded-xl pa-1">
+      <div v-if="isLoading" class="d-flex justify-center mt-16">
+        <v-progress-circular
+          color="primary"
+          indeterminate
+        ></v-progress-circular>
+      </div>
+      <div v-else>
+
+      
       <v-carousel class="rounded-xl" @click.stop v-if="propertyObj.IMAGES && propertyObj.IMAGES?.length > 1"
         hide-delimiters :show-arrows="propertyObj.IMAGES?.length > 1" height="250">
         <v-carousel-item cover v-for="(image, i) in propertyObj.IMAGES" :key="i">
@@ -308,7 +298,7 @@
           </v-col>
         </v-row>
       </div>
-
+    </div>
     </v-card>
   </v-dialog>
 
@@ -406,7 +396,7 @@ const fetchPropertyDetail = async () => {
       PAGE_SIZE: 10,
     }
     let res;
-    console.log(route.query.createdBy, 'route.query.createdBy')
+    
     if (route.query.createdBy === 'false') {
       console.log('1')
       res = await propertyService.GetPropertyDetailPublic(data);

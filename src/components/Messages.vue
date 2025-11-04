@@ -20,7 +20,7 @@
                   <v-img alt="John" src="@/assets/dummy_profile.webp"></v-img>
                 </v-avatar>
                 <div class="">
-                  <h6>{{ msgObj.RECEIVER_USER_NAME }}</h6>
+                  <h6>{{ getName(msgObj.MEMBERS_LIST)?.USER_NAME }}</h6>
                   <p class="text-grey-darken-1 text-subtitle-2"> ({{ moment(msgObj.SENT_ON).format('Do MMM, YYYY') }}
                     )
                   </p>
@@ -191,13 +191,14 @@ const newMessage = ref('')
 const msgSentLoader = ref(false)
 const sendMessage = async () => {
   if (newMessage.value && newMessage.value.length) {
-    msgSentLoader.value = true
+    console.log(selectedMsgObj.value, 'selectedMsgObj')
+    // msgSentLoader.value = true
     try {
       let data = {
         "ACTION_TYPE": "CREATE",
         "MESSAGE_ID": 0,
         "SENDER_USER_ID": authStore.getUserDetails.USER_ID,
-        "RECEIVER_USER_ID": selectedMsgObj.value.SENDER_USER_ID,
+        "RECEIVER_USER_ID": getName(selectedMsgObj.value?.MEMBERS_LIST)?.USER_ID,
         "MESSAGE_BODY": newMessage.value,
         "READ_ON": new Date(),
         "PROPERTY_ID": selectedMsgObj.value.PROPERTY_ID,
@@ -222,6 +223,10 @@ const sendMessage = async () => {
     }
   }
 
+}
+
+const getName = (arr)=>{
+  return arr.find(item=> item.USER_ID !== authStore.getUserDetails.USER_ID)
 }
 </script>
 
