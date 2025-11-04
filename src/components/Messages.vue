@@ -20,7 +20,7 @@
                   <v-img alt="John" src="@/assets/dummy_profile.webp"></v-img>
                 </v-avatar>
                 <div class="">
-                  <h6>{{ msgObj.RECEIVER_USER_NAME }}</h6>
+                  <h6>{{ msgObj.SENDER_USER_NAME }}</h6>
                   <p class="text-grey-darken-1 text-subtitle-2"> ({{ moment(msgObj.SENT_ON).format('Do MMM, YYYY') }}
                     )
                   </p>
@@ -183,6 +183,7 @@ const fetchMassges = async (id) => {
 }
 const selectChannel = (data) => {
   selectedMsgObj.value = data
+  console.log(data, 'data')
   fetchMassges(data.THREAD_ID)
 }
 
@@ -195,8 +196,8 @@ const sendMessage = async () => {
       let data = {
         "ACTION_TYPE": "CREATE",
         "MESSAGE_ID": 0,
-        "SENDER_USER_ID": selectedMsgObj.value.SENDER_USER_ID,
-        "RECEIVER_USER_ID": selectedMsgObj.value.RECEIVER_USER_ID,
+        "SENDER_USER_ID": authStore.getUserDetails.USER_ID,
+        "RECEIVER_USER_ID": selectedMsgObj.value.SENDER_USER_ID,
         "MESSAGE_BODY": newMessage.value,
         "READ_ON": new Date(),
         "PROPERTY_ID": selectedMsgObj.value.PROPERTY_ID,
