@@ -10,9 +10,9 @@
 
       <!-- Messages -->
       <v-list-item prepend-icon="mdi-message-outline" title="Messages" @click="gotoMenu('/messages')" :class="isRouteActive('/messages') ? 'active-item text-primary' : ''">
-        <template #append>
+        <!-- <template #append>
           <v-badge color="error" content="3" inline></v-badge>
-        </template>
+        </template> -->
       </v-list-item>
 
       <!-- Saved -->
