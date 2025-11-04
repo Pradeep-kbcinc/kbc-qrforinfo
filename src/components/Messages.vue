@@ -34,13 +34,20 @@
       </v-col>
       <v-col cols="8" class="pa-0">
         <div class="bg-grey-lighten-4" style="height: calc(100dvh - 65px)">
-          <div v-if="!selectedMsgObj.THREAD_ID" class="d-flex justify-center align-center w-100 h-100">
+          <div v-if="messageLoader" class="d-flex justify-center align-center pt-16">
+            <v-progress-circular
+              color="primary"
+              indeterminate
+            ></v-progress-circular>
+            <p class="ml-2">Loading Messages...</p>
+          </div>
+          <div v-else-if="!messageLoader && !selectedMsgObj.THREAD_ID" class="d-flex justify-center align-center w-100 h-100">
             <p class="text-grey-darken-1">Select channel to view Messages</p>
           </div>
           <div v-else class="d-flex justify-center align-center w-100 h-100 flex-column">
             <div class="pa-4 bg-white border-b w-100">
-              <h5>{{ selectedMsgObj.RECEIVER_USER_NAME }}</h5>
-              <p>Property Name</p>
+              <h5>{{ getName(selectedMsgObj?.MEMBERS_LIST)?.USER_NAME }}</h5>
+              <p>{{allMessages[0].TITLE}}</p>
             </div>
             <div class="w-100 h-100 overflow-y-scroll">
               <div class="pa-4">
@@ -182,8 +189,8 @@ const fetchMassges = async (id) => {
   }
 }
 const selectChannel = (data) => {
+  messageLoader.value = true
   selectedMsgObj.value = data
-  console.log(data, 'data')
   fetchMassges(data.THREAD_ID)
 }
 
