@@ -158,7 +158,7 @@
               <h3 class="text-h6 font-weight-bold mb-2">Statistics</h3>
               <div class="border-b d-flex justify-space-between ga-4 py-4">
                 <p>Total QR Scans</p>
-                <p class="text-h5 text-primary font-weight-bold">45</p>
+                <p class="text-h5 text-primary font-weight-bold">{{ statisticsData && statisticsData.length > 0 ? statisticsData.find(i=>i.METRIC_KEY == 'TOTAL_QR_VIEW')?.METRIC_VALUE : 0 }}</p>
               </div>
               <!-- <div class="border-b d-flex justify-space-between ga-4 py-4">
                 <p>Unique Visitors</p>
@@ -166,7 +166,7 @@
               </div> -->
               <div class="d-flex justify-space-between ga-4 py-4">
                 <p>Conversions</p>
-                <p class="text-h6">8 messages</p>
+                <p class="text-h6">{{statisticsData && statisticsData.length > 0  ? statisticsData.find(i=>i.METRIC_KEY == 'TOTAL_MESSAGE')?.METRIC_VALUE : 0}} messages</p>
               </div>
             </v-card>
           </v-card>
@@ -370,7 +370,22 @@ const updateStatistics = async () => {
     console.log(error)
   }
 }
+
+const statisticsData = ref({})
+const fetchStatistics = async()=>{
+  try {
+    let res = await propertyService.getDashboardStatistics()
+    if(res.data.ERR_CODE == 0){
+      let response = res.data.FetchData
+      statisticsData.value = response.PROPERTY_MESSAGE_DETAILS
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 onMounted(() => {
+  fetchStatistics()
   baseUrl.value = window.location.origin
   if (route.query.qr) {
     warningPopUp.value = true

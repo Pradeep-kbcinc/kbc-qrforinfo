@@ -13,7 +13,7 @@
               <p>First Name</p>
               <v-text-field :error-messages="v$.FNAME.$errors.map(e => e.$message)" @blur="v$.FNAME.$touch"
                 @input="v$.FNAME.$touch" v-model="state.FNAME" class="mt-1" rounded="lg" variant="outlined"
-                placeholder="Modern 3BR Apartment"></v-text-field>
+                placeholder="First Name"></v-text-field>
             </div>
           </v-col>
           <v-col cols="12" md="4">
@@ -21,7 +21,7 @@
               <p>Middle Name</p>
               <v-text-field :error-messages="v$.MNAME.$errors.map(e => e.$message)" @blur="v$.MNAME.$touch"
                 @input="v$.MNAME.$touch" v-model="state.MNAME" class="mt-1" rounded="lg" variant="outlined"
-                placeholder="Modern 3BR Apartment"></v-text-field>
+                placeholder="Middle Name(optional)"></v-text-field>
             </div>
           </v-col>
           <v-col cols="12" md="4">
@@ -29,7 +29,7 @@
               <p>Last Name</p>
               <v-text-field :error-messages="v$.LNAME.$errors.map(e => e.$message)" @blur="v$.LNAME.$touch"
                 @input="v$.LNAME.$touch" v-model="state.LNAME" class="mt-1" rounded="lg" variant="outlined"
-                placeholder="Modern 3BR Apartment"></v-text-field>
+                placeholder="Last Name"></v-text-field>
             </div>
           </v-col>
           <v-col cols="12" md="4">
@@ -37,7 +37,7 @@
               <p>Gender</p>
               <v-select :items="['Male', 'Female']" :error-messages="v$.GENDER.$errors.map(e => e.$message)"
                 @blur="v$.GENDER.$touch" @input="v$.GENDER.$touch" v-model="state.GENDER" class="mt-1" rounded="lg"
-                variant="outlined" placeholder="Modern 3BR Apartment"></v-select>
+                variant="outlined" placeholder="Gender"></v-select>
             </div>
           </v-col>
           <v-col cols="12" md="4">
@@ -62,7 +62,7 @@
               <p>Email</p>
               <v-text-field :error-messages="v$.EMAIL.$errors.map(e => e.$message)" @blur="v$.EMAIL.$touch"
                 @input="v$.EMAIL.$touch" v-model="state.EMAIL" class="mt-1" rounded="lg" variant="outlined"
-                placeholder="jhon@gmail.com">
+                placeholder="Ex: jhon@gmail.com">
 
                 <template v-slot:prepend-inner>
                   <v-icon :color="authStore.getUserDetails.IS_EMAIL_VERIFIED_FLG == 1 ? 'success' : 'info'">{{authStore.getUserDetails.IS_EMAIL_VERIFIED_FLG == 1 ? 'mdi-check-circle' : 'mdi-alert-circle-outline'}}</v-icon>
