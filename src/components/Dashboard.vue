@@ -6,15 +6,7 @@
         <p>Welcome Back, {{ authStore?.userDetails?.FNAME }} {{ authStore?.userDetails?.MNAME }} {{
           authStore?.userDetails?.LNAME }}</p>
       </div>
-      <v-spacer></v-spacer>
-      <v-btn @click="openDraftList" :height="!mobile ? 48 : 38" :width="mobile ? '140' : ''" rounded="lg"
-        class="elevation-0 text-none font-weight-bold mr-2" color="info">
-        <v-icon class="mr-2">mdi-file-sign</v-icon>Saved Drafts
-      </v-btn>
-      <v-btn @click="router.push('/add-new-property')" :height="!mobile ? 48 : 38" :width="mobile ? '140' : ''"
-        rounded="lg" class="elevation-0 text-none font-weight-bold" color="primary">
-        <v-icon>mdi-plus</v-icon> Add Property
-      </v-btn>
+      
     </div>
     <section class="py-4">
       <v-row>
@@ -58,6 +50,15 @@
           <v-row align="center" justify="space-between" class="px-2 mb-2">
             <h3 class="text-h6">My Properties</h3>
             <!-- <v-btn variant="text" color="primary" class="text-capitalize">View All</v-btn> -->
+            <v-spacer></v-spacer>
+      <v-btn @click="openDraftList" :height="!mobile ? 48 : 38" :width="mobile ? '140' : ''" rounded="lg"
+        class="elevation-0 text-none font-weight-bold mr-2" color="info">
+        <v-icon class="mr-2">mdi-file-sign</v-icon>Saved Drafts
+      </v-btn>
+      <v-btn @click="router.push('/add-new-property')" :height="!mobile ? 48 : 38" :width="mobile ? '140' : ''"
+        rounded="lg" class="elevation-0 text-none font-weight-bold" color="primary">
+        <v-icon>mdi-plus</v-icon> Add Property
+      </v-btn>
           </v-row>
 
           <v-divider class="my-4"></v-divider>

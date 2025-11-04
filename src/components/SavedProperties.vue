@@ -12,7 +12,7 @@
           <v-col><v-skeleton-loader class="mx-auto border" type="image, article"></v-skeleton-loader></v-col>
         </template>
         <v-col v-else cols="12" md="6" lg="4" v-for="propertyObj in propertyArr">
-          <PropertyCard :propertyObj="propertyObj" />
+          <PropertyCard :propertyObj="propertyObj" @recall="getProperties()" />
 
         </v-col>
       </v-row>

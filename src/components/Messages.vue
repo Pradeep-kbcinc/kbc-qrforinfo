@@ -20,7 +20,7 @@
                   <v-img alt="John" src="@/assets/dummy_profile.webp"></v-img>
                 </v-avatar>
                 <div class="">
-                  <h6>{{ msgObj.SENDER_USER_NAME }}</h6>
+                  <h6>{{ msgObj.RECEIVER_USER_NAME }}</h6>
                   <p class="text-grey-darken-1 text-subtitle-2"> ({{ moment(msgObj.SENT_ON).format('Do MMM, YYYY') }}
                     )
                   </p>

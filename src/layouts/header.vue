@@ -8,17 +8,17 @@
 
       <v-app-bar-title @click="router.push('/home')" class="font-weight-black pointer">QRForInfo</v-app-bar-title>
 
-      <div v-if="props.genarelPurpose">
+      <!-- <div v-if="props.genarelPurpose">
         <v-btn @click="router.push('/login')" variant="elevated" height="42" rounded="lg" class="elevation-0 text-none font-weight-bold" color="primary">
             <v-icon>mdi-plus</v-icon> Add Property
           </v-btn>
-      </div>
-      <div v-else class="d-flex align-center">
-        <v-badge location="top right" color="red" dot>
+      </div> -->
+      <div class="d-flex align-center">
+        <!-- <v-badge location="top right" color="red" dot>
           <v-btn icon size="small">
             <v-icon size="x-large" color="lightBlack" icon="mdi-bell-outline" class="pointer"></v-icon>
           </v-btn>
-        </v-badge>
+        </v-badge> -->
         <v-menu
     location="bottom end"
     offset="8"
@@ -33,7 +33,7 @@
       </v-avatar>
     </template>
 
-    <v-list density="compact" min-width="150">
+    <v-list v-if="authStore.isAuthenticated" density="compact" min-width="150">
       <v-list-item @click="router.push('/settings')">
         <v-list-item-title class="font-weight-medium">My Profile</v-list-item-title>
       </v-list-item>
@@ -41,6 +41,12 @@
       <v-list-item @click="logout">
         <v-list-item-title class="text-error font-weight-medium">Logout</v-list-item-title>
       </v-list-item>
+    </v-list>
+    <v-list v-else density="compact" min-width="150">
+      <v-list-item @click="router.push('/login')">
+        <v-list-item-title class="font-weight-medium">Login</v-list-item-title>
+      </v-list-item>
+   
     </v-list>
   </v-menu>
       </div>
@@ -53,8 +59,10 @@ import { defineProps, nextTick } from 'vue';
 import { useDisplay } from 'vuetify'
 const { mobile } = useDisplay()
 import Sidebar from './sidebar.vue'
+import { useAuthStore } from '@/stores/app'
 const router = useRouter()
 const route = useRoute()
+const authStore = useAuthStore()
 const props = defineProps({
   genarelPurpose: {
     type: Boolean,

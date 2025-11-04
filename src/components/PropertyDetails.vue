@@ -27,7 +27,7 @@
       <v-row>
         <v-col cols="12" lg="9">
           <v-card class="card-box-shadow rounded-lg">
-            <v-card  elevation="0" rounded="0"
+            <v-card elevation="0" rounded="0"
               class="bg-box-gradient d-flex justify-center align-center position-relative"
               style="font-size: 8.0rem;line-height: 1;">
               <v-carousel @click.stop v-if="propertyObj.IMAGES && propertyObj.IMAGES?.length > 1" hide-delimiters
@@ -223,13 +223,9 @@
     </v-card>
   </v-dialog>
 
-  <v-dialog max-width="400" persistent v-model="warningPopUp">
-    <v-toolbar density="compact" rounded="t-xl" class="px-4">
-      <v-spacer></v-spacer>
-      <!-- <v-icon @click="warningPopUp = false">mdi-close</v-icon> -->
-    </v-toolbar>
-    <v-card class="rounded-t-0 rounded-b-xl">
-      <v-card-text>
+  <v-dialog max-width="430" persistent v-model="warningPopUp">
+    <v-card class="rounded-xl pa-1">
+      <!-- <v-card-text>
         <p class="font-weight-bold">You can continue right here in your browser or download our app for a faster and
           more optimized experience !</p>
       </v-card-text>
@@ -237,18 +233,81 @@
         <v-col>
           <v-btn @click="warningPopUp = false" rounded="xl" height="48" color="secondary" width="100%"
             class="text-none elevation-0 font-weight-bold">
-            <v-icon class="mr-1" color="">mdi-web</v-icon> Continue Web
+            <v-icon class="mr-1" color="">mdi-web</v-icon> View Detail
           </v-btn>
         </v-col>
         <v-col>
-          <!-- https://apps.apple.com/in/app/school/id1528665599 -->
+          
           <v-btn @click="openMobileApp" rounded="xl" height="48" color="primary" width="100%"
             class="text-none elevation-0 font-weight-bold">
-            <v-icon class="mr-1" color="">mdi-cellphone</v-icon> Download App
+            <v-icon class="mr-1" color="">mdi-cellphone</v-icon> Open in App
           </v-btn>
         </v-col>
-      </v-row>
+      </v-row> -->
+      <v-carousel class="rounded-xl" @click.stop v-if="propertyObj.IMAGES && propertyObj.IMAGES?.length > 1"
+        hide-delimiters :show-arrows="propertyObj.IMAGES?.length > 1" height="250">
+        <v-carousel-item cover v-for="(image, i) in propertyObj.IMAGES" :key="i">
+          <v-img v-if="image?.IMAGE_URL"
+            :src="image?.IMAGE_URL ? image.IMAGE_URL : `@/assets/property_placeholder.webp`"
+            lazy-src="@/assets/property_placeholder.webp" cover height="250" class="rounded-lg">
+            <v-btn :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'"
+              class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 left-0 mt-4 ms-4"
+              height="" density="comfortable">{{ propertyObj.LISTING_TYPE }}</v-btn>
+            <template #placeholder>
+              <div class="d-flex fill-height align-center justify-center" style="background-color: #f2f2f2;">
+                <v-progress-circular indeterminate color="primary"></v-progress-circular>
+              </div>
+            </template>
+          </v-img>
+          <v-img v-else cover src="@/assets/property_placeholder.webp" alt="" />
+        </v-carousel-item>
+      </v-carousel>
+      <v-carousel class="rounded-xl" @click.stop="
+        $router.push({
+          path: route.name !== 'BuyProperties'
+            ? `/property/${propertyObj.PROPERTY_ID}`
+            : `/buy/property/${propertyObj.PROPERTY_ID}`,
+          query: {
+            createdBy: propertyObj.SELLER_USER_ID === authStore.getUserDetails?.USER_ID
+          }
+        })
+        " v-else hide-delimiters :show-arrows="propertyObj.IMAGES?.length > 1" height="250">
+        <v-carousel-item>
+          <v-img cover :src="findImageType(propertyObj.PROPERTY_KIND)" alt="">
+            <v-btn v-if="propertyObj.LISTING_TYPE"
+              :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'"
+              class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 left-0 mt-4 ms-4"
+              height="" density="comfortable">{{ propertyObj.LISTING_TYPE }}</v-btn>
+          </v-img>
+        </v-carousel-item>
+      </v-carousel>
+      <div class="pa-2">
+        <h6>{{ propertyObj.TITLE }}</h6>
+        <div class="mt-2">
+          <v-btn variant="outlined" rounded size="small" class="text-none text-subtitle-2">{{ propertyObj.PROPERTY_KIND
+            }}</v-btn>
+          <v-btn variant="outlined" rounded size="small" class="text-none text-subtitle-2 ml-2">{{
+            propertyObj.PRICE_AMOUNT }} {{ propertyObj.CURRENCY_CODE }}</v-btn>
+          <v-btn variant="outlined" rounded size="small" class="text-none text-subtitle-2 ml-2"> <v-icon
+              color="primary">mdi-map-marker</v-icon> {{ propertyObj.STATE }}</v-btn>
+        </div>
+        <v-divider class="my-4"></v-divider>
+        <v-row>
+          <v-col>
+            <v-btn @click="warningPopUp = false" rounded="xl" height="48" color="secondary" width="100%"
+              class="text-none elevation-0 font-weight-bold">
+              <v-icon class="mr-1" color="">mdi-web</v-icon> View Detail
+            </v-btn>
+          </v-col>
+          <v-col>
 
+            <v-btn @click="openMobileApp" rounded="xl" height="48" color="primary" width="100%"
+              class="text-none elevation-0 font-weight-bold">
+              <v-icon class="mr-1" color="">mdi-cellphone</v-icon> Open in App
+            </v-btn>
+          </v-col>
+        </v-row>
+      </div>
 
     </v-card>
   </v-dialog>
