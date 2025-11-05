@@ -132,7 +132,7 @@
     </v-card>
   </v-dialog>
   <v-dialog max-width="800" v-model="draftModal">
-    <v-toolbar density="compact" rounded="t-lg" class="px-2">
+    <v-toolbar density="compact" rounded="t-lg" class="px-4">
       <h5>Draft List</h5>
       <v-spacer></v-spacer>
       <v-btn @click="draftModal = false" icon><v-icon>mdi-close</v-icon></v-btn>
@@ -143,7 +143,9 @@
           <v-skeleton-loader type="list-item-avatar"></v-skeleton-loader>
         </div>
         <div v-else>
-
+          <div v-if="draftsArr.length == 0">
+            <p class="text-center mt-16">No Draft Data Found</p>
+          </div>
           <div v-for="(propertyObj, i) in draftsArr" :key="i" class="rounded-lg">
             <v-list-item class="px-2 my-2 pointer">
               <template #prepend>

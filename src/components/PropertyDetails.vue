@@ -25,7 +25,7 @@
 
     <div class="pa-4">
       <v-row>
-        <v-col cols="12" lg="9">
+        <v-col cols="12" md="8" lg="9">
           <v-card class="card-box-shadow rounded-lg">
             <v-card elevation="0" rounded="0"
               class="bg-box-gradient d-flex justify-center align-center position-relative"
@@ -128,7 +128,7 @@
         </v-col>
 
 
-        <v-col cols="12" lg="3">
+        <v-col cols="12" md="4" lg="3">
           <v-card class="card-box-shadow rounded-lg pa-6">
             <p class="text-h4 font-weight-bold text-primary mb-6">
               {{ propertyObj?.PRICE_AMOUNT?.toLocaleString('en-IN', {
@@ -166,7 +166,7 @@
               </div> -->
               <div class="d-flex justify-space-between ga-4 py-4">
                 <p>Conversions</p>
-                <p class="text-h6">{{statisticsData && statisticsData.length > 0  ? statisticsData.find(i=>i.METRIC_KEY == 'TOTAL_MESSAGE')?.METRIC_VALUE : 0}} messages</p>
+                <p class="text-subtitle-1 font-weight-bold text-primary">{{statisticsData && statisticsData.length > 0  ? statisticsData.find(i=>i.METRIC_KEY == 'TOTAL_MESSAGE')?.METRIC_VALUE : 0}} messages</p>
               </div>
             </v-card>
           </v-card>
