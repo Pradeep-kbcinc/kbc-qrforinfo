@@ -88,11 +88,11 @@
             </v-col>
             <v-col>
               <p class="font-weight-bold">Bedrooms</p>
-              <v-text-field type="number" :disabled="state.PROPERTY_KIND !== 'LAND'" :error-messages="v$.NO_BEDROOMS.$errors.map(e => e.$message)" @blur="v$.NO_BEDROOMS.$touch" @input="v$.NO_BEDROOMS.$touch" v-model="state.NO_BEDROOMS" class="mt-1" rounded="lg" variant="outlined" placeholder="3"></v-text-field>
+              <v-text-field type="number" :disabled="state.PROPERTY_KIND == 'LAND'" :error-messages="v$.NO_BEDROOMS.$errors.map(e => e.$message)" @blur="v$.NO_BEDROOMS.$touch" @input="v$.NO_BEDROOMS.$touch" v-model="state.NO_BEDROOMS" class="mt-1" rounded="lg" variant="outlined" placeholder="Ex. 3"></v-text-field>
             </v-col>
             <v-col>
               <p class="font-weight-bold">Bathrooms</p>
-              <v-text-field :disabled="state.PROPERTY_KIND !== 'LAND'" v-model="state.NO_BATHROOMS" class="mt-1" rounded="lg" variant="outlined" type="number" placeholder="3"></v-text-field>
+              <v-text-field :disabled="state.PROPERTY_KIND == 'LAND'" v-model="state.NO_BATHROOMS" class="mt-1" rounded="lg" variant="outlined" type="number" placeholder="Ex. 3"></v-text-field>
             </v-col>
           </v-row>
 
