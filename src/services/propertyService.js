@@ -100,6 +100,11 @@ export default {
   
   async getDashboardStatistics(){
     return axios.get(`/GetPropertyDashboardCount`)
+  },
+
+  // 
+  async fetchDashboardStatistics(data){
+    return axios.post(`/GetPropertyMsgDetailUserSpecific`,data)
   }
 
 }

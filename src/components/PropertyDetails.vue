@@ -309,8 +309,18 @@
     </v-toolbar>
     <v-card class="d-flex flex-column" min-height="400" rounded="b-lg t-0">
       <!-- Messages Section -->
-      <v-card-text class="overflow-y-auto px-4 py-2">
-        <div v-for="(msg, i) in messages" :key="i" class="mb-3 d-flex">
+      <v-card-text class="overflow-y-auto px-4 py-2" :class="oldMsgLoader ? `d-flex align-center justify-center` : ''">
+        <div v-if="oldMsgLoader" class="">
+          <p class="text-center">Getting your messages</p>
+          <v-progress-linear
+            color="primary"
+            height="6"
+            indeterminate
+            rounded
+            
+          ></v-progress-linear>
+        </div>
+        <div v-else v-for="(msg, i) in messages" :key="i" class="mb-3 d-flex">
           <div :class="[
             'pa-3 rounded-lg d-inline-block',
             msg.sender === 'me'
@@ -324,7 +334,7 @@
 
       <!-- Input Section -->
       <v-divider></v-divider>
-      <v-card-actions class="px-4 py-3">
+      <v-card-actions v-if="!oldMsgLoader" class="px-4 py-3">
         <v-text-field v-model="newMessage" placeholder="Type your message..." variant="outlined" density="comfortable"
           hide-details clearable @keyup.enter="sendMessage"></v-text-field>
         <v-btn icon color="primary" :loading="msgSentLoader" @click="sendMessage">
@@ -433,9 +443,7 @@ const fetchPropertyDetail = async () => {
 //------------------------------------------------------------------------------
 const downloadPDF = async (propertyObj) => {
   const prtHtml = document.getElementById('reportContent') // Reference to form container
-  console.log('--->prtHtml', document.getElementById('reportContent'));
-  console.log('--->prtHtml', prtHtml);
-  console.log('--->propertyObj', propertyObj);
+  
   const html2pdf = (await import('html2pdf.js')).default;
   console.log('--->html2pdf', html2pdf);
 
@@ -549,18 +557,6 @@ const sendMessage = async () => {
   }
 
 }
-const contactOwner = () => {
-  if (authStore.isAuthenticated) {
-    // router.push(`/messages?user_id=${propertyObj.SELLER_USER_ID}&property_id=${propertyObj.PROPERTY_ID}`)
-    sender_id.value = authStore.getUserDetails.USER_ID
-    receiver_id.value = propertyObj.value.SELLER_USER_ID
-    property_id.value = propertyObj.value.PROPERTY_ID
-    msgDialog.value = true
-  } else {
-    router.push('/login')
-  }
-}
-
 const newMessage = ref('')
 const messages = ref([
   // { sender: 'other', text: 'Hey there! How can I help you today?' },
@@ -574,14 +570,50 @@ const messages = ref([
 
 ])
 
-// const sendMessage = () => {
-//   if (!newMessage.value.trim()) return
-//   messages.value.push({ sender: 'me', text: newMessage.value.trim() })
-//   newMessage.value = ''
-//   setTimeout(() => {
-//     messages.value.push({ sender: 'other', text: 'Sure! I’ll share the latest ones shortly.' })
-//   }, 1000)
-// }
+const oldMsgLoader = ref(true)
+const oldMsges = async()=>{
+  oldMsgLoader.value = true
+  try {
+    let data = {
+      OWNER_ID: propertyObj?.value.SELLER_USER_ID,
+      PROPERTY_ID: propertyObj?.value.PROPERTY_ID
+    }
+    let res = await propertyService.fetchDashboardStatistics(data)
+    if(res.data.ERR_CODE == 0){
+      let response = res.data.FetchData
+      if(response.PROPERTY_MESSAGE_DETAILS && response.PROPERTY_MESSAGE_DETAILS.length > 0){
+        messages.value = response.PROPERTY_MESSAGE_DETAILS.map((item)=>{
+          return {
+            sender: item.SENDER_USER_ID == authStore.getUserDetails.USER_ID ? 'me' : 'other',
+            text: item.MESSAGE_BODY
+          }
+        })
+        oldMsgLoader.value = false
+      }
+
+    }
+    if(res.data.ERR_CODE == 0){
+      let response = res.data
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+const contactOwner = () => {
+  if (authStore.isAuthenticated) {
+    // router.push(`/messages?user_id=${propertyObj.SELLER_USER_ID}&property_id=${propertyObj.PROPERTY_ID}`)
+    oldMsges()
+    sender_id.value = authStore.getUserDetails.USER_ID
+    receiver_id.value = propertyObj.value.SELLER_USER_ID
+    property_id.value = propertyObj.value.PROPERTY_ID
+    msgDialog.value = true
+  } else {
+    router.push('/login')
+  }
+}
+
+
+
 const findImageType = (type) => {
   if (type == 'APARTMENT') {
     return DummyApartment
