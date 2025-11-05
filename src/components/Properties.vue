@@ -16,8 +16,8 @@
           </div>
         </v-col>
         <v-col cols="3">
-          <v-btn @click="$router.push('/add-new-property')" variant="elevated" height="55" rounded="lg" class="elevation-0 text-none font-weight-bold" color="">
-            <v-icon>mdi-plus</v-icon> Add Your New Property
+          <v-btn block @click="$router.push('/add-new-property')" variant="elevated" height="55" rounded="lg" class="elevation-0 text-none font-weight-bold" color="">
+            <v-icon>mdi-plus</v-icon> Post Property
           </v-btn>
         </v-col>
       </v-row>

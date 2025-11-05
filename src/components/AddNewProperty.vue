@@ -37,21 +37,21 @@
           </v-col>
           <v-col>
             <v-radio-group hide-details v-model="state.FURNISHING_TYPE" inline color="primary" label="Furnishing Type">
-              <v-radio label="UNFURNISHED" value="UNFURNISHED"></v-radio>
-              <v-radio label="SEMI" value="SEMI"></v-radio>
-              <v-radio label="FULL" value="FULL"></v-radio>
+              <v-radio label="Unfurnished" value="UNFURNISHED"></v-radio>
+              <v-radio label="Semi" value="SEMI"></v-radio>
+              <v-radio label="Full" value="FULL"></v-radio>
             </v-radio-group>
           </v-col>
           <v-col>
             <v-radio-group hide-details v-model="state.LAND_USE" inline color="primary" label="Land Type">
-              <v-radio label="RESIDENTIAL" value="RESIDENTIAL"></v-radio>
-              <v-radio label="COMMERCIAL" value="COMMERCIAL"></v-radio>
-              <v-radio label="MIXED" value="MIXED"></v-radio>
-              <v-radio label="AGRICULTURAL" value="AGRICULTURAL"></v-radio>
-              <v-radio label="INDUSTRIAL" value="INDUSTRIAL"></v-radio>
-              <v-radio label="INSTITUTIONAL" value="INSTITUTIONAL"></v-radio>
-              <v-radio label="RECREATIONAL" value="RECREATIONAL"></v-radio>
-              <v-radio label="OTHER" value="OTHER"></v-radio>
+              <v-radio label="Residential" value="RESIDENTIAL"></v-radio>
+              <v-radio label="Commercial" value="COMMERCIAL"></v-radio>
+              <v-radio label="Mixed" value="MIXED"></v-radio>
+              <v-radio v-if="state.PROPERTY_KIND !== 'HOUSE'" label="Agricultural" value="AGRICULTURAL"></v-radio>
+              <v-radio label="Industrial" value="INDUSTRIAL"></v-radio>
+              <v-radio label="Institutional" value="INSTITUTIONAL"></v-radio>
+              <v-radio label="Recreational" value="RECREATIONAL"></v-radio>
+              <v-radio label="Other" value="OTHER"></v-radio>
             </v-radio-group>
           </v-col>
         </v-row>
@@ -88,11 +88,11 @@
             </v-col>
             <v-col>
               <p class="font-weight-bold">Bedrooms</p>
-              <v-text-field :error-messages="v$.NO_BEDROOMS.$errors.map(e => e.$message)" @blur="v$.NO_BEDROOMS.$touch" @input="v$.NO_BEDROOMS.$touch" v-model="state.NO_BEDROOMS" class="mt-1" rounded="lg" variant="outlined" placeholder="3"></v-text-field>
+              <v-text-field type="number" :disabled="state.PROPERTY_KIND !== 'LAND'" :error-messages="v$.NO_BEDROOMS.$errors.map(e => e.$message)" @blur="v$.NO_BEDROOMS.$touch" @input="v$.NO_BEDROOMS.$touch" v-model="state.NO_BEDROOMS" class="mt-1" rounded="lg" variant="outlined" placeholder="3"></v-text-field>
             </v-col>
             <v-col>
               <p class="font-weight-bold">Bathrooms</p>
-              <v-text-field v-model="state.NO_BATHROOMS" class="mt-1" rounded="lg" variant="outlined" placeholder="3"></v-text-field>
+              <v-text-field :disabled="state.PROPERTY_KIND !== 'LAND'" v-model="state.NO_BATHROOMS" class="mt-1" rounded="lg" variant="outlined" type="number" placeholder="3"></v-text-field>
             </v-col>
           </v-row>
 
@@ -173,7 +173,7 @@ const state = reactive({
   PRICE_AMOUNT: null,
   CURRENCY_CODE: "INR",
   NO_BEDROOMS: null,
-  NO_BATHROOMS: 0,
+  NO_BATHROOMS: null,
   FURNISHING_TYPE: "UNFURNISHED",
   IS_PARKING_SPACE_AVAILABLE: 0,
   BUILT_YEAR: 0,
@@ -209,6 +209,7 @@ const rules = {
   CITY: { required: helpers.withMessage('City is required', required) },
   AREA: { required: helpers.withMessage('Area is required', required) },
   NO_BEDROOMS: {  },
+  NO_BATHROOMS:{}
 }
 const v$ = useVuelidate(rules, state)
 const saveBtnLoader = ref(false)
