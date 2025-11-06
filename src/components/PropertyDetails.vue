@@ -73,14 +73,21 @@
             <div class="pa-4">
               <p class="text-h6">Details</p>
               <v-row>
-                <v-col>
+                <v-col v-if="propertyObj.DIMENSIONS">
                   <div class="">
                     <p class="text-grey-darken-1">Property Dimensions</p>
                     <p class="text-h6">{{ propertyObj.DIMENSIONS }}
                     </p>
                   </div>
                 </v-col>
-                <v-col>
+                <v-col v-if="propertyObj.FURNISHING_TYPE">
+                  <div class="">
+                    <p class="text-grey-darken-1">Furnishing Type</p>
+                    <p class="text-h6">{{ propertyObj.FURNISHING_TYPE }}
+                    </p>
+                  </div>
+                </v-col>
+                <v-col v-if="propertyObj.PROPERTY_KIND">
                   <div class="">
                     <p class="text-grey-darken-1">Property Type</p>
                     <p class="text-h6">{{ propertyObj.PROPERTY_KIND }}
@@ -91,19 +98,19 @@
 
               </v-row>
               <v-row>
-                <v-col>
+                <v-col v-if="propertyObj.NO_BEDROOMS">
                   <div class="">
                     <p class="text-grey-darken-1">Bedrooms</p>
                     <p class="text-h6">{{ propertyObj.NO_BEDROOMS }}</p>
                   </div>
                 </v-col>
-                <v-col>
+                <v-col v-if="propertyObj.NO_BATHROOMS">
                   <div class="">
                     <p class="text-grey-darken-1">Bathrooms</p>
                     <p class="text-h6">{{ propertyObj.NO_BATHROOMS }}</p>
                   </div>
                 </v-col>
-                <v-col>
+                <v-col v-if="propertyObj.AREA_UNIT">
                   <div class="">
                     <p class="text-grey-darken-1">Area</p>
                     <p class="text-h6">{{ propertyObj.AREA }} {{ propertyObj.AREA_UNIT }}
@@ -165,7 +172,7 @@
                 <p class="text-h6">38</p>
               </div> -->
               <div class="d-flex justify-space-between ga-4 py-4">
-                <p>Conversions</p>
+                <p>Conversation</p>
                 <p class="text-subtitle-1 font-weight-bold text-primary">{{statisticsData && statisticsData.length > 0  ? statisticsData.find(i=>i.METRIC_KEY == 'TOTAL_MESSAGE')?.METRIC_VALUE : 0}} messages</p>
               </div>
             </v-card>

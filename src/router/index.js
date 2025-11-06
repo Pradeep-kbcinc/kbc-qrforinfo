@@ -13,7 +13,7 @@ import PropertyDetails from "@/components/PropertyDetails.vue";
 import Signup from "@/components/Signup.vue";
 import { useAuthStore } from '@/stores/app'
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: "/home",

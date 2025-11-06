@@ -56,7 +56,7 @@
       </v-btn>
     </v-card>
     <div class="pa-4">
-      <p class="text-h6">{{ propertyObj.TITLE }}</p>
+      <p class="text-h6 single-line">{{ propertyObj.TITLE }}</p>
       <p v-if="propertyObj.COUNTRY && propertyObj.STATE && propertyObj.CITY" class="mt-1">
         <v-icon>mdi-map-marker-outline</v-icon>{{ propertyObj.COUNTRY }}, {{ propertyObj.STATE }}, {{ propertyObj.CITY
         }}
