@@ -395,7 +395,10 @@ const fetchStatistics = async()=>{
 }
 
 onMounted(() => {
-  fetchStatistics()
+  if(authStore.isAuthenticated){
+    fetchStatistics()
+  }
+ 
   baseUrl.value = window.location.origin
   if (route.query.qr) {
     warningPopUp.value = true
