@@ -54,7 +54,15 @@ export const useAuthStore = defineStore("app", {
     setTempPropertyDetails(data){
       localStorage.setItem('tempoPropertyData', JSON.stringify(data))
       this.propertyDetailsTempo = data
-    }
+    }, 
+    logout() {
+      this.token = null
+      this.userDetails = null
+      localStorage.removeItem('access_token')
+      localStorage.removeItem('userDetails')
+      localStorage.removeItem('tempoPropertyData')
+    },
+
 
   },
 });
