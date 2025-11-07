@@ -73,17 +73,24 @@
             <div class="pa-4">
               <p class="text-h6">Details</p>
               <v-row>
-                <v-col>
+                <v-col v-if="propertyObj.DIMENSIONS">
                   <div class="">
                     <p class="text-grey-darken-1">Property Dimensions</p>
                     <p class="text-h6">{{ propertyObj.DIMENSIONS }}
                     </p>
                   </div>
                 </v-col>
-                <v-col>
+                <v-col v-if="propertyObj.FURNISHING_TYPE">
+                  <div class="">
+                    <p class="text-grey-darken-1">Furnishing Type</p>
+                    <p class="text-h6">{{ formatKind(propertyObj.FURNISHING_TYPE) }}
+                    </p>
+                  </div>
+                </v-col>
+                <v-col v-if="propertyObj.PROPERTY_KIND">
                   <div class="">
                     <p class="text-grey-darken-1">Property Type</p>
-                    <p class="text-h6">{{ propertyObj.PROPERTY_KIND }}
+                    <p class="text-h6">{{ formatKind(propertyObj.PROPERTY_KIND) }}
                     </p>
                   </div>
                 </v-col>
@@ -91,19 +98,19 @@
 
               </v-row>
               <v-row>
-                <v-col>
+                <v-col v-if="propertyObj.NO_BEDROOMS">
                   <div class="">
                     <p class="text-grey-darken-1">Bedrooms</p>
                     <p class="text-h6">{{ propertyObj.NO_BEDROOMS }}</p>
                   </div>
                 </v-col>
-                <v-col>
+                <v-col v-if="propertyObj.NO_BATHROOMS">
                   <div class="">
                     <p class="text-grey-darken-1">Bathrooms</p>
                     <p class="text-h6">{{ propertyObj.NO_BATHROOMS }}</p>
                   </div>
                 </v-col>
-                <v-col>
+                <v-col v-if="propertyObj.AREA_UNIT">
                   <div class="">
                     <p class="text-grey-darken-1">Area</p>
                     <p class="text-h6">{{ propertyObj.AREA }} {{ propertyObj.AREA_UNIT }}
@@ -122,7 +129,7 @@
 
 
               <v-divider></v-divider>
-              <p class="mt-6" v-html="propertyObj.PROPERTY_DESC"></p>
+              <p class="mt-6 ml-4" v-html="propertyObj.PROPERTY_DESC"></p>
             </div>
           </v-card>
         </v-col>
@@ -165,7 +172,7 @@
                 <p class="text-h6">38</p>
               </div> -->
               <div class="d-flex justify-space-between ga-4 py-4">
-                <p>Conversions</p>
+                <p>Conversation</p>
                 <p class="text-subtitle-1 font-weight-bold text-primary">{{statisticsData && statisticsData.length > 0  ? statisticsData.find(i=>i.METRIC_KEY == 'TOTAL_MESSAGE')?.METRIC_VALUE : 0}} messages</p>
               </div>
             </v-card>
@@ -395,7 +402,10 @@ const fetchStatistics = async()=>{
 }
 
 onMounted(() => {
-  fetchStatistics()
+  if(authStore.isAuthenticated){
+    fetchStatistics()
+  }
+ 
   baseUrl.value = window.location.origin
   if (route.query.qr) {
     warningPopUp.value = true
@@ -531,6 +541,10 @@ const sender_id = ref()
 const receiver_id = ref()
 const property_id = ref()
 const msgSentLoader = ref(false)
+const formatKind = (text) => {
+  if (!text) return ''
+  return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase()
+}
 const sendMessage = async () => {
   if (newMessage.value && newMessage.value.length) {
     msgSentLoader.value = true
@@ -588,9 +602,9 @@ const oldMsges = async()=>{
             text: item.MESSAGE_BODY
           }
         })
-        oldMsgLoader.value = false
+        
       }
-
+      oldMsgLoader.value = false
     }
     if(res.data.ERR_CODE == 0){
       let response = res.data

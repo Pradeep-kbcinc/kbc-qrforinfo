@@ -6,37 +6,65 @@
         <p>Welcome Back, {{ authStore?.userDetails?.FNAME }} {{ authStore?.userDetails?.MNAME }} {{
           authStore?.userDetails?.LNAME }}</p>
       </div>
-      
+
     </div>
     <section class="py-4">
       <v-row>
         <v-col cols="6" md="3">
-          <v-card height="100%" class="rounded-lg card-box-shadow">
-            <v-card-text>
-              <p>Active Listings</p>
-              <h5 class="text-primary text-h4 font-weight-bold mt-1">{{ statisticsData[0]?.METRIC_VALUE || 0 }}</h5>
+          <v-card class="d-flex align-center justify-space-between rounded-lg" height="100" elevation="1"
+            style="position: relative; overflow: hidden; background-color: white;">
+            <!-- First soft background polygon -->
+            <div class="first-polygon"></div>
+
+            <!-- Second lighter crossing polygon -->
+            <div class="second-polygon"></div>
+
+            <!-- Content -->
+            <v-card-text class="text-center w-100" style="position: relative; z-index: 2;">
+              <p class="text-grey-darken-1 mb-1 text-subtitle-1 font-weight-medium">
+                Active Listings
+              </p>
+              <h2 class="text-primary font-weight-bold mb-0">
+                {{ statisticsData[0]?.METRIC_VALUE || 0 }}
+              </h2>
             </v-card-text>
           </v-card>
+
         </v-col>
         <v-col cols="6" md="3">
           <v-card height="100%" class="rounded-lg card-box-shadow">
-            <v-card-text>
+            <!-- First soft background polygon -->
+            <div class="first-polygon" style="background: #4CB04F4D!important;"></div>
+
+            <!-- Second lighter crossing polygon -->
+            <div class="second-polygon" style="background: #4CB04F4D!important;"></div>
+            <v-card-text class="text-center w-100">
               <p>Total Views</p>
-              <h5 class="text-green text-h4 font-weight-bold mt-1">{{statisticsData[3]?.METRIC_VALUE || 0}}</h5>
+              <h5 class="text-green text-h4 font-weight-bold mt-1">{{ statisticsData[3]?.METRIC_VALUE || 0 }}</h5>
             </v-card-text>
           </v-card>
         </v-col>
         <v-col cols="6" md="3">
           <v-card height="100%" class="rounded-lg card-box-shadow">
-            <v-card-text>
+            <!-- First soft background polygon -->
+            <div class="first-polygon" style="background: #9B27B04D!important;"></div>
+
+            <!-- Second lighter crossing polygon -->
+            <div class="second-polygon" style="background: #9B27B04D!important;"></div>
+            <v-card-text class="text-center w-100">
               <p>Messages</p>
-              <h5 class="text-purple text-h4 font-weight-bold mt-1">{{statisticsData[2]?.METRIC_VALUE || 0}}</h5>
+              <h5 class="text-purple text-h4 font-weight-bold mt-1">{{ statisticsData[2]?.METRIC_VALUE || 0 }}</h5>
             </v-card-text>
           </v-card>
         </v-col>
         <v-col cols="6" md="3">
           <v-card class="rounded-lg card-box-shadow">
-            <v-card-text>
+            <!-- First soft background polygon -->
+            <div class="first-polygon" style="background: #7A7A7A4D!important;"></div>
+
+            <!-- Second lighter crossing polygon -->
+            <div class="second-polygon" style="background: #7A7A7A4D!important;"></div>
+            <v-card-text class="text-center w-100">
               <p>Drafts</p>
               <h5 class="text-lightBlack text-h4 font-weight-bold mt-1">{{ statisticsData[1]?.METRIC_VALUE || 0 }}</h5>
             </v-card-text>
@@ -46,19 +74,19 @@
     </section>
     <section>
       <v-card class="card-box-shadow rounded-lg">
-        <v-card-text>
+        <v-card-text class="">
           <v-row align="center" justify="space-between" class="px-2 mb-2">
             <h3 class="text-h6">My Properties</h3>
             <!-- <v-btn variant="text" color="primary" class="text-capitalize">View All</v-btn> -->
             <v-spacer></v-spacer>
-      <v-btn @click="openDraftList" :height="!mobile ? 48 : 38" :width="mobile ? '140' : ''" rounded="lg"
-        class="elevation-0 text-none font-weight-bold mr-2" color="info">
-        <v-icon class="mr-2">mdi-file-sign</v-icon>Saved Drafts
-      </v-btn>
-      <v-btn @click="router.push('/add-new-property')" :height="!mobile ? 48 : 38" :width="mobile ? '140' : ''"
-        rounded="lg" class="elevation-0 text-none font-weight-bold" color="primary">
-        <v-icon>mdi-plus</v-icon> Add Property
-      </v-btn>
+            <v-btn @click="openDraftList" :height="!mobile ? 48 : 38" :width="mobile ? '140' : ''" rounded="lg"
+              class="elevation-0 text-none font-weight-bold mr-2" color="info">
+              <v-icon class="mr-2">mdi-file-sign</v-icon>Saved Drafts
+            </v-btn>
+            <v-btn @click="router.push('/add-new-property')" :height="!mobile ? 48 : 38" :width="mobile ? '140' : ''"
+              rounded="lg" class="elevation-0 text-none font-weight-bold" color="primary">
+              <v-icon>mdi-plus</v-icon> Add Property
+            </v-btn>
           </v-row>
 
           <v-divider class="my-4"></v-divider>
@@ -95,9 +123,10 @@
 
                 <template #append>
                   <div class="text-end">
-                  
-                    <v-btn @click.stop="openModal(propertyObj)" rounded="lg" class="text-none font-weight-bold text-subtitle-1"
-                      min-width="100" height="48" color="primary" elevation="0">Add Images</v-btn>
+
+                    <v-btn @click.stop="openModal(propertyObj)" rounded="lg"
+                      class="text-none font-weight-bold text-subtitle-1" min-width="100" height="48" color="primary"
+                      elevation="0">Add Images</v-btn>
                   </div>
                 </template>
 
@@ -225,10 +254,10 @@ const properties = [
 //------------------------------------------------------------------------------
 
 const statisticsData = ref({})
-const fetchStatistics = async()=>{
+const fetchStatistics = async () => {
   try {
     let res = await propertyService.getDashboardStatistics()
-    if(res.data.ERR_CODE == 0){
+    if (res.data.ERR_CODE == 0) {
       let response = res.data.FetchData
       statisticsData.value = response.PROPERTY_MESSAGE_DETAILS
     }
@@ -320,8 +349,8 @@ const uploadImages = async () => {
       const formData = new FormData()
       formData.append('ACTION_TYPE', 'CREATE')
       formData.append('IMAGE_ID', 0),
-      formData.append('PROPERTY_ID', selectedPropertyId.value),
-      formData.append('IMAGE_URL', file)
+        formData.append('PROPERTY_ID', selectedPropertyId.value),
+        formData.append('IMAGE_URL', file)
       formData.append('IS_PRIMARY', 0)
       formData.append('SEQ_NO', i + 1)
       formData.append('ALT_TEXT', `Image ${i + 1}`)
@@ -340,3 +369,27 @@ const uploadImages = async () => {
   }
 }
 </script>
+
+<style scoped>
+.first-polygon {
+  position: absolute;
+  left: -85px;
+  top: 0px;
+  z-index: 100;
+  bottom: 0px;
+  width: 180px;
+  background: #BED1F94D;
+  clip-path: polygon(0px 0px, 51% 0px, 100% 100%, 0% 100%);
+}
+
+.second-polygon {
+  position: absolute;
+  left: -30px;
+  top: 0px;
+  bottom: 0px;
+  width: 180px;
+  background: rgba(190, 209, 249, 0.3);
+  clip-path: polygon(0px 0px, 67% 0px, 19% 102%, 0% 90%);
+
+}
+</style>

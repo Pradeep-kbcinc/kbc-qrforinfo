@@ -56,10 +56,10 @@
       </v-btn>
     </v-card>
     <div class="pa-4">
-      <p class="text-h6">{{ propertyObj.TITLE }}</p>
-      <p v-if="propertyObj.COUNTRY && propertyObj.STATE && propertyObj.CITY" class="mt-1">
-        <v-icon>mdi-map-marker-outline</v-icon>{{ propertyObj.COUNTRY }}, {{ propertyObj.STATE }}, {{ propertyObj.CITY
-        }}
+      <p class="text-h6 single-line">{{ propertyObj.TITLE }}</p>
+      <p class="mt-1">
+        <v-icon>mdi-map-marker-outline</v-icon><span v-if="propertyObj.COUNTRY && propertyObj.STATE && propertyObj.CITY">{{ propertyObj.COUNTRY }}, {{ propertyObj.STATE }}, {{ propertyObj.CITY
+        }}</span>
       </p>
       <div class="d-flex justify-space-between align-center text-primary mt-3">
         <p class="text-h5 font-weight-bold">

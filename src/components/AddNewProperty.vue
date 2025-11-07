@@ -36,7 +36,7 @@
             </v-radio-group>
           </v-col>
           <v-col>
-            <v-radio-group hide-details v-model="state.FURNISHING_TYPE" inline color="primary" label="Furnishing Type">
+            <v-radio-group :disabled="state.PROPERTY_KIND == 'LAND'" hide-details v-model="state.FURNISHING_TYPE" inline color="primary" label="Furnishing Type">
               <v-radio label="Unfurnished" value="UNFURNISHED"></v-radio>
               <v-radio label="Semi" value="SEMI"></v-radio>
               <v-radio label="Full" value="FULL"></v-radio>
@@ -47,10 +47,10 @@
               <v-radio label="Residential" value="RESIDENTIAL"></v-radio>
               <v-radio label="Commercial" value="COMMERCIAL"></v-radio>
               <v-radio label="Mixed" value="MIXED"></v-radio>
-              <v-radio v-if="state.PROPERTY_KIND !== 'HOUSE'" label="Agricultural" value="AGRICULTURAL"></v-radio>
+              <v-radio :disabled="state.PROPERTY_KIND == 'HOUSE' || state.PROPERTY_KIND == 'APARTMENT'" label="Agricultural" value="AGRICULTURAL"></v-radio>
               <v-radio label="Industrial" value="INDUSTRIAL"></v-radio>
               <v-radio label="Institutional" value="INSTITUTIONAL"></v-radio>
-              <v-radio label="Recreational" value="RECREATIONAL"></v-radio>
+              <v-radio :disabled="state.PROPERTY_KIND == 'LAND'" label="Recreational" value="RECREATIONAL"></v-radio>
               <v-radio label="Other" value="OTHER"></v-radio>
             </v-radio-group>
           </v-col>
