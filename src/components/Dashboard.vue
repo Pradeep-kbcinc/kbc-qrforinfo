@@ -152,7 +152,20 @@
     </v-toolbar>
     <v-card rounded="t-0 b-lg">
       <v-card-text>
-        <v-file-upload v-model="addedImagesArr" clearable multiple density="default"></v-file-upload>
+        <h6 class="">Available Images : </h6>
+        <div class="">
+          <div>
+            <v-row v-if="selectedData.IMAGES && selectedData.IMAGES.length > 0">
+              <v-col cols="3" v-for="item in selectedData.IMAGES">
+                <v-img contain class="rounded-lg" :src="item.IMAGE_URL">
+
+                </v-img>
+              </v-col>
+            </v-row>
+          </div>
+        </div>
+        <v-divider class="mb-4"></v-divider>
+        <v-file-upload  density="comfortable" v-model="addedImagesArr" clearable multiple></v-file-upload>
         <div class="d-flex justify-end mt-4">
           <v-btn size="large" class="text-none rounded-lg" @click="uploadImages" :loading="uploadImagesLoader"
             elevation="0" min-width="200" color="primary">Save</v-btn>
@@ -302,8 +315,10 @@ const getProperties = async () => {
 }
 
 const selectedPropertyId = ref(null)
+const selectedData = ref()
 const openModal = (data) => {
   selectedPropertyId.value = data.PROPERTY_ID
+  selectedData.value = data
   uploadImageModal.value = true
 }
 

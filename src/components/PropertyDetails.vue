@@ -32,7 +32,7 @@
               style="font-size: 8.0rem;line-height: 1;">
               <v-carousel @click.stop v-if="propertyObj.IMAGES && propertyObj.IMAGES?.length > 1" hide-delimiters
                 :show-arrows="propertyObj.IMAGES?.length > 1" height="250">
-                <v-carousel-item cover v-for="(image, i) in propertyObj.IMAGES" :key="i">
+                <v-carousel-item class="pointer" @click="previewImages(propertyObj.IMAGES)" cover v-for="(image, i) in propertyObj.IMAGES" :key="i">
                   <v-img v-if="image?.IMAGE_URL"
                     :src="image?.IMAGE_URL ? image.IMAGE_URL : `@/assets/property_placeholder.webp`"
                     lazy-src="@/assets/property_placeholder.webp" cover height="250" class="rounded-lg">
@@ -183,6 +183,57 @@
 
   </div>
 
+  <v-dialog max-width="1000" v-model="imagePreviewModal">
+    <!-- <v-toolbar class="rounded-t-xl " flat density="compact"></v-toolbar> -->
+    <v-defaults-provider :defaults="{ }">
+    <v-sheet class="overflow-hidden"  rounded="xl">
+      <v-carousel
+        v-model="currentIndex"
+        direction="vertical"
+        show-arrows
+        progress="red"
+        vertical-arrows="left"
+        vertical-delimiters="right"
+      >
+        <v-carousel-item
+          v-for="(item, i) in selectedImageArr"
+          :key="i"
+          :src="item.IMAGE_URL"
+          contain
+        ></v-carousel-item>
+
+        <!-- <v-overlay
+          :scrim="false"
+          content-class="w-100 h-100 d-flex flex-column align-center justify-space-between pointer-pass-through py-3"
+          contained
+          model-value
+          no-click-animation
+          persistent
+        > -->
+          <!-- <v-scroll-x-transition mode="out-in" appear>
+            <v-sheet
+              :key="currentIndex"
+              rounded="xl"
+            >
+              <v-list-item
+                :prepend-avatar="`https://randomuser.me/api/portraits/${currentItem.avatarId}.jpg`"
+                :subtitle="currentItem.subtitle"
+                :title="currentItem.authorName"
+                class="pa-1 pr-6"
+              ></v-list-item>
+            </v-sheet>
+          </v-scroll-x-transition> -->
+          <!-- <v-chip
+            :text="`${ currentIndex + 1 } / ${items.length }`"
+            color="#eee"
+            size="small"
+            variant="flat"
+          ></v-chip> -->
+        <!-- </v-overlay> -->
+      </v-carousel>
+    </v-sheet>
+  </v-defaults-provider>
+  </v-dialog>
 
   <v-dialog max-width="600" v-model="qrModal">
     <v-toolbar rounded="t-lg b-0" class="px-4">
@@ -637,6 +688,16 @@ const findImageType = (type) => {
     return DummyHouse
   }
 }
+
+const imagePreviewModal = ref(false)
+const selectedImageArr = ref([])
+const currentIndex = ref(0)
+const previewImages = (data)=>{
+  selectedImageArr.value = data
+  console.log(data, 'data')
+  imagePreviewModal.value = true
+}
+
 </script>
 
 <style scoped lang="scss">

@@ -101,6 +101,7 @@ const getProperties = async () => {
   }
 }
 const searchNow = () => {
+  currentPage.value = 1
   getProperties()
 }
 

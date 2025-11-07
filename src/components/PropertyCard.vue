@@ -15,7 +15,7 @@
       style="font-size: 5.0rem;line-height: 1;">
       <v-carousel @click.stop v-if="propertyObj.IMAGES && propertyObj.IMAGES?.length > 1" hide-delimiters
         :show-arrows="propertyObj.IMAGES?.length > 1" height="250">
-        <v-carousel-item v-for="(image, i) in propertyObj.IMAGES" :key="i">
+        <v-carousel-item cover v-for="(image, i) in propertyObj.IMAGES" :key="i">
           <v-img v-if="image?.IMAGE_URL"
             :src="image?.IMAGE_URL ? image.IMAGE_URL : `@/assets/property_placeholder.webp`"
             lazy-src="@/assets/property_placeholder.webp" cover height="250" class="rounded-lg">
@@ -38,9 +38,9 @@
       }
     })
     " v-else hide-delimiters :show-arrows="propertyObj.IMAGES?.length > 1" height="250">
-        <v-carousel-item>
+        <v-carousel-item cover>
 
-          <v-img cover :src="findImageType(propertyObj.PROPERTY_KIND)" alt="" />
+          <v-img cover height="250" :src="findImageType(propertyObj.PROPERTY_KIND)" alt="" />
         </v-carousel-item>
       </v-carousel>
 

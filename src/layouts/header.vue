@@ -38,7 +38,7 @@
         <v-list-item-title class="font-weight-medium">My Profile</v-list-item-title>
       </v-list-item>
       <v-divider></v-divider>
-      <v-list-item @click="logout">
+      <v-list-item @click="logout" >
         <v-list-item-title class="text-error font-weight-medium">Logout</v-list-item-title>
       </v-list-item>
     </v-list>
@@ -58,6 +58,7 @@
 import { defineProps, nextTick } from 'vue';
 import { useDisplay } from 'vuetify'
 const { mobile } = useDisplay()
+import { useRouter } from 'vue-router'
 import Sidebar from './sidebar.vue'
 import { useAuthStore } from '@/stores/app'
 const router = useRouter()
@@ -79,9 +80,9 @@ const toggleSidebar = ()=>{
   sidebarPanel.value.toggleSidebar()
 }
 
-const logout = async()=>{
-  await nextTick()
-localStorage.clear()
-router.push('/login')
+const logout = ()=>{
+authStore.logout()
+router.push('/')
+console.log(authStore.isAuthenticated, 'authStore.isAuthenticated')
 }
 </script>
