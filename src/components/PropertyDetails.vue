@@ -83,14 +83,14 @@
                 <v-col v-if="propertyObj.FURNISHING_TYPE">
                   <div class="">
                     <p class="text-grey-darken-1">Furnishing Type</p>
-                    <p class="text-h6">{{ propertyObj.FURNISHING_TYPE }}
+                    <p class="text-h6">{{ formatKind(propertyObj.FURNISHING_TYPE) }}
                     </p>
                   </div>
                 </v-col>
                 <v-col v-if="propertyObj.PROPERTY_KIND">
                   <div class="">
                     <p class="text-grey-darken-1">Property Type</p>
-                    <p class="text-h6">{{ propertyObj.PROPERTY_KIND }}
+                    <p class="text-h6">{{ formatKind(propertyObj.PROPERTY_KIND) }}
                     </p>
                   </div>
                 </v-col>
@@ -541,6 +541,10 @@ const sender_id = ref()
 const receiver_id = ref()
 const property_id = ref()
 const msgSentLoader = ref(false)
+const formatKind = (text) => {
+  if (!text) return ''
+  return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase()
+}
 const sendMessage = async () => {
   if (newMessage.value && newMessage.value.length) {
     msgSentLoader.value = true
