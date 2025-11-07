@@ -60,7 +60,7 @@
                     :color="msgObj.position == 'right' ? 'primary' : ''" :class="{ 'ms-auto': msgObj.self }"
                     style="width: fit-content;">
                     <p>{{ msgObj.MESSAGE_BODY }}</p>
-                    <p class="mt-2 text-body-2 ">{{ moment(msgObj.SENT_ON).format('Do MMM, YYYY') }}</p>
+                    <p class="mt-2 text-body-2 ">{{ moment(msgObj.SENT_ON).format('Do MMM, YYYY hh:mm A') }}</p>
                   </v-card>
                 </div>
 

@@ -129,7 +129,7 @@
 
 
               <v-divider></v-divider>
-              <p class="mt-6" v-html="propertyObj.PROPERTY_DESC"></p>
+              <p class="mt-6 ml-4" v-html="propertyObj.PROPERTY_DESC"></p>
             </div>
           </v-card>
         </v-col>
@@ -598,9 +598,9 @@ const oldMsges = async()=>{
             text: item.MESSAGE_BODY
           }
         })
-        oldMsgLoader.value = false
+        
       }
-
+      oldMsgLoader.value = false
     }
     if(res.data.ERR_CODE == 0){
       let response = res.data
