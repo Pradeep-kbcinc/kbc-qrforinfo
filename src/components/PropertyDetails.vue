@@ -524,7 +524,7 @@ const shareAction = async (propertyObj) => {
     const shareData = {
       title: propertyObj.TITLE,
       text: propertyObj.PROPERTY_DESC,
-      url: `/buy/property/${propertyObj.PROPERTY_ID}`,
+      url: `/#/buy/property/${propertyObj.PROPERTY_ID}`,
     };
     await navigator.share(shareData);
   } catch (err) {
