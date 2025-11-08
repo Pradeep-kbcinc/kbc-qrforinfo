@@ -35,7 +35,7 @@
 
     <v-list v-if="authStore.isAuthenticated" density="compact" min-width="150">
       <v-list-item @click="router.push('/settings')">
-        <v-list-item-title class="font-weight-medium">My Profile</v-list-item-title>
+        <v-list-item-title class="font-weight-medium">My Profile<br>(v{{ version }})</v-list-item-title>
       </v-list-item>
       <v-divider></v-divider>
       <v-list-item @click="logout" >
@@ -61,6 +61,7 @@ const { mobile } = useDisplay()
 import { useRouter } from 'vue-router'
 import Sidebar from './sidebar.vue'
 import { useAuthStore } from '@/stores/app'
+import { version } from '../../package.json'
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()

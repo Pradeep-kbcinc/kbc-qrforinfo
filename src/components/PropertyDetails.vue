@@ -520,16 +520,28 @@ const downloadPDF = async (propertyObj) => {
 }
 //------------------------------------------------------------------------------
 const shareAction = async (propertyObj) => {
-  try {
-    const shareData = {
-      title: propertyObj.TITLE,
-      text: propertyObj.PROPERTY_DESC,
-      url: `/#/buy/property/${propertyObj.PROPERTY_ID}`,
-    };
-    await navigator.share(shareData);
-  } catch (err) {
-    console.log('--->err', err);
+  const shareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(
+    propertyObj.TITLE + '\n' +
+    propertyObj.PROPERTY_DESC + '\n' +
+    `https://yourdomain.com/#/buy/property/${propertyObj.PROPERTY_ID}`
+  )}`;
+
+  const shareData = {
+    title: propertyObj.TITLE,
+    text: propertyObj.PROPERTY_DESC,
+    url: `/#/buy/property/${propertyObj.PROPERTY_ID}`,
+  };
+
+  if (navigator.share) {
+    try {
+      await navigator.share(shareData);
+      return;
+    } catch (err) {
+      console.log('--->err', err);
+    }
   }
+
+  window.open(shareUrl, '_blank');
 }
 //------------------------------------------------------------------------------
 const openMobileApp = () => {
