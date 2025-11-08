@@ -57,7 +57,7 @@
         </v-row>
 
         <div>
-          <p class="font-weight-bold">Property Title</p>
+          <p class="font-weight-bold">Property Name</p>
           <v-text-field :error-messages="v$.TITLE.$errors.map(e => e.$message)" @blur="v$.TITLE.$touch" @input="v$.TITLE.$touch" v-model="state.TITLE" class="mt-1" rounded="lg" variant="outlined" placeholder="Modern 3BR Apartment"></v-text-field>
         </div>
         <div>
@@ -86,11 +86,11 @@
               <p class="pr-4 font-weight-bold mb-1">Currency Code</p>
               <v-select v-model="state.CURRENCY_CODE" variant="outlined" class="mt-auto" :items="['INR', 'USD']" rounded="lg"></v-select>
             </v-col>
-            <v-col>
+            <v-col v-if="state.PROPERTY_KIND !== 'LAND'">
               <p class="font-weight-bold">Bedrooms</p>
               <v-text-field type="number" :disabled="state.PROPERTY_KIND == 'LAND'" :error-messages="v$.NO_BEDROOMS.$errors.map(e => e.$message)" @blur="v$.NO_BEDROOMS.$touch" @input="v$.NO_BEDROOMS.$touch" v-model="state.NO_BEDROOMS" class="mt-1" rounded="lg" variant="outlined" placeholder="Ex. 3"></v-text-field>
             </v-col>
-            <v-col>
+            <v-col v-if="state.PROPERTY_KIND !== 'LAND'">
               <p class="font-weight-bold">Bathrooms</p>
               <v-text-field :disabled="state.PROPERTY_KIND == 'LAND'" v-model="state.NO_BATHROOMS" class="mt-1" rounded="lg" variant="outlined" type="number" placeholder="Ex. 3"></v-text-field>
             </v-col>
@@ -201,7 +201,7 @@ const state = reactive({
 })
 const rules = {
   LISTING_TYPE: { required: helpers.withMessage('Property Listing type is required', required) },
-  TITLE: { required: helpers.withMessage('Property title is required', required) },
+  TITLE: { required: helpers.withMessage('Property name is required', required) },
   PROPERTY_DESC: { required: helpers.withMessage('Property description is required', required) },
   PRICE_AMOUNT: { required: helpers.withMessage('Price is required', required) },
   COUNTRY: { required: helpers.withMessage('Country is required', required) },

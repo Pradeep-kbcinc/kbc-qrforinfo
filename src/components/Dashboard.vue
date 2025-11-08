@@ -157,11 +157,12 @@
           <div>
             <v-row v-if="selectedData.IMAGES && selectedData.IMAGES.length > 0">
               <v-col cols="3" v-for="item in selectedData.IMAGES">
-                <v-img contain class="rounded-lg" :src="item.IMAGE_URL">
+                <v-img lazy-src="@/assets/property_placeholder.webp" contain class="rounded-lg" :src="item.IMAGE_URL">
 
                 </v-img>
               </v-col>
             </v-row>
+            <p v-else class="text-center mb-4">No images added yet</p>
           </div>
         </div>
         <v-divider class="mb-4"></v-divider>
