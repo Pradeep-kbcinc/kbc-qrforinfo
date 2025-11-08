@@ -55,7 +55,7 @@
               <v-text-field :error-messages="v$.MOBILE_PHONE.$errors.map(e => e.$message)" @blur="v$.MOBILE_PHONE.$touch" @input="v$.MOBILE_PHONE.$touch" v-model="propertyObj.MOBILE_PHONE" rounded="lg" placeholder="+91 987643210" max-width="500" label="" variant="outlined"></v-text-field>
             </div>
             <div class="">
-              <p class="text-body-2">Email (Optional)</p>
+              <p class="text-body-2">Email </p>
               <v-text-field :error-messages="v$.EMAIL.$errors.map(e => e.$message)" @blur="v$.EMAIL.$touch"  v-model="propertyObj.EMAIL" rounded="lg" placeholder="your@email.com" max-width="500" label="" variant="outlined" ></v-text-field>
             </div>
             <v-btn @click="registerNow" :loading="btnLoader" class="text-none font-weight-bold mt-3" height="48" width="500" size="large" rounded="lg" color="#2663eb" elevation="0">
@@ -105,7 +105,7 @@ const rules = {
   MNAME: {},
   LNAME: { required },
   GENDER: {},
-  EMAIL: { email },
+  EMAIL: { email, required },
   ADDRESS: {},
   LATITUDE: {},
   LONGITUDE: {},

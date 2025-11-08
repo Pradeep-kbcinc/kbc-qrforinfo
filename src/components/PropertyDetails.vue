@@ -361,7 +361,7 @@
   </v-dialog>
 
   <v-dialog v-model="msgDialog" max-width="650">
-    <v-toolbar class="" rounded="t-lg b-0">
+    <v-toolbar class="" color="white" density="compact" rounded="t-lg b-0">
       <v-spacer></v-spacer>
       <v-btn icon @click="msgDialog = false"><v-icon>mdi-close</v-icon></v-btn>
     </v-toolbar>
@@ -378,7 +378,7 @@
             
           ></v-progress-linear>
         </div>
-        <div v-else v-for="(msg, i) in messages" :key="i" class="mb-3 d-flex">
+        <div v-else v-for="(msg, i) in messages" :key="i" class="mb-3 d-flex flex-column">
           <div :class="[
             'pa-3 rounded-lg d-inline-block',
             msg.sender === 'me'
@@ -386,17 +386,19 @@
               : 'bg-grey-lighten-3 text-black mr-auto'
           ]" style="max-width: 80%; white-space: pre-wrap;">
             {{ msg.text }}
+            <p class="text-caption">{{ msg.SENT_ON }}</p>
           </div>
+          
         </div>
       </v-card-text>
 
       <!-- Input Section -->
       <v-divider></v-divider>
       <v-card-actions v-if="!oldMsgLoader" class="px-4 py-3">
-        <v-text-field v-model="newMessage" placeholder="Type your message..." variant="outlined" density="comfortable"
+        <v-text-field v-model="newMessage" placeholder="Type your message..." variant="solo" flat density="comfortable"
           hide-details clearable @keyup.enter="sendMessage"></v-text-field>
-        <v-btn icon color="primary" :loading="msgSentLoader" @click="sendMessage">
-          <v-icon>mdi-send</v-icon>
+        <v-btn icon variant="tonal"  rounded="circle" color="primary" :loading="msgSentLoader" @click="sendMessage">
+          <v-icon >mdi-send</v-icon>
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -414,6 +416,7 @@ import { toast } from 'vue3-toastify';
 import DummyHouse from '@/assets/dummy_house.webp'
 import DummyApartment from '@/assets/dummy_apartment.webp'
 import DummyLand from '@/assets/dummy_land.webp'
+import moment from 'moment';
 //..............................................................................
 const authStore = useAuthStore()
 const route = useRoute()
@@ -484,10 +487,10 @@ const fetchPropertyDetail = async () => {
     let res;
     
     if (route.query.createdBy === 'false') {
-      console.log('1')
+      
       res = await propertyService.GetPropertyDetailPublic(data);
     } else if (route.name == 'BuyPropertyDetails') {
-      console.log('2')
+     
       res = await propertyService.GetPropertyDetailPublic(data);
     } else if (route.query.createdBy) {
       res = await propertyService.GetPropertyDetail(data);
@@ -624,7 +627,7 @@ const sendMessage = async () => {
       let res = await propertyService.message(data)
       if (res.data.ERR_CODE == 0) {
         msgSentLoader.value = false
-        messages.value.push({ sender: 'me', text: newMessage.value.trim() })
+        messages.value.push({ sender: 'me', text: newMessage.value.trim(), SENT_ON: moment(new Date()).format('Do MMM, YYYY')  })
         newMessage.value = ''
       }
     } catch (error) {
@@ -661,7 +664,8 @@ const oldMsges = async()=>{
         messages.value = response.PROPERTY_MESSAGE_DETAILS.map((item)=>{
           return {
             sender: item.SENDER_USER_ID == authStore.getUserDetails.USER_ID ? 'me' : 'other',
-            text: item.MESSAGE_BODY
+            text: item.MESSAGE_BODY,
+            SENT_ON: moment(item.SENT_ON).format('Do MMM, YYYY hh:mm A')
           }
         })
         
