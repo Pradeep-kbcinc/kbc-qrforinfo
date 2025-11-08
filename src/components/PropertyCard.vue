@@ -1,7 +1,7 @@
 <template>
   <v-card @click.stop="
     $router.push({
-      path: route.name !== 'BuyProperties'
+      path: (route.name !== 'BuyProperties' && route.name !== 'BuyerLanding')
         ? `/property/${propertyObj.PROPERTY_ID}`
         : `/buy/property/${propertyObj.PROPERTY_ID}`,
       query: {

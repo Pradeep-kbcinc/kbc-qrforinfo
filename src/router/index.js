@@ -67,7 +67,9 @@ const router = createRouter({
     },
     {
       path: '/',
-      redirect: '/buy/properties', // 👈 redirect root to this
+      name: "BuyerLanding",
+      component: Properties
+      // redirect: '/buy/properties', // 👈 redirect root to this
     },
     {
       path: "/login",
