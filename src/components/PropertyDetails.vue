@@ -80,7 +80,7 @@
                     </p>
                   </div>
                 </v-col>
-                <v-col v-if="propertyObj.FURNISHING_TYPE">
+                <v-col v-if="propertyObj.FURNISHING_TYPE && propertyObj.PROPERTY_KIND !== 'LAND'">
                   <div class="">
                     <p class="text-grey-darken-1">Furnishing Type</p>
                     <p class="text-h6">{{ formatKind(propertyObj.FURNISHING_TYPE) }}
