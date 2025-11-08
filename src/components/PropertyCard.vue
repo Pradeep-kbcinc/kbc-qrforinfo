@@ -13,7 +13,7 @@
     <v-card height="250" elevation="0" rounded="0"
       class="bg-box-gradient d-flex justify-center align-center position-relative"
       style="font-size: 5.0rem;line-height: 1;">
-      <v-carousel @click.stop v-if="propertyObj.IMAGES && propertyObj.IMAGES?.length > 1" hide-delimiters
+      <v-carousel @click.stop v-if="propertyObj.IMAGES && propertyObj.IMAGES?.length > 0" hide-delimiters
         :show-arrows="propertyObj.IMAGES?.length > 1" height="250">
         <v-carousel-item cover v-for="(image, i) in propertyObj.IMAGES" :key="i">
           <v-img v-if="image?.IMAGE_URL"

@@ -30,7 +30,7 @@
             <v-card elevation="0" rounded="0"
               class="bg-box-gradient d-flex justify-center align-center position-relative"
               style="font-size: 8.0rem;line-height: 1;">
-              <v-carousel @click.stop v-if="propertyObj.IMAGES && propertyObj.IMAGES?.length > 1" hide-delimiters
+              <v-carousel @click.stop v-if="propertyObj.IMAGES && propertyObj.IMAGES?.length > 0" hide-delimiters
                 :show-arrows="propertyObj.IMAGES?.length > 1" height="250">
                 <v-carousel-item class="pointer" @click="previewImages(propertyObj.IMAGES)" cover v-for="(image, i) in propertyObj.IMAGES" :key="i">
                   <v-img v-if="image?.IMAGE_URL"
@@ -291,8 +291,8 @@
       </div>
       <div v-else>
 
-      
-      <v-carousel class="rounded-xl" @click.stop v-if="propertyObj.IMAGES && propertyObj.IMAGES?.length > 1"
+     
+      <v-carousel class="rounded-xl" @click.stop v-if="propertyObj.IMAGES && propertyObj.IMAGES?.length > 0"
         hide-delimiters :show-arrows="propertyObj.IMAGES?.length > 1" height="250">
         <v-carousel-item cover v-for="(image, i) in propertyObj.IMAGES" :key="i">
           <v-img v-if="image?.IMAGE_URL"
@@ -522,7 +522,6 @@ const downloadPDF = async (propertyObj) => {
 const shareAction = async (propertyObj) => {
   const shareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(
     propertyObj.TITLE + '\n' +
-    propertyObj.PROPERTY_DESC + '\n' +
     `https://yourdomain.com/#/buy/property/${propertyObj.PROPERTY_ID}`
   )}`;
 
