@@ -13,7 +13,7 @@
     <v-card height="250" elevation="0" rounded="0"
       class="bg-box-gradient d-flex justify-center align-center position-relative"
       style="font-size: 5.0rem;line-height: 1;">
-      <v-carousel @click.stop v-if="propertyObj.IMAGES && propertyObj.IMAGES?.length > 1" hide-delimiters
+      <v-carousel v-if="propertyObj.IMAGES && propertyObj.IMAGES?.length > 0" hide-delimiters
         :show-arrows="propertyObj.IMAGES?.length > 1" height="250">
         <v-carousel-item cover v-for="(image, i) in propertyObj.IMAGES" :key="i">
           <v-img v-if="image?.IMAGE_URL"
@@ -28,16 +28,7 @@
           <v-img v-else cover src="@/assets/property_placeholder.webp" alt="" />
         </v-carousel-item>
       </v-carousel>
-      <v-carousel @click.stop="
-    $router.push({
-      path: route.name !== 'BuyProperties'
-        ? `/property/${propertyObj.PROPERTY_ID}`
-        : `/buy/property/${propertyObj.PROPERTY_ID}`,
-      query: {
-        createdBy: propertyObj.SELLER_USER_ID === authStore.getUserDetails?.USER_ID
-      }
-    })
-    " v-else hide-delimiters :show-arrows="propertyObj.IMAGES?.length > 1" height="250">
+      <v-carousel v-else hide-delimiters :show-arrows="propertyObj.IMAGES?.length > 1" height="250">
         <v-carousel-item cover>
 
           <v-img cover height="250" :src="findImageType(propertyObj.PROPERTY_KIND)" alt="" />
@@ -92,7 +83,7 @@ import { toast } from 'vue3-toastify';
 import DummyHouse from '@/assets/dummy_house.webp'
 import DummyApartment from '@/assets/dummy_apartment.webp'
 import DummyLand from '@/assets/dummy_land.webp'
-
+import { onMounted, nextTick } from 'vue'
 
 const authStore = useAuthStore()
 const emit = defineEmits('recall')
@@ -154,6 +145,15 @@ const findImageType = (type) => {
     return DummyHouse
   }
 }
+
+onMounted(async()=>{
+  await nextTick()
+
+  // Select all carousel arrow buttons and stop their click from bubbling
+  document.querySelectorAll('.v-window__controls .v-btn').forEach(btn => {
+    btn.addEventListener('click', e => e.stopPropagation())
+  })
+})
 </script>
 
 <style scoped>

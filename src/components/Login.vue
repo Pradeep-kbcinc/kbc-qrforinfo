@@ -38,8 +38,8 @@
           <h2>Welcome Back</h2>
           <p class="">Sign in to your account</p>
           <div class="mt-6">
-            <p class="text-body-2">Phone Number</p>
-            <v-text-field v-model="initialState.phoneNumber" rounded="lg" :error-messages="v$.phoneNumber.$errors.map(e => e.$message)" @blur="v$.phoneNumber.$touch" @input="v$.phoneNumber.$touch" placeholder="+91 987643210" max-width="500" label="" variant="outlined">
+            <!-- <p class="text-body-2">Phone Number</p> -->
+            <v-text-field v-model="initialState.phoneNumber" rounded="lg" :error-messages="v$.phoneNumber.$errors.map(e => e.$message)" @blur="v$.phoneNumber.$touch" @input="v$.phoneNumber.$touch" placeholder="Phone No. / Email" max-width="500" label="" variant="outlined">
 
             </v-text-field>
 
@@ -91,7 +91,7 @@ const initialState = ref({
   phoneNumber: '',
 })
 const rules = {
-  phoneNumber: { required, numeric },
+  phoneNumber: { required },
 }
 const v$ = useVuelidate(rules, initialState.value)
 const btnLoader = ref(false)

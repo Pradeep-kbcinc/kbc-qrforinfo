@@ -20,7 +20,8 @@
                   <v-img alt="John" src="@/assets/dummy_profile.webp"></v-img>
                 </v-avatar>
                 <div class="">
-                  <h6>{{ getName(msgObj.MEMBERS_LIST)?.USER_NAME }}</h6>
+                  <!-- <h6>{{ getName(msgObj.MEMBERS_LIST)?.USER_NAME }}</h6> -->
+                   <h6 class="">{{ msgObj?.PROPERTY_NAME ? truncateWords(msgObj?.PROPERTY_NAME, 6) : ''}}</h6>
                   <p class="text-grey-darken-1 text-subtitle-2"> ({{ moment(msgObj.SENT_ON).format('Do MMM, YYYY') }}
                     )
                   </p>
@@ -46,8 +47,8 @@
           </div>
           <div v-else class="d-flex justify-center align-center w-100 h-100 flex-column">
             <div class="pa-4 bg-white border-b w-100">
-              <h5>{{ getName(selectedMsgObj?.MEMBERS_LIST)?.USER_NAME }}</h5>
-              <p>{{allMessages[0].TITLE}}</p>
+              <h5>{{allMessages[0].TITLE}}</h5>
+              <p>{{ getName(selectedMsgObj?.MEMBERS_LIST)?.USER_NAME }}</p>
             </div>
             <div class="w-100 h-100 overflow-y-scroll">
               <div class="pa-4">
@@ -234,6 +235,14 @@ const sendMessage = async () => {
 
 const getName = (arr)=>{
   return arr.find(item=> item.USER_ID !== authStore.getUserDetails.USER_ID)
+}
+
+const truncateWords = (text, wordLimit)=> {
+  if (!text) return ''
+  const words = text.split(' ')
+  return words.length > wordLimit 
+    ? words.slice(0, wordLimit).join(' ') + '...' 
+    : text
 }
 </script>
 
