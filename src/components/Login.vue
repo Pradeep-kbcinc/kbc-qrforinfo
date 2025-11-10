@@ -107,7 +107,8 @@ const sendOtpToLogin = async () => {
     try {
       btnLoader.value = true
       let data = {
-        MOBILE_NUMBER: initialState.value.phoneNumber
+        MOBILE_NUMBER: initialState.value.phoneNumber,
+        USERNAME: initialState.value.phoneNumber
       }
       const res = await authStore.loginUser(data)
       console.log('--->res', res?.response?.data?.MESSAGE);
@@ -161,16 +162,17 @@ const verifyOtp = async () => {
     btnLoader.value = true
     const data = {
       MOBILE_NUMBER: initialState.value.phoneNumber,
+      USERNAME: initialState.value.phoneNumber,
       OTP: otpCode.value
     }
     const res = await propertyService.VerifyOtp(data)
-   
+
     if (res.data.Result.TOKEN && res.data.Result.USER) {
       authStore.login(res.data.Result.USER, res.data.Result.TOKEN)
       // localStorage.setItem("access_token", res.data)
       router.push('/home')
-    }else{
-        toast.error(res.data?.Result?.MESSAGE, {
+    } else {
+      toast.error(res.data?.Result?.MESSAGE, {
         autoClose: 4000,
       });
     }
