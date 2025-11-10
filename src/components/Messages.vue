@@ -13,18 +13,19 @@
             <div v-if="channelLoader">
               <v-skeleton-loader class="my-2" v-for="item in 4" type="list-item-avatar"></v-skeleton-loader>
             </div>
-            <v-card v-else v-for="(msgObj, index) in channels" @click="selectChannel(msgObj)" class="border-b pa-4"
-              elevation="0" rounded="0" :color="selectedMsgObj.THREAD_ID == msgObj.THREAD_ID ? '#f0f6ff' : ''">
+            <v-card v-else v-for="(msgObj, index) in channels" @click="selectChannel(msgObj)" class="border-b pa-4" elevation="0" rounded="0" :color="selectedMsgObj.THREAD_ID == msgObj.THREAD_ID ? '#f0f6ff' : ''">
               <div class="d-flex align-center">
                 <v-avatar size="60" class="mr-2">
                   <v-img alt="John" src="@/assets/dummy_profile.webp"></v-img>
                 </v-avatar>
-                <div class="">
+                <div class="w-100">
                   <!-- <h6>{{ getName(msgObj.MEMBERS_LIST)?.USER_NAME }}</h6> -->
-                   <h6 class="">{{ msgObj?.PROPERTY_NAME ? truncateWords(msgObj?.PROPERTY_NAME, 6) : ''}}</h6>
-                  <p class="text-grey-darken-1 text-subtitle-2"> ({{ moment(msgObj.SENT_ON).format('Do MMM, YYYY') }}
-                    )
-                  </p>
+                  <h6 class="mb-0">{{ msgObj?.PROPERTY_NAME ? truncateWords(msgObj?.PROPERTY_NAME, 6) : '' }}</h6>
+
+                  <div class="d-flex ga-2 justify-space-between">
+                    <p>{{ truncateWords(getName(msgObj?.MEMBERS_LIST)?.USER_NAME, 6) || '' }}</p>
+                    <p class="text-grey-darken-1 text-subtitle-2"> {{ moment(msgObj.SENT_ON).format('Do MMM, YYYY') }}</p>
+                  </div>
 
                 </div>
               </div>
@@ -36,10 +37,7 @@
       <v-col cols="8" class="pa-0">
         <div class="bg-grey-lighten-4" style="height: calc(100dvh - 65px)">
           <div v-if="messageLoader" class="d-flex justify-center align-center pt-16">
-            <v-progress-circular
-              color="primary"
-              indeterminate
-            ></v-progress-circular>
+            <v-progress-circular color="primary" indeterminate></v-progress-circular>
             <p class="ml-2">Loading Messages...</p>
           </div>
           <div v-else-if="!messageLoader && !selectedMsgObj.THREAD_ID" class="d-flex justify-center align-center w-100 h-100">
@@ -47,31 +45,29 @@
           </div>
           <div v-else class="d-flex justify-center align-center w-100 h-100 flex-column">
             <div class="pa-4 bg-white border-b w-100">
-              <h5>{{allMessages[0].TITLE}}</h5>
-              <p>{{ getName(selectedMsgObj?.MEMBERS_LIST)?.USER_NAME }}</p>
+              <h5>{{ allMessages[0].TITLE }}</h5>
+              <div class="d-flex ga-2 justify-space-between">
+                <p>{{ getName(selectedMsgObj?.MEMBERS_LIST)?.USER_NAME || '' }}</p>
+                <p class="text-grey-darken-1 text-subtitle-2"> {{ moment(selectedMsgObj.SENT_ON).format('Do MMM, YYYY') }}</p>
+              </div>
             </div>
             <div class="w-100 h-100 overflow-y-scroll">
               <div class="pa-4">
                 <div v-if="messageLoader">
                   <v-skeleton-loader class="my-2" v-for="item in 4" type="paragraph"></v-skeleton-loader>
                 </div>
-                <div v-else v-for="(msgObj, index) in allMessages" :key="index"
-                  :class="`d-flex ${msgObj.position == 'right' ? 'justify-end' : ''}`">
-                  <v-card class="pa-4 card-box-shadow mb-4 rounded-lg"
-                    :color="msgObj.position == 'right' ? 'primary' : ''" :class="{ 'ms-auto': msgObj.self }"
-                    style="width: fit-content;">
+                <div v-else v-for="(msgObj, index) in allMessages" :key="index" :class="`d-flex ${msgObj.position == 'right' ? 'justify-end' : ''}`">
+                  <v-card class="pa-4 card-box-shadow mb-4 rounded-lg" :color="msgObj.position == 'right' ? 'primary' : ''" :class="{ 'ms-auto': msgObj.self }" style="width: fit-content;">
                     <p>{{ msgObj.MESSAGE_BODY }}</p>
-                    <p class="mt-2 text-body-2 ">{{ moment(msgObj.SENT_ON).format('Do MMM, YYYY hh:mm A') }}</p>
+                    <p class="mt-2 text-body-2 text-grey-lighten-1">{{ moment(msgObj.SENT_ON).format('Do MMM, YYYY hh:mm A') }}</p>
                   </v-card>
                 </div>
 
               </div>
             </div>
             <div class="bg-white d-flex ga-4 pa-4 w-100">
-              <v-text-field placeholder="Type Message..." v-model="newMessage" @keyup.enter="sendMessage" hide-details
-                variant="outlined" rounded="lg" density="comfortable"></v-text-field>
-              <v-btn color="primary" class="text-none rounded-lg elevation-0 font-weight-bold" @click="sendMessage"
-                :loading="msgSentLoader" height="52" icon="mdi-send-outline"></v-btn>
+              <v-text-field placeholder="Type Message..." v-model="newMessage" @keyup.enter="sendMessage" hide-details variant="outlined" rounded="lg" density="comfortable"></v-text-field>
+              <v-btn color="primary" class="text-none rounded-lg elevation-0 font-weight-bold" @click="sendMessage" :loading="msgSentLoader" height="52" icon="mdi-send-outline"></v-btn>
             </div>
           </div>
         </div>
@@ -190,6 +186,7 @@ const fetchMassges = async (id) => {
   }
 }
 const selectChannel = (data) => {
+  console.log('--->data', data);
   messageLoader.value = true
   selectedMsgObj.value = data
   fetchMassges(data.THREAD_ID)
@@ -233,15 +230,15 @@ const sendMessage = async () => {
 
 }
 
-const getName = (arr)=>{
-  return arr.find(item=> item.USER_ID !== authStore.getUserDetails.USER_ID)
+const getName = (arr) => {
+  return arr?.find(item => item.USER_ID !== authStore.getUserDetails.USER_ID)
 }
 
-const truncateWords = (text, wordLimit)=> {
+const truncateWords = (text, wordLimit) => {
   if (!text) return ''
-  const words = text.split(' ')
-  return words.length > wordLimit 
-    ? words.slice(0, wordLimit).join(' ') + '...' 
+  const words = text?.split(' ')
+  return words.length > wordLimit
+    ? words?.slice(0, wordLimit)?.join(' ') + '...'
     : text
 }
 </script>

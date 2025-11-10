@@ -14,6 +14,7 @@
           {{ propertyObj.COUNTRY }}, {{ propertyObj.STATE }}, {{ propertyObj.CITY }}</p>
       </div>
       <div v-if="authStore.isAuthenticated" class="d-flex ga-4">
+        <v-btn v-if="propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID" @click="deleteProperty(propertyObj)" variant="outlined" prependIcon="mdi-trash-can" class="text-none rounded-lg elevation-0 font-weight-bold" color="red" height="42">Delete</v-btn>
         <v-btn v-if="propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID" @click="$router.push(`/add-new-property/${propertyObj.PROPERTY_ID}`)" variant="outlined" prependIcon="mdi-square-edit-outline" class="text-none rounded-lg elevation-0 font-weight-bold" height="42">Edit</v-btn>
         <v-btn @click="shareAction(propertyObj)" color="primary" prependIcon="mdi-share-variant-outline" class="text-none rounded-lg elevation-0 font-weight-bold" height="42">Share</v-btn>
       </div>
@@ -165,8 +166,13 @@
     <v-defaults-provider :defaults="{}">
       <v-sheet class="overflow-hidden" rounded="xl">
         <v-carousel v-model="currentIndex" direction="vertical" show-arrows progress="red" vertical-arrows="left" vertical-delimiters="right">
-          <v-carousel-item v-for="(item, i) in selectedImageArr" :key="i" :src="item.IMAGE_URL" contain></v-carousel-item>
+          <v-carousel-item v-for="(item, i) in selectedImageArr" :key="i" :src="item.IMAGE_URL" contain>
 
+            <div class="d-flex justify-end">
+
+              <v-btn @click="deleteImage(item)" prependIcon="mdi-trash-can" class="text-none rounded-lg elevation-0 font-weight-bold ms-auto mt-2 mr-2" color="red" height="42">Delete Image</v-btn>
+            </div>
+          </v-carousel-item>
           <!-- <v-overlay
           :scrim="false"
           content-class="w-100 h-100 d-flex flex-column align-center justify-space-between pointer-pass-through py-3"
@@ -368,10 +374,27 @@ const qrModal = ref(false)
 const router = useRouter()
 //------------------------------------------------------------------------------
 
+//------------------------------------------------------------------------------
+onMounted(() => {
+  if (authStore.isAuthenticated) {
+    fetchStatistics()
+  }
+
+  baseUrl.value = window.location.origin
+  console.log('--->route.query', route.query);
+  if (route.query.qr) {
+    updateQrStatistics()
+    warningPopUp.value = true
+  }
+
+  fetchPropertyDetail()
+
+})
+//------------------------------------------------------------------------------
 const updateStatistics = async () => {
   try {
     let data = {
-      "PROPERTY_ID": propertyObj.value.PROPERTY_ID,
+      "PROPERTY_ID": Number(propertyObj.value?.PROPERTY_ID || route?.params?.id || 0),
       "USER_ID": authStore.isAuthenticated ? authStore.userDetails.USER_ID : 0
     }
     let res = await propertyService.addView(data)
@@ -379,7 +402,19 @@ const updateStatistics = async () => {
     console.log(error)
   }
 }
-
+//------------------------------------------------------------------------------
+const updateQrStatistics = async () => {
+  try {
+    let data = {
+      "PROPERTY_ID": Number(propertyObj.value?.PROPERTY_ID || route?.params?.id || 0),
+      "USER_ID": authStore.isAuthenticated ? authStore.userDetails.USER_ID : 0
+    }
+    let res = await propertyService.AddPropertyQrViewDetail(data)
+  } catch (error) {
+    console.log(error)
+  }
+}
+//------------------------------------------------------------------------------
 const statisticsData = ref({})
 const fetchStatistics = async () => {
   try {
@@ -392,20 +427,6 @@ const fetchStatistics = async () => {
     console.log(error)
   }
 }
-
-onMounted(() => {
-  if (authStore.isAuthenticated) {
-    fetchStatistics()
-  }
-
-  baseUrl.value = window.location.origin
-  if (route.query.qr) {
-    warningPopUp.value = true
-  }
-
-  fetchPropertyDetail()
-
-})
 //------------------------------------------------------------------------------
 const fetchPropertyDetail = async () => {
   try {
@@ -658,7 +679,42 @@ const previewImages = (data) => {
   console.log(data, 'data')
   imagePreviewModal.value = true
 }
+//------------------------------------------------------------------------------
+const deleteProperty = async (item) => {
+  if (confirm('Are you sure ?')) {
+    try {
+      // const data = {
+      //   ACTION_TYPE: "DELETE",
+      //   PROPERTY_ID: item.PROPERTY_ID,
+      // }
+      const res = await propertyService.DeletePropertyMst(item.PROPERTY_ID)
+      router.go(-1)
+    } catch (error) {
 
+    }
+
+  }
+}
+//------------------------------------------------------------------------------
+const deleteImage = async (item) => {
+  if (confirm(`Are you sure ?`)) {
+    try {
+      // formData.append('ACTION_TYPE', 'CREATE')
+      // formData.append('IMAGE_ID', 0),
+      // formData.append('PROPERTY_ID', selectedPropertyId.value);
+      console.log('--->', item);
+      const data = {
+        IMAGE_ID: item.IMAGE_ID,
+        PROPERTY_ID: item.PROPERTY_ID,
+      }
+      const res = await propertyService.DeletePropertyImage(data);
+      console.log('--->res', res);
+    } catch (error) {
+      console.log('--->err', error);
+    }
+  }
+}
+//------------------------------------------------------------------------------
 </script>
 
 <style scoped lang="scss">

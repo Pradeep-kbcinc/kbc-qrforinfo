@@ -35,7 +35,7 @@
               <v-radio label="House" value="HOUSE"></v-radio>
             </v-radio-group>
           </v-col>
-          <v-col>
+          <v-col v-if="state.PROPERTY_KIND != 'LAND'">
             <v-radio-group :disabled="state.PROPERTY_KIND == 'LAND'" hide-details v-model="state.FURNISHING_TYPE" inline color="primary" label="Furnishing Type">
               <v-radio label="Unfurnished" value="UNFURNISHED"></v-radio>
               <v-radio label="Semi" value="SEMI"></v-radio>
@@ -64,17 +64,10 @@
           <p class="mb-2 font-weight-bold">Property Description</p>
           <!-- <v-textarea :error-messages="v$.PROPERTY_DESC.$errors.map(e => e.$message)" @blur="v$.PROPERTY_DESC.$touch" @input="v$.PROPERTY_DESC.$touch" v-model="state.PROPERTY_DESC" class="mt-1" rounded="lg" variant="outlined" placeholder="Modern 3BR Apartment"></v-textarea> -->
 
-          <QuillEditor
-              style="height: 150px"
-              theme="snow"
-              contentType="html"
-              placeholder="Property Description"
-              v-model:content="state.PROPERTY_DESC"
-               @blur="v$.PROPERTY_DESC.$touch" @input="v$.PROPERTY_DESC.$touch"
-            />
-            <small v-if="v$.PROPERTY_DESC.$error" class="text-error">
-    {{ v$.PROPERTY_DESC.$errors[0].$message }}
-  </small>
+          <QuillEditor style="height: 150px" theme="snow" contentType="html" placeholder="Property Description" v-model:content="state.PROPERTY_DESC" @blur="v$.PROPERTY_DESC.$touch" @input="v$.PROPERTY_DESC.$touch" />
+          <small v-if="v$.PROPERTY_DESC.$error" class="text-error">
+            {{ v$.PROPERTY_DESC.$errors[0].$message }}
+          </small>
         </div>
         <div>
           <v-row align="end">
@@ -208,8 +201,8 @@ const rules = {
   STATE: { required: helpers.withMessage('State is required', required) },
   CITY: { required: helpers.withMessage('City is required', required) },
   AREA: { required: helpers.withMessage('Area is required', required) },
-  NO_BEDROOMS: {  },
-  NO_BATHROOMS:{}
+  NO_BEDROOMS: {},
+  NO_BATHROOMS: {}
 }
 const v$ = useVuelidate(rules, state)
 const saveBtnLoader = ref(false)
@@ -217,14 +210,14 @@ const saveBtnLoader = ref(false)
 
 //------------------------------------------------------------------------------
 onMounted(() => {
-  if(route.query.draft){
+  if (route.query.draft) {
     Object.assign(state, { ...state, ...authStore.getTemporaryPropertyDetails });
-  }else{
+  } else {
     fetchPropertyDetail()
   }
 })
 
-onBeforeUnmount(()=>{
+onBeforeUnmount(() => {
   localStorage.removeItem('tempoPropertyData')
 })
 //------------------------------------------------------------------------------
@@ -282,7 +275,8 @@ const saveProperty = async () => {
         COUNTRY: state.COUNTRY || '',
         IS_ACTIVE_FLG: state.IS_ACTIVE_FLG || 1,
       }
-      if(authStore.getTemporaryPropertyDetails.DRAFT_ID){
+      console.log('--->', data);
+      if (authStore.getTemporaryPropertyDetails.DRAFT_ID) {
         data.DRAFT_ID = authStore.getTemporaryPropertyDetails.DRAFT_ID
       }
       const res = await propertyService.LLPropertyMasterCrud(data)
@@ -318,8 +312,8 @@ const fetchPropertyDetail = async () => {
       POSTAL_CODE: "",
       COUNTRY: "",
       PAGE_NO: 1,
-      PAGE_SIZE:10, 
-      SEARCH:''
+      PAGE_SIZE: 10,
+      SEARCH: ''
     }
     const res = await propertyService.GetPropertyDetail(data);
     // state.value = { ...state.value, ...res?.data?.FetchData?.PROPERTY_DETAILS?.[0] } || {}
@@ -338,12 +332,12 @@ const fetchPropertyDetail = async () => {
 }
 //------------------------------------------------------------------------------
 const draftLoader = ref(false)
-const saveDraft = async()=>{
+const saveDraft = async () => {
   draftLoader.value = true
   try {
     let data
     let res
-    if(route.query.draft){
+    if (route.query.draft) {
       data = {
         ...state,
         DRAFT_ID: authStore.getTemporaryPropertyDetails.DRAFT_ID,
@@ -392,7 +386,7 @@ const saveDraft = async()=>{
         IS_ACTIVE_FLG: state.IS_ACTIVE_FLG || 1,
       }
       res = await propertyService.updatePropertyDraft(data)
-    }else{
+    } else {
       data = {
         ...state,
         SELLER_USER_ID: state.SELLER_USER_ID || authStore?.userDetails?.USER_ID || 0,
@@ -442,24 +436,24 @@ const saveDraft = async()=>{
       res = await propertyService.addPropertyToDraft(data)
     }
     if (res?.data?.ERR_CODE == 0) {
-        saveBtnLoader.value = false
-        toast.success('Property added to draft', {
-          autoClose: 4000,
-        });
-        draftLoader.value = false
-        router.push('/home')
-      } else {
-        throw new Error('Could not add Property')
-        toast.error('Something went wrong', {
-          autoClose: 4000,
-        });
-        draftLoader.value = false
-      }
+      saveBtnLoader.value = false
+      toast.success('Property added to draft', {
+        autoClose: 4000,
+      });
+      draftLoader.value = false
+      router.push('/home')
+    } else {
+      throw new Error('Could not add Property')
+      toast.error('Something went wrong', {
+        autoClose: 4000,
+      });
+      draftLoader.value = false
+    }
   } catch (error) {
     console.log(error)
     toast.error('Something went wrong', {
-          autoClose: 4000,
-        });
+      autoClose: 4000,
+    });
     draftLoader.value = false
   }
 }

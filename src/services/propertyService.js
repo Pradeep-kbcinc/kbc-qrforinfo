@@ -54,12 +54,12 @@ export default {
     return axios.post(`/GetPropertyDetailPublic`, data)
   },
 
-  // user details  
-  
+  // user details
+
   async fetchUserDetail(){
     return axios.get(`/GetUserDetail`)
   },
-  // message 
+  // message
   async message(data){
     return axios.post(`/MessageTxnCrud`, data)
   },
@@ -74,13 +74,13 @@ export default {
   async updatePropertyDraft(data){
     return axios.post(`/UpdatePropertyDraft`, data)
   },
-  
-  // image upload API  
+
+  // image upload API
   async uploadPropertyImage(data){
     return axios.post(`/LLPropertyImageCrud`, data)
   },
 
-  // get channel list 
+  // get channel list
   async fetchAllChannelList(){
     return axios.get(`/GetAllPropertyMsgDetail`)
   },
@@ -88,23 +88,41 @@ export default {
   async fetchMessages(id){
     return axios.get(`/GetPropertyMsgDetailSpecific?ThreadId=${id}`)
   },
-  
 
-  // total view update 
-  
+
+  // total view update
+
   async addView(data){
     return axios.post(`/AddPropertyViewDetail`, data)
   },
 
   // get statistics
-  
+
   async getDashboardStatistics(){
     return axios.get(`/GetPropertyDashboardCount`)
   },
 
-  // 
   async fetchDashboardStatistics(data){
     return axios.post(`/GetPropertyMsgDetailUserSpecific`,data)
+  },
+
+  // api/v1/AddPropertyQrViewDetail
+  // {
+  //   "PROPERTY_ID": 7,
+  //   "USER_ID": 5
+  // }
+  async AddPropertyQrViewDetail(data){
+    return axios.post(`/AddPropertyQrViewDetail`,data)
+  },
+
+  // api/v1/DeletePropertyMst?PROPERTY_ID=8
+  async DeletePropertyMst(propertyId){
+    return axios.get(`/DeletePropertyMst?PROPERTY_ID=${propertyId}`)
+  },
+
+  // api/v1/DeletePropertyImage
+  async DeletePropertyImage(data){
+    return axios.post(`/DeletePropertyImage`, data)
   }
 
 }
