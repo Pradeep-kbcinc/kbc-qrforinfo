@@ -286,7 +286,7 @@
           <h6>{{ propertyObj.TITLE }}</h6>
           <div class="mt-2">
             <v-btn variant="outlined" rounded size="small" class="text-none text-subtitle-2">{{ propertyObj.PROPERTY_KIND
-              }}</v-btn>
+            }}</v-btn>
             <v-btn variant="outlined" rounded size="small" class="text-none text-subtitle-2 ml-2">{{
               propertyObj.PRICE_AMOUNT }} {{ propertyObj.CURRENCY_CODE }}</v-btn>
             <v-btn variant="outlined" rounded size="small" class="text-none text-subtitle-2 ml-2"> <v-icon color="primary">mdi-map-marker</v-icon> {{ propertyObj.STATE }}</v-btn>
@@ -681,7 +681,7 @@ const previewImages = (data) => {
 }
 //------------------------------------------------------------------------------
 const deleteProperty = async (item) => {
-  if (confirm('Are you sure ?')) {
+  if (confirm('Are you sure you want to delete this property ?')) {
     try {
       // const data = {
       //   ACTION_TYPE: "DELETE",
@@ -697,17 +697,18 @@ const deleteProperty = async (item) => {
 }
 //------------------------------------------------------------------------------
 const deleteImage = async (item) => {
-  if (confirm(`Are you sure ?`)) {
+  if (confirm(`Are you sure you want to delete this image ?`)) {
     try {
       // formData.append('ACTION_TYPE', 'CREATE')
       // formData.append('IMAGE_ID', 0),
       // formData.append('PROPERTY_ID', selectedPropertyId.value);
       console.log('--->', item);
       const data = {
-        IMAGE_ID: item.IMAGE_ID,
-        PROPERTY_ID: item.PROPERTY_ID,
+        IMAGE_ID: item?.IMAGE_ID || 0,
+        PROPERTY_ID: item?.PROPERTY_ID || 0,
       }
       const res = await propertyService.DeletePropertyImage(data);
+      router.go(0)
       console.log('--->res', res);
     } catch (error) {
       console.log('--->err', error);
