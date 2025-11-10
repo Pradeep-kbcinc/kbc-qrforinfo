@@ -11,8 +11,7 @@
     <section class="py-4">
       <v-row>
         <v-col cols="6" md="3">
-          <v-card class="d-flex align-center justify-space-between rounded-lg" height="100" elevation="1"
-            style="position: relative; overflow: hidden; background-color: white;">
+          <v-card class="d-flex align-center justify-space-between rounded-lg card-box-shadow" height="100" style="position: relative; overflow: hidden; background-color: white;">
             <!-- First soft background polygon -->
             <div class="first-polygon"></div>
 
@@ -79,12 +78,10 @@
             <h3 class="text-h6">My Properties</h3>
             <!-- <v-btn variant="text" color="primary" class="text-capitalize">View All</v-btn> -->
             <v-spacer></v-spacer>
-            <v-btn @click="openDraftList" :height="!mobile ? 48 : 38" :width="mobile ? '140' : ''" rounded="lg"
-              class="elevation-0 text-none font-weight-bold mr-2" color="info">
+            <v-btn @click="openDraftList" :height="!mobile ? 48 : 38" :width="mobile ? '140' : ''" rounded="lg" class="elevation-0 text-none font-weight-bold mr-2" color="info">
               <v-icon class="mr-2">mdi-file-sign</v-icon>Saved Drafts
             </v-btn>
-            <v-btn @click="router.push('/add-new-property')" :height="!mobile ? 48 : 38" :width="mobile ? '140' : ''"
-              rounded="lg" class="elevation-0 text-none font-weight-bold" color="primary">
+            <v-btn @click="router.push('/add-new-property')" :height="!mobile ? 48 : 38" :width="mobile ? '140' : ''" rounded="lg" class="elevation-0 text-none font-weight-bold" color="primary">
               <v-icon>mdi-plus</v-icon> Add Property
             </v-btn>
           </v-row>
@@ -93,8 +90,7 @@
 
           <div v-if="isLoading" class="">
             <v-skeleton-loader class="mx-auto border" type="article"></v-skeleton-loader>
-            <v-skeleton-loader v-for="item in 2" :key="item" class="mx-auto border mt-4"
-              type="article"></v-skeleton-loader>
+            <v-skeleton-loader v-for="item in 2" :key="item" class="mx-auto border mt-4" type="article"></v-skeleton-loader>
 
           </div>
 
@@ -113,20 +109,17 @@
                 </template>
 
                 <v-list-item-title class="font-weight-bold text-grey-darken-3">{{ propertyObj.TITLE
-                  }}</v-list-item-title>
+                }}</v-list-item-title>
                 <!-- <v-list-item-subtitle>{{ property.location }}</v-list-item-subtitle> -->
-                <v-list-item-subtitle v-if="propertyObj?.COUNTRY && propertyObj?.STATE && propertyObj?.CITY"
-                  class="mt-1"><v-icon>mdi-map-marker-outline</v-icon>{{ propertyObj.COUNTRY }}, {{ propertyObj.STATE
-                  }}, {{
+                <v-list-item-subtitle v-if="propertyObj?.COUNTRY && propertyObj?.STATE && propertyObj?.CITY" class="mt-1"><v-icon>mdi-map-marker-outline</v-icon>{{ propertyObj.COUNTRY }}, {{ propertyObj.STATE
+                }}, {{
                     propertyObj.CITY }}</v-list-item-subtitle>
                 <div class="text-primary font-weight-bold text-subtitle-1">{{ propertyObj.price }}</div>
 
                 <template #append>
                   <div class="text-end">
 
-                    <v-btn @click.stop="openModal(propertyObj)" rounded="lg"
-                      class="text-none font-weight-bold text-subtitle-1" min-width="100" height="48" color="primary"
-                      elevation="0">Add Images</v-btn>
+                    <v-btn @click.stop="openModal(propertyObj)" rounded="lg" class="text-none font-weight-bold text-subtitle-1" min-width="100" height="48" color="primary" elevation="0">Add Images</v-btn>
                   </div>
                 </template>
 
@@ -166,10 +159,9 @@
           </div>
         </div>
         <v-divider class="mb-4"></v-divider>
-        <v-file-upload  density="comfortable" v-model="addedImagesArr" clearable multiple></v-file-upload>
+        <v-file-upload density="comfortable" v-model="addedImagesArr" clearable multiple></v-file-upload>
         <div class="d-flex justify-end mt-4">
-          <v-btn size="large" class="text-none rounded-lg" @click="uploadImages" :loading="uploadImagesLoader"
-            elevation="0" min-width="200" color="primary">Save</v-btn>
+          <v-btn size="large" class="text-none rounded-lg" @click="uploadImages" :loading="uploadImagesLoader" elevation="0" min-width="200" color="primary">Save</v-btn>
         </div>
       </v-card-text>
     </v-card>
@@ -199,18 +191,16 @@
               </template>
 
               <v-list-item-title class="font-weight-bold text-grey-darken-3">{{ propertyObj.TITLE
-                }}</v-list-item-title>
+              }}</v-list-item-title>
               <!-- <v-list-item-subtitle>{{ property.location }}</v-list-item-subtitle> -->
-              <v-list-item-subtitle v-if="propertyObj?.COUNTRY && propertyObj?.STATE && propertyObj?.CITY"
-                class="mt-1"><v-icon>mdi-map-marker-outline</v-icon>{{ propertyObj.COUNTRY }}, {{ propertyObj.STATE
-                }}, {{
+              <v-list-item-subtitle v-if="propertyObj?.COUNTRY && propertyObj?.STATE && propertyObj?.CITY" class="mt-1"><v-icon>mdi-map-marker-outline</v-icon>{{ propertyObj.COUNTRY }}, {{ propertyObj.STATE
+              }}, {{
                   propertyObj.CITY }}</v-list-item-subtitle>
               <div class="text-primary font-weight-bold text-subtitle-1">{{ propertyObj.price }}</div>
 
               <template #append>
                 <div class="text-end">
-                  <v-btn @click.stop="gotoDraftEdit(propertyObj)" rounded="lg"
-                    class="text-none font-weight-bold text-subtitle-1" color="success" elevation="0">
+                  <v-btn @click.stop="gotoDraftEdit(propertyObj)" rounded="lg" class="text-none font-weight-bold text-subtitle-1" color="success" elevation="0">
                     <v-icon>mdi-pencil</v-icon> Edit</v-btn>
                 </div>
               </template>
