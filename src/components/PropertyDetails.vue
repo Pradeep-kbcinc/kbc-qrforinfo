@@ -14,12 +14,8 @@
           {{ propertyObj.COUNTRY }}, {{ propertyObj.STATE }}, {{ propertyObj.CITY }}</p>
       </div>
       <div v-if="authStore.isAuthenticated" class="d-flex ga-4">
-        <v-btn v-if="propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID"
-          @click="$router.push(`/add-new-property/${propertyObj.PROPERTY_ID}`)" variant="outlined"
-          prependIcon="mdi-square-edit-outline" class="text-none rounded-lg elevation-0 font-weight-bold"
-          height="42">Edit</v-btn>
-        <v-btn @click="shareAction(propertyObj)" color="primary" prependIcon="mdi-share-variant-outline"
-          class="text-none rounded-lg elevation-0 font-weight-bold" height="42">Share</v-btn>
+        <v-btn v-if="propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID" @click="$router.push(`/add-new-property/${propertyObj.PROPERTY_ID}`)" variant="outlined" prependIcon="mdi-square-edit-outline" class="text-none rounded-lg elevation-0 font-weight-bold" height="42">Edit</v-btn>
+        <v-btn @click="shareAction(propertyObj)" color="primary" prependIcon="mdi-share-variant-outline" class="text-none rounded-lg elevation-0 font-weight-bold" height="42">Share</v-btn>
       </div>
     </div>
 
@@ -27,18 +23,11 @@
       <v-row>
         <v-col cols="12" md="8" lg="9">
           <v-card class="card-box-shadow rounded-lg">
-            <v-card elevation="0" rounded="0"
-              class="bg-box-gradient d-flex justify-center align-center position-relative"
-              style="font-size: 8.0rem;line-height: 1;">
-              <v-carousel @click.stop v-if="propertyObj.IMAGES && propertyObj.IMAGES?.length > 0" hide-delimiters
-                :show-arrows="propertyObj.IMAGES?.length > 1" height="250">
+            <v-card elevation="0" rounded="0" class="bg-box-gradient d-flex justify-center align-center position-relative" style="font-size: 8.0rem;line-height: 1;">
+              <v-carousel @click.stop v-if="propertyObj.IMAGES && propertyObj.IMAGES?.length > 0" hide-delimiters :show-arrows="propertyObj.IMAGES?.length > 1" height="250">
                 <v-carousel-item class="pointer" @click="previewImages(propertyObj.IMAGES)" cover v-for="(image, i) in propertyObj.IMAGES" :key="i">
-                  <v-img v-if="image?.IMAGE_URL"
-                    :src="image?.IMAGE_URL ? image.IMAGE_URL : `@/assets/property_placeholder.webp`"
-                    lazy-src="@/assets/property_placeholder.webp" cover height="250" class="rounded-lg">
-                    <v-btn :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'"
-                      class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 left-0 mt-4 ms-4"
-                      height="" density="comfortable">{{ propertyObj.LISTING_TYPE }}</v-btn>
+                  <v-img v-if="image?.IMAGE_URL" :src="image?.IMAGE_URL ? image.IMAGE_URL : `@/assets/property_placeholder.webp`" lazy-src="@/assets/property_placeholder.webp" cover height="250" class="rounded-lg">
+                    <v-btn :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'" class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 left-0 mt-4 ms-4" height="" density="comfortable">{{ propertyObj.LISTING_TYPE }}</v-btn>
                     <template #placeholder>
                       <div class="d-flex fill-height align-center justify-center" style="background-color: #f2f2f2;">
                         <v-progress-circular indeterminate color="primary"></v-progress-circular>
@@ -60,10 +49,7 @@
                 " v-else hide-delimiters :show-arrows="propertyObj.IMAGES?.length > 1" height="250">
                 <v-carousel-item>
                   <v-img cover :src="findImageType(propertyObj.PROPERTY_KIND)" alt="">
-                    <v-btn v-if="propertyObj.LISTING_TYPE"
-                      :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'"
-                      class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 left-0 mt-4 ms-4"
-                      height="" density="comfortable">{{ propertyObj.LISTING_TYPE }}</v-btn>
+                    <v-btn v-if="propertyObj.LISTING_TYPE" :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'" class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 left-0 mt-4 ms-4" height="" density="comfortable">{{ propertyObj.LISTING_TYPE }}</v-btn>
                   </v-img>
                 </v-carousel-item>
               </v-carousel>
@@ -117,12 +103,9 @@
                     </p>
                   </div>
                 </v-col>
-                <v-col
-                  v-if="!$route.fullPath.includes('/buy/') && propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID">
+                <v-col v-if="!$route.fullPath.includes('/buy/') && propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID">
                   <div class="d-flex justify-end">
-                    <v-btn @click="qrModal = true" rounded="lg" width="200" min-height="48"
-                      class="text-none d-flex align-center" elevation="0" color="primary"> <v-icon
-                        class="mr-2">mdi-eye</v-icon> QR Code</v-btn>
+                    <v-btn @click="qrModal = true" rounded="lg" width="200" min-height="48" class="text-none d-flex align-center" elevation="0" color="primary"> <v-icon class="mr-2">mdi-eye</v-icon> QR Code</v-btn>
                   </div>
                 </v-col>
               </v-row>
@@ -149,23 +132,17 @@
               }) }}
             </p>
             <!-- {{ propertyObj.CURRENCY_CODE }} -->
-            <v-btn @click="contactOwner" v-if="authStore.userDetails?.USER_ID !== propertyObj.SELLER_USER_ID"
-              color="primary" class="text-none rounded-lg elevation-0 font-weight-bold w-100" height="50"
-              prepend-icon="mdi-comment-outline">Contact Owner</v-btn>
+            <v-btn @click="contactOwner" v-if="authStore.userDetails?.USER_ID !== propertyObj.SELLER_USER_ID" color="primary" class="text-none rounded-lg elevation-0 font-weight-bold w-100" height="50" prepend-icon="mdi-comment-outline">Contact Owner</v-btn>
 
-            <v-btn @click="makeFev" :loading="makeFevLoader" color="red" variant="outlined"
-              class="text-none rounded-lg elevation-0 font-weight-bold w-100 mt-3"
-              :prepend-icon="propertyObj.IS_FAVOURITE == 1 ? 'mdi-heart' : 'mdi-heart-outline'" height="50">{{
-                propertyObj.IS_FAV ?
-                  'Saved to Favorites' : 'Save to Favorites' }}</v-btn>
-            <v-btn @click="shareAction(propertyObj)" variant="outlined"
-              class="text-none rounded-lg elevation-0 font-weight-bold w-100 mt-3"
-              prepend-icon="mdi-share-variant-outline" height="50">Share Property</v-btn>
+            <v-btn @click="makeFev" :loading="makeFevLoader" color="red" variant="outlined" class="text-none rounded-lg elevation-0 font-weight-bold w-100 mt-3" :prepend-icon="propertyObj.IS_FAVOURITE == 1 ? 'mdi-heart' : 'mdi-heart-outline'" height="50">{{
+              propertyObj.IS_FAV ?
+                'Saved to Favorites' : 'Save to Favorites' }}</v-btn>
+            <v-btn @click="shareAction(propertyObj)" variant="outlined" class="text-none rounded-lg elevation-0 font-weight-bold w-100 mt-3" prepend-icon="mdi-share-variant-outline" height="50">Share Property</v-btn>
             <v-card class="card-box-shadow rounded-lg pa-4 mt-5">
               <h3 class="text-h6 font-weight-bold mb-2">Statistics</h3>
               <div class="border-b d-flex justify-space-between ga-4 py-4">
                 <p>Total QR Scans</p>
-                <p class="text-h5 text-primary font-weight-bold">{{ statisticsData && statisticsData.length > 0 ? statisticsData.find(i=>i.METRIC_KEY == 'TOTAL_QR_VIEW')?.METRIC_VALUE : 0 }}</p>
+                <p class="text-h5 text-primary font-weight-bold">{{statisticsData && statisticsData.length > 0 ? statisticsData.find(i => i.METRIC_KEY == 'TOTAL_QR_VIEW')?.METRIC_VALUE : 0}}</p>
               </div>
               <!-- <div class="border-b d-flex justify-space-between ga-4 py-4">
                 <p>Unique Visitors</p>
@@ -173,7 +150,7 @@
               </div> -->
               <div class="d-flex justify-space-between ga-4 py-4">
                 <p>Conversation</p>
-                <p class="text-subtitle-1 font-weight-bold text-primary">{{statisticsData && statisticsData.length > 0  ? statisticsData.find(i=>i.METRIC_KEY == 'TOTAL_MESSAGE')?.METRIC_VALUE : 0}} messages</p>
+                <p class="text-subtitle-1 font-weight-bold text-primary">{{statisticsData && statisticsData.length > 0 ? statisticsData.find(i => i.METRIC_KEY == 'TOTAL_MESSAGE')?.METRIC_VALUE : 0}} messages</p>
               </div>
             </v-card>
           </v-card>
@@ -185,24 +162,12 @@
 
   <v-dialog max-width="1000" v-model="imagePreviewModal">
     <!-- <v-toolbar class="rounded-t-xl " flat density="compact"></v-toolbar> -->
-    <v-defaults-provider :defaults="{ }">
-    <v-sheet class="overflow-hidden"  rounded="xl">
-      <v-carousel
-        v-model="currentIndex"
-        direction="vertical"
-        show-arrows
-        progress="red"
-        vertical-arrows="left"
-        vertical-delimiters="right"
-      >
-        <v-carousel-item
-          v-for="(item, i) in selectedImageArr"
-          :key="i"
-          :src="item.IMAGE_URL"
-          contain
-        ></v-carousel-item>
+    <v-defaults-provider :defaults="{}">
+      <v-sheet class="overflow-hidden" rounded="xl">
+        <v-carousel v-model="currentIndex" direction="vertical" show-arrows progress="red" vertical-arrows="left" vertical-delimiters="right">
+          <v-carousel-item v-for="(item, i) in selectedImageArr" :key="i" :src="item.IMAGE_URL" contain></v-carousel-item>
 
-        <!-- <v-overlay
+          <!-- <v-overlay
           :scrim="false"
           content-class="w-100 h-100 d-flex flex-column align-center justify-space-between pointer-pass-through py-3"
           contained
@@ -229,10 +194,10 @@
             size="small"
             variant="flat"
           ></v-chip> -->
-        <!-- </v-overlay> -->
-      </v-carousel>
-    </v-sheet>
-  </v-defaults-provider>
+          <!-- </v-overlay> -->
+        </v-carousel>
+      </v-sheet>
+    </v-defaults-provider>
   </v-dialog>
 
   <v-dialog max-width="600" v-model="qrModal">
@@ -246,18 +211,13 @@
         <div class="pa-4 mb-10">
           <v-card class="card-box-shadow rounded-lg pa-6">
             <h3 class="text-h6 font-weight-bold mb-2">QR Code</h3>
-            <v-card id="reportContent" min-height="400" elevation="0" rounded="lg"
-              class="bg-grey-lighten-4 d-flex ga-4 flex-column justify-center align-center position-relative"
-              style="font-size: 8.0rem;line-height: 1;">
-              <v-btn v-if="propertyObj.LISTING_TYPE"
-                :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'"
-                class="text-none rounded-pill elevation-0 font-weight-bold" height="" density="comfortable">{{
-                  propertyObj.LISTING_TYPE }}</v-btn>
+            <v-card id="reportContent" min-height="400" elevation="0" rounded="lg" class="bg-grey-lighten-4 d-flex ga-4 flex-column justify-center align-center position-relative" style="font-size: 8.0rem;line-height: 1;">
+              <v-btn v-if="propertyObj.LISTING_TYPE" :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'" class="text-none rounded-pill elevation-0 font-weight-bold" height="" density="comfortable">{{
+                propertyObj.LISTING_TYPE }}</v-btn>
               <v-card class="bg-white pa-6 rounded-lg card-box-shadow">
 
 
-                <qrcode-vue :value="`${baseUrl}/#/buy/property/${propertyObj.PROPERTY_ID}?qr=1`" :size="200" level="H"
-                  background="transparent" foreground="black" />
+                <qrcode-vue :value="`${baseUrl}/#/buy/property/${propertyObj.PROPERTY_ID}?qr=1`" :size="200" level="H" background="transparent" foreground="black" />
 
 
               </v-card>
@@ -269,10 +229,8 @@
             </v-card>
             <div class="pa-4">
               <div class="d-flex ga-4">
-                <v-btn @click="downloadPDF(propertyObj)" color="primary" prependIcon="mdi-download"
-                  class="text-none rounded-lg elevation-0 font-weight-bold flex-1-1" height="42">Download</v-btn>
-                <v-btn @click="shareAction(propertyObj)" variant="outlined" prependIcon="mdi-share-variant-outline"
-                  class="text-none rounded-lg elevation-0 font-weight-bold flex-1-1" height="42">Share</v-btn>
+                <v-btn @click="downloadPDF(propertyObj)" :loading="isDownloading" color="primary" prependIcon="mdi-download" class="text-none rounded-lg elevation-0 font-weight-bold flex-1-1" height="42">Download</v-btn>
+                <v-btn @click="shareAction(propertyObj)" variant="outlined" prependIcon="mdi-share-variant-outline" class="text-none rounded-lg elevation-0 font-weight-bold flex-1-1" height="42">Share</v-btn>
               </div>
             </div>
           </v-card>
@@ -284,79 +242,65 @@
   <v-dialog max-width="430" persistent v-model="warningPopUp">
     <v-card min-height="400" class="rounded-xl pa-1">
       <div v-if="isLoading" class="d-flex justify-center mt-16">
-        <v-progress-circular
-          color="primary"
-          indeterminate
-        ></v-progress-circular>
+        <v-progress-circular color="primary" indeterminate></v-progress-circular>
       </div>
       <div v-else>
 
-     
-      <v-carousel class="rounded-xl" @click.stop v-if="propertyObj.IMAGES && propertyObj.IMAGES?.length > 0"
-        hide-delimiters :show-arrows="propertyObj.IMAGES?.length > 1" height="250">
-        <v-carousel-item cover v-for="(image, i) in propertyObj.IMAGES" :key="i">
-          <v-img v-if="image?.IMAGE_URL"
-            :src="image?.IMAGE_URL ? image.IMAGE_URL : `@/assets/property_placeholder.webp`"
-            lazy-src="@/assets/property_placeholder.webp" cover height="250" class="rounded-lg">
-            <v-btn :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'"
-              class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 left-0 mt-4 ms-4"
-              height="" density="comfortable">{{ propertyObj.LISTING_TYPE }}</v-btn>
-            <template #placeholder>
-              <div class="d-flex fill-height align-center justify-center" style="background-color: #f2f2f2;">
-                <v-progress-circular indeterminate color="primary"></v-progress-circular>
-              </div>
-            </template>
-          </v-img>
-          <v-img v-else cover src="@/assets/property_placeholder.webp" alt="" />
-        </v-carousel-item>
-      </v-carousel>
-      <v-carousel class="rounded-xl" @click.stop="
-        $router.push({
-          path: route.name !== 'BuyProperties'
-            ? `/property/${propertyObj.PROPERTY_ID}`
-            : `/buy/property/${propertyObj.PROPERTY_ID}`,
-          query: {
-            createdBy: propertyObj.SELLER_USER_ID === authStore.getUserDetails?.USER_ID
-          }
-        })
-        " v-else hide-delimiters :show-arrows="propertyObj.IMAGES?.length > 1" height="250">
-        <v-carousel-item>
-          <v-img cover :src="findImageType(propertyObj.PROPERTY_KIND)" alt="">
-            <v-btn v-if="propertyObj.LISTING_TYPE"
-              :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'"
-              class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 left-0 mt-4 ms-4"
-              height="" density="comfortable">{{ propertyObj.LISTING_TYPE }}</v-btn>
-          </v-img>
-        </v-carousel-item>
-      </v-carousel>
-      <div class="pa-2">
-        <h6>{{ propertyObj.TITLE }}</h6>
-        <div class="mt-2">
-          <v-btn variant="outlined" rounded size="small" class="text-none text-subtitle-2">{{ propertyObj.PROPERTY_KIND
-            }}</v-btn>
-          <v-btn variant="outlined" rounded size="small" class="text-none text-subtitle-2 ml-2">{{
-            propertyObj.PRICE_AMOUNT }} {{ propertyObj.CURRENCY_CODE }}</v-btn>
-          <v-btn variant="outlined" rounded size="small" class="text-none text-subtitle-2 ml-2"> <v-icon
-              color="primary">mdi-map-marker</v-icon> {{ propertyObj.STATE }}</v-btn>
-        </div>
-        <v-divider class="my-4"></v-divider>
-        <v-row>
-          <v-col>
-            <v-btn @click="warningPopUp = false" rounded="xl" height="48" color="secondary" width="100%"
-              class="text-none elevation-0 font-weight-bold">
-              <v-icon class="mr-1" color="">mdi-web</v-icon> View Detail
-            </v-btn>
-          </v-col>
-          <v-col>
 
-            <v-btn @click="openMobileApp" rounded="xl" height="48" color="primary" width="100%"
-              class="text-none elevation-0 font-weight-bold">
-              <v-icon class="mr-1" color="">mdi-cellphone</v-icon> Open in App
-            </v-btn>
-          </v-col>
-        </v-row>
+        <v-carousel class="rounded-xl" @click.stop v-if="propertyObj.IMAGES && propertyObj.IMAGES?.length > 0" hide-delimiters :show-arrows="propertyObj.IMAGES?.length > 1" height="250">
+          <v-carousel-item cover v-for="(image, i) in propertyObj.IMAGES" :key="i">
+            <v-img v-if="image?.IMAGE_URL" :src="image?.IMAGE_URL ? image.IMAGE_URL : `@/assets/property_placeholder.webp`" lazy-src="@/assets/property_placeholder.webp" cover height="250" class="rounded-lg">
+              <v-btn :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'" class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 left-0 mt-4 ms-4" height="" density="comfortable">{{ propertyObj.LISTING_TYPE }}</v-btn>
+              <template #placeholder>
+                <div class="d-flex fill-height align-center justify-center" style="background-color: #f2f2f2;">
+                  <v-progress-circular indeterminate color="primary"></v-progress-circular>
+                </div>
+              </template>
+            </v-img>
+            <v-img v-else cover src="@/assets/property_placeholder.webp" alt="" />
+          </v-carousel-item>
+        </v-carousel>
+        <v-carousel class="rounded-xl" @click.stop="
+          $router.push({
+            path: route.name !== 'BuyProperties'
+              ? `/property/${propertyObj.PROPERTY_ID}`
+              : `/buy/property/${propertyObj.PROPERTY_ID}`,
+            query: {
+              createdBy: propertyObj.SELLER_USER_ID === authStore.getUserDetails?.USER_ID
+            }
+          })
+          " v-else hide-delimiters :show-arrows="propertyObj.IMAGES?.length > 1" height="250">
+          <v-carousel-item>
+            <v-img cover :src="findImageType(propertyObj.PROPERTY_KIND)" alt="">
+              <v-btn v-if="propertyObj.LISTING_TYPE" :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'" class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 left-0 mt-4 ms-4" height="" density="comfortable">{{ propertyObj.LISTING_TYPE }}</v-btn>
+            </v-img>
+          </v-carousel-item>
+        </v-carousel>
+        <div class="pa-2">
+          <h6>{{ propertyObj.TITLE }}</h6>
+          <div class="mt-2">
+            <v-btn variant="outlined" rounded size="small" class="text-none text-subtitle-2">{{ propertyObj.PROPERTY_KIND
+              }}</v-btn>
+            <v-btn variant="outlined" rounded size="small" class="text-none text-subtitle-2 ml-2">{{
+              propertyObj.PRICE_AMOUNT }} {{ propertyObj.CURRENCY_CODE }}</v-btn>
+            <v-btn variant="outlined" rounded size="small" class="text-none text-subtitle-2 ml-2"> <v-icon color="primary">mdi-map-marker</v-icon> {{ propertyObj.STATE }}</v-btn>
+          </div>
+          <v-divider class="my-4"></v-divider>
+          <v-row>
+            <v-col>
+              <v-btn @click="warningPopUp = false" rounded="xl" height="48" color="secondary" width="100%" class="text-none elevation-0 font-weight-bold">
+                <v-icon class="mr-1" color="">mdi-web</v-icon> View Detail
+              </v-btn>
+            </v-col>
+            <v-col>
+
+              <v-btn @click="openMobileApp" rounded="xl" height="48" color="primary" width="100%" class="text-none elevation-0 font-weight-bold">
+                <v-icon class="mr-1" color="">mdi-cellphone</v-icon> Open in App
+              </v-btn>
+            </v-col>
+          </v-row>
+        </div>
       </div>
-    </div>
     </v-card>
   </v-dialog>
 
@@ -370,13 +314,7 @@
       <v-card-text class="overflow-y-auto px-4 py-2" :class="oldMsgLoader ? `d-flex align-center justify-center` : ''">
         <div v-if="oldMsgLoader" class="">
           <p class="text-center">Getting your messages</p>
-          <v-progress-linear
-            color="primary"
-            height="6"
-            indeterminate
-            rounded
-            
-          ></v-progress-linear>
+          <v-progress-linear color="primary" height="6" indeterminate rounded></v-progress-linear>
         </div>
         <div v-else v-for="(msg, i) in messages" :key="i" class="mb-3 d-flex flex-column">
           <div :class="[
@@ -388,17 +326,16 @@
             {{ msg.text }}
             <p class="text-caption">{{ msg.SENT_ON }}</p>
           </div>
-          
+
         </div>
       </v-card-text>
 
       <!-- Input Section -->
       <v-divider></v-divider>
       <v-card-actions v-if="!oldMsgLoader" class="px-4 py-3">
-        <v-text-field v-model="newMessage" placeholder="Type your message..." variant="solo" flat density="comfortable"
-          hide-details clearable @keyup.enter="sendMessage"></v-text-field>
-        <v-btn icon variant="tonal"  rounded="circle" color="primary" :loading="msgSentLoader" @click="sendMessage">
-          <v-icon >mdi-send</v-icon>
+        <v-text-field v-model="newMessage" placeholder="Type your message..." variant="solo" flat density="comfortable" hide-details clearable @keyup.enter="sendMessage"></v-text-field>
+        <v-btn icon variant="tonal" rounded="circle" color="primary" :loading="msgSentLoader" @click="sendMessage">
+          <v-icon>mdi-send</v-icon>
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -424,6 +361,7 @@ const propertyObj = ref({});
 const qrCodeValue = ref({});
 const warningPopUp = ref(false)
 const isLoading = ref(false)
+const isDownloading = ref(false)
 const baseUrl = ref('')
 const qrModal = ref(false)
 //..............................................................................
@@ -443,10 +381,10 @@ const updateStatistics = async () => {
 }
 
 const statisticsData = ref({})
-const fetchStatistics = async()=>{
+const fetchStatistics = async () => {
   try {
     let res = await propertyService.getDashboardStatistics()
-    if(res.data.ERR_CODE == 0){
+    if (res.data.ERR_CODE == 0) {
       let response = res.data.FetchData
       statisticsData.value = response.PROPERTY_MESSAGE_DETAILS
     }
@@ -456,10 +394,10 @@ const fetchStatistics = async()=>{
 }
 
 onMounted(() => {
-  if(authStore.isAuthenticated){
+  if (authStore.isAuthenticated) {
     fetchStatistics()
   }
- 
+
   baseUrl.value = window.location.origin
   if (route.query.qr) {
     warningPopUp.value = true
@@ -485,12 +423,12 @@ const fetchPropertyDetail = async () => {
       PAGE_SIZE: 10,
     }
     let res;
-    
+
     if (route.query.createdBy === 'false') {
-      
+
       res = await propertyService.GetPropertyDetailPublic(data);
     } else if (route.name == 'BuyPropertyDetails') {
-     
+
       res = await propertyService.GetPropertyDetailPublic(data);
     } else if (route.query.createdBy) {
       res = await propertyService.GetPropertyDetail(data);
@@ -506,20 +444,28 @@ const fetchPropertyDetail = async () => {
 }
 //------------------------------------------------------------------------------
 const downloadPDF = async (propertyObj) => {
-  const prtHtml = document.getElementById('reportContent') // Reference to form container
-  
-  const html2pdf = (await import('html2pdf.js')).default;
-  console.log('--->html2pdf', html2pdf);
+  try {
+    isDownloading.value = true;
+    const prtHtml = document.getElementById('reportContent') // Reference to form container
 
-  let fileName = `${propertyObj.TITLE}`
-  const options = {
-    margin: 0.5,
-    filename: fileName + '.pdf',
-    image: { type: 'jpeg', quality: 1 },
-    html2canvas: { scale: 2 },
-    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    const html2pdf = (await import('html2pdf.js')).default;
+    console.log('--->html2pdf', html2pdf);
+
+    let fileName = `${propertyObj.TITLE}`
+    const options = {
+      margin: 0.5,
+      filename: fileName + '.pdf',
+      image: { type: 'jpeg', quality: 1 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    }
+    await html2pdf().from(prtHtml).set(options).save()
+
+  } catch (error) {
+
+  } finally {
+    isDownloading.value = false;
   }
-  html2pdf().from(prtHtml).set(options).save()
 }
 //------------------------------------------------------------------------------
 const shareAction = async (propertyObj) => {
@@ -627,7 +573,7 @@ const sendMessage = async () => {
       let res = await propertyService.message(data)
       if (res.data.ERR_CODE == 0) {
         msgSentLoader.value = false
-        messages.value.push({ sender: 'me', text: newMessage.value.trim(), SENT_ON: moment(new Date()).format('Do MMM, YYYY')  })
+        messages.value.push({ sender: 'me', text: newMessage.value.trim(), SENT_ON: moment(new Date()).format('Do MMM, YYYY') })
         newMessage.value = ''
       }
     } catch (error) {
@@ -650,7 +596,7 @@ const messages = ref([
 ])
 
 const oldMsgLoader = ref(true)
-const oldMsges = async()=>{
+const oldMsges = async () => {
   oldMsgLoader.value = true
   try {
     let data = {
@@ -658,21 +604,21 @@ const oldMsges = async()=>{
       PROPERTY_ID: propertyObj?.value.PROPERTY_ID
     }
     let res = await propertyService.fetchDashboardStatistics(data)
-    if(res.data.ERR_CODE == 0){
+    if (res.data.ERR_CODE == 0) {
       let response = res.data.FetchData
-      if(response.PROPERTY_MESSAGE_DETAILS && response.PROPERTY_MESSAGE_DETAILS.length > 0){
-        messages.value = response.PROPERTY_MESSAGE_DETAILS.map((item)=>{
+      if (response.PROPERTY_MESSAGE_DETAILS && response.PROPERTY_MESSAGE_DETAILS.length > 0) {
+        messages.value = response.PROPERTY_MESSAGE_DETAILS.map((item) => {
           return {
             sender: item.SENDER_USER_ID == authStore.getUserDetails.USER_ID ? 'me' : 'other',
             text: item.MESSAGE_BODY,
             SENT_ON: moment(item.SENT_ON).format('Do MMM, YYYY hh:mm A')
           }
         })
-        
+
       }
       oldMsgLoader.value = false
     }
-    if(res.data.ERR_CODE == 0){
+    if (res.data.ERR_CODE == 0) {
       let response = res.data
     }
   } catch (error) {
@@ -707,7 +653,7 @@ const findImageType = (type) => {
 const imagePreviewModal = ref(false)
 const selectedImageArr = ref([])
 const currentIndex = ref(0)
-const previewImages = (data)=>{
+const previewImages = (data) => {
   selectedImageArr.value = data
   console.log(data, 'data')
   imagePreviewModal.value = true
