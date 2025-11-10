@@ -3,8 +3,7 @@
     <div class="mt-1 d-flex align-center">
       <div>
         <h3 class="font-weight-bold">Dashboard</h3>
-        <p>Welcome Back, {{ authStore?.userDetails?.FNAME }} {{ authStore?.userDetails?.MNAME }} {{
-          authStore?.userDetails?.LNAME }}</p>
+        <p>Welcome Back, <span class="text-primary">{{ authStore?.userDetails?.FNAME }} {{ authStore?.userDetails?.MNAME }} {{ authStore?.userDetails?.LNAME }}</span></p>
       </div>
 
     </div>
@@ -109,10 +108,10 @@
                 </template>
 
                 <v-list-item-title class="font-weight-bold text-grey-darken-3">{{ propertyObj.TITLE
-                }}</v-list-item-title>
+                  }}</v-list-item-title>
                 <!-- <v-list-item-subtitle>{{ property.location }}</v-list-item-subtitle> -->
                 <v-list-item-subtitle v-if="propertyObj?.COUNTRY && propertyObj?.STATE && propertyObj?.CITY" class="mt-1"><v-icon>mdi-map-marker-outline</v-icon>{{ propertyObj.COUNTRY }}, {{ propertyObj.STATE
-                }}, {{
+                  }}, {{
                     propertyObj.CITY }}</v-list-item-subtitle>
                 <div class="text-primary font-weight-bold text-subtitle-1">{{ propertyObj.price }}</div>
 
@@ -191,10 +190,10 @@
               </template>
 
               <v-list-item-title class="font-weight-bold text-grey-darken-3">{{ propertyObj.TITLE
-              }}</v-list-item-title>
+                }}</v-list-item-title>
               <!-- <v-list-item-subtitle>{{ property.location }}</v-list-item-subtitle> -->
               <v-list-item-subtitle v-if="propertyObj?.COUNTRY && propertyObj?.STATE && propertyObj?.CITY" class="mt-1"><v-icon>mdi-map-marker-outline</v-icon>{{ propertyObj.COUNTRY }}, {{ propertyObj.STATE
-              }}, {{
+                }}, {{
                   propertyObj.CITY }}</v-list-item-subtitle>
               <div class="text-primary font-weight-bold text-subtitle-1">{{ propertyObj.price }}</div>
 
