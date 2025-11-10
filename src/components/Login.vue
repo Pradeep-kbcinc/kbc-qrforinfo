@@ -107,7 +107,7 @@ const sendOtpToLogin = async () => {
     try {
       btnLoader.value = true
       let data = {
-        MOBILE_NUMBER: initialState.value.phoneNumber,
+        // MOBILE_NUMBER: initialState.value.phoneNumber,
         USERNAME: initialState.value.phoneNumber
       }
       const res = await authStore.loginUser(data)
@@ -161,7 +161,7 @@ const verifyOtp = async () => {
   try {
     btnLoader.value = true
     const data = {
-      MOBILE_NUMBER: initialState.value.phoneNumber,
+      // MOBILE_NUMBER: initialState.value.phoneNumber,
       USERNAME: initialState.value.phoneNumber,
       OTP: otpCode.value
     }

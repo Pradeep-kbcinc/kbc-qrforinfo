@@ -16,7 +16,7 @@ export const useAuthStore = defineStore("app", {
         return true
       }
     },
-    getUserDetails: (state)=> state.userDetails, 
+    getUserDetails: (state)=> state.userDetails,
     getTemporaryPropertyDetails: (state)=> state.propertyDetailsTempo
   },
   actions: {
@@ -30,7 +30,7 @@ export const useAuthStore = defineStore("app", {
 
     async loginUser(data) {
       try {
-        if (data && data.MOBILE_NUMBER) {
+        if (data && data.USERNAME) {
           const res = await axios.post(`${appAuthUrl}/GetLoginOTP`, data);
           if (!res.data?.FetchData?.length) {
             console.log("Invalid credential!", "error");
@@ -54,7 +54,7 @@ export const useAuthStore = defineStore("app", {
     setTempPropertyDetails(data){
       localStorage.setItem('tempoPropertyData', JSON.stringify(data))
       this.propertyDetailsTempo = data
-    }, 
+    },
     logout() {
       this.token = null
       this.userDetails = null
