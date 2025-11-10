@@ -139,11 +139,11 @@
               propertyObj.IS_FAV ?
                 'Saved to Favorites' : 'Save to Favorites' }}</v-btn>
             <v-btn @click="shareAction(propertyObj)" variant="outlined" class="text-none rounded-lg elevation-0 font-weight-bold w-100 mt-3" prepend-icon="mdi-share-variant-outline" height="50">Share Property</v-btn>
-            <v-card class="card-box-shadow rounded-lg pa-4 mt-5">
+            <v-card v-if="!$route.fullPath.includes('/buy/')" class="card-box-shadow rounded-lg pa-4 mt-5">
               <h3 class="text-h6 font-weight-bold mb-2">Statistics</h3>
               <div class="border-b d-flex justify-space-between ga-4 py-4">
                 <p>Total QR Scans</p>
-                <p class="text-h5 text-primary font-weight-bold">{{statisticsData && statisticsData.length > 0 ? statisticsData.find(i => i.METRIC_KEY == 'TOTAL_QR_VIEW')?.METRIC_VALUE : 0}}</p>
+                <p class="text-h5 text-primary font-weight-bold">{{propertyObj?.QR_COUNT || (statisticsData && statisticsData.length > 0 ? statisticsData.find(i => i.METRIC_KEY == 'TOTAL_QR_VIEW')?.METRIC_VALUE : 0)}}</p>
               </div>
               <!-- <div class="border-b d-flex justify-space-between ga-4 py-4">
                 <p>Unique Visitors</p>
@@ -151,7 +151,7 @@
               </div> -->
               <div class="d-flex justify-space-between ga-4 py-4">
                 <p>Conversation</p>
-                <p class="text-subtitle-1 font-weight-bold text-primary">{{statisticsData && statisticsData.length > 0 ? statisticsData.find(i => i.METRIC_KEY == 'TOTAL_MESSAGE')?.METRIC_VALUE : 0}} messages</p>
+                <p class="text-subtitle-1 font-weight-bold text-primary">{{propertyObj?.MSG_COUNT || (statisticsData && statisticsData.length > 0 ? statisticsData.find(i => i.METRIC_KEY == 'TOTAL_MESSAGE')?.METRIC_VALUE : 0)}} messages</p>
               </div>
             </v-card>
           </v-card>
@@ -170,7 +170,7 @@
 
             <div class="d-flex justify-end">
 
-              <v-btn @click="deleteImage(item)" prependIcon="mdi-trash-can" class="text-none rounded-lg elevation-0 font-weight-bold ms-auto mt-2 mr-2" color="red" height="42">Delete Image</v-btn>
+              <v-btn @click="deleteImage(item)" v-if="propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID" prependIcon="mdi-trash-can" class="text-none rounded-lg elevation-0 font-weight-bold ms-auto mt-2 mr-2" color="red" height="42">Delete Image</v-btn>
             </div>
           </v-carousel-item>
           <!-- <v-overlay
