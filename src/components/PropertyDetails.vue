@@ -16,7 +16,7 @@
       <div v-if="authStore.isAuthenticated" class="d-flex ga-4">
         <v-btn v-if="propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID" @click="deleteProperty(propertyObj)" variant="outlined" prependIcon="mdi-trash-can" class="text-none rounded-lg elevation-0 font-weight-bold" color="red" height="42">Delete</v-btn>
         <v-btn v-if="propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID" @click="$router.push(`/add-new-property/${propertyObj.PROPERTY_ID}`)" variant="outlined" prependIcon="mdi-square-edit-outline" class="text-none rounded-lg elevation-0 font-weight-bold" height="42">Edit</v-btn>
-        <v-btn @click="shareAction(propertyObj)" color="primary" prependIcon="mdi-share-variant-outline" class="text-none rounded-lg elevation-0 font-weight-bold" height="42">Share</v-btn>
+        <!-- <v-btn @click="shareAction(propertyObj)" color="primary" prependIcon="mdi-share-variant-outline" class="text-none rounded-lg elevation-0 font-weight-bold" height="42">Share</v-btn> -->
       </div>
     </div>
 
@@ -594,7 +594,7 @@ const sendMessage = async () => {
       let res = await propertyService.message(data)
       if (res.data.ERR_CODE == 0) {
         msgSentLoader.value = false
-        messages.value.push({ sender: 'me', text: newMessage.value.trim(), SENT_ON: moment(new Date()).format('Do MMM, YYYY') })
+        messages.value.push({ sender: 'me', text: newMessage.value.trim(), SENT_ON: moment().format("Do MMM, YYYY hh:mm A") })
         newMessage.value = ''
       }
     } catch (error) {
