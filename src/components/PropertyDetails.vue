@@ -22,7 +22,7 @@
 
     <div class="pa-4">
       <v-row>
-        <v-col cols="12" md="8" lg="9">
+        <v-col cols="12" md="8" lg="8">
           <v-card class="card-box-shadow rounded-lg">
             <v-card elevation="0" rounded="0" class="bg-box-gradient d-flex justify-center align-center position-relative" style="font-size: 8.0rem;line-height: 1;">
               <v-carousel @click.stop v-if="propertyObj.IMAGES && propertyObj.IMAGES?.length > 0" hide-delimiters :show-arrows="propertyObj.IMAGES?.length > 1" height="250">
@@ -117,9 +117,7 @@
             </div>
           </v-card>
         </v-col>
-
-
-        <v-col cols="12" md="4" lg="3">
+        <v-col cols="12" md="4" lg="4">
           <v-card class="card-box-shadow rounded-lg pa-6">
             <p class="text-h4 font-weight-bold text-primary mb-6">
               {{ propertyObj?.PRICE_AMOUNT?.toLocaleString('en-IN', {
@@ -139,11 +137,14 @@
               propertyObj.IS_FAV ?
                 'Saved to Favorites' : 'Save to Favorites' }}</v-btn>
             <v-btn @click="shareAction(propertyObj)" variant="outlined" class="text-none rounded-lg elevation-0 font-weight-bold w-100 mt-3" prepend-icon="mdi-share-variant-outline" height="50">Share Property</v-btn>
-            <v-card v-if="!$route.fullPath.includes('/buy/')" class="card-box-shadow rounded-lg pa-4 mt-5">
+            <div v-if="authStore.isAuthenticated">
+
+            
+            <v-card v-if="!$route.fullPath.includes('/buy/') && propertyObj.SELLER_USER_ID == authStore.getUserDetails.USER_ID" class="card-box-shadow rounded-lg pa-4 mt-5">
               <h3 class="text-h6 font-weight-bold mb-2">Statistics</h3>
               <div class="border-b d-flex justify-space-between ga-4 py-4">
                 <p>Total QR Scans</p>
-                <p class="text-h5 text-primary font-weight-bold">{{propertyObj?.QR_COUNT || (statisticsData && statisticsData.length > 0 ? statisticsData.find(i => i.METRIC_KEY == 'TOTAL_QR_VIEW')?.METRIC_VALUE : 0)}}</p>
+                <p class="text-h5 text-primary font-weight-bold">{{propertyObj?.QR_COUNT}}</p>
               </div>
               <!-- <div class="border-b d-flex justify-space-between ga-4 py-4">
                 <p>Unique Visitors</p>
@@ -151,9 +152,10 @@
               </div> -->
               <div class="d-flex justify-space-between ga-4 py-4">
                 <p>Conversation</p>
-                <p class="text-subtitle-1 font-weight-bold text-primary">{{propertyObj?.MSG_COUNT || (statisticsData && statisticsData.length > 0 ? statisticsData.find(i => i.METRIC_KEY == 'TOTAL_MESSAGE')?.METRIC_VALUE : 0)}} messages</p>
+                <p class="text-subtitle-1 font-weight-bold text-primary">{{propertyObj?.MSG_COUNT }} messages</p>
               </div>
             </v-card>
+          </div>
           </v-card>
         </v-col>
       </v-row>
@@ -376,9 +378,9 @@ const router = useRouter()
 
 //------------------------------------------------------------------------------
 onMounted(() => {
-  if (authStore.isAuthenticated) {
-    fetchStatistics()
-  }
+  // if (authStore.isAuthenticated) {
+  //   fetchStatistics()
+  // }
 
   baseUrl.value = window.location.origin
   console.log('--->route.query', route.query);
@@ -416,17 +418,17 @@ const updateQrStatistics = async () => {
 }
 //------------------------------------------------------------------------------
 const statisticsData = ref({})
-const fetchStatistics = async () => {
-  try {
-    let res = await propertyService.getDashboardStatistics()
-    if (res.data.ERR_CODE == 0) {
-      let response = res.data.FetchData
-      statisticsData.value = response.PROPERTY_MESSAGE_DETAILS
-    }
-  } catch (error) {
-    console.log(error)
-  }
-}
+// const fetchStatistics = async () => {
+//   try {
+//     let res = await propertyService.getDashboardStatistics()
+//     if (res.data.ERR_CODE == 0) {
+//       let response = res.data.FetchData
+//       statisticsData.value = response.PROPERTY_MESSAGE_DETAILS
+//     }
+//   } catch (error) {
+//     console.log(error)
+//   }
+// }
 //------------------------------------------------------------------------------
 const fetchPropertyDetail = async () => {
   try {
@@ -497,7 +499,7 @@ const shareAction = async (propertyObj) => {
 
   const shareData = {
     title: propertyObj.TITLE,
-    text: propertyObj.PROPERTY_DESC,
+    text: propertyObj.TITLE,
     url: `/#/buy/property/${propertyObj.PROPERTY_ID}`,
   };
 
