@@ -47,7 +47,7 @@
             <div class="pa-4 bg-white border-b w-100">
               <h5>{{ allMessages[0].TITLE }}</h5>
               <div class="d-flex ga-2 justify-space-between">
-                <p class="font-weight-bold"> <span class="font-weight-bold text-primary">Property Owner Name :</span>  {{ getName(selectedMsgObj?.MEMBERS_LIST)?.USER_NAME || '' }}</p>
+                <p class="font-weight-bold"> {{ getName(selectedMsgObj?.MEMBERS_LIST)?.USER_NAME || '' }}</p>
                 <p class="text-grey-darken-1 text-subtitle-2"> {{ moment(selectedMsgObj.SENT_ON).format('Do MMM, YYYY') }}</p>
               </div>
             </div>
