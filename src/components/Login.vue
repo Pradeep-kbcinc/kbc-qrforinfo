@@ -3,8 +3,8 @@
     <v-row>
       <v-col cols="12" md="6" class="right-col d-flex flex-column justify-center align-center">
         <div>
-          <v-avatar size="100" color="white">
-            <img contain src="@/assets/QR.svg">
+          <v-avatar size="200" color="white">
+            <img width="160" src="@/assets/newLogo.png" >
           </v-avatar>
         </div>
         <h1>QRForInfo</h1>

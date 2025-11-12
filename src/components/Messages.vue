@@ -45,7 +45,7 @@
           </div>
           <div v-else class="d-flex justify-center align-center w-100 h-100 flex-column">
             <div class="pa-4 bg-white border-b w-100">
-              <h5>{{ allMessages[0].TITLE }}</h5>
+              <h5 class="pointer" @click="$router.push(`/property/${allMessages[0].PROPERTY_ID}?createdBy=true`)">{{ allMessages[0].TITLE }}</h5>
               <div class="d-flex ga-2 justify-space-between">
                 <p class="font-weight-bold"> {{ getName(selectedMsgObj?.MEMBERS_LIST)?.USER_NAME || '' }}</p>
                 <p class="text-grey-darken-1 text-subtitle-2"> {{ moment(selectedMsgObj.SENT_ON).format('Do MMM, YYYY') }}</p>

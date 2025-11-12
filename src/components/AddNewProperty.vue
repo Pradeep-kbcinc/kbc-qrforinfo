@@ -100,12 +100,12 @@
             </v-col>
             <v-col>
               <p class="font-weight-bold">City</p>
-              {{ state.CITY?.CITY_NAME }}
+              
               <v-select :loading="dropdownLoader" :items="CITY_LIST" item-title="CITY_NAME" :return-object="true" :error-messages="v$.CITY.$errors.map(e => e.$message)" @blur="v$.CITY.$touch" @input="v$.CITY.$touch" v-model="state.CITY" class="mt-1" rounded="lg" variant="outlined" placeholder="New Delhi"></v-select>
             </v-col>
             <v-col>
               <p class="font-weight-bold">Postal Code</p>
-              <v-text-field v-model="state.POSTAL_CODE" class="mt-1" rounded="lg" variant="outlined" placeholder="Postal Code"></v-text-field>
+              <v-text-field v-model="state.POSTAL_CODE" :error-messages="v$.POSTAL_CODE.$errors.map(e => e.$message)" @blur="v$.POSTAL_CODE.$touch" @input="v$.POSTAL_CODE.$touch" class="mt-1" rounded="lg" variant="outlined" placeholder="Postal Code"></v-text-field>
             </v-col>
           </v-row>
 
@@ -203,7 +203,14 @@ const rules = {
   CITY: { required: helpers.withMessage('City is required', required) },
   AREA: { required: helpers.withMessage('Area is required', required) },
   NO_BEDROOMS: {},
-  NO_BATHROOMS: {}
+  NO_BATHROOMS: {},
+  POSTAL_CODE:{
+    required: helpers.withMessage('Postal code is required', required),
+    validFormat: helpers.withMessage(
+      'Postal code must be a 6-digit number',
+      (value) => /^[0-9]{6}$/.test(value)
+    )
+  }
 }
 const v$ = useVuelidate(rules, state)
 const saveBtnLoader = ref(false)
@@ -494,6 +501,8 @@ const saveDraft = async () => {
 
 watch(() => state.COUNTRY,(val) => {
   getLocationDetails()
+  state.STATE = ''
+  state.CITY = ''
   },
   {
     deep: true
@@ -501,6 +510,7 @@ watch(() => state.COUNTRY,(val) => {
 );
 watch(() => state.STATE,(val) => {
   getLocationDetails()
+  state.CITY = ''
   },
   {
     deep: true
