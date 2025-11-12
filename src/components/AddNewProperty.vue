@@ -92,15 +92,16 @@
           <v-row align="end">
             <v-col>
               <p class="font-weight-bold">Country</p>
-              <v-text-field :error-messages="v$.COUNTRY.$errors.map(e => e.$message)" @blur="v$.COUNTRY.$touch" @input="v$.COUNTRY.$touch" v-model="state.COUNTRY" class="mt-1" rounded="lg" variant="outlined" placeholder="India"></v-text-field>
+              <v-select :loading="dropdownLoader" :return-object="true" item-title="COUNTRY_NAME" :items="COUNTRY_LIST" :error-messages="v$.COUNTRY.$errors.map(e => e.$message)" @blur="v$.COUNTRY.$touch" @input="v$.COUNTRY.$touch" v-model="state.COUNTRY" class="mt-1" rounded="lg" variant="outlined"  placeholder="India"></v-select>
             </v-col>
             <v-col>
               <p class="font-weight-bold">State</p>
-              <v-text-field :error-messages="v$.STATE.$errors.map(e => e.$message)" @blur="v$.STATE.$touch" @input="v$.STATE.$touch" v-model="state.STATE" class="mt-1" rounded="lg" variant="outlined" placeholder="Delhi"></v-text-field>
+              <v-select :loading="dropdownLoader" :items="STATE_LIST" item-title="STATE_NAME" :return-object="true" :error-messages="v$.STATE.$errors.map(e => e.$message)" @blur="v$.STATE.$touch" @input="v$.STATE.$touch" v-model="state.STATE" class="mt-1" rounded="lg" variant="outlined" placeholder="Delhi"></v-select>
             </v-col>
             <v-col>
               <p class="font-weight-bold">City</p>
-              <v-text-field :error-messages="v$.CITY.$errors.map(e => e.$message)" @blur="v$.CITY.$touch" @input="v$.CITY.$touch" v-model="state.CITY" class="mt-1" rounded="lg" variant="outlined" placeholder="New Delhi"></v-text-field>
+              {{ state.CITY?.CITY_NAME }}
+              <v-select :loading="dropdownLoader" :items="CITY_LIST" item-title="CITY_NAME" :return-object="true" :error-messages="v$.CITY.$errors.map(e => e.$message)" @blur="v$.CITY.$touch" @input="v$.CITY.$touch" v-model="state.CITY" class="mt-1" rounded="lg" variant="outlined" placeholder="New Delhi"></v-select>
             </v-col>
             <v-col>
               <p class="font-weight-bold">Postal Code</p>
@@ -165,8 +166,8 @@ const state = reactive({
   CARPET_AREA_UNIT: "SQFT",
   PRICE_AMOUNT: null,
   CURRENCY_CODE: "INR",
-  NO_BEDROOMS: null,
-  NO_BATHROOMS: null,
+  NO_BEDROOMS: 0,
+  NO_BATHROOMS: 0,
   FURNISHING_TYPE: "",
   IS_PARKING_SPACE_AVAILABLE: 0,
   BUILT_YEAR: 0,
@@ -209,7 +210,38 @@ const saveBtnLoader = ref(false)
 //..............................................................................
 
 //------------------------------------------------------------------------------
+const COUNTRY_LIST = ref([])
+const STATE_LIST = ref([])
+const CITY_LIST = ref([])
+const dropdownLoader = ref(false)
+const getLocationDetails = async()=>{
+  dropdownLoader.value = true
+  try {
+    let data = {
+      "COUNTRY_ID": state.COUNTRY?.COUNTRY_ID || 0,
+      "STATE_ID": state.STATE?.STATE_ID || 0,
+    }
+    let res = await propertyService.fetchLocationDetails(data)
+    if(res.data.ERR_CODE == 0){
+      let response = res.data.FetchData
+      if(response.COUNTRY_LIST){
+        COUNTRY_LIST.value = res.data.FetchData?.COUNTRY_LIST
+      }
+      if(response.STATE_LIST){
+        STATE_LIST.value = res.data.FetchData?.STATE_LIST
+      }
+      if(response.CITY_LIST){
+        CITY_LIST.value = res.data.FetchData?.CITY_LIST
+      }
+      dropdownLoader.value = false
+    }
+  } catch (error) {
+    console.log(error)
+    dropdownLoader.value = false
+  }
+}
 onMounted(() => {
+  getLocationDetails()
   if (route.query.draft) {
     Object.assign(state, { ...state, ...authStore.getTemporaryPropertyDetails });
   } else {
@@ -269,10 +301,11 @@ const saveProperty = async () => {
         LONGITUDE: state.LONGITUDE || 0,
         ADDRESS_LINE1: state.ADDRESS_LINE1 || '',
         ADDRESS_LINE2: state.ADDRESS_LINE2 || '',
-        CITY: state.CITY || '',
-        STATE: state.STATE || '',
+        COUNTRY: state.COUNTRY?.COUNTRY_NAME || '',
+        STATE: state.STATE?.STATE_NAME || '',
+        CITY: state.CITY?.CITY_NAME || '',
         POSTAL_CODE: state.POSTAL_CODE || '',
-        COUNTRY: state.COUNTRY || '',
+       
         IS_ACTIVE_FLG: state.IS_ACTIVE_FLG || 1,
       }
       console.log('--->', data);
@@ -379,10 +412,10 @@ const saveDraft = async () => {
         LONGITUDE: state.LONGITUDE || 0,
         ADDRESS_LINE1: state.ADDRESS_LINE1 || '',
         ADDRESS_LINE2: state.ADDRESS_LINE2 || '',
-        CITY: state.CITY || '',
-        STATE: state.STATE || '',
+        COUNTRY: state.COUNTRY?.COUNTRY_NAME || '',
+        STATE: state.STATE?.STATE_NAME || '',
+        CITY: state.CITY?.CITY_NAME || '',
         POSTAL_CODE: state.POSTAL_CODE || '',
-        COUNTRY: state.COUNTRY || '',
         IS_ACTIVE_FLG: state.IS_ACTIVE_FLG || 1,
       }
       res = await propertyService.updatePropertyDraft(data)
@@ -427,10 +460,11 @@ const saveDraft = async () => {
         LONGITUDE: state.LONGITUDE,
         ADDRESS_LINE1: state.ADDRESS_LINE1 || '',
         ADDRESS_LINE2: state.ADDRESS_LINE2 || '',
-        CITY: state.CITY || '',
-        STATE: state.STATE || '',
+        COUNTRY: state.COUNTRY?.COUNTRY_NAME || '',
+        STATE: state.STATE?.STATE_NAME || '',
+        CITY: state.CITY?.CITY_NAME || '',
         POSTAL_CODE: state.POSTAL_CODE || '',
-        COUNTRY: state.COUNTRY || '',
+       
         IS_ACTIVE_FLG: state.IS_ACTIVE_FLG || 1,
       }
       res = await propertyService.addPropertyToDraft(data)
@@ -457,6 +491,21 @@ const saveDraft = async () => {
     draftLoader.value = false
   }
 }
+
+watch(() => state.COUNTRY,(val) => {
+  getLocationDetails()
+  },
+  {
+    deep: true
+  }
+);
+watch(() => state.STATE,(val) => {
+  getLocationDetails()
+  },
+  {
+    deep: true
+  }
+);
 </script>
 
 <style scoped lang="scss">

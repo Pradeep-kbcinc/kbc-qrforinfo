@@ -123,6 +123,11 @@ export default {
   // api/v1/DeletePropertyImage
   async DeletePropertyImage(data){
     return axios.post(`/DeletePropertyImage`, data)
-  }
+  },
+
+  // GetLocationDetails
+  async fetchLocationDetails(data){
+    return axios.post(`/GetLocationDetails`, data)
+  },
 
 }
