@@ -225,7 +225,7 @@ const getLocationDetails = async()=>{
   dropdownLoader.value = true
   try {
     let data = {
-      "COUNTRY_ID": state.COUNTRY?.COUNTRY_ID || 0,
+      "COUNTRY_ID": state.COUNTRY?.COUNTRY_ID || 1,
       "STATE_ID": state.STATE?.STATE_ID || 0,
     }
     let res = await propertyService.fetchLocationDetails(data)
@@ -501,8 +501,11 @@ const saveDraft = async () => {
 
 watch(() => state.COUNTRY,(val) => {
   getLocationDetails()
-  state.STATE = ''
-  state.CITY = ''
+  if(!route.query.draft){
+    state.STATE = ''
+    state.CITY = ''
+  }
+  
   },
   {
     deep: true
@@ -510,7 +513,9 @@ watch(() => state.COUNTRY,(val) => {
 );
 watch(() => state.STATE,(val) => {
   getLocationDetails()
+  if(!route.query.draft){
   state.CITY = ''
+  }
   },
   {
     deep: true
