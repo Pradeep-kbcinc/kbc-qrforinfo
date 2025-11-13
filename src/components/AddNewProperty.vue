@@ -501,8 +501,11 @@ const saveDraft = async () => {
 
 watch(() => state.COUNTRY,(val) => {
   getLocationDetails()
-  state.STATE = ''
-  state.CITY = ''
+  if(!route.query.draft){
+    state.STATE = ''
+    state.CITY = ''
+  }
+  
   },
   {
     deep: true
@@ -510,7 +513,9 @@ watch(() => state.COUNTRY,(val) => {
 );
 watch(() => state.STATE,(val) => {
   getLocationDetails()
+  if(!route.query.draft){
   state.CITY = ''
+  }
   },
   {
     deep: true

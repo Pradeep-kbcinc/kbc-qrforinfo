@@ -36,7 +36,7 @@
 
             <!-- Second lighter crossing polygon -->
             <div class="second-polygon" style="background: #4CB04F4D!important;"></div>
-            <v-card-text class="text-center w-100">
+            <v-card-text class="text-center text-grey-darken-1 mb-1 text-subtitle-1 font-weight-medium">
               <p>Total Views</p>
               <h5 class="text-green text-h4 font-weight-bold mt-1">{{ statisticsData[3]?.METRIC_VALUE || 0 }}</h5>
             </v-card-text>
@@ -49,7 +49,7 @@
 
             <!-- Second lighter crossing polygon -->
             <div class="second-polygon" style="background: #9B27B04D!important;"></div>
-            <v-card-text class="text-center w-100">
+            <v-card-text class="text-center text-grey-darken-1 mb-1 text-subtitle-1 font-weight-medium">
               <p>Messages</p>
               <h5 class="text-purple text-h4 font-weight-bold mt-1">{{ statisticsData[2]?.METRIC_VALUE || 0 }}</h5>
             </v-card-text>
@@ -62,7 +62,7 @@
 
             <!-- Second lighter crossing polygon -->
             <div class="second-polygon" style="background: #7A7A7A4D!important;"></div>
-            <v-card-text class="text-center w-100">
+            <v-card-text class="text-center text-grey-darken-1 mb-1 text-subtitle-1 font-weight-medium">
               <p>Drafts</p>
               <h5 class="text-lightBlack text-h4 font-weight-bold mt-1">{{ statisticsData[1]?.METRIC_VALUE || 0 }}</h5>
             </v-card-text>
