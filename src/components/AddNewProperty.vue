@@ -225,7 +225,7 @@ const getLocationDetails = async()=>{
   dropdownLoader.value = true
   try {
     let data = {
-      "COUNTRY_ID": state.COUNTRY?.COUNTRY_ID || 1,
+      "COUNTRY_ID": state.COUNTRY?.COUNTRY_ID || 0,
       "STATE_ID": state.STATE?.STATE_ID || 0,
     }
     let res = await propertyService.fetchLocationDetails(data)
