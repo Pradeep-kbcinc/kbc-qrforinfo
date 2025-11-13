@@ -9,7 +9,8 @@
 
     <div class="d-flex align-center justify-space-between pa-6 pb-0">
       <div class="">
-        <h3 class="text-h5 font-weight-bold font-weight-bold">{{ propertyObj.TITLE }}</h3>
+        <v-btn @click="router.back()" size="small" color="primary" variant="tonal" class="text-none font-weight-bold"> <v-icon class="mr-2">mdi-arrow-left</v-icon> Back</v-btn>
+        <h3 class="text-h5 font-weight-bold font-weight-bold mt-4">{{ propertyObj.TITLE }}</h3>
         <p v-if="propertyObj.COUNTRY && propertyObj.STATE && propertyObj.CITY"><v-icon>mdi-map-marker-outline</v-icon>
           {{ propertyObj.COUNTRY }}, {{ propertyObj.STATE }}, {{ propertyObj.CITY }}</p>
       </div>
@@ -238,47 +239,94 @@
     </v-defaults-provider>
   </v-dialog>
 
-  <v-dialog max-width="500" v-model="qrModal">
+  <v-dialog :max-width="qrViewSwitch == 'Portrait' ? 500 : 900" v-model="qrModal">
     <v-toolbar rounded="t-lg b-0" class="px-4">
       <h5>QR Code & Analytics</h5>
       <v-spacer></v-spacer>
-      <v-btn @click="qrModal = false" icon><v-icon>mdi-close</v-icon></v-btn>
+      <v-switch size="large" inset v-model="qrViewSwitch" :label="`${qrViewSwitch} View`" false-value="Portrait"
+              true-value="Landscape" hide-details class="ml-4" color="primary"></v-switch>
     </v-toolbar>
     <v-card rounded="b-lg t-0" elevation="0">
-      <div>
-          <div class="pa-4 ">
+      <!-- Portrait  -->
+      <div id="portraitContent" v-if="qrViewSwitch == 'Portrait'"> 
+        <div class="pa-4 ">
+         
+          <!-- <h3 class="text-h6 font-weight-bold mb-2">QR Code</h3> -->
 
-            <!-- <h3 class="text-h6 font-weight-bold mb-2">QR Code</h3> -->
 
+          <div class="d-flex justify-center">
+            <img width="100" src="@/assets/newLogo.png" alt="">
+          </div>
+          <h2 class="text-center text-h3 font-weight-black mt-2 " v-if="propertyObj.LISTING_TYPE">{{
+            propertyObj.LISTING_TYPE.toUpperCase() }}</h2>
+          <p class="text-primary mb-6 text-center">REALLY <span class="px-1"> GREAT</span> REALITY</p>
 
-            <div class="d-flex justify-center">
-              <img width="100" src="@/assets/newLogo.png" alt="">
-            </div>
-            <h2 class="text-center text-h3 font-weight-black mt-2 " v-if="propertyObj.LISTING_TYPE">{{
-              propertyObj.LISTING_TYPE.toUpperCase() }}</h2>
-              <p class="text-primary mb-6 text-center">REALLY <span class="px-1"> GREAT</span> REALITY</p>
-
-            <div class="d-flex justify-center flex-column align-center">
-              <v-card class="pa-2 elevation-0">
+          <div class="d-flex justify-center flex-column align-center">
+            <v-card class="pa-2 elevation-0">
               <qrcode-vue :value="`${baseUrl}/#/buy/property/${propertyObj.PROPERTY_ID}?qr=1`" :size="200" level="H"
                 background="white" foreground="black" />
-              </v-card>
-              <p class="text-center mt-2 text-white">Hold the camera to the image</p>
-            </div>
-          </div>
-          <div style="background-color: #2663eb; min-height: 200px;position: relative;top: -80px;z-index: -1;" elevation="0" color="primary" class="mt-n16" min-height="200"></div>
-          <div style="background-color: #ee961d; min-height: 50px;position: relative;top: -16px;z-index: -1;" elevation="0" color="primary" class="mt-n16 d-flex justify-center align-center" min-height="200">
-            <h5 class="text-white">SCAN TO SEE INFORMATION ON THIS LISTING</h5>
-          </div>
-      </div>
-        <div class="pa-2">
-          <div class="d-flex ga-4">
-            <v-btn @click="downloadPDF(propertyObj)" :loading="isDownloading" color="primary" prependIcon="mdi-download"
-              class="text-none rounded-lg elevation-0 font-weight-bold flex-1-1" height="42">Download</v-btn>
-            <v-btn @click="shareAction(propertyObj)" variant="outlined" prependIcon="mdi-share-variant-outline"
-              class="text-none rounded-lg elevation-0 font-weight-bold flex-1-1" height="42">Share</v-btn>
+            </v-card>
+            <p class="text-center mt-2 text-white">Hold the camera to the image</p>
           </div>
         </div>
+        <div style="background-color: #2663eb; min-height: 200px;position: relative;top: -80px;z-index: -1;"
+          elevation="0" color="primary" class="mt-n16" min-height="200"></div>
+        <div style="background-color: #ee961d; min-height: 50px;position: relative;top: -16px;z-index: -1;"
+          elevation="0" color="primary" class="mt-n16 d-flex justify-center align-center" min-height="200">
+          <h5 class="text-white">SCAN TO SEE INFORMATION ON THIS LISTING</h5>
+        </div>
+      </div>
+      
+        <div id="landscapeContent" v-else class="d-flex flex-column">
+      <div class="d-flex">
+        <!-- Left: QR Section -->
+        <div class="pa-8 d-flex flex-column align-center justify-center"  style="
+        flex: 1;
+        background-color: #2663eb;
+        clip-path: polygon(0px 0px, 100% 0px, 78% 100%, 0px 100%);
+      ">
+          <v-card class="pa-2 elevation-0" color="white">
+            <qrcode-vue
+              :value="`${baseUrl}/#/buy/property/${propertyObj.PROPERTY_ID}?qr=1`"
+              :size="200"
+              level="H"
+              background="white"
+              foreground="black"
+            />
+          </v-card>
+        </div>
+
+        <!-- Right: Info Section -->
+        <div class="pa-8 d-flex flex-column align-center justify-center" style="flex: 1;">
+          <div class="d-flex justify-center mb-4">
+            <img width="100" src="@/assets/newLogo.png" alt="logo" />
+          </div>
+          <h2 class="text-h3 font-weight-black text-center mb-2" v-if="propertyObj.LISTING_TYPE">
+            {{ propertyObj.LISTING_TYPE.toUpperCase() }}
+          </h2>
+          <p class="text-primary text-center">REALLY <span class="px-1">GREAT</span> REALITY</p>
+        </div>
+      </div>
+
+      <!-- Bottom Banner -->
+      <div
+        class="d-flex justify-center align-center"
+        style="background-color: #ee961d; min-height: 60px;"
+      >
+        <h5 class="text-white text-center">
+          SCAN TO SEE INFORMATION ON THIS LISTING
+        </h5>
+      </div>
+    
+      </div>
+      <div class="pa-2">
+        <div class="d-flex ga-4">
+          <v-btn @click="downloadPDF(propertyObj)" :loading="isDownloading" color="primary" prependIcon="mdi-download"
+            class="text-none rounded-lg elevation-0 font-weight-bold flex-1-1" height="42">Download</v-btn>
+          <v-btn @click="shareAction(propertyObj)" variant="outlined" prependIcon="mdi-share-variant-outline"
+            class="text-none rounded-lg elevation-0 font-weight-bold flex-1-1" height="42">Share</v-btn>
+        </div>
+      </div>
 
     </v-card>
   </v-dialog>
@@ -333,7 +381,7 @@
           <div class="mt-2">
             <v-btn variant="outlined" rounded size="small" class="text-none text-subtitle-2">{{
               propertyObj.PROPERTY_KIND
-              }}</v-btn>
+            }}</v-btn>
             <v-btn variant="outlined" rounded size="small" class="text-none text-subtitle-2 ml-2">{{
               propertyObj.PRICE_AMOUNT }} {{ propertyObj.CURRENCY_CODE }}</v-btn>
             <v-btn variant="outlined" rounded size="small" class="text-none text-subtitle-2 ml-2"> <v-icon
@@ -421,6 +469,7 @@ const isLoading = ref(false)
 const isDownloading = ref(false)
 const baseUrl = ref('')
 const qrModal = ref(false)
+const qrViewSwitch = ref('Portrait')
 //..............................................................................
 const router = useRouter()
 //------------------------------------------------------------------------------
@@ -518,7 +567,13 @@ const fetchPropertyDetail = async () => {
 const downloadPDF = async (propertyObj) => {
   try {
     isDownloading.value = true;
-    const prtHtml = document.getElementById('reportContent') // Reference to form container
+    let prtHtml
+    if(qrViewSwitch.value == 'Portrait'){
+       prtHtml = document.getElementById('portraitContent')
+    }else{
+       prtHtml = document.getElementById('landscapeContent')
+    }
+     // Reference to form container
 
     const html2pdf = (await import('html2pdf.js')).default;
     console.log('--->html2pdf', html2pdf);

@@ -73,8 +73,13 @@ onMounted(() => {
 const getProperties = async () => {
   try {
     isLoading.value = true;
-    console.log('--->', 12312);
 
+  if(sessionStorage.getItem('SEARCH')){
+    searchVal.value = sessionStorage.getItem('SEARCH')
+  } 
+  if(sessionStorage.getItem('PAGE_NO')){
+    currentPage.value = Number(sessionStorage.getItem('PAGE_NO'))
+  }
     const data = {
       PROPERTY_ID: 0,
       CITY: "",
@@ -101,19 +106,26 @@ const getProperties = async () => {
   }
 }
 const searchNow = () => {
-  currentPage.value = 1
+  // currentPage.value = 1
+  sessionStorage.setItem('PAGE_NO', 0)
+  sessionStorage.setItem('SEARCH',searchVal.value)
+  
   getProperties()
 }
 
 watch(currentPage,(val) => {
+  sessionStorage.setItem('PAGE_NO', val)
   getProperties()
 })
 
 watch(searchVal, (val)=>{
   if(!val){
+    sessionStorage.clear()
     getProperties()
   }
 })
+
+
 </script>
 
 <style scoped>

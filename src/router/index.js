@@ -102,6 +102,27 @@ const router = createRouter({
   ],
 });
 
+router.beforeEach((to, from, next) => {
+  // Detect if the user is LEAVING the property details page
+  const isLeavingPropertyPage = from.path.includes('/properties')
+  const isGoingToPropertyPage = to.path.includes('/property/')
+
+
+  // viceVerca 
+  const isLeavingPropertyPageVice = from.path.includes('/property/')
+  const isGoingToPropertyPageVice = to.path.includes('/properties')
+
+  // Only clear when leaving the property route → going somewhere else
+  if ((isLeavingPropertyPage && isGoingToPropertyPage) || (isLeavingPropertyPageVice && isGoingToPropertyPageVice)) {
+    console.log('🧹 Clearing sessionStorage: leaving property page')
+    
+  }else{
+    sessionStorage.clear()
+  }
+
+  next()
+})
+
 async function routeGuard(to, from, next) {
   const authStore = useAuthStore()
   const isAuthenticated = authStore.isAuthenticated
