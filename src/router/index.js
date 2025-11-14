@@ -11,6 +11,7 @@ import SavedProperties from "@/components/SavedProperties.vue";
 import Messages from "@/components/Messages.vue";
 import PropertyDetails from "@/components/PropertyDetails.vue";
 import Signup from "@/components/Signup.vue";
+import PrivacyPolicy from "@/components/PrivacyPolicy.vue"
 import { useAuthStore } from '@/stores/app'
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -62,9 +63,21 @@ const router = createRouter({
           component: Settings,
           beforeEnter: routeGuard,
         },
+        {
+          path: '/privacy-policy',
+          name: "PrivacyPolicy",
+          component: PrivacyPolicy
+          // redirect: '/buy/properties', // 👈 redirect root to this
+        },
 
       ],
     },
+    // {
+    //   path: '/privacy-policy',
+    //   name: "PrivacyPolicy",
+    //   component: PrivacyPolicy
+    //   // redirect: '/buy/properties', // 👈 redirect root to this
+    // },
     {
       path: '/',
       name: "BuyerLanding",
@@ -101,6 +114,8 @@ const router = createRouter({
     },
   ],
 });
+
+
 
 router.beforeEach((to, from, next) => {
   // Detect if the user is LEAVING the property details page

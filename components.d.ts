@@ -16,6 +16,7 @@ declare module 'vue' {
     Dashboard: typeof import('./src/components/Dashboard.vue')['default']
     Login: typeof import('./src/components/Login.vue')['default']
     Messages: typeof import('./src/components/Messages.vue')['default']
+    PrivacyPolicy: typeof import('./src/components/PrivacyPolicy.vue')['default']
     Properties: typeof import('./src/components/Properties.vue')['default']
     PropertyCard: typeof import('./src/components/PropertyCard.vue')['default']
     PropertyDetails: typeof import('./src/components/PropertyDetails.vue')['default']
