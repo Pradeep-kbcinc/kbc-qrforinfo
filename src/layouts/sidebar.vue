@@ -34,7 +34,7 @@
 <v-list-item prepend-icon="mdi-cog-outline" @click="gotoMenu('/settings')" :class="isRouteActive('/settings') ? 'active-item text-primary' : ''">
   <p :class="isRouteActive('/settings') ? 'font-weight-bold bolder-text' : ''">Settings</p>
 </v-list-item>
-<v-list-item prepend-icon="mdi-cog-outline" @click="gotoMenu('/privacy-policy')" :class="isRouteActive('/privacy-policy') ? 'active-item text-primary' : ''">
+<v-list-item prepend-icon="mdi-file-sign" @click="gotoMenu('/privacy-policy')" :class="isRouteActive('/privacy-policy') ? 'active-item text-primary' : ''">
   <p :class="isRouteActive('/privacy-policy') ? 'font-weight-bold bolder-text' : ''">Privacy Policy</p>
 </v-list-item>
 
