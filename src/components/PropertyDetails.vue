@@ -481,7 +481,7 @@ onMounted(() => {
   // }
 
   baseUrl.value = window.location.origin
-  console.log('--->route.query', route.query);
+  
   if (route.query.qr) {
     updateQrStatistics()
     warningPopUp.value = true

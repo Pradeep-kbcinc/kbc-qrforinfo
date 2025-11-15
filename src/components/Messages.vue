@@ -45,7 +45,7 @@
           </div>
           <div v-else class="d-flex justify-center align-center w-100 h-100 flex-column">
             <div class="pa-4 bg-white border-b w-100">
-              <h5 class="pointer" @click="$router.push(`/property/${allMessages[0].PROPERTY_ID}?createdBy=true`)">{{ allMessages[0].TITLE }}</h5>
+              <h5 class="pointer" @click="$router.push(`/property/${allMessages[0].PROPERTY_ID}?createdBy=${allMessages[0].SELLER_USER_ID === authStore.getUserDetails.USER_ID}`)">{{ allMessages[0].TITLE }}</h5>
               <div class="d-flex ga-2 justify-space-between">
                 <p class="font-weight-bold"> {{ getName(selectedMsgObj?.MEMBERS_LIST)?.USER_NAME || '' }}</p>
                 <p class="text-grey-darken-1 text-subtitle-2"> {{ moment(selectedMsgObj.SENT_ON).format('Do MMM, YYYY') }}</p>
@@ -81,6 +81,7 @@
 import propertyService from '@/services/propertyService'
 import moment from 'moment'
 import { useAuthStore } from '@/stores/app'
+
 const authStore = useAuthStore()
 const msgArr = ref([
   {
@@ -188,7 +189,7 @@ const fetchMassges = async (id) => {
   }
 }
 const selectChannel = (data) => {
-  console.log('--->data', data);
+  
   messageLoader.value = true
   selectedMsgObj.value = data
   fetchMassges(data.THREAD_ID)

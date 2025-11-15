@@ -73,7 +73,7 @@ const props = defineProps({
   }
 })
 onMounted(()=>{
-  console.log(mobile.value)
+  // console.log(mobile.value)
 })
 
 const sidebarPanel = ref(null)
