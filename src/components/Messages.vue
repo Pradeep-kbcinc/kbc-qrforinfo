@@ -6,7 +6,7 @@
           <div class="pa-4 mb-2">
             <h5 class="mb-3">Messages</h5>
 
-            <v-text-field hideDetails variant="outlined" placeholder="Search..." density="comfortable"></v-text-field>
+            <v-text-field v-model="searchVal" hideDetails variant="outlined" placeholder="Search..." density="comfortable"></v-text-field>
           </div>
 
           <div class="border-t">
@@ -144,6 +144,7 @@ const msgArr = ref([
 
 const selectedMsgObj = ref({})
 const channels = ref([])
+const channelsRef = ref([])
 const channelLoader = ref(false)
 const getAllChannels = async () => {
   channelLoader.value = true
@@ -153,6 +154,7 @@ const getAllChannels = async () => {
       let response = res.data.FetchData
       if (response) {
         channels.value = response.PROPERTY_MESSAGE_DETAILS
+        channelsRef.value = response.PROPERTY_MESSAGE_DETAILS
         channelLoader.value = false
       }
     }
@@ -241,6 +243,18 @@ const truncateWords = (text, wordLimit) => {
     ? words?.slice(0, wordLimit)?.join(' ') + '...'
     : text
 }
+
+const searchVal = ref('')
+watch(searchVal,(val)=>{
+  if(val && val.length >2){
+    channels.value = channelsRef.value.filter((item)=>{
+      return item.PROPERTY_NAME.toLowerCase().includes(val.toLowerCase())
+    })
+  }else{
+    channels.value = channelsRef.value
+  }
+})
+
 </script>
 
 <style scoped>
