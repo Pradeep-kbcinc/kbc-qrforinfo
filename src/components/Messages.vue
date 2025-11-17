@@ -6,7 +6,7 @@
           <div class="pa-4 mb-2">
             <h5 class="mb-3">Messages</h5>
 
-            <v-text-field v-model="searchVal" hideDetails variant="outlined" placeholder="Search..." density="comfortable"></v-text-field>
+            <v-text-field v-model="searchVal" hideDetails variant="outlined" placeholder="Search by property name..." density="comfortable"></v-text-field>
           </div>
 
           <div class="border-t">
@@ -18,16 +18,18 @@
                 <v-avatar size="60" class="mr-2">
                   <v-img alt="John" src="@/assets/dummy_profile.webp"></v-img>
                 </v-avatar>
-                <div class="w-100">
+                <div class="w-100 d-flex ga-2 justify-space-between align-center">
                   <!-- <h6>{{ getName(msgObj.MEMBERS_LIST)?.USER_NAME }}</h6> -->
+                   <div>
+                  
                   <h6 class="mb-0">{{ msgObj?.PROPERTY_NAME ? truncateWords(msgObj?.PROPERTY_NAME, 6) : '' }}</h6>
-
-                  <div class="d-flex ga-2 justify-space-between">
-                    <p>{{ truncateWords(getName(msgObj?.MEMBERS_LIST)?.USER_NAME, 6) || '' }}</p>
-                    <p class="text-grey-darken-1 text-subtitle-2"> {{ moment(msgObj.SENT_ON).format('Do MMM, YYYY') }}</p>
+                  <p>{{ truncateWords(getName(msgObj?.MEMBERS_LIST)?.USER_NAME, 6) || '' }}</p>
                   </div>
-
-                </div>
+                  <div class="d-flex justify-center flex-column align-end">
+                      <v-btn @click.stop="deleteChannelPopUp(msgObj)" variant="tonal" color="error" size="small" icon="mdi-delete"></v-btn>
+                      <p class="text-grey-darken-1 text-subtitle-2"> {{ moment(msgObj.SENT_ON).format('Do MMM, YYYY') }}</p>
+                    </div>
+                  </div>
               </div>
               <!-- <p>{{ msgObj.MESSAGE_BODY }}</p> -->
             </v-card>
@@ -73,7 +75,28 @@
         </div>
       </v-col>
     </v-row>
-
+    <v-dialog max-width="400" v-model="confirmDeleteModal">
+      <v-toolbar color="secondary" class="rounded-t-xl rounded-b-0" density="compact">
+       
+        <v-spacer></v-spacer>
+        <v-btn icon @click="confirmDeleteModal = false">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+        
+      </v-toolbar>
+      <v-card class="rounded-t-0 rounded-b-xl">
+    
+        <v-card-text>
+          <h6 class="font-weight-bold mt-n">Are You Sure , To Delete This Channel ?</h6>
+          <v-divider class="mt-2"></v-divider>
+          <div class="mt-4">
+            <v-btn color="red" @click="deleteChannel" :loading="deleteChannelLoader" elevation="0" class="text-none font-weight-bold" rounded="lg">Delete Now</v-btn>
+            <v-btn color="secondary" elevation="0" @click="confirmDeleteModal = false" class="text-none font-weight-bold ml-2" rounded="lg">Cancel</v-btn>
+          </div>
+          
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -81,6 +104,7 @@
 import propertyService from '@/services/propertyService'
 import moment from 'moment'
 import { useAuthStore } from '@/stores/app'
+import { toast } from 'vue3-toastify'
 
 const authStore = useAuthStore()
 const msgArr = ref([
@@ -255,6 +279,40 @@ watch(searchVal,(val)=>{
     channels.value = channelsRef.value
   }
 })
+
+
+const selectedDeleteData = ref({})
+const confirmDeleteModal = ref(false)
+const selectedThreadID = ref(null)
+const deleteChannelPopUp = (data)=>{
+  console.log(data.THREAD_ID, 'data')
+  selectedThreadID.value = data.THREAD_ID
+  selectedDeleteData.value = data
+  confirmDeleteModal.value = true
+}
+
+const deleteChannelLoader =ref(false)
+
+
+const deleteChannel = async()=>{
+  deleteChannelLoader.value = true
+    try {
+      let res = await propertyService.deleteChannel(selectedThreadID.value)
+      if(res.data.ERR_CODE == 0){
+        deleteChannelLoader.value = false
+        getAllChannels()
+        confirmDeleteModal.value = false
+        toast.success('Channel Deleted')
+
+      }else{
+        deleteChannelLoader.value = false
+      }
+    } catch (error) {
+      deleteChannelLoader.value = false
+    }
+}
+
+
 
 </script>
 
