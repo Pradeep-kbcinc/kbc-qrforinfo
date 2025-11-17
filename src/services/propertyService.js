@@ -130,4 +130,10 @@ export default {
     return axios.post(`/GetLocationDetails`, data)
   },
 
+  async deleteChannel(id){
+    return axios.get(`/DeleteThread?THREAD_ID=${id}`)
+  }
+
+  
+
 }
