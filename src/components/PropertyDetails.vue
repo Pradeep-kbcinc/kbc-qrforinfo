@@ -257,8 +257,12 @@
           <div class="d-flex justify-center">
             <img width="100" src="@/assets/newLogo.png" alt="">
           </div>
-          <h2 class="text-center text-h3 font-weight-black mt-2 " v-if="propertyObj.LISTING_TYPE">{{
-            propertyObj.LISTING_TYPE.toUpperCase() }}</h2>
+          <h2 class="text-center text-h3 font-weight-black mt-2 " v-if="propertyObj.LISTING_TYPE">
+            <!-- {{
+            propertyObj.LISTING_TYPE.toUpperCase() }} -->
+            FOR SALE
+            </h2>
+            
           <p class="text-primary mb-6 text-center">REALLY <span class="px-1"> GREAT</span> REALITY</p>
 
           <div class="d-flex justify-center flex-column align-center">
@@ -302,7 +306,8 @@
             <img width="100" src="@/assets/newLogo.png" alt="logo" />
           </div>
           <h2 class="text-h3 font-weight-black text-center mb-2" v-if="propertyObj.LISTING_TYPE">
-            {{ propertyObj.LISTING_TYPE.toUpperCase() }}
+            <!-- {{ propertyObj.LISTING_TYPE.toUpperCase() }} -->
+              FOR SALE
           </h2>
           <p class="text-primary text-center">REALLY <span class="px-1">GREAT</span> REALITY</p>
         </div>
@@ -598,7 +603,7 @@ const downloadPDF = async (propertyObj) => {
 const shareAction = async (propertyObj) => {
   const shareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(
     propertyObj.TITLE + '\n' +
-    `https://yourdomain.com/#/buy/property/${propertyObj.PROPERTY_ID}`
+    `https://qrforinfo.com/#/buy/property/${propertyObj.PROPERTY_ID}`
   )}`;
 
   const shareData = {

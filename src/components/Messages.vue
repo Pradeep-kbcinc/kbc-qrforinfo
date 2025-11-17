@@ -48,7 +48,7 @@
               <h5 class="pointer" @click="$router.push(`/property/${allMessages[0].PROPERTY_ID}?createdBy=${allMessages[0].SELLER_USER_ID === authStore.getUserDetails.USER_ID}`)">{{ allMessages[0].TITLE }}</h5>
               <div class="d-flex ga-2 justify-space-between">
                 <p class="font-weight-bold"> {{ getName(selectedMsgObj?.MEMBERS_LIST)?.USER_NAME || '' }}</p>
-                <p class="text-grey-darken-1 text-subtitle-2"> {{ moment(selectedMsgObj.SENT_ON).format('Do MMM, YYYY') }}</p>
+                <!-- <p class="text-grey-darken-1 text-subtitle-2"> {{ moment(selectedMsgObj.SENT_ON).format('Do MMM, YYYY') }}</p> -->
               </div>
             </div>
             <div class="w-100 h-100 overflow-y-scroll">
