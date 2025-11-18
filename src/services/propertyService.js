@@ -132,8 +132,16 @@ export default {
 
   async deleteChannel(id){
     return axios.get(`/DeleteThread?THREAD_ID=${id}`)
+  },
+
+  async deleteMSG(id){
+    return axios.get(`/DeleteMessage?MESSAGE_ID=${id}`)
   }
 
+
+
+
+  
   
 
 }
