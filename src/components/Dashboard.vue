@@ -148,9 +148,11 @@
         <div class="">
           <div>
             <v-row v-if="selectedData.IMAGES && selectedData.IMAGES.length > 0">
-              <v-col cols="3" v-for="item in selectedData.IMAGES">
-                <v-img lazy-src="@/assets/property_placeholder.webp" contain class="rounded-lg" :src="item.IMAGE_URL">
-
+              <v-col cols="3" v-for="(item,ind) in selectedData.IMAGES" :key="ind">
+                <v-img height="200" @click="deleteImage(item,ind)" lazy-src="@/assets/property_placeholder.webp" contain class="rounded-lg" :src="item.IMAGE_URL">
+                  <v-btn icon size="x-small" :loading="deleteImageLoader[ind]">
+                    <v-icon color="red">mdi-delete</v-icon>
+                  </v-btn> 
                 </v-img>
               </v-col>
             </v-row>
@@ -227,34 +229,9 @@ const uploadImageModal = ref(false)
 const currentPage = ref(1)
 const totalPages = ref(null)
 const properties = [
-  {
-    title: 'Modern 3BR Apartment',
-    location: 'New York',
-    price: '$450,000',
-    status: 'ACTIVE',
-    statusColor: 'green-lighten-4',
-    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQp7-a_VsyHwiODqLFYJ_Zbp0eOeGJQp4y5hA&s',
-  },
-  {
-    title: 'Downtown Studio',
-    location: 'Brooklyn',
-    price: '$195,000',
-    status: 'ACTIVE',
-    statusColor: 'green-lighten-4',
-    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQp7-a_VsyHwiODqLFYJ_Zbp0eOeGJQp4y5hA&s',
-  },
-  {
-    title: 'Suburban House',
-    location: 'Queens',
-    price: '$650,000',
-    status: 'DRAFT',
-    statusColor: 'grey-lighten-4',
-    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQp7-a_VsyHwiODqLFYJ_Zbp0eOeGJQp4y5hA&s',
-  },
+  
 ]
-//..............................................................................
 
-//------------------------------------------------------------------------------
 
 const statisticsData = ref({})
 const fetchStatistics = async () => {
@@ -371,6 +348,30 @@ const uploadImages = async () => {
     getProperties()
   } catch (error) {
     console.log(error)
+  }
+}
+
+const deleteImageLoader = ref([false])
+const deleteImage = async (item,index) => {
+  if (confirm(`Are you sure you want to delete this image ?`)) {
+    try {
+      deleteImageLoader.value[index] = true
+      const data = {
+        IMAGE_ID: item?.IMAGE_ID || 0,
+        PROPERTY_ID: item?.PROPERTY_ID || 0,
+      }
+      const res = await propertyService.DeletePropertyImage(data);
+      if(res.data.ERR_CODE == 0){
+        getProperties()
+        uploadImageModal.value = false
+        deleteImageLoader.value[index] = false
+      }else{
+        deleteImageLoader.value[index] = false
+      }
+      console.log('--->res', res);
+    } catch (error) {
+      deleteImageLoader.value[index] = false
+    }
   }
 }
 </script>

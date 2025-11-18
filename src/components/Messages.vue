@@ -170,7 +170,7 @@ const msgSentLoader = ref(false)
 const sendMessage = async () => {
   if (newMessage.value && newMessage.value.length) {
     console.log(selectedMsgObj.value, 'selectedMsgObj')
-    // msgSentLoader.value = true
+    msgSentLoader.value = true
     try {
       let data = {
         "ACTION_TYPE": "CREATE",
@@ -185,15 +185,16 @@ const sendMessage = async () => {
       let res = await propertyService.message(data)
       if (res.data.ERR_CODE == 0) {
         msgSentLoader.value = false
-        allMessages.value.push({
-          IS_ACTIVE_FLG: 1,
-          IS_DELETED_BY_RECEIVER: 0,
-          IS_DELETED_BY_SENDER: 0,
-          MESSAGE_BODY: newMessage.value,
-          SENDER_USER_ID: selectedMsgObj.value.SENDER_USER_ID,
-          RECEIVER_USER_ID: selectedMsgObj.value.RECEIVER_USER_ID,
-          position: 'right'
-        })
+        // allMessages.value.push({
+        //   IS_ACTIVE_FLG: 1,
+        //   IS_DELETED_BY_RECEIVER: 0,
+        //   IS_DELETED_BY_SENDER: 0,
+        //   MESSAGE_BODY: newMessage.value,
+        //   SENDER_USER_ID: selectedMsgObj.value.SENDER_USER_ID,
+        //   RECEIVER_USER_ID: selectedMsgObj.value.RECEIVER_USER_ID,
+        //   position: 'right'
+        // })
+        fetchMassges(selectedMsgObj.value.THREAD_ID)
         newMessage.value = ''
       }
     } catch (error) {
