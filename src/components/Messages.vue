@@ -25,10 +25,7 @@
                   <h6 class="mb-0">{{ msgObj?.PROPERTY_NAME ? truncateWords(msgObj?.PROPERTY_NAME, 6) : '' }}</h6>
                   <p>{{ truncateWords(getName(msgObj?.MEMBERS_LIST)?.USER_NAME, 6) || '' }}</p>
                   </div>
-                  <div class="d-flex justify-center flex-column align-end">
-                      <v-btn @click.stop="deleteChannelPopUp(msgObj)" variant="tonal" color="error" size="small" icon="mdi-delete"></v-btn>
-                      <p class="text-grey-darken-1 text-subtitle-2"> {{ moment(msgObj.SENT_ON).format('Do MMM, YYYY') }}</p>
-                    </div>
+                  
                   </div>
               </div>
               <!-- <p>{{ msgObj.MESSAGE_BODY }}</p> -->
@@ -47,10 +44,11 @@
           </div>
           <div v-else class="d-flex justify-center align-center w-100 h-100 flex-column">
             <div class="pa-4 bg-white border-b w-100">
-              <h5 class="pointer" @click="$router.push(`/property/${allMessages[0].PROPERTY_ID}?createdBy=${allMessages[0].SELLER_USER_ID === authStore.getUserDetails.USER_ID}`)">{{ allMessages[0].TITLE }}</h5>
+              <h5 class="pointer" @click="$router.push(`/property/${allMessages[0].PROPERTY_ID}?createdBy=${allMessages[0].SELLER_USER_ID === authStore.getUserDetails.USER_ID}`)">{{ allMessages[0]?.TITLE }}</h5>
               <div class="d-flex ga-2 justify-space-between">
                 <p class="font-weight-bold"> {{ getName(selectedMsgObj?.MEMBERS_LIST)?.USER_NAME || '' }}</p>
-                <!-- <p class="text-grey-darken-1 text-subtitle-2"> {{ moment(selectedMsgObj.SENT_ON).format('Do MMM, YYYY') }}</p> -->
+                
+                <v-btn @click.stop="deleteChannelPopUp(selectedMsgObj)" elevation="0" class="text-none font-weight-bold" rounded="lg" color="error" size="small" > <v-icon class="mr-2">mdi-delete</v-icon> Delete Channel</v-btn> 
               </div>
             </div>
             <div class="w-100 h-100 overflow-y-scroll">
@@ -60,8 +58,14 @@
                 </div>
                 <div v-else v-for="(msgObj, index) in allMessages" :key="index" :class="`d-flex ${msgObj.position == 'right' ? 'justify-end' : ''}`">
                   <v-card class="pa-4 card-box-shadow mb-4 rounded-lg" :color="msgObj.position == 'right' ? 'primary' : ''" :class="{ 'ms-auto': msgObj.self }" style="width: fit-content;">
+                    <div style="position: absolute;right: -3px;top: -2px" v-if="msgObj.position == 'right'" class="">
+                      <v-btn @click="deleteMessage(msgObj, index)" :loading="deleteMessageLoader[index]" size="x-small"  elevation="10" icon><v-icon color="error">mdi-delete</v-icon></v-btn>
+                    </div>
                     <p>{{ msgObj.MESSAGE_BODY }}</p>
-                    <p class="mt-2 text-body-2 text-grey-lighten-1">{{ moment(msgObj.SENT_ON).format('Do MMM, YYYY hh:mm A') }}</p>
+                 
+                    <p class="mt-2 text-body-2 ">({{ moment(msgObj.SENT_ON).format('Do MMM, YYYY hh:mm A') }})</p>
+                    
+                    
                   </v-card>
                 </div>
 
@@ -107,65 +111,7 @@ import { useAuthStore } from '@/stores/app'
 import { toast } from 'vue3-toastify'
 
 const authStore = useAuthStore()
-const msgArr = ref([
-  {
-    id: 1,
-    name: 'Sarah Johnson',
-    propertyName: 'Modern 3BR Apartment',
-    lastMsg: "Yes, it's available!",
-    lastActive: '2m',
-    msgArr: [
-      {
-        message: 'Is this property available?',
-        time: '10:23 AM',
-        self: false
-      },
-      {
-        message: "Yes, it's available!",
-        time: '10:23 AM',
-        self: true
-      },
-    ]
-  },
-  {
-    id: 2,
-    name: 'Mike Chen',
-    propertyName: 'Downtown Studio',
-    lastMsg: 'Yes, we can meet tomorrow',
-    lastActive: '2m',
-    msgArr: [
-      {
-        message: 'Can we schedule?',
-        time: '10:23 AM',
-        self: false
-      },
-      {
-        message: "Yes, we can meet tomorrow",
-        time: '10:23 AM',
-        self: true
-      },
-    ]
-  },
-  {
-    id: 3,
-    name: 'Emily Davis',
-    propertyName: 'Suburban House',
-    lastMsg: 'Thanks!',
-    lastActive: '2m',
-    msgArr: [
-      {
-        message: 'You can come anytime',
-        time: '10:23 AM',
-        self: false
-      },
-      {
-        message: "Thanks!",
-        time: '10:23 AM',
-        self: true
-      },
-    ]
-  },
-])
+
 
 const selectedMsgObj = ref({})
 const channels = ref([])
@@ -224,7 +170,7 @@ const msgSentLoader = ref(false)
 const sendMessage = async () => {
   if (newMessage.value && newMessage.value.length) {
     console.log(selectedMsgObj.value, 'selectedMsgObj')
-    // msgSentLoader.value = true
+    msgSentLoader.value = true
     try {
       let data = {
         "ACTION_TYPE": "CREATE",
@@ -239,15 +185,16 @@ const sendMessage = async () => {
       let res = await propertyService.message(data)
       if (res.data.ERR_CODE == 0) {
         msgSentLoader.value = false
-        allMessages.value.push({
-          IS_ACTIVE_FLG: 1,
-          IS_DELETED_BY_RECEIVER: 0,
-          IS_DELETED_BY_SENDER: 0,
-          MESSAGE_BODY: newMessage.value,
-          SENDER_USER_ID: selectedMsgObj.value.SENDER_USER_ID,
-          RECEIVER_USER_ID: selectedMsgObj.value.RECEIVER_USER_ID,
-          position: 'right'
-        })
+        // allMessages.value.push({
+        //   IS_ACTIVE_FLG: 1,
+        //   IS_DELETED_BY_RECEIVER: 0,
+        //   IS_DELETED_BY_SENDER: 0,
+        //   MESSAGE_BODY: newMessage.value,
+        //   SENDER_USER_ID: selectedMsgObj.value.SENDER_USER_ID,
+        //   RECEIVER_USER_ID: selectedMsgObj.value.RECEIVER_USER_ID,
+        //   position: 'right'
+        // })
+        fetchMassges(selectedMsgObj.value.THREAD_ID)
         newMessage.value = ''
       }
     } catch (error) {
@@ -312,6 +259,20 @@ const deleteChannel = async()=>{
     }
 }
 
+
+const deleteMessageLoader = ref([false])
+const deleteMessage = async(data , index)=>{
+  deleteMessageLoader.value[index] = true
+  try {
+    let res = await propertyService.deleteMSG(data.MESSAGE_ID)
+    if(res.data.ERR_CODE == 0){
+      fetchMassges(selectedMsgObj.value.THREAD_ID)
+      deleteMessageLoader.value[index] = false
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 
 </script>
