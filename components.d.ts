@@ -25,5 +25,6 @@ declare module 'vue' {
     SavedProperties: typeof import('./src/components/SavedProperties.vue')['default']
     Settings: typeof import('./src/components/Settings.vue')['default']
     Signup: typeof import('./src/components/Signup.vue')['default']
+    TermsAndCondition: typeof import('./src/components/TermsAndCondition.vue')['default']
   }
 }

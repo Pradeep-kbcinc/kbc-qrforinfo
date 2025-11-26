@@ -12,6 +12,7 @@ import Messages from "@/components/Messages.vue";
 import PropertyDetails from "@/components/PropertyDetails.vue";
 import Signup from "@/components/Signup.vue";
 import PrivacyPolicy from "@/components/PrivacyPolicy.vue"
+import TermsAndCondition from "@/components/TermsAndCondition.vue"
 import { useAuthStore } from '@/stores/app'
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -69,6 +70,13 @@ const router = createRouter({
           component: PrivacyPolicy
           // redirect: '/buy/properties', // 👈 redirect root to this
         },
+        {
+          path: '/terms-and-condition',
+          name: "TermsAndCondition",
+          component: TermsAndCondition
+          // redirect: '/buy/properties', // 👈 redirect root to this
+        },
+        
 
       ],
     },
