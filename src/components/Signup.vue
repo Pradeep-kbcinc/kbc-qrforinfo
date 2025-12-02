@@ -3,8 +3,8 @@
     <v-row>
       <v-col cols="12" md="6" class="right-col d-flex flex-column justify-center align-center">
         <div>
-          <v-avatar size="100" color="white">
-            <img contain src="@/assets/QR.svg">
+          <v-avatar size="200" color="white">
+            <img width="160" src="@/assets/newLogo.png">
           </v-avatar>
         </div>
         <h1>QRForInfo</h1>
@@ -56,12 +56,12 @@
             </div>
             <div class="">
               <p class="text-body-2">Email </p>
-              <v-text-field :error-messages="v$.EMAIL.$errors.map(e => e.$message)" @blur="v$.EMAIL.$touch"  v-model="propertyObj.EMAIL" rounded="lg" placeholder="your@email.com" max-width="500" label="" variant="outlined" ></v-text-field>
+              <v-text-field :error-messages="v$.EMAIL.$errors.map(e => e.$message)" @blur="v$.EMAIL.$touch" v-model="propertyObj.EMAIL" rounded="lg" placeholder="your@email.com" max-width="500" label="" variant="outlined"></v-text-field>
             </div>
             <v-btn @click="registerNow" :loading="btnLoader" class="text-none font-weight-bold mt-3" height="48" width="500" size="large" rounded="lg" color="#2663eb" elevation="0">
               SignUp
             </v-btn>
-            <p class="text-center mt-4">Already have an account ? <span @click="$router.push('/login')" class="text-primary font-weight-bold ml-2 cursor-pointer">Login</span> </p>
+            <p class="text-center mt-4">Already have an account ? <span @click="$router.push({ name: 'Login' })" class="text-primary font-weight-bold ml-2 cursor-pointer">Login</span> </p>
           </div>
         </v-container>
       </v-col>
@@ -134,7 +134,7 @@ const registerNow = async () => {
         toast.success('Registration Successfull', {
           autoClose: 4000,
         });
-        router.push('/login')
+        router.push({ name: 'Login' })
       } else {
         btnLoader.value = false
         toast.error('Something Went Wrong', {

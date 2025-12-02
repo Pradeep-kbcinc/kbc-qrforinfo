@@ -14,6 +14,7 @@ import Signup from "@/components/Signup.vue";
 import PrivacyPolicy from "@/components/PrivacyPolicy.vue"
 import TermsAndCondition from "@/components/TermsAndCondition.vue"
 import { useAuthStore } from '@/stores/app'
+import SignupV2 from "@/components/SignupV2.vue";
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
@@ -76,7 +77,7 @@ const router = createRouter({
           component: TermsAndCondition
           // redirect: '/buy/properties', // 👈 redirect root to this
         },
-        
+
 
       ],
     },
@@ -87,13 +88,13 @@ const router = createRouter({
     //   // redirect: '/buy/properties', // 👈 redirect root to this
     // },
     {
-      path: '/',
+      path: '/propertyListing',
       name: "BuyerLanding",
       component: Properties
       // redirect: '/buy/properties', // 👈 redirect root to this
     },
     {
-      path: "/login",
+      path: "/",
       name: "Login",
       component: Login,
       beforeEnter: checkLoggedInRouteGuard
@@ -106,7 +107,8 @@ const router = createRouter({
     {
       path: "/signup",
       name: "SignUp",
-      component: Signup,
+      // component: Signup,
+      component: SignupV2,
       beforeEnter: checkLoggedInRouteGuard
     },
 
@@ -131,14 +133,14 @@ router.beforeEach((to, from, next) => {
   const isGoingToPropertyPage = to.path.includes('/property/')
 
 
-  // viceVerca 
+  // viceVerca
   const isLeavingPropertyPageVice = from.path.includes('/property/')
   const isGoingToPropertyPageVice = to.path.includes('/properties')
 
   // Only clear when leaving the property route → going somewhere else
   if ((isLeavingPropertyPage && isGoingToPropertyPage) || (isLeavingPropertyPageVice && isGoingToPropertyPageVice)) {
     console.log('🧹 Clearing sessionStorage: leaving property page')
-    
+
   }else{
     sessionStorage.clear()
   }

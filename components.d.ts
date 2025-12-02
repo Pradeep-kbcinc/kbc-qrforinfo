@@ -13,8 +13,10 @@ declare module 'vue' {
   export interface GlobalComponents {
     AddNewProperty: typeof import('./src/components/AddNewProperty.vue')['default']
     AppFooter: typeof import('./src/components/AppFooter.vue')['default']
+    copy: typeof import('./src/components/LoginV2 copy.vue')['default']
     Dashboard: typeof import('./src/components/Dashboard.vue')['default']
     Login: typeof import('./src/components/Login.vue')['default']
+    LoginV2: typeof import('./src/components/LoginV2.vue')['default']
     Messages: typeof import('./src/components/Messages.vue')['default']
     PrivacyPolicy: typeof import('./src/components/PrivacyPolicy.vue')['default']
     Properties: typeof import('./src/components/Properties.vue')['default']
@@ -25,6 +27,7 @@ declare module 'vue' {
     SavedProperties: typeof import('./src/components/SavedProperties.vue')['default']
     Settings: typeof import('./src/components/Settings.vue')['default']
     Signup: typeof import('./src/components/Signup.vue')['default']
+    SignupV2: typeof import('./src/components/SignupV2.vue')['default']
     TermsAndCondition: typeof import('./src/components/TermsAndCondition.vue')['default']
   }
 }
