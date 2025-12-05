@@ -9,12 +9,17 @@
 
     <div class="d-flex align-center justify-space-between pa-6 pb-0">
       <div class="">
-        <v-btn @click="router.back()" size="small" color="primary" variant="tonal" class="text-none font-weight-bold"> <v-icon class="mr-2">mdi-arrow-left</v-icon> Back</v-btn>
+        <v-btn @click="router.back()" size="small" color="primary" variant="tonal" class="text-none font-weight-bold">
+          <v-icon class="mr-2">mdi-arrow-left</v-icon> Back</v-btn>
         <h3 class="text-h5 font-weight-bold font-weight-bold mt-4">{{ propertyObj.TITLE }}</h3>
         <p v-if="propertyObj.COUNTRY && propertyObj.STATE && propertyObj.CITY"><v-icon>mdi-map-marker-outline</v-icon>
           {{ propertyObj.COUNTRY }}, {{ propertyObj.STATE }}, {{ propertyObj.CITY }}</p>
       </div>
+
       <div v-if="authStore.isAuthenticated" class="d-flex ga-4">
+        <v-btn @click="openFeedback" height="42" color="primary"
+          class="text-none elevation-0 font-weight-bold rounded-lg" variant="outlined"> <v-icon>mdi-star</v-icon>
+          Feedback</v-btn>
         <v-btn v-if="propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID"
           @click="deleteProperty(propertyObj)" variant="outlined" prependIcon="mdi-trash-can"
           class="text-none rounded-lg elevation-0 font-weight-bold" color="red" height="42">Delete</v-btn>
@@ -244,13 +249,13 @@
       <h5>QR Code & Analytics</h5>
       <v-spacer></v-spacer>
       <v-switch size="large" inset v-model="qrViewSwitch" :label="`${qrViewSwitch} View`" false-value="Portrait"
-              true-value="Landscape" hide-details class="ml-4" color="primary"></v-switch>
+        true-value="Landscape" hide-details class="ml-4" color="primary"></v-switch>
     </v-toolbar>
     <v-card rounded="b-lg t-0" elevation="0">
       <!-- Portrait  -->
-      <div id="portraitContent" v-if="qrViewSwitch == 'Portrait'"> 
+      <div id="portraitContent" v-if="qrViewSwitch == 'Portrait'">
         <div class="pa-4 ">
-         
+
           <!-- <h3 class="text-h6 font-weight-bold mb-2">QR Code</h3> -->
 
 
@@ -261,8 +266,8 @@
             <!-- {{
             propertyObj.LISTING_TYPE.toUpperCase() }} -->
             FOR SALE
-            </h2>
-            
+          </h2>
+
           <p class="text-primary mb-6 text-center">REALLY <span class="px-1"> GREAT</span> REALITY</p>
 
           <div class="d-flex justify-center flex-column align-center">
@@ -280,49 +285,41 @@
           <h5 class="text-white">SCAN TO SEE INFORMATION ON THIS LISTING</h5>
         </div>
       </div>
-      
-        <div id="landscapeContent" v-else class="d-flex flex-column">
-      <div class="d-flex">
-        <!-- Left: QR Section -->
-        <div class="pa-8 d-flex flex-column align-center justify-center"  style="
+
+      <div id="landscapeContent" v-else class="d-flex flex-column">
+        <div class="d-flex">
+          <!-- Left: QR Section -->
+          <div class="pa-8 d-flex flex-column align-center justify-center" style="
         flex: 1;
         background-color: #2663eb;
         clip-path: polygon(0px 0px, 100% 0px, 78% 100%, 0px 100%);
       ">
-          <v-card class="pa-2 elevation-0" color="white">
-            <qrcode-vue
-              :value="`${baseUrl}/#/buy/property/${propertyObj.PROPERTY_ID}?qr=1`"
-              :size="200"
-              level="H"
-              background="white"
-              foreground="black"
-            />
-          </v-card>
-        </div>
-
-        <!-- Right: Info Section -->
-        <div class="pa-8 d-flex flex-column align-center justify-center" style="flex: 1;">
-          <div class="d-flex justify-center mb-4">
-            <img width="100" src="@/assets/newLogo.png" alt="logo" />
+            <v-card class="pa-2 elevation-0" color="white">
+              <qrcode-vue :value="`${baseUrl}/#/buy/property/${propertyObj.PROPERTY_ID}?qr=1`" :size="200" level="H"
+                background="white" foreground="black" />
+            </v-card>
           </div>
-          <h2 class="text-h3 font-weight-black text-center mb-2" v-if="propertyObj.LISTING_TYPE">
-            <!-- {{ propertyObj.LISTING_TYPE.toUpperCase() }} -->
-              FOR SALE
-          </h2>
-          <p class="text-primary text-center">REALLY <span class="px-1">GREAT</span> REALITY</p>
-        </div>
-      </div>
 
-      <!-- Bottom Banner -->
-      <div
-        class="d-flex justify-center align-center"
-        style="background-color: #ee961d; min-height: 60px;"
-      >
-        <h5 class="text-white text-center">
-          SCAN TO SEE INFORMATION ON THIS LISTING
-        </h5>
-      </div>
-    
+          <!-- Right: Info Section -->
+          <div class="pa-8 d-flex flex-column align-center justify-center" style="flex: 1;">
+            <div class="d-flex justify-center mb-4">
+              <img width="100" src="@/assets/newLogo.png" alt="logo" />
+            </div>
+            <h2 class="text-h3 font-weight-black text-center mb-2" v-if="propertyObj.LISTING_TYPE">
+              <!-- {{ propertyObj.LISTING_TYPE.toUpperCase() }} -->
+              FOR SALE
+            </h2>
+            <p class="text-primary text-center">REALLY <span class="px-1">GREAT</span> REALITY</p>
+          </div>
+        </div>
+
+        <!-- Bottom Banner -->
+        <div class="d-flex justify-center align-center" style="background-color: #ee961d; min-height: 60px;">
+          <h5 class="text-white text-center">
+            SCAN TO SEE INFORMATION ON THIS LISTING
+          </h5>
+        </div>
+
       </div>
       <div class="pa-2">
         <div class="d-flex ga-4">
@@ -451,6 +448,668 @@
     </v-card>
   </v-dialog>
 
+  <v-dialog fullscreen v-model="feedbackModal">
+    <div style="background-color: white;overflow-y: auto; background-color: #faf8f0;height: 100vh;">
+      <div style="position: fixed;background-color: rgb(256, 256, 256, 0.9);width: 100%;height: 150px;z-index: 1;">
+        <v-container fluid class="px-10">
+          <div class="d-flex">
+            <div>
+              <div class="d-flex align-center">
+                <v-icon size="x-large" color="primary" class="mr-2">mdi-shield-sync-outline</v-icon>
+                <h2 class="font-weight-bold">QRFORINFO Trust System</h2>
+              </div>
+              <v-row>
+                <v-col>
+                  <v-btn @click="selectedType = 'RatingForm'"
+                    :color="selectedType == 'RatingForm' ? 'primary' : '#f5f5f4'"
+                    class="text-none text-black rounded-lg elevation-0" size="large"
+                    :variant="selectedType == 'RatingForm' ? 'elevated' : 'tonal'">1. Rating Form </v-btn>
+                </v-col>
+                <v-col>
+                  <v-btn @click="selectedType = 'PublicProfile'"
+                    :color="selectedType == 'PublicProfile' ? 'primary' : '#f5f5f4'"
+                    class="text-none text-black rounded-lg elevation-0" size="large"
+                    :variant="selectedType == 'PublicProfile' ? 'elevated' : 'tonal'">2. Public Profile </v-btn>
+                </v-col>
+                <v-col>
+                  <v-btn @click="selectedType = 'MyReputation'"
+                    :color="selectedType == 'MyReputation' ? 'primary' : '#f5f5f4'"
+                    class="text-none text-black rounded-lg elevation-0" size="large"
+                    :variant="selectedType == 'MyReputation' ? 'elevated' : 'tonal'">3. My Reputation </v-btn>
+                </v-col>
+                <v-col>
+                  <v-btn @click="selectedType = 'RiskWarning'"
+                    :color="selectedType == 'RiskWarning' ? 'primary' : '#f5f5f4'"
+                    class="text-none text-black rounded-lg elevation-0" size="large"
+                    :variant="selectedType == 'RiskWarning' ? 'elevated' : 'tonal'">4. Risk Warning </v-btn>
+                </v-col>
+                <v-col>
+                  <v-btn @click="selectedType = 'DisputeForm'"
+                    :color="selectedType == 'DisputeForm' ? 'primary' : '#f5f5f4'"
+                    class="text-none text-black rounded-lg elevation-0" size="large"
+                    :variant="selectedType == 'DisputeForm' ? 'elevated' : 'tonal'">5. Dispute Form </v-btn>
+                    
+                </v-col>
+                <v-col>
+                  <v-btn @click="selectedType = 'AdminDashboard'"
+                    :color="selectedType == 'AdminDashboard' ? 'primary' : '#f5f5f4'"
+                    class="text-none text-black rounded-lg elevation-0" size="large"
+                    :variant="selectedType == 'AdminDashboard' ? 'elevated' : 'tonal'">6. Admin Dashboard </v-btn>
+                    
+                </v-col>
+              </v-row>
+            </div>
+            <v-spacer></v-spacer>
+            <v-btn size="small" @click="feedbackModal = false" variant="tonal" icon="mdi-close"></v-btn>
+          </div>
+
+        </v-container>
+      </div>
+
+
+      <div class="d-flex justify-center py-4 position-relative" style="top: 180px;">
+        <v-card v-if="selectedType == 'RatingForm'" width="900" class="pa-8 card-box-shadow" rounded="xl">
+          <!-- Status Badge -->
+          <div class="text-center mb-6">
+            <v-chip color="green-lighten-4" text-color="green-darken-2" variant="flat">
+              Interaction Completed
+            </v-chip>
+          </div>
+
+          <!-- Title -->
+          <h2 class="text-center font-weight-bold">Rate Your Experience</h2>
+
+          <p class="text-center mt-2 text-medium-emphasis">
+            With <strong>Michael Torres</strong> • Consultation on Dec 1, 2024
+          </p>
+
+          <!-- Rating -->
+          <div class="mt-8">
+            <label class="font-weight-bold">Overall Rating *</label>
+
+            <div class="d-flex justify-center mt-3">
+              <v-rating v-model="rating" color="amber" size="x-large" hover />
+            </div>
+
+            <p class="text-center text-medium-emphasis mt-2">Select a rating</p>
+          </div>
+
+          <!-- Quick Tags -->
+          <div class="mt-8">
+            <p class="font-weight-bold mb-2">Quick Tags</p>
+
+            <div class="d-flex flex-wrap ga-3">
+              <v-chip v-for="tag in tags" size="large" :key="tag" rounded variant="outlined"
+                class="px-4 font-weight-bold" @click="toggleTag(tag)"
+                :color="selectedTags.includes(tag) ? 'primary' : ''">
+                {{ tag }}
+              </v-chip>
+            </div>
+
+            <v-btn variant="text" color="red" class="mt-3 text-caption">
+              Report concerns (scam, abuse, payment issues)
+            </v-btn>
+          </div>
+
+          <!-- Public Feedback -->
+          <div class="mt-8">
+            <label class="font-weight-bold">Public Feedback</label>
+
+            <v-textarea v-model="publicFeedback" rows="4" rounded="lg" variant="outlined"
+              placeholder="Share your experience to help other users..."></v-textarea>
+
+            <div class="text-right text-caption text-medium-emphasis">
+              {{ publicFeedback.length }}/1000
+            </div>
+          </div>
+
+          <!-- Private Note -->
+          <div>
+            <label class="font-weight-bold">Private Note to QRFORINFO Team</label>
+            <v-textarea v-model="privateNote" rows="3" rounded="lg" variant="outlined"
+              placeholder="Additional concerns for our safety team..."></v-textarea>
+          </div>
+
+          <!-- Actions -->
+          <div class="d-flex justify-space-between mt-10">
+            <v-btn color="primary" size="large" min-width="400" height="48"
+              class="elevation-0 text-none font-weight-bold" rounded="lg" @click="submit">
+              Submit Rating
+            </v-btn>
+
+            <v-btn variant="text" class="text-medium-emphasis text-none font-weight-bold">
+              Skip for now
+            </v-btn>
+          </div>
+
+        </v-card>
+        <div v-if="selectedType == 'PublicProfile'">
+          <v-card width="900" rounded="xl" elevation="2" class="pa-8 mb-8 card-box-shadow">
+            <div class="d-flex justify-space-between align-start">
+
+              <!-- LEFT SIDE -->
+              <div>
+                <div class="d-flex">
+                  <!-- Avatar -->
+                  <v-avatar size="84" class="mr-6" rounded
+                    style="background: linear-gradient(135deg, #F7C56A, #D9902A);">
+                    <span class="text-h5 font-weight-bold white--text">{{ initials }}</span>
+                  </v-avatar>
+
+                  <div>
+                    <h2 class="font-weight-bold">{{ profile.name }}</h2>
+                    <p class="text-medium-emphasis mb-3">Member since {{ profile.memberSince }}</p>
+
+                    <!-- Verified badges -->
+                    <v-chip color="green-lighten-4" text-color="green-darken-2" class="mr-3">
+                      Reliable
+                    </v-chip>
+
+                    <v-chip v-for="v in verified" :key="v" class="mr-2" color="green-lighten-4"
+                      text-color="green-darken-2" variant="outlined">
+                      <v-icon size="14" class="mr-1">mdi-check</v-icon>
+                      {{ v }}
+                    </v-chip>
+                  </div>
+
+                </div>
+
+              </div>
+
+              <!-- Trust Score -->
+              <v-card width="110" class="d-flex flex-column align-center py-4 text-white" rounded="lg"
+                style="background: linear-gradient(135deg, #3FB57C, #1E7F4B);">
+                <h2 class="font-weight-bold">{{ profile.trustScore }}</h2>
+                <span class="text-caption">TRUST SCORE</span>
+              </v-card>
+
+            </div>
+            <!-- Stats -->
+            <v-row class="mt-10">
+              <v-col>
+                <v-card class="pa-6 rounded-xl" elevation="0" color="grey-lighten-4">
+                  <h2 class="font-weight-bold mb-1">{{ profile.completedInteractions }}</h2>
+                  <span class="text-medium-emphasis">Completed Interactions</span>
+                </v-card>
+              </v-col>
+              <v-col>
+                <v-card height="100%" width="100%" class="pa-6 rounded-xl" elevation="0" color="grey-lighten-4">
+                  <h2 class="font-weight-bold mb-1">{{ profile.usersRatedBy }}</h2>
+                  <span class="text-medium-emphasis">Users Rated By</span>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-card>
+
+          <!-- Recent Feedback -->
+          <v-card width="900" rounded="xl" elevation="2" class="pa-8 card-box-shadow">
+            <h2 class="font-weight-bold mb-6">Recent Feedback</h2>
+
+            <div v-for="fb in feedback" :key="fb.id">
+              <v-card class="pa-6 mb-6 rounded-xl" variant="outlined" elevation="0">
+                <div class="d-flex justify-space-between">
+                  <!-- Reviewer Info -->
+                  <div class="d-flex">
+                    <v-avatar size="46" class="mr-4" color="grey-lighten-3">
+                      <span class="text-subtitle-2 font-weight-medium">{{ getInitials(fb.name) }}</span>
+                    </v-avatar>
+
+                    <div>
+                      <h4 class="font-weight-medium mb-1">{{ fb.name }}</h4>
+                      <span class="text-medium-emphasis text-body-2">{{ fb.date }}</span>
+
+                      <!-- Tags -->
+                      <div class="d-flex ga-2 mt-3">
+                        <v-chip v-for="tag in fb.tags" :key="tag" size="small" variant="outlined"
+                          color="grey-lighten-2">
+                          {{ tag }}
+                        </v-chip>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Star Rating -->
+                  <v-rating v-model="fb.rating" readonly color="amber" size="22" />
+                </div>
+
+                <!-- Feedback Text -->
+                <p class="mt-4 text-body-1">
+                  {{ fb.comment }}
+                </p>
+              </v-card>
+            </div>
+            <div class="d-flex justify-center">
+              <v-btn color="primary" class="text-none font-weight-bold" variant="text" size="large">View All
+                Reviews</v-btn>
+            </div>
+
+          </v-card>
+        </div>
+        <div v-if="selectedType == 'MyReputation'">
+          <h2 class="font-weight-bold">My Reputation</h2>
+          <p class="text-subtitle-1">Track your trust profile and ratings from the community</p>
+          <v-card width="900" rounded="xl" class="pa-8 mb-2 mt-4 card-box-shadow" elevation="0">
+            <div class="d-flex align-center">
+              <v-icon size="32" color="green-darken-2" class="mr-4">mdi-shield-check-outline</v-icon>
+              <h3 class="text-h6 font-weight-medium">Trust Score</h3>
+            </div>
+
+            <div class="mt-4">
+              <span class="text-h3 font-weight-bold">86</span>
+              <span class="text-h5 text-medium-emphasis">/100</span>
+            </div>
+
+            <div class="d-flex align-center mt-3">
+              <v-icon size="20" color="green-darken-2" class="mr-1">mdi-trending-up</v-icon>
+              <span class="text-body-2" style="color:#1F8F4B;">+3 this month</span>
+            </div>
+          </v-card>
+
+          <!-- AVG RATING CARD -->
+          <v-card width="900" rounded="xl" class="pa-8 card-box-shadow" elevation="0">
+            <div class="d-flex align-center">
+              <v-icon size="32" color="orange-darken-2" class="mr-4">mdi-star-outline</v-icon>
+              <h3 class="text-h6 font-weight-medium">Avg Rating</h3>
+            </div>
+
+            <div class="mt-4">
+              <span class="text-h3 font-weight-bold">4.8</span>
+              <span class="text-h5 text-medium-emphasis">/5</span>
+            </div>
+
+            <p class="text-body-2 text-medium-emphasis mt-3">
+              From 45 ratings
+            </p>
+          </v-card>
+          <v-card width="900" rounded="xl" class="pa-8 card-box-shadow mt-4">
+            <h2 class="font-weight-bold mb-6">Feedback You've Received</h2>
+
+            <div v-for="fb in feedback" :key="fb.id">
+              <v-card class="pa-6 mb-6 rounded-xl" variant="outlined" elevation="0">
+                <div class="d-flex justify-space-between">
+                  <!-- Reviewer Info -->
+                  <div class="d-flex">
+                    <v-avatar size="46" class="mr-4" color="grey-lighten-3">
+                      <span class="text-subtitle-2 font-weight-medium">{{ getInitials(fb.name) }}</span>
+                    </v-avatar>
+
+                    <div>
+                      <h4 class="font-weight-medium mb-1">{{ fb.name }}</h4>
+                      <span class="text-medium-emphasis text-body-2">{{ fb.date }}</span>
+
+                      <!-- Tags -->
+                      <div class="d-flex ga-2 mt-3">
+                        <v-chip v-for="tag in fb.tags" :key="tag" size="small" variant="outlined"
+                          color="grey-lighten-2">
+                          {{ tag }}
+                        </v-chip>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Star Rating -->
+                  <v-rating v-model="fb.rating" readonly color="amber" size="22" />
+                </div>
+
+                <!-- Feedback Text -->
+                <p class="mt-4 text-body-1">
+                  {{ fb.comment }}
+                </p>
+              </v-card>
+            </div>
+            <div class="d-flex justify-center">
+              <v-btn color="primary" class="text-none font-weight-bold" variant="text" size="large">View All
+                Reviews</v-btn>
+            </div>
+
+          </v-card>
+        </div>
+        <v-card v-if="selectedType == 'RiskWarning'" width="900" class="pa-8 card-box-shadow warning-border" rounded="xl">
+  
+      <div class="text-center">
+        <div class="warning-icon mx-auto mb-4 d-flex align-center justify-center">
+          <v-icon size="42" color="#D14B4B">mdi-alert-outline</v-icon>
+        </div>
+
+        <h2 class="text-h4 font-weight-bold mb-2">Trust Warning</h2>
+        <p class="text-body-1 text-medium-emphasis">
+          Please review this information before proceeding
+        </p>
+      </div>
+
+      <!-- USER RISK BOX -->
+      <v-card
+        rounded="xl"
+        class="pa-6 mt-8 risk-box"
+        elevation="0"
+      >
+        <div class="d-flex align-start">
+          <div class="avatar-box mr-4">
+            <span class="avatar-text">JS</span>
+          </div>
+
+          <div>
+            <div class="">
+              <h3 class="text-h6 font-weight-bold mr-3">John Suspicious</h3>
+              <p>
+                <v-btn size="small" color="#D14B4B" elevation="0" rounded="lg" text-color="white" class="mr-3 text-none font-weight-bold">
+                HIGH_RISK
+              </v-btn>
+
+              <span class="text-body-1 text-medium-emphasis">
+                Trust Score: 32/100
+              </span>
+            </p>
+            </div>
+
+            <!-- Bullet Danger List -->
+            <ul class="mt-4 reports-list">
+              <li>
+                <v-icon size="18" color="#D14B4B" class="mr-2">mdi-close-circle</v-icon>
+                <strong>3 scam-related reports</strong> in the last 30 days
+              </li>
+              <li>
+                <v-icon size="18" color="#D14B4B" class="mr-2">mdi-close-circle</v-icon>
+                Only <strong>8 completed interactions</strong>
+              </li>
+              <li>
+                <v-icon size="18" color="#D14B4B" class="mr-2">mdi-close-circle</v-icon>
+                Phone and payment <strong>not verified</strong>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </v-card>
+
+      <!-- RECENT USER REPORTS -->
+      <h3 class="text-h6 font-weight-bold mt-10 mb-4">Recent User Reports:</h3>
+
+      <!-- REPORT ITEM -->
+      <v-card
+        v-for="item in reports"
+        :key="item.id"
+        rounded="xl"
+        variant="outlined" color="red" class="rounded-lg pa-4 mt-2"
+      >
+        <div class="d-flex justify-space-between text-black">
+          <strong class="text-black">{{ item.name }}</strong>
+          <span class="text-body-2 text-black">{{ item.time }}</span>
+        </div>
+
+        <p class="text-body-2 mt-2">
+          {{ item.text }}
+        </p>
+      </v-card>
+
+      
+   
+        </v-card>
+        <v-card v-if="selectedType == 'DisputeForm'" width="900" class="pa-8 card-box-shadow" rounded="xl">
+            
+
+      <!-- ICON -->
+      <div class="d-flex justify-center mb-6">
+        <v-avatar class="" size="86" color="#fef3c7">
+          <v-icon size="36" color="#E2B747">mdi-flag-outline</v-icon>
+        </v-avatar>
+      </div>
+
+      <!-- TITLE -->
+      <h2 class="text-h4 text-center font-weight-bold mb-2">Dispute Rating</h2>
+      <p class="text-center text-body-1 text-medium-emphasis mb-10">
+        Report feedback that violates our policies
+      </p>
+
+      <!-- ORIGINAL FEEDBACK CARD -->
+      <v-card
+        rounded="xl"
+        elevation="0"
+        class="pa-6 mb-8"
+        style="background:#fafafa; border:1px solid #eee;"
+      >
+        <div class="mb-2 text-body-1 text-medium-emphasis">
+          Original feedback you're disputing:
+        </div>
+
+        <!-- Stars + Date -->
+        <div class="d-flex align-center mb-2">
+          <v-rating
+            model-value="4"
+            color="#E2B747"
+            readonly
+            density="compact"
+            size="20"
+          ></v-rating>
+
+          <span class="ml-3 text-body-2 text-medium-emphasis">
+            • Nov 25, 2024
+          </span>
+        </div>
+
+        <!-- Review text -->
+        <p class="text-body-1 mb-3">
+          "Good service overall. Minor delay but handled professionally."
+        </p>
+
+        <!-- Chip -->
+        <v-chip
+          color="#e8e4d8"
+          text-color="black"
+          size="small"
+          class="text-caption"
+        >
+          Accurate info
+        </v-chip>
+      </v-card>
+
+      <!-- FORM -->
+      <div class="text-body-1 font-weight-medium mb-2">Reason for Dispute *</div>
+      <v-select
+        :items="reasons"
+        placeholder="Select a reason..."
+        variant="outlined"
+        rounded="lg"
+        class="mb-6"
+      ></v-select>
+
+      <div class="text-body-1 font-weight-medium mb-2">Explanation *</div>
+      <v-textarea
+        variant="outlined"
+        rounded="lg"
+        placeholder="Please explain why this feedback should be removed. Include any relevant details or evidence..."
+        class="mb-2"
+        rows="5"
+      ></v-textarea>
+
+      <p class="text-caption text-medium-emphasis mb-8">
+        Our team will review your dispute within 3–5 business days
+      </p>
+
+      <!-- NOTE BOX -->
+      <v-card
+        rounded="lg"
+        class="pa-4 mb-10"
+        elevation="0"
+        style="background:#fff7df; border:1px solid #f3e1b7;"
+      >
+        <strong class="text-body-1 d-block mb-1">Note:</strong>
+        <p class="text-body-2 text-medium-emphasis">
+          False or abusive dispute reports may result in action against your account.
+          Only dispute feedback that genuinely violates our policies.
+        </p>
+      </v-card>
+
+      <!-- BUTTONS -->
+      <div class="d-flex align-center justify-center mt-8">
+        <v-btn
+          height="48"
+          
+          class="submit-btn text-none"
+          rounded="lg"
+        >
+          Submit Dispute
+        </v-btn>
+
+        <v-btn
+          variant="plain"
+          class="ml-6 text-medium-emphasis"
+        >
+          Cancel
+        </v-btn>
+      </div>
+
+    
+          </v-card>
+        
+          <div v-if="selectedType == 'AdminDashboard'">
+            <div class="d-flex justify-space-between align-center mb-6">
+      <div>
+        <h1 class="text-h4 font-weight-bold mb-1">Moderation Dashboard</h1>
+        <p class="text-body-1 text-medium-emphasis">
+          Review ratings, disputes, and manage user trust profiles
+        </p>
+      </div>
+
+      <div class="d-flex ga-3">
+        <v-btn variant="outlined" size="large" class="text-none" rounded="lg">
+          <v-icon left>mdi-magnify</v-icon>
+          Search Users
+        </v-btn>
+
+        <v-btn variant="outlined" size="large" class="text-none" rounded="lg">
+          <v-icon left>mdi-filter-variant</v-icon>
+          Filters
+        </v-btn>
+      </div>
+    </div>
+
+    <!-- METRICS GRID -->
+    <v-row class="mb-8">
+      <v-col v-for="stat in stats" :key="stat.label" cols="12" md="4" lg="2">
+        <v-card
+          rounded="lg"
+          elevation="0"
+          class="pa-6 text-center card-box-shadow"
+          style="background:white;"
+        >
+          <h2 :style="{ color: stat.color }" class="text-h4 font-weight-bold">
+            {{ stat.value }}
+          </h2>
+          <p class="text-medium-emphasis text-body-1 mt-1">
+            {{ stat.label }}
+          </p>
+        </v-card>
+      </v-col>
+    </v-row>
+
+    <!-- TABS -->
+    <v-tabs
+      v-model="activeTab"
+      color="primary"
+      class="mb-6"
+      slider-color="primary"
+    >
+      <v-tab value="active">Active Disputes</v-tab>
+      <v-tab value="highrisk">High-Risk Flags</v-tab>
+      <v-tab value="recent">Recent Ratings</v-tab>
+      <v-tab value="patterns">Suspicious Patterns</v-tab>
+    </v-tabs>
+
+    <v-divider class="mb-6"></v-divider>
+
+        <!-- DISPUTE LIST -->
+        <v-row>
+          <v-col cols="12" v-for="item in disputes" :key="item.id">
+            <v-card rounded="xl" elevation="0" class="pa-6 mb-6 card-box-shadow" style="background:white; border:1px solid #eee;">
+              <div class="d-flex justify-space-between align-start mb-4">
+                <div>
+                  <!-- ID + Names -->
+                  <div class="text-body-2 text-medium-emphasis mb-1">
+                    {{ item.id }}
+                  </div>
+
+                  <div class="text-body-1 font-weight-bold">
+                    {{ item.from }}
+                    <span class="text-medium-emphasis">vs</span>
+                    {{ item.to }}
+
+                    <v-chip
+                      v-if="item.tag"
+                      size="small"
+                      class="ml-2"
+                      :color="item.tag === 'URGENT' ? '#d9534f' : '#d48d27'"
+                      text-color="white"
+                    >
+                      {{ item.tag }}
+                    </v-chip>
+                  </div>
+
+                  <!-- Meta Row -->
+                  <div class="d-flex align-center mt-2 ga-4 text-body-2 text-medium-emphasis">
+                    <span>
+                      <v-icon size="16" color="#d48d27">mdi-flag-outline</v-icon>
+                      {{ item.reason }}
+                    </span>
+
+                    <span>• {{ item.time }}</span>
+
+                    <span>• ⭐ rating disputed</span>
+                  </div>
+                </div>
+
+                <!-- ACTION ICONS -->
+                <div class="d-flex align-center ga-3">
+                  <v-btn icon variant="text" size="small">
+                    <v-icon>mdi-eye-outline</v-icon>
+                  </v-btn>
+
+                  <v-menu>
+                    <template #activator="{ props }">
+                      <v-btn icon variant="text" size="small" v-bind="props">
+                        <v-icon>mdi-dots-vertical</v-icon>
+                      </v-btn>
+                    </template>
+
+                    <v-list>
+                      <v-list-item title="Open"></v-list-item>
+                      <v-list-item title="Assign Moderator"></v-list-item>
+                    </v-list>
+                  </v-menu>
+                </div>
+              </div>
+
+              <!-- ORIGINAL FEEDBACK SECTION -->
+              <v-card
+                rounded="lg"
+                elevation="0"
+                class="pa-4 mb-4"
+                style="background:#fafafa; border:1px solid #eee;"
+              >
+                <div class="text-medium-emphasis text-body-2 mb-1">Original feedback:</div>
+                <div class="text-body-1">
+                  “{{ item.feedback }}”
+                </div>
+              </v-card>
+
+              <!-- ACTION BUTTONS -->
+              <div class="d-flex ga-3">
+                <v-btn rounded="lg" color="green" dark>Remove Rating</v-btn>
+                <v-btn rounded="lg" color="#d48d27" dark>Keep Rating</v-btn>
+                <v-btn rounded="lg" variant="outlined">Request More Info</v-btn>
+                <v-btn rounded="lg" variant="outlined">View Full History</v-btn>
+              </div>
+
+            </v-card>
+          </v-col>
+        </v-row>
+          </div>
+
+      </div>
+
+
+
+    </div>
+  </v-dialog>
 </template>
 
 <script setup>
@@ -480,13 +1139,14 @@ const router = useRouter()
 //------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
+const selectedType = ref('RatingForm')
 onMounted(() => {
   // if (authStore.isAuthenticated) {
   //   fetchStatistics()
   // }
 
   baseUrl.value = window.location.origin
-  
+
   if (route.query.qr) {
     updateQrStatistics()
     warningPopUp.value = true
@@ -573,12 +1233,12 @@ const downloadPDF = async (propertyObj) => {
   try {
     isDownloading.value = true;
     let prtHtml
-    if(qrViewSwitch.value == 'Portrait'){
-       prtHtml = document.getElementById('portraitContent')
-    }else{
-       prtHtml = document.getElementById('landscapeContent')
+    if (qrViewSwitch.value == 'Portrait') {
+      prtHtml = document.getElementById('portraitContent')
+    } else {
+      prtHtml = document.getElementById('landscapeContent')
     }
-     // Reference to form container
+    // Reference to form container
 
     const html2pdf = (await import('html2pdf.js')).default;
     console.log('--->html2pdf', html2pdf);
@@ -827,6 +1487,116 @@ const deleteImage = async (item) => {
   }
 }
 //------------------------------------------------------------------------------
+const feedbackModal = ref(false)
+const openFeedback = () => {
+  feedbackModal.value = true
+}
+const rating = ref(0);
+
+const tags = [
+  "On time",
+  "Responsive",
+  "Polite",
+  "Accurate info",
+  "Helpful",
+  "Professional",
+];
+
+const selectedTags = ref([]);
+
+const toggleTag = (tag) => {
+  if (selectedTags.value.includes(tag)) {
+    selectedTags.value = selectedTags.value.filter((t) => t !== tag);
+  } else {
+    selectedTags.value.push(tag);
+  }
+};
+
+const publicFeedback = ref("");
+const privateNote = ref("");
+
+const submit = () => {
+  console.log({
+    rating: rating.value,
+    selectedTags: selectedTags.value,
+    publicFeedback: publicFeedback.value,
+    privateNote: privateNote.value
+  });
+};
+
+const profile = ref({
+  name: "Sarah Chen",
+  memberSince: "2023",
+  trustScore: 86,
+  completedInteractions: 127,
+  usersRatedBy: 45,
+});
+
+const verified = ["Email", "Phone", "Payment"];
+
+const feedback = ref([
+  {
+    id: 1,
+    name: "Alex Johnson",
+    date: "2 days ago",
+    tags: ["On time", "Professional", "Helpful"],
+    rating: 5,
+    comment:
+      "Excellent communication throughout. Very knowledgeable and provided accurate information quickly.",
+  },
+  {
+    id: 2,
+    name: "Maria Garcia",
+    date: "1 week ago",
+    tags: ["Responsive", "Polite"],
+    rating: 5,
+    comment:
+      "Very polite and very responsive. Smooth interaction overall.",
+  },
+]);
+
+const initials = computed(() => {
+  return profile.value.name
+    .split(" ")
+    .map((n) => n[0])
+    .join("");
+});
+
+const getInitials = (n) => n.split(" ").map((v) => v[0]).join("");
+const reports = [
+  { id: 1, name: "Emma Wilson", text: "Suspected scam – requested off-platform payment", time: "3 days ago" },
+  { id: 2, name: "Robert Chen", text: "Did not deliver as promised", time: "8 days ago" },
+];
+const activeTab = ref("active");
+
+const stats = [
+  { label: "Open Disputes", value: 12, color: "#d9534f" },
+  { label: "Pending Reviews", value: 34, color: "#d48d27" },
+  { label: "High-Risk Users", value: 8, color: "#d04d4d" },
+  { label: "Resolved Today", value: 156, color: "#3d8b37" },
+  { label: "Total This Month", value: "2,341", color: "#2c60d3" }
+];
+
+const disputes = [
+  {
+    id: "D-2847",
+    from: "Sarah Chen",
+    to: "Mike Johnson",
+    tag: "HIGH",
+    reason: "Contains false information",
+    time: "2 hours ago",
+    feedback: "This person was completely unreliable and wasted my time. Would not recommend."
+  },
+  {
+    id: "D-2846",
+    from: "Robert Taylor",
+    to: "Emma Davis",
+    tag: "URGENT",
+    reason: "Abusive language",
+    time: "5 hours ago",
+    feedback: "This person was completely unreliable and wasted my time. Would not recommend."
+  }
+];
 </script>
 
 <style scoped lang="scss">
@@ -839,5 +1609,49 @@ const deleteImage = async (item) => {
 .v-overlay {
   backdrop-filter: blur(6px) !important;
   background-color: rgba(0, 0, 0, 0.3) !important;
+}
+
+.warning-border {
+  border: 2px solid #D14B4B;
+  background: #fffdfa;
+}
+
+.warning-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #fdecec;
+}
+
+.risk-box {
+  background: #fdecec;
+  border: 1px solid #f3c7c7;
+}
+
+.avatar-box {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  background: #d9d9d9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-text {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.reports-list li {
+  list-style: none;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.report-card {
+  background: white;
+  border: 1px solid #eee;
 }
 </style>
