@@ -40,21 +40,38 @@
               style="font-size: 8.0rem;line-height: 1;">
               <v-carousel @click.stop v-if="propertyObj.IMAGES && propertyObj.IMAGES?.length > 0" hide-delimiters
                 :show-arrows="propertyObj.IMAGES?.length > 1" height="250">
+
                 <v-carousel-item class="pointer" @click="previewImages(propertyObj.IMAGES)" cover
                   v-for="(image, i) in propertyObj.IMAGES" :key="i">
-                  <v-img v-if="image?.IMAGE_URL"
-                    :src="image?.IMAGE_URL ? image.IMAGE_URL : `@/assets/property_placeholder.webp`"
-                    lazy-src="@/assets/property_placeholder.webp" cover height="250" class="rounded-lg">
-                    <v-btn :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'"
-                      class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 left-0 mt-4 ms-4"
-                      height="" density="comfortable">{{ propertyObj.LISTING_TYPE }}</v-btn>
-                    <template #placeholder>
-                      <div class="d-flex fill-height align-center justify-center" style="background-color: #f2f2f2;">
-                        <v-progress-circular indeterminate color="primary"></v-progress-circular>
-                      </div>
-                    </template>
-                  </v-img>
-                  <v-img v-else cover src="@/assets/property_placeholder.webp" alt="" />
+                  <div v-if="image?.IMAGE_URL">
+                    <v-hover v-slot="{ isHovering, props }">
+                      <v-img v-bind="props"
+                        :src="image?.IMAGE_URL ? image.IMAGE_URL : `@/assets/property_placeholder.webp`"
+                        lazy-src="@/assets/property_placeholder.webp" cover height="250" class="rounded-lg">
+                        <v-btn :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'"
+                          class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 left-0 mt-4 ms-4"
+                          height="" density="comfortable">{{ propertyObj.LISTING_TYPE }}</v-btn>
+                        <template #placeholder>
+                          <div class="d-flex fill-height align-center justify-center"
+                            style="background-color: #f2f2f2;">
+                            <v-progress-circular indeterminate color="primary"></v-progress-circular>
+                          </div>
+                        </template>
+                        <v-overlay
+                        :model-value="!!isHovering"
+                        class="align-center justify-center"
+                        scrim=""
+                        contained
+                      >
+                        <v-btn variant="flat" class="text-none font-weight-bold">See Full Image</v-btn>
+                      </v-overlay>
+                      </v-img>
+                    </v-hover>
+                    
+                  </div>
+                  <v-img v-bind="props" v-else cover src="@/assets/property_placeholder.webp" alt="" />
+
+
                 </v-carousel-item>
               </v-carousel>
               <v-carousel @click.stop="
@@ -200,7 +217,7 @@
     <!-- <v-toolbar class="rounded-t-xl " flat density="compact"></v-toolbar> -->
     <v-defaults-provider :defaults="{}">
       <v-sheet class="overflow-hidden" rounded="xl">
-        <v-carousel v-model="currentIndex" direction="vertical" show-arrows progress="red" vertical-arrows="left"
+        <v-carousel v-model="currentIndex" direction="vertical" show-arrows progress="warning" vertical-arrows="left"
           vertical-delimiters="right">
           <v-carousel-item v-for="(item, i) in selectedImageArr" :key="i" :src="item.IMAGE_URL" contain>
 
@@ -253,40 +270,43 @@
     </v-toolbar>
     <v-card rounded="b-lg t-0" elevation="0">
       <!-- Portrait  -->
-      <div id="portraitContent" v-if="qrViewSwitch == 'Portrait'">
-        <div class="pa-4 ">
+      <div id="portraitContent" class="border-lg rounded-xl overflow-hidden" v-if="qrViewSwitch == 'Portrait'">
+        <div>
+          <div class="pa-4">
 
-          <!-- <h3 class="text-h6 font-weight-bold mb-2">QR Code</h3> -->
+            <!-- <h3 class="text-h6 font-weight-bold mb-2">QR Code</h3> -->
 
 
-          <div class="d-flex justify-center">
-            <img width="100" src="@/assets/newLogo.png" alt="">
+            <div class="d-flex justify-center">
+              <img width="100" src="@/assets/newLogo.png" alt="">
+            </div>
+            <h2 class="text-center text-h3 font-weight-black mt-2 " v-if="propertyObj.LISTING_TYPE">
+              <!-- {{
+              propertyObj.LISTING_TYPE.toUpperCase() }} -->
+              FOR SALE
+            </h2>
+
+            <p class="text-primary mb-6 text-center">REALLY <span class="px-1"> GREAT</span> REALITY</p>
+
+            <div class="d-flex justify-center flex-column align-center">
+              <v-card class="pa-2 elevation-0">
+                <qrcode-vue :value="`${baseUrl}/#/buy/property/${propertyObj.PROPERTY_ID}?qr=1`" :size="200" level="H"
+                  background="white" foreground="black" />
+              </v-card>
+              <p class="text-center mt-2 text-white">Hold the camera to the image</p>
+            </div>
           </div>
-          <h2 class="text-center text-h3 font-weight-black mt-2 " v-if="propertyObj.LISTING_TYPE">
-            <!-- {{
-            propertyObj.LISTING_TYPE.toUpperCase() }} -->
-            FOR SALE
-          </h2>
-
-          <p class="text-primary mb-6 text-center">REALLY <span class="px-1"> GREAT</span> REALITY</p>
-
-          <div class="d-flex justify-center flex-column align-center">
-            <v-card class="pa-2 elevation-0">
-              <qrcode-vue :value="`${baseUrl}/#/buy/property/${propertyObj.PROPERTY_ID}?qr=1`" :size="200" level="H"
-                background="white" foreground="black" />
-            </v-card>
-            <p class="text-center mt-2 text-white">Hold the camera to the image</p>
-          </div>
+          <div style="background-color: #2663eb; min-height: 200px;position: relative;top: -80px;z-index: -1;"
+            elevation="0" color="primary" class="mt-n16" min-height="200"></div>
         </div>
-        <div style="background-color: #2663eb; min-height: 200px;position: relative;top: -80px;z-index: -1;"
-          elevation="0" color="primary" class="mt-n16" min-height="200"></div>
-        <div style="background-color: #ee961d; min-height: 50px;position: relative;top: -16px;z-index: -1;"
-          elevation="0" color="primary" class="mt-n16 d-flex justify-center align-center" min-height="200">
+        <div
+          style="background-color: #ee961d; min-height: 60px;position: relative;z-index: -1; height: 100%;margin-top: -80px;"
+          elevation="0" color="primary" class="d-flex justify-center align-center" min-height="200">
           <h5 class="text-white">SCAN TO SEE INFORMATION ON THIS LISTING</h5>
         </div>
       </div>
 
-      <div id="landscapeContent" v-else class="d-flex flex-column">
+      <div id="landscapeContent" v-else class="d-flex flex-column border-lg rounded-xl overflow-hidden">
         <div class="d-flex">
           <!-- Left: QR Section -->
           <div class="pa-8 d-flex flex-column align-center justify-center" style="
@@ -383,7 +403,7 @@
           <div class="mt-2">
             <v-btn variant="outlined" rounded size="small" class="text-none text-subtitle-2">{{
               propertyObj.PROPERTY_KIND
-            }}</v-btn>
+              }}</v-btn>
             <v-btn variant="outlined" rounded size="small" class="text-none text-subtitle-2 ml-2">{{
               propertyObj.PRICE_AMOUNT }} {{ propertyObj.CURRENCY_CODE }}</v-btn>
             <v-btn variant="outlined" rounded size="small" class="text-none text-subtitle-2 ml-2"> <v-icon
@@ -488,14 +508,14 @@
                     :color="selectedType == 'DisputeForm' ? 'primary' : '#f5f5f4'"
                     class="text-none text-black rounded-lg elevation-0" size="large"
                     :variant="selectedType == 'DisputeForm' ? 'elevated' : 'tonal'">5. Dispute Form </v-btn>
-                    
+
                 </v-col>
                 <v-col>
                   <v-btn @click="selectedType = 'AdminDashboard'"
                     :color="selectedType == 'AdminDashboard' ? 'primary' : '#f5f5f4'"
                     class="text-none text-black rounded-lg elevation-0" size="large"
                     :variant="selectedType == 'AdminDashboard' ? 'elevated' : 'tonal'">6. Admin Dashboard </v-btn>
-                    
+
                 </v-col>
               </v-row>
             </div>
@@ -764,345 +784,282 @@
 
           </v-card>
         </div>
-        <v-card v-if="selectedType == 'RiskWarning'" width="900" class="pa-8 card-box-shadow warning-border" rounded="xl">
-  
-      <div class="text-center">
-        <div class="warning-icon mx-auto mb-4 d-flex align-center justify-center">
-          <v-icon size="42" color="#D14B4B">mdi-alert-outline</v-icon>
-        </div>
+        <v-card v-if="selectedType == 'RiskWarning'" width="900" class="pa-8 card-box-shadow warning-border"
+          rounded="xl">
 
-        <h2 class="text-h4 font-weight-bold mb-2">Trust Warning</h2>
-        <p class="text-body-1 text-medium-emphasis">
-          Please review this information before proceeding
-        </p>
-      </div>
-
-      <!-- USER RISK BOX -->
-      <v-card
-        rounded="xl"
-        class="pa-6 mt-8 risk-box"
-        elevation="0"
-      >
-        <div class="d-flex align-start">
-          <div class="avatar-box mr-4">
-            <span class="avatar-text">JS</span>
-          </div>
-
-          <div>
-            <div class="">
-              <h3 class="text-h6 font-weight-bold mr-3">John Suspicious</h3>
-              <p>
-                <v-btn size="small" color="#D14B4B" elevation="0" rounded="lg" text-color="white" class="mr-3 text-none font-weight-bold">
-                HIGH_RISK
-              </v-btn>
-
-              <span class="text-body-1 text-medium-emphasis">
-                Trust Score: 32/100
-              </span>
-            </p>
+          <div class="text-center">
+            <div class="warning-icon mx-auto mb-4 d-flex align-center justify-center">
+              <v-icon size="42" color="#D14B4B">mdi-alert-outline</v-icon>
             </div>
 
-            <!-- Bullet Danger List -->
-            <ul class="mt-4 reports-list">
-              <li>
-                <v-icon size="18" color="#D14B4B" class="mr-2">mdi-close-circle</v-icon>
-                <strong>3 scam-related reports</strong> in the last 30 days
-              </li>
-              <li>
-                <v-icon size="18" color="#D14B4B" class="mr-2">mdi-close-circle</v-icon>
-                Only <strong>8 completed interactions</strong>
-              </li>
-              <li>
-                <v-icon size="18" color="#D14B4B" class="mr-2">mdi-close-circle</v-icon>
-                Phone and payment <strong>not verified</strong>
-              </li>
-            </ul>
+            <h2 class="text-h4 font-weight-bold mb-2">Trust Warning</h2>
+            <p class="text-body-1 text-medium-emphasis">
+              Please review this information before proceeding
+            </p>
           </div>
-        </div>
-      </v-card>
 
-      <!-- RECENT USER REPORTS -->
-      <h3 class="text-h6 font-weight-bold mt-10 mb-4">Recent User Reports:</h3>
+          <!-- USER RISK BOX -->
+          <v-card rounded="xl" class="pa-6 mt-8 risk-box" elevation="0">
+            <div class="d-flex align-start">
+              <div class="avatar-box mr-4">
+                <span class="avatar-text">JS</span>
+              </div>
 
-      <!-- REPORT ITEM -->
-      <v-card
-        v-for="item in reports"
-        :key="item.id"
-        rounded="xl"
-        variant="outlined" color="red" class="rounded-lg pa-4 mt-2"
-      >
-        <div class="d-flex justify-space-between text-black">
-          <strong class="text-black">{{ item.name }}</strong>
-          <span class="text-body-2 text-black">{{ item.time }}</span>
-        </div>
+              <div>
+                <div class="">
+                  <h3 class="text-h6 font-weight-bold mr-3">John Suspicious</h3>
+                  <p>
+                    <v-btn size="small" color="#D14B4B" elevation="0" rounded="lg" text-color="white"
+                      class="mr-3 text-none font-weight-bold">
+                      HIGH_RISK
+                    </v-btn>
 
-        <p class="text-body-2 mt-2">
-          {{ item.text }}
-        </p>
-      </v-card>
+                    <span class="text-body-1 text-medium-emphasis">
+                      Trust Score: 32/100
+                    </span>
+                  </p>
+                </div>
 
-      
-   
+                <!-- Bullet Danger List -->
+                <ul class="mt-4 reports-list">
+                  <li>
+                    <v-icon size="18" color="#D14B4B" class="mr-2">mdi-close-circle</v-icon>
+                    <strong>3 scam-related reports</strong> in the last 30 days
+                  </li>
+                  <li>
+                    <v-icon size="18" color="#D14B4B" class="mr-2">mdi-close-circle</v-icon>
+                    Only <strong>8 completed interactions</strong>
+                  </li>
+                  <li>
+                    <v-icon size="18" color="#D14B4B" class="mr-2">mdi-close-circle</v-icon>
+                    Phone and payment <strong>not verified</strong>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </v-card>
+
+          <!-- RECENT USER REPORTS -->
+          <h3 class="text-h6 font-weight-bold mt-10 mb-4">Recent User Reports:</h3>
+
+          <!-- REPORT ITEM -->
+          <v-card v-for="item in reports" :key="item.id" rounded="xl" variant="outlined" color="red"
+            class="rounded-lg pa-4 mt-2">
+            <div class="d-flex justify-space-between text-black">
+              <strong class="text-black">{{ item.name }}</strong>
+              <span class="text-body-2 text-black">{{ item.time }}</span>
+            </div>
+
+            <p class="text-body-2 mt-2">
+              {{ item.text }}
+            </p>
+          </v-card>
+
+
+
         </v-card>
         <v-card v-if="selectedType == 'DisputeForm'" width="900" class="pa-8 card-box-shadow" rounded="xl">
-            
 
-      <!-- ICON -->
-      <div class="d-flex justify-center mb-6">
-        <v-avatar class="" size="86" color="#fef3c7">
-          <v-icon size="36" color="#E2B747">mdi-flag-outline</v-icon>
-        </v-avatar>
-      </div>
 
-      <!-- TITLE -->
-      <h2 class="text-h4 text-center font-weight-bold mb-2">Dispute Rating</h2>
-      <p class="text-center text-body-1 text-medium-emphasis mb-10">
-        Report feedback that violates our policies
-      </p>
-
-      <!-- ORIGINAL FEEDBACK CARD -->
-      <v-card
-        rounded="xl"
-        elevation="0"
-        class="pa-6 mb-8"
-        style="background:#fafafa; border:1px solid #eee;"
-      >
-        <div class="mb-2 text-body-1 text-medium-emphasis">
-          Original feedback you're disputing:
-        </div>
-
-        <!-- Stars + Date -->
-        <div class="d-flex align-center mb-2">
-          <v-rating
-            model-value="4"
-            color="#E2B747"
-            readonly
-            density="compact"
-            size="20"
-          ></v-rating>
-
-          <span class="ml-3 text-body-2 text-medium-emphasis">
-            • Nov 25, 2024
-          </span>
-        </div>
-
-        <!-- Review text -->
-        <p class="text-body-1 mb-3">
-          "Good service overall. Minor delay but handled professionally."
-        </p>
-
-        <!-- Chip -->
-        <v-chip
-          color="#e8e4d8"
-          text-color="black"
-          size="small"
-          class="text-caption"
-        >
-          Accurate info
-        </v-chip>
-      </v-card>
-
-      <!-- FORM -->
-      <div class="text-body-1 font-weight-medium mb-2">Reason for Dispute *</div>
-      <v-select
-        :items="reasons"
-        placeholder="Select a reason..."
-        variant="outlined"
-        rounded="lg"
-        class="mb-6"
-      ></v-select>
-
-      <div class="text-body-1 font-weight-medium mb-2">Explanation *</div>
-      <v-textarea
-        variant="outlined"
-        rounded="lg"
-        placeholder="Please explain why this feedback should be removed. Include any relevant details or evidence..."
-        class="mb-2"
-        rows="5"
-      ></v-textarea>
-
-      <p class="text-caption text-medium-emphasis mb-8">
-        Our team will review your dispute within 3–5 business days
-      </p>
-
-      <!-- NOTE BOX -->
-      <v-card
-        rounded="lg"
-        class="pa-4 mb-10"
-        elevation="0"
-        style="background:#fff7df; border:1px solid #f3e1b7;"
-      >
-        <strong class="text-body-1 d-block mb-1">Note:</strong>
-        <p class="text-body-2 text-medium-emphasis">
-          False or abusive dispute reports may result in action against your account.
-          Only dispute feedback that genuinely violates our policies.
-        </p>
-      </v-card>
-
-      <!-- BUTTONS -->
-      <div class="d-flex align-center justify-center mt-8">
-        <v-btn
-          height="48"
-          
-          class="submit-btn text-none"
-          rounded="lg"
-        >
-          Submit Dispute
-        </v-btn>
-
-        <v-btn
-          variant="plain"
-          class="ml-6 text-medium-emphasis"
-        >
-          Cancel
-        </v-btn>
-      </div>
-
-    
-          </v-card>
-        
-          <div v-if="selectedType == 'AdminDashboard'">
-            <div class="d-flex justify-space-between align-center mb-6">
-      <div>
-        <h1 class="text-h4 font-weight-bold mb-1">Moderation Dashboard</h1>
-        <p class="text-body-1 text-medium-emphasis">
-          Review ratings, disputes, and manage user trust profiles
-        </p>
-      </div>
-
-      <div class="d-flex ga-3">
-        <v-btn variant="outlined" size="large" class="text-none" rounded="lg">
-          <v-icon left>mdi-magnify</v-icon>
-          Search Users
-        </v-btn>
-
-        <v-btn variant="outlined" size="large" class="text-none" rounded="lg">
-          <v-icon left>mdi-filter-variant</v-icon>
-          Filters
-        </v-btn>
-      </div>
-    </div>
-
-    <!-- METRICS GRID -->
-    <v-row class="mb-8">
-      <v-col v-for="stat in stats" :key="stat.label" cols="12" md="4" lg="2">
-        <v-card
-          rounded="lg"
-          elevation="0"
-          class="pa-6 text-center card-box-shadow"
-          style="background:white;"
-        >
-          <h2 :style="{ color: stat.color }" class="text-h4 font-weight-bold">
-            {{ stat.value }}
-          </h2>
-          <p class="text-medium-emphasis text-body-1 mt-1">
-            {{ stat.label }}
-          </p>
-        </v-card>
-      </v-col>
-    </v-row>
-
-    <!-- TABS -->
-    <v-tabs
-      v-model="activeTab"
-      color="primary"
-      class="mb-6"
-      slider-color="primary"
-    >
-      <v-tab value="active">Active Disputes</v-tab>
-      <v-tab value="highrisk">High-Risk Flags</v-tab>
-      <v-tab value="recent">Recent Ratings</v-tab>
-      <v-tab value="patterns">Suspicious Patterns</v-tab>
-    </v-tabs>
-
-    <v-divider class="mb-6"></v-divider>
-
-        <!-- DISPUTE LIST -->
-        <v-row>
-          <v-col cols="12" v-for="item in disputes" :key="item.id">
-            <v-card rounded="xl" elevation="0" class="pa-6 mb-6 card-box-shadow" style="background:white; border:1px solid #eee;">
-              <div class="d-flex justify-space-between align-start mb-4">
-                <div>
-                  <!-- ID + Names -->
-                  <div class="text-body-2 text-medium-emphasis mb-1">
-                    {{ item.id }}
-                  </div>
-
-                  <div class="text-body-1 font-weight-bold">
-                    {{ item.from }}
-                    <span class="text-medium-emphasis">vs</span>
-                    {{ item.to }}
-
-                    <v-chip
-                      v-if="item.tag"
-                      size="small"
-                      class="ml-2"
-                      :color="item.tag === 'URGENT' ? '#d9534f' : '#d48d27'"
-                      text-color="white"
-                    >
-                      {{ item.tag }}
-                    </v-chip>
-                  </div>
-
-                  <!-- Meta Row -->
-                  <div class="d-flex align-center mt-2 ga-4 text-body-2 text-medium-emphasis">
-                    <span>
-                      <v-icon size="16" color="#d48d27">mdi-flag-outline</v-icon>
-                      {{ item.reason }}
-                    </span>
-
-                    <span>• {{ item.time }}</span>
-
-                    <span>• ⭐ rating disputed</span>
-                  </div>
-                </div>
-
-                <!-- ACTION ICONS -->
-                <div class="d-flex align-center ga-3">
-                  <v-btn icon variant="text" size="small">
-                    <v-icon>mdi-eye-outline</v-icon>
-                  </v-btn>
-
-                  <v-menu>
-                    <template #activator="{ props }">
-                      <v-btn icon variant="text" size="small" v-bind="props">
-                        <v-icon>mdi-dots-vertical</v-icon>
-                      </v-btn>
-                    </template>
-
-                    <v-list>
-                      <v-list-item title="Open"></v-list-item>
-                      <v-list-item title="Assign Moderator"></v-list-item>
-                    </v-list>
-                  </v-menu>
-                </div>
-              </div>
-
-              <!-- ORIGINAL FEEDBACK SECTION -->
-              <v-card
-                rounded="lg"
-                elevation="0"
-                class="pa-4 mb-4"
-                style="background:#fafafa; border:1px solid #eee;"
-              >
-                <div class="text-medium-emphasis text-body-2 mb-1">Original feedback:</div>
-                <div class="text-body-1">
-                  “{{ item.feedback }}”
-                </div>
-              </v-card>
-
-              <!-- ACTION BUTTONS -->
-              <div class="d-flex ga-3">
-                <v-btn rounded="lg" color="green" dark>Remove Rating</v-btn>
-                <v-btn rounded="lg" color="#d48d27" dark>Keep Rating</v-btn>
-                <v-btn rounded="lg" variant="outlined">Request More Info</v-btn>
-                <v-btn rounded="lg" variant="outlined">View Full History</v-btn>
-              </div>
-
-            </v-card>
-          </v-col>
-        </v-row>
+          <!-- ICON -->
+          <div class="d-flex justify-center mb-6">
+            <v-avatar class="" size="86" color="#fef3c7">
+              <v-icon size="36" color="#E2B747">mdi-flag-outline</v-icon>
+            </v-avatar>
           </div>
+
+          <!-- TITLE -->
+          <h2 class="text-h4 text-center font-weight-bold mb-2">Dispute Rating</h2>
+          <p class="text-center text-body-1 text-medium-emphasis mb-10">
+            Report feedback that violates our policies
+          </p>
+
+          <!-- ORIGINAL FEEDBACK CARD -->
+          <v-card rounded="xl" elevation="0" class="pa-6 mb-8" style="background:#fafafa; border:1px solid #eee;">
+            <div class="mb-2 text-body-1 text-medium-emphasis">
+              Original feedback you're disputing:
+            </div>
+
+            <!-- Stars + Date -->
+            <div class="d-flex align-center mb-2">
+              <v-rating model-value="4" color="#E2B747" readonly density="compact" size="20"></v-rating>
+
+              <span class="ml-3 text-body-2 text-medium-emphasis">
+                • Nov 25, 2024
+              </span>
+            </div>
+
+            <!-- Review text -->
+            <p class="text-body-1 mb-3">
+              "Good service overall. Minor delay but handled professionally."
+            </p>
+
+            <!-- Chip -->
+            <v-chip color="#e8e4d8" text-color="black" size="small" class="text-caption">
+              Accurate info
+            </v-chip>
+          </v-card>
+
+          <!-- FORM -->
+          <div class="text-body-1 font-weight-medium mb-2">Reason for Dispute *</div>
+          <v-select :items="reasons" placeholder="Select a reason..." variant="outlined" rounded="lg"
+            class="mb-6"></v-select>
+
+          <div class="text-body-1 font-weight-medium mb-2">Explanation *</div>
+          <v-textarea variant="outlined" rounded="lg"
+            placeholder="Please explain why this feedback should be removed. Include any relevant details or evidence..."
+            class="mb-2" rows="5"></v-textarea>
+
+          <p class="text-caption text-medium-emphasis mb-8">
+            Our team will review your dispute within 3–5 business days
+          </p>
+
+          <!-- NOTE BOX -->
+          <v-card rounded="lg" class="pa-4 mb-10" elevation="0" style="background:#fff7df; border:1px solid #f3e1b7;">
+            <strong class="text-body-1 d-block mb-1">Note:</strong>
+            <p class="text-body-2 text-medium-emphasis">
+              False or abusive dispute reports may result in action against your account.
+              Only dispute feedback that genuinely violates our policies.
+            </p>
+          </v-card>
+
+          <!-- BUTTONS -->
+          <div class="d-flex align-center justify-center mt-8">
+            <v-btn height="48" class="submit-btn text-none" rounded="lg">
+              Submit Dispute
+            </v-btn>
+
+            <v-btn variant="plain" class="ml-6 text-medium-emphasis">
+              Cancel
+            </v-btn>
+          </div>
+
+
+        </v-card>
+
+        <div v-if="selectedType == 'AdminDashboard'">
+          <div class="d-flex justify-space-between align-center mb-6">
+            <div>
+              <h1 class="text-h4 font-weight-bold mb-1">Moderation Dashboard</h1>
+              <p class="text-body-1 text-medium-emphasis">
+                Review ratings, disputes, and manage user trust profiles
+              </p>
+            </div>
+
+            <div class="d-flex ga-3">
+              <v-btn variant="outlined" size="large" class="text-none" rounded="lg">
+                <v-icon left>mdi-magnify</v-icon>
+                Search Users
+              </v-btn>
+
+              <v-btn variant="outlined" size="large" class="text-none" rounded="lg">
+                <v-icon left>mdi-filter-variant</v-icon>
+                Filters
+              </v-btn>
+            </div>
+          </div>
+
+          <!-- METRICS GRID -->
+          <v-row class="mb-8">
+            <v-col v-for="stat in stats" :key="stat.label" cols="12" md="4" lg="2">
+              <v-card rounded="lg" elevation="0" class="pa-6 text-center card-box-shadow" style="background:white;">
+                <h2 :style="{ color: stat.color }" class="text-h4 font-weight-bold">
+                  {{ stat.value }}
+                </h2>
+                <p class="text-medium-emphasis text-body-1 mt-1">
+                  {{ stat.label }}
+                </p>
+              </v-card>
+            </v-col>
+          </v-row>
+
+          <!-- TABS -->
+          <v-tabs v-model="activeTab" color="primary" class="mb-6" slider-color="primary">
+            <v-tab value="active">Active Disputes</v-tab>
+            <v-tab value="highrisk">High-Risk Flags</v-tab>
+            <v-tab value="recent">Recent Ratings</v-tab>
+            <v-tab value="patterns">Suspicious Patterns</v-tab>
+          </v-tabs>
+
+          <v-divider class="mb-6"></v-divider>
+
+          <!-- DISPUTE LIST -->
+          <v-row>
+            <v-col cols="12" v-for="item in disputes" :key="item.id">
+              <v-card rounded="xl" elevation="0" class="pa-6 mb-6 card-box-shadow"
+                style="background:white; border:1px solid #eee;">
+                <div class="d-flex justify-space-between align-start mb-4">
+                  <div>
+                    <!-- ID + Names -->
+                    <div class="text-body-2 text-medium-emphasis mb-1">
+                      {{ item.id }}
+                    </div>
+
+                    <div class="text-body-1 font-weight-bold">
+                      {{ item.from }}
+                      <span class="text-medium-emphasis">vs</span>
+                      {{ item.to }}
+
+                      <v-chip v-if="item.tag" size="small" class="ml-2"
+                        :color="item.tag === 'URGENT' ? '#d9534f' : '#d48d27'" text-color="white">
+                        {{ item.tag }}
+                      </v-chip>
+                    </div>
+
+                    <!-- Meta Row -->
+                    <div class="d-flex align-center mt-2 ga-4 text-body-2 text-medium-emphasis">
+                      <span>
+                        <v-icon size="16" color="#d48d27">mdi-flag-outline</v-icon>
+                        {{ item.reason }}
+                      </span>
+
+                      <span>• {{ item.time }}</span>
+
+                      <span>• ⭐ rating disputed</span>
+                    </div>
+                  </div>
+
+                  <!-- ACTION ICONS -->
+                  <div class="d-flex align-center ga-3">
+                    <v-btn icon variant="text" size="small">
+                      <v-icon>mdi-eye-outline</v-icon>
+                    </v-btn>
+
+                    <v-menu>
+                      <template #activator="{ props }">
+                        <v-btn icon variant="text" size="small" v-bind="props">
+                          <v-icon>mdi-dots-vertical</v-icon>
+                        </v-btn>
+                      </template>
+
+                      <v-list>
+                        <v-list-item title="Open"></v-list-item>
+                        <v-list-item title="Assign Moderator"></v-list-item>
+                      </v-list>
+                    </v-menu>
+                  </div>
+                </div>
+
+                <!-- ORIGINAL FEEDBACK SECTION -->
+                <v-card rounded="lg" elevation="0" class="pa-4 mb-4" style="background:#fafafa; border:1px solid #eee;">
+                  <div class="text-medium-emphasis text-body-2 mb-1">Original feedback:</div>
+                  <div class="text-body-1">
+                    “{{ item.feedback }}”
+                  </div>
+                </v-card>
+
+                <!-- ACTION BUTTONS -->
+                <div class="d-flex ga-3">
+                  <v-btn rounded="lg" color="green" dark>Remove Rating</v-btn>
+                  <v-btn rounded="lg" color="#d48d27" dark>Keep Rating</v-btn>
+                  <v-btn rounded="lg" variant="outlined">Request More Info</v-btn>
+                  <v-btn rounded="lg" variant="outlined">View Full History</v-btn>
+                </div>
+
+              </v-card>
+            </v-col>
+          </v-row>
+        </div>
 
       </div>
 
@@ -1241,7 +1198,7 @@ const downloadPDF = async (propertyObj) => {
     // Reference to form container
 
     const html2pdf = (await import('html2pdf.js')).default;
-    console.log('--->html2pdf', html2pdf);
+
 
     let fileName = `${propertyObj.TITLE}`
     const options = {
@@ -1447,7 +1404,7 @@ const selectedImageArr = ref([])
 const currentIndex = ref(0)
 const previewImages = (data) => {
   selectedImageArr.value = data
-  console.log(data, 'data')
+  
   imagePreviewModal.value = true
 }
 //------------------------------------------------------------------------------

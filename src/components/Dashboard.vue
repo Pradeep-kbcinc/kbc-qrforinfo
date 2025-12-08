@@ -160,7 +160,7 @@
           </div>
         </div>
         <v-divider class="mb-4"></v-divider>
-        <v-file-upload density="comfortable" v-model="addedImagesArr" clearable multiple></v-file-upload>
+        <v-file-upload density="compact" v-model="addedImagesArr" title="Browse Or Drag and Drop Here" clearable multiple></v-file-upload>
         <div class="d-flex justify-end mt-4">
           <v-btn size="large" class="text-none rounded-lg" @click="uploadImages" :loading="uploadImagesLoader" elevation="0" min-width="200" color="primary">Save</v-btn>
         </div>
