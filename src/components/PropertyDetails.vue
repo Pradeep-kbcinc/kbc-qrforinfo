@@ -556,7 +556,7 @@
             <label class="font-weight-bold">Public Feedback</label>
 
             <v-textarea v-model="publicFeedback" rows="4" rounded="lg" variant="outlined"
-              placeholder="Share your experience to help other users..."></v-textarea>
+              placeholder="Share your experience to help other users..." class="mt-1"></v-textarea>
 
             <div class="text-right text-caption text-medium-emphasis">
               {{ publicFeedback.length }}/1000
@@ -566,7 +566,7 @@
           <!-- Private Note -->
           <div>
             <label class="font-weight-bold">Private Note to QRFORINFO Team</label>
-            <v-textarea v-model="privateNote" rows="3" rounded="lg" variant="outlined"
+            <v-textarea class="mt-1" v-model="privateNote" rows="3" rounded="lg" variant="outlined"
               placeholder="Additional concerns for our safety team..."></v-textarea>
           </div>
 
@@ -655,7 +655,7 @@
                     </v-avatar>
 
                     <div>
-                      <h4 class="font-weight-medium mb-1">{{ fb.name }}</h4>
+                      <h4 class="font-weight-bold mb-1">{{ fb.name }}</h4>
                       <span class="text-medium-emphasis text-body-2">{{ fb.date }}</span>
 
                       <!-- Tags -->
@@ -673,7 +673,7 @@
                 </div>
 
                 <!-- Feedback Text -->
-                <p class="mt-4 text-body-1">
+                <p class="mt-4 text-body-1 ml-15">
                   {{ fb.comment }}
                 </p>
               </v-card>
