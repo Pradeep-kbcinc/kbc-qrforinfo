@@ -217,9 +217,9 @@ const rules = {
   TITLE: { required: helpers.withMessage('Property name is required', required) },
   PROPERTY_DESC: { required: helpers.withMessage('Property description is required', required) },
   PRICE_AMOUNT: { required: helpers.withMessage('Price is required', required) },
-  COUNTRY: { required: helpers.withMessage('Country is required', required) },
-  STATE: { required: helpers.withMessage('State is required', required) },
-  CITY: { required: helpers.withMessage('City is required', required) },
+  COUNTRY: { },
+  STATE: { },
+  CITY: { },
   AREA: { required: helpers.withMessage('Area is required', required) },
   NO_BEDROOMS: {},
   NO_BATHROOMS: {},
@@ -230,7 +230,7 @@ const rules = {
       (value) => /^[0-9]{6}$/.test(value)
     )
   },
-  ADDRESS_LINE1:{}
+  ADDRESS_LINE1:{ required: helpers.withMessage('Address is required', required) }
 }
 const v$ = useVuelidate(rules, state)
 const saveBtnLoader = ref(false)
