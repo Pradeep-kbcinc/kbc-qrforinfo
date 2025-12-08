@@ -286,7 +286,7 @@
               FOR SALE
             </h2>
 
-            <p class="text-primary mb-6 text-center">REALLY <span class="px-1"> GREAT</span> REALITY</p>
+            <!-- <p class="text-primary mb-6 text-center">REALLY <span class="px-1"> GREAT</span> REALITY</p> -->
 
             <div class="d-flex justify-center flex-column align-center">
               <v-card class="pa-2 elevation-0">
@@ -302,7 +302,7 @@
         <div
           style="background-color: #ee961d; min-height: 60px;position: relative;z-index: -1; height: 100%;margin-top: -80px;"
           elevation="0" color="primary" class="d-flex justify-center align-center" min-height="200">
-          <h5 class="text-white">SCAN TO SEE INFORMATION ON THIS LISTING</h5>
+          <h5 class="text-white">SCAN TO SEE INFORMATION ABOUT THIS LISTING</h5>
         </div>
       </div>
 
@@ -329,14 +329,14 @@
               <!-- {{ propertyObj.LISTING_TYPE.toUpperCase() }} -->
               FOR SALE
             </h2>
-            <p class="text-primary text-center">REALLY <span class="px-1">GREAT</span> REALITY</p>
+            <!-- <p class="text-primary text-center">REALLY <span class="px-1">GREAT</span> REALITY</p> -->
           </div>
         </div>
 
         <!-- Bottom Banner -->
         <div class="d-flex justify-center align-center" style="background-color: #ee961d; min-height: 60px;">
           <h5 class="text-white text-center">
-            SCAN TO SEE INFORMATION ON THIS LISTING
+            SCAN TO SEE INFORMATION ABOUT THIS LISTING
           </h5>
         </div>
 
