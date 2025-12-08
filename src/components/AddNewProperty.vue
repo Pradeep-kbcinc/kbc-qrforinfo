@@ -69,6 +69,24 @@
             {{ v$.PROPERTY_DESC.$errors[0].$message }}
           </small>
         </div>
+        <div class="mt-4">
+          <p class="font-weight-bold">Property Address</p>
+          <v-text-field clearable prepend-inner-icon="mdi-magnify" v-model="address" class="mt-1" rounded="lg" @input="debouncedSearch" variant="outlined" placeholder="Property Address..."></v-text-field>
+         
+              <v-list v-show="results && results.length" class="mt-n5">
+                <v-list-item v-for="(result, i) in results" :key="i" @click="selectedAddress(result)" @click.prevent="results = []" color="grey" variant="outlined">
+                  <v-list-item-title> {{ result.name }}</v-list-item-title>
+                </v-list-item>
+              </v-list>
+              <div v-if="state.ADDRESS_LINE1">
+
+              
+             <p class="font-weight-bold">Selected Address :</p> 
+             <v-textarea variant="outlined" class="mt-1" rounded="lg" v-model="state.ADDRESS_LINE1">
+             </v-textarea>
+            </div>
+        </div>
+
         <div>
           <v-row align="end">
             <v-col>
@@ -89,24 +107,24 @@
             </v-col>
           </v-row>
 
-          <v-row align="end">
-            <v-col>
+          <v-row>
+            <!-- <v-col>
               <p class="font-weight-bold">Country</p>
               <v-select :loading="dropdownLoader" :return-object="true" item-title="COUNTRY_NAME" :items="COUNTRY_LIST" :error-messages="v$.COUNTRY.$errors.map(e => e.$message)" @blur="v$.COUNTRY.$touch" @input="v$.COUNTRY.$touch" v-model="state.COUNTRY" class="mt-1" rounded="lg" variant="outlined"  placeholder="India"></v-select>
-            </v-col>
-            <v-col>
+            </v-col> -->
+            <!-- <v-col>
               <p class="font-weight-bold">State</p>
               <v-select :loading="dropdownLoader" :items="STATE_LIST" item-title="STATE_NAME" :return-object="true" :error-messages="v$.STATE.$errors.map(e => e.$message)" @blur="v$.STATE.$touch" @input="v$.STATE.$touch" v-model="state.STATE" class="mt-1" rounded="lg" variant="outlined" placeholder="Delhi"></v-select>
-            </v-col>
-            <v-col>
+            </v-col> -->
+            <!-- <v-col>
               <p class="font-weight-bold">City</p>
               
               <v-select :loading="dropdownLoader" :items="CITY_LIST" item-title="CITY_NAME" :return-object="true" :error-messages="v$.CITY.$errors.map(e => e.$message)" @blur="v$.CITY.$touch" @input="v$.CITY.$touch" v-model="state.CITY" class="mt-1" rounded="lg" variant="outlined" placeholder="New Delhi"></v-select>
-            </v-col>
-            <v-col>
+            </v-col> -->
+            <!-- <v-col>
               <p class="font-weight-bold">Postal Code</p>
               <v-text-field v-model="state.POSTAL_CODE" :error-messages="v$.POSTAL_CODE.$errors.map(e => e.$message)" @blur="v$.POSTAL_CODE.$touch" @input="v$.POSTAL_CODE.$touch" class="mt-1" rounded="lg" variant="outlined" placeholder="Postal Code"></v-text-field>
-            </v-col>
+            </v-col> -->
           </v-row>
 
           <v-row align="end">
@@ -140,13 +158,14 @@ import { useAuthStore } from '@/stores/app';
 import { useVuelidate } from '@vuelidate/core'
 import { required, helpers, minLength, maxLength, numeric, email } from '@vuelidate/validators'
 import { toast } from 'vue3-toastify';
-
+import { useDebounce } from '@/config/debounce.js'
 //..............................................................................
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 const isLoadingProperty = ref(false)
 const cardKey = ref(1)
+const results = ref([])
 const state = reactive({
   ACTION_TYPE: route?.params?.id ? 'UPDATE' : "CREATE",
   PROPERTY_ID: 0,
@@ -210,7 +229,8 @@ const rules = {
       'Postal code must be a 6-digit number',
       (value) => /^[0-9]{6}$/.test(value)
     )
-  }
+  },
+  ADDRESS_LINE1:{}
 }
 const v$ = useVuelidate(rules, state)
 const saveBtnLoader = ref(false)
@@ -521,6 +541,46 @@ watch(() => state.STATE,(val) => {
     deep: true
   }
 );
+const address = ref('')
+const search = async () => {
+  if (address.value.length < 3) {
+    results.value = []
+    return
+  }
+
+  try {
+    results.value = []
+    const response = await fetch(
+      `https://api.geoapify.com/v1/geocode/search?text=${address.value}&apiKey=4443e53cd6c740319898ef871c7e239c`
+    )
+
+    let fetchResult = await response.json()
+    
+    fetchResult.features.forEach((element, i) => {
+      results.value.push({
+        id: i + 1,
+        name: element.properties.formatted,
+        lat: element.properties.lat,
+        lng: element.properties.lon
+      })
+    })
+  } catch (error) {
+    console.error('Failed to fetch addresses:', error)
+  } finally {
+  }
+}
+const debouncedSearch = () => {
+  if (address.value) {
+    return useDebounce(search(), 300)
+  } else {
+    results.value = []
+  }
+}
+const selectedAddress = (result) => {
+  state.ADDRESS_LINE1 = result.name
+  // lat.value = result.lat
+  // long.value = result.lng
+}
 </script>
 
 <style scoped lang="scss">
