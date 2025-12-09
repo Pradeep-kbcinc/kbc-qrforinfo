@@ -46,7 +46,7 @@
             <div v-if="!isVerfiyOTP" class="px-10">
               <v-text-field v-model="initialState.phoneNumber" placeholder="Phone No. / Email" :error-messages="v$.phoneNumber.$errors.map(e => e.$message)" @blur="v$.phoneNumber.$touch" @input="v$.phoneNumber.$touch" variant="outlined" rounded="xl" class="email-field mb-0 pb-0" density="compact"></v-text-field>
 
-              <v-btn @click="sendOtpToLogin()" :loading="btnLoader" block rounded="xl" height="38" elevation="0" class="continue-btn text-none text-caption mt-2" color="#19191a">
+              <v-btn @click="checkCredentials" :loading="btnLoader" block rounded="xl" height="38" elevation="0" class="continue-btn text-none text-caption mt-2" color="#19191a">
                 Send OTP Code
               </v-btn>
 
@@ -121,6 +121,31 @@ const authStore = useAuthStore()
 //..............................................................................
 
 //------------------------------------------------------------------------------
+
+const checkCredentials = async()=>{
+  const isFormCorrect = await v$.value.$validate();
+  if (!isFormCorrect) {
+    return;
+  } else {
+    btnLoader.value = true
+  try {
+    let data = {
+      USERNAME: initialState.value.phoneNumber
+    }
+    let res = await propertyService.verifyUser(data)
+    if(res.data.FetchData.ERR_FLG !== 1){
+      sendOtpToLogin()
+    }else{
+      toast.info('Provided phone number / email is not registered yet', {
+        autoClose: 4000,
+      });
+      btnLoader.value = false
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+}
 const sendOtpToLogin = async () => {
   const isFormCorrect = await v$.value.$validate();
   if (!isFormCorrect) {

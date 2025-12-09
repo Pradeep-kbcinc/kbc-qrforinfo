@@ -136,7 +136,13 @@ export default {
 
   async deleteMSG(id){
     return axios.get(`/DeleteMessage?MESSAGE_ID=${id}`)
-  }
+  }, 
+
+  async verifyUser(data){
+    return axios.post(`/VerifyUser`, data)
+  }, 
+
+  
 
 
 

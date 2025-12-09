@@ -13,10 +13,10 @@
           <v-icon class="mr-2">mdi-arrow-left</v-icon> Back</v-btn>
         <h3 class="text-h5 font-weight-bold font-weight-bold mt-4">{{ propertyObj.TITLE }}</h3>
         <p class="mt-1">
-        <v-icon>mdi-map-marker-outline</v-icon><span v-if="propertyObj.ADDRESS_LINE1">{{ propertyObj.ADDRESS_LINE1 }}</span>
+        <v-icon>mdi-map-marker-outline</v-icon><span v-if="propertyObj.ADDRESS_LINE1">{{ propertyObj.IS_ADDRESS_PRIVATE_FLG == 1 ? propertyObj.ADDRESS_LINE1 : 'Hidden' }}</span>
       </p>
-        <p v-if="propertyObj.COUNTRY && propertyObj.STATE && propertyObj.CITY"><v-icon>mdi-map-marker-outline</v-icon>
-          {{ propertyObj.COUNTRY }}, {{ propertyObj.STATE }}, {{ propertyObj.CITY }}</p>
+        <!-- <p v-if="propertyObj.COUNTRY && propertyObj.STATE && propertyObj.CITY"><v-icon>mdi-map-marker-outline</v-icon>
+          {{ propertyObj.COUNTRY }}, {{ propertyObj.STATE }}, {{ propertyObj.CITY }}</p> -->
       </div>
 
       <div v-if="authStore.isAuthenticated" class="d-flex ga-4">

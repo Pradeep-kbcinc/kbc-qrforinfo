@@ -7,8 +7,14 @@
           <div>
             <div v-if="false" class="d-flex">
 
-              <v-btn @click="selectedTab = 'staff'" color="#0397b1" :variant="selectedTab == 'staff' ? 'tonal' : 'outlined'" height="35" class="text-none font-weight-bold text-subtitle-1" rounded>Staff Login <v-icon class="ml-2">mdi-account-cog</v-icon></v-btn>
-              <v-btn @click="selectedTab = 'admin'" color="#0397b1" :variant="selectedTab == 'admin' ? 'tonal' : 'outlined'" height="35" class="text-none ml-2 font-weight-bold text-subtitle-1" rounded>Admin Login <v-icon class="ml-2">mdi-account-cog</v-icon></v-btn>
+              <v-btn @click="selectedTab = 'staff'" color="#0397b1"
+                :variant="selectedTab == 'staff' ? 'tonal' : 'outlined'" height="35"
+                class="text-none font-weight-bold text-subtitle-1" rounded>Staff Login <v-icon
+                  class="ml-2">mdi-account-cog</v-icon></v-btn>
+              <v-btn @click="selectedTab = 'admin'" color="#0397b1"
+                :variant="selectedTab == 'admin' ? 'tonal' : 'outlined'" height="35"
+                class="text-none ml-2 font-weight-bold text-subtitle-1" rounded>Admin Login <v-icon
+                  class="ml-2">mdi-account-cog</v-icon></v-btn>
               <v-spacer></v-spacer>
               <v-btn size="small" color="#0397b1" rounded="xl" class="mr-2"> <v-icon>mdi-qrcode-scan</v-icon></v-btn>
               <v-btn size="small" color="#0397b1" rounded="xl"><v-icon>mdi-key-alert</v-icon></v-btn>
@@ -19,8 +25,10 @@
             </div>
 
             <h2 class="welcome text-center">Create Account</h2>
-            <p class="subtitle text-center mb-1">Already have an account ? <span class="link text-primary" @click="$router.push({ name: 'Login' })">Login</span></p>
-            <p class="subtitle text-center mb-6">Go to <span class="link text-primary" @click="$router.push({ name: 'BuyerLanding' })">Property Listing</span></p>
+            <p class="subtitle text-center mb-1">Already have an account ? <span class="link text-primary"
+                @click="$router.push({ name: 'Login' })">Login</span></p>
+            <p class="subtitle text-center mb-6">Go to <span class="link text-primary"
+                @click="$router.push({ name: 'BuyerLanding' })">Property Listing</span></p>
 
             <!-- <div class="social-row">
             <v-btn variant="outlined" rounded="lg" class="social-btn">
@@ -42,16 +50,28 @@
 
             <div class="px-10">
 
-              <v-text-field :error-messages="v$.FNAME.$errors.map(e => e.$message)" @blur="v$.FNAME.$touch" @input="v$.FNAME.$touch" v-model="propertyObj.FNAME" label="First Name" variant="outlined" rounded="xl" class="email-field mb-0 pb-0" density="compact"></v-text-field>
-              <v-text-field :error-messages="v$.MNAME.$errors.map(e => e.$message)" @blur="v$.MNAME.$touch" @input="v$.MNAME.$touch" v-model="propertyObj.MNAME" label="Middle Name (Optional)" variant="outlined" rounded="xl" class="email-field mb-0 pb-0" density="compact"></v-text-field>
-              <v-text-field :error-messages="v$.LNAME.$errors.map(e => e.$message)" @blur="v$.LNAME.$touch" @input="v$.LNAME.$touch" v-model="propertyObj.LNAME" label="Last Name" variant="outlined" rounded="xl" class="email-field mb-0 pb-0" density="compact"></v-text-field>
+              <v-text-field :error-messages="v$.FNAME.$errors.map(e => e.$message)" @blur="v$.FNAME.$touch"
+                @input="v$.FNAME.$touch" v-model="propertyObj.FNAME" label="First Name" variant="outlined" rounded="xl"
+                class="email-field mb-0 pb-0" density="compact"></v-text-field>
+              <v-text-field :error-messages="v$.MNAME.$errors.map(e => e.$message)" @blur="v$.MNAME.$touch"
+                @input="v$.MNAME.$touch" v-model="propertyObj.MNAME" label="Middle Name (Optional)" variant="outlined"
+                rounded="xl" class="email-field mb-0 pb-0" density="compact"></v-text-field>
+              <v-text-field :error-messages="v$.LNAME.$errors.map(e => e.$message)" @blur="v$.LNAME.$touch"
+                @input="v$.LNAME.$touch" v-model="propertyObj.LNAME" label="Last Name" variant="outlined" rounded="xl"
+                class="email-field mb-0 pb-0" density="compact"></v-text-field>
 
               <div class="d-flex ga-2">
-                <v-text-field :error-messages="v$.MOBILE_PHONE.$errors.map(e => e.$message)" @blur="v$.MOBILE_PHONE.$touch" @input="v$.MOBILE_PHONE.$touch" v-model="propertyObj.MOBILE_PHONE" label="Phone Number" variant="outlined" rounded="xl" class="email-field mb-0 pb-0 w-100" density="compact"></v-text-field>
-                <v-text-field :error-messages="v$.EMAIL.$errors.map(e => e.$message)" @blur="v$.EMAIL.$touch" v-model="propertyObj.EMAIL" label="Email" variant="outlined" rounded="xl" class="email-field mb-0 pb-0 w-100" density="compact"></v-text-field>
+                <v-text-field :error-messages="v$.MOBILE_PHONE.$errors.map(e => e.$message)"
+                  @blur="v$.MOBILE_PHONE.$touch" @input="v$.MOBILE_PHONE.$touch" v-model="propertyObj.MOBILE_PHONE"
+                  label="Phone Number" variant="outlined" rounded="xl" class="email-field mb-0 pb-0 w-100"
+                  density="compact"></v-text-field>
+                <v-text-field :error-messages="v$.EMAIL.$errors.map(e => e.$message)" @blur="v$.EMAIL.$touch"
+                  v-model="propertyObj.EMAIL" label="Email" variant="outlined" rounded="xl"
+                  class="email-field mb-0 pb-0 w-100" density="compact"></v-text-field>
               </div>
 
-              <v-btn @click="registerNow" :loading="btnLoader" block rounded="xl" height="38" elevation="0" class="continue-btn text-none text-caption mt-2" color="#19191a">
+              <v-btn @click="checkCredentials" :loading="btnLoader" block rounded="xl" height="38" elevation="0"
+                class="continue-btn text-none text-caption mt-2" color="#19191a">
                 Signup
               </v-btn>
 
@@ -66,8 +86,10 @@
 
         <v-col cols="12" md="6">
           <video autoplay muted loop playsinline class="tw-relative tw-size-full tw-rounded-2xl tw-object-cover">
-            <source src="https://static.heygen.ai/prod/movio/public/resource/d5a3ba28e5d04d9987673d35d50ee3d0.webm" type="video/webm">
-            <source src="https://dynamic.heygen.ai/prod/movio/public/resource/7246d7c9786c49cfb03c77d2d4d98c6b.mp4" type="video/mp4">
+            <source src="https://static.heygen.ai/prod/movio/public/resource/d5a3ba28e5d04d9987673d35d50ee3d0.webm"
+              type="video/webm">
+            <source src="https://dynamic.heygen.ai/prod/movio/public/resource/7246d7c9786c49cfb03c77d2d4d98c6b.mp4"
+              type="video/mp4">
           </video>
 
         </v-col>
@@ -129,6 +151,49 @@ const btnLoader = ref(false)
 //..............................................................................
 
 //------------------------------------------------------------------------------
+
+
+const checkCredentials = async () => {
+  const isFormCorrect = await v$.value.$validate();
+  if (!isFormCorrect) {
+    return;
+  } else {
+    btnLoader.value = true
+    try {
+      let data = {
+        USERNAME: propertyObj.value.MOBILE_PHONE
+      }
+      let res = await propertyService.verifyUser(data)
+      if (res.data.FetchData.ERR_FLG == 0) {
+        toast.info('Provided mobile number is already taken', {
+          autoClose: 4000,
+        });
+        btnLoader.value = false
+      } else {
+        try {
+          let data = {
+            USERNAME: propertyObj.value.EMAIL
+          }
+          let resTwo = await propertyService.verifyUser(data)
+          if (resTwo.data.FetchData.ERR_FLG == 0) {
+            toast.info('Provided email number is already taken', {
+              autoClose: 4000,
+            });
+            btnLoader.value = false
+
+          } else {
+            registerNow()
+          }
+        } catch (error) {
+          console.log(error)
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}
+
 const registerNow = async () => {
   const isFormCorrect = await v$.value.$validate();
   if (!isFormCorrect) {
