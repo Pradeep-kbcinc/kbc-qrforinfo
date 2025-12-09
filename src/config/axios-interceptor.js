@@ -40,7 +40,7 @@ axios.interceptors.response.use(
     async function (error) {
         if (error && error?.response?.status === 401) {
             // alert('Session Expired');
-            window.location.href = '/login';
+            window.location.href = '/';
             console.log(error.response)
             localStorage.clear();
             return axios();

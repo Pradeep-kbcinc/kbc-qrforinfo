@@ -8,15 +8,15 @@
         </v-col>
         <v-col cols="9">
           <div class="position-relative d-flex align-center">
-            <v-text-field v-model="searchVal" placeholder="Search Properties..." hide-details variant="solo-filled"
-              rounded="lg"></v-text-field>
-            <v-btn @click="searchNow" color="primary"
-              class="text-none rounded-lg elevation-0 font-weight-bold position-absolute top-0 right-0 mt-2 mr-2"
-              height="42"> <v-icon size="large" class="mr-2 mt-1">mdi-magnify</v-icon> Search</v-btn>
+            <v-text-field v-model="searchVal" placeholder="Search Properties..." hide-details variant="solo-filled" rounded="lg"></v-text-field>
+            <v-btn @click="searchNow" color="primary" class="text-none rounded-lg elevation-0 font-weight-bold position-absolute top-0 right-0 mt-2 mr-2" height="42"> <v-icon size="large" class="mr-2 mt-1">mdi-magnify</v-icon> Search</v-btn>
           </div>
         </v-col>
         <v-col cols="3">
-          <v-btn block @click="$router.push('/add-new-property')" variant="elevated" height="55" rounded="lg" class="elevation-0 text-none font-weight-bold" color="">
+          <v-btn v-if="route.name == 'BuyerLanding'" block @click="$router.push({ name: 'Login' })" variant="elevated" height="55" rounded="lg" class="elevation-0 text-none font-weight-bold" color="">
+            <v-icon class="mr-3">mdi-login</v-icon> Login
+          </v-btn>
+          <v-btn v-else block @click="$router.push('/add-new-property')" variant="elevated" height="55" rounded="lg" class="elevation-0 text-none font-weight-bold" color="">
             <v-icon>mdi-plus</v-icon> List Property
           </v-btn>
         </v-col>
@@ -32,8 +32,7 @@
           </v-btn> -->
         </v-col>
         <v-col v-if="$route.name == 'properties'" cols="auto">
-          <v-btn @click="$router.push('/add-new-property')" height="42" rounded="lg"
-            class="elevation-0 text-none font-weight-bold" color="primary">
+          <v-btn @click="$router.push('/add-new-property')" height="42" rounded="lg" class="elevation-0 text-none font-weight-bold" color="primary">
             <v-icon>mdi-plus</v-icon> Add Property
           </v-btn>
         </v-col>
@@ -43,8 +42,7 @@
     <div class="pa-4 pt-0">
       <v-row>
         <template v-if="isLoading">
-          <v-col cols="12" md="4" v-for="value in 6"><v-skeleton-loader class="mx-auto border"
-              type="image, article"></v-skeleton-loader></v-col>
+          <v-col cols="12" md="4" v-for="value in 6"><v-skeleton-loader class="mx-auto border" type="image, article"></v-skeleton-loader></v-col>
         </template>
         <v-col v-else cols="12" md="6" lg="4" v-for="propertyObj in propertyArr">
           <PropertyCard @recall="getProperties()" :propertyObj="propertyObj" />
@@ -74,12 +72,12 @@ const getProperties = async () => {
   try {
     isLoading.value = true;
 
-  if(sessionStorage.getItem('SEARCH')){
-    searchVal.value = sessionStorage.getItem('SEARCH')
-  } 
-  if(sessionStorage.getItem('PAGE_NO')){
-    currentPage.value = Number(sessionStorage.getItem('PAGE_NO'))
-  }
+    if (sessionStorage.getItem('SEARCH')) {
+      searchVal.value = sessionStorage.getItem('SEARCH')
+    }
+    if (sessionStorage.getItem('PAGE_NO')) {
+      currentPage.value = Number(sessionStorage.getItem('PAGE_NO'))
+    }
     const data = {
       PROPERTY_ID: 0,
       CITY: "",
@@ -108,18 +106,18 @@ const getProperties = async () => {
 const searchNow = () => {
   // currentPage.value = 1
   sessionStorage.setItem('PAGE_NO', 0)
-  sessionStorage.setItem('SEARCH',searchVal.value)
-  
+  sessionStorage.setItem('SEARCH', searchVal.value)
+
   getProperties()
 }
 
-watch(currentPage,(val) => {
+watch(currentPage, (val) => {
   sessionStorage.setItem('PAGE_NO', val)
   getProperties()
 })
 
-watch(searchVal, (val)=>{
-  if(!val){
+watch(searchVal, (val) => {
+  if (!val) {
     sessionStorage.clear()
     getProperties()
   }
