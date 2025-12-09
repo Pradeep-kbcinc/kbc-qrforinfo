@@ -86,10 +86,18 @@
               </v-list>
               <div v-if="state.ADDRESS_LINE1">
 
-              
-             <p class="font-weight-bold">Selected Address :</p> 
+              <v-row>
+                <v-col>
+                  <p class="font-weight-bold">Selected Address :</p> 
              <v-textarea variant="outlined" class="mt-1" rounded="lg" v-model="state.ADDRESS_LINE1">
              </v-textarea>
+                </v-col>
+                <v-col>
+                  <GoogleMap v-if="state.LATITUDE && state.LONGITUDE" :lat="state.LATITUDE" :lng="state.LONGITUDE"/>
+                </v-col>
+              </v-row>
+            
+             
             </div>
             <small v-if="v$.ADDRESS_LINE1.$error" class="text-error">
             {{ v$.ADDRESS_LINE1.$errors[0].$message }}
@@ -171,6 +179,7 @@ import { useVuelidate } from '@vuelidate/core'
 import { required, helpers, minLength, maxLength, numeric, email } from '@vuelidate/validators'
 import { toast } from 'vue3-toastify';
 import { useDebounce } from '@/config/debounce.js'
+import GoogleMap from './GoogleMap.vue'
 //..............................................................................
 const route = useRoute()
 const router = useRouter()
@@ -223,7 +232,7 @@ const state = reactive({
   STATE: "",
   POSTAL_CODE: "",
   COUNTRY: "",
-  IS_ACTIVE_FLG: 1
+  IS_ACTIVE_FLG: 1, 
 })
 const rules = {
   LISTING_TYPE: { required: helpers.withMessage('Property Listing type is required', required) },
@@ -392,8 +401,6 @@ const fetchPropertyDetail = async () => {
     // state.value = { ...state.value, ...res?.data?.FetchData?.PROPERTY_DETAILS?.[0] } || {}
     // v$.value = useVuelidate(rules, state.value)
     const resData = res?.data?.FetchData?.PROPERTY_DETAILS?.[0] || {}
-
-    console.log('--->resData', resData);
     Object.assign(state, { ...state, ...resData });
     v$.value.$reset()
     // cardKey.value++;
@@ -590,6 +597,8 @@ const debouncedSearch = () => {
   }
 }
 const selectedAddress = (result) => {
+  state.LATITUDE = result.lat
+  state.LONGITUDE = result.lng
   state.ADDRESS_LINE1 = result.name
   // lat.value = result.lat
   // long.value = result.lng

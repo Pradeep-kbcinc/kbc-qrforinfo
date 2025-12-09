@@ -15,6 +15,7 @@ declare module 'vue' {
     AppFooter: typeof import('./src/components/AppFooter.vue')['default']
     copy: typeof import('./src/components/LoginV2 copy.vue')['default']
     Dashboard: typeof import('./src/components/Dashboard.vue')['default']
+    GoogleMap: typeof import('./src/components/GoogleMap.vue')['default']
     Login: typeof import('./src/components/Login.vue')['default']
     LoginV2: typeof import('./src/components/LoginV2.vue')['default']
     Messages: typeof import('./src/components/Messages.vue')['default']

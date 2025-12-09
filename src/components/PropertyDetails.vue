@@ -137,6 +137,7 @@
           </v-card>
         </v-col>
         <v-col cols="12" md="4" lg="4">
+          <GoogleMap class="mb-2" v-if="propertyObj.LATITUDE && propertyObj.LONGITUDE" :lat="propertyObj.LATITUDE" :lng="propertyObj.LONGITUDE"/>
           <v-card class="card-box-shadow rounded-lg pa-6">
             <p class="text-h4 font-weight-bold text-primary mb-6">
               {{ propertyObj?.PRICE_AMOUNT?.toLocaleString('en-IN', {
@@ -990,6 +991,7 @@ import DummyHouse from '@/assets/dummy_house.webp'
 import DummyApartment from '@/assets/dummy_apartment.webp'
 import DummyLand from '@/assets/dummy_land.webp'
 import moment from 'moment';
+import GoogleMap from '@/components/GoogleMap.vue'
 //..............................................................................
 const authStore = useAuthStore()
 const route = useRoute()
