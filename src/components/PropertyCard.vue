@@ -49,8 +49,7 @@
     <div class="pa-4">
       <p class="text-h6 single-line">{{ propertyObj.TITLE }}</p>
       <p class="mt-1">
-        <v-icon>mdi-map-marker-outline</v-icon><span v-if="propertyObj.COUNTRY && propertyObj.STATE && propertyObj.CITY">{{ propertyObj.COUNTRY }}, {{ propertyObj.STATE }}, {{ propertyObj.CITY
-        }}</span>
+        <v-icon>mdi-map-marker-outline</v-icon><span v-if="propertyObj.ADDRESS_LINE1">{{ propertyObj.ADDRESS_LINE1 }}</span>
       </p>
       <div class="d-flex justify-space-between align-center text-primary mt-3">
         <p class="text-h5 font-weight-bold">

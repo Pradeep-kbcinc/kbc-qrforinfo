@@ -70,8 +70,14 @@
           </small>
         </div>
         <div class="mt-4">
-          <p class="font-weight-bold">Property Address</p>
-          <v-text-field clearable prepend-inner-icon="mdi-magnify" v-model="address" class="mt-1" rounded="lg" @input="debouncedSearch" variant="outlined" placeholder="Property Address..."></v-text-field>
+          <div class="d-flex align-center">
+            <p class="font-weight-bold">**Property Address</p>
+            <v-spacer></v-spacer>
+            <v-switch v-model="state.IS_ADDRESS_PRIVATE_FLG" :false-value="0"
+            :true-value="1" color="primary" label="Show Address to the buyers ?"></v-switch>
+          </div>
+          
+          <v-text-field clearable prepend-inner-icon="mdi-magnify" v-model="address" class="mt-n5" rounded="lg" @input="debouncedSearch" variant="outlined" placeholder="Property Address..."></v-text-field>
          
               <v-list v-show="results && results.length" class="mt-n5">
                 <v-list-item v-for="(result, i) in results" :key="i" @click="selectedAddress(result)" @click.prevent="results = []" color="grey" variant="outlined">
@@ -85,6 +91,9 @@
              <v-textarea variant="outlined" class="mt-1" rounded="lg" v-model="state.ADDRESS_LINE1">
              </v-textarea>
             </div>
+            <small v-if="v$.ADDRESS_LINE1.$error" class="text-error">
+            {{ v$.ADDRESS_LINE1.$errors[0].$message }}
+          </small>
         </div>
 
         <div>
@@ -97,6 +106,8 @@
               <p class="pr-4 font-weight-bold mb-1">Currency Code</p>
               <v-select v-model="state.CURRENCY_CODE" variant="outlined" class="mt-auto" :items="['INR', 'USD']" rounded="lg"></v-select>
             </v-col>
+
+
             <v-col v-if="state.PROPERTY_KIND !== 'LAND'">
               <p class="font-weight-bold">Bedrooms</p>
               <v-text-field type="number" :disabled="state.PROPERTY_KIND == 'LAND'" :error-messages="v$.NO_BEDROOMS.$errors.map(e => e.$message)" @blur="v$.NO_BEDROOMS.$touch" @input="v$.NO_BEDROOMS.$touch" v-model="state.NO_BEDROOMS" class="mt-1" rounded="lg" variant="outlined" placeholder="Ex. 3"></v-text-field>
@@ -121,18 +132,19 @@
               
               <v-select :loading="dropdownLoader" :items="CITY_LIST" item-title="CITY_NAME" :return-object="true" :error-messages="v$.CITY.$errors.map(e => e.$message)" @blur="v$.CITY.$touch" @input="v$.CITY.$touch" v-model="state.CITY" class="mt-1" rounded="lg" variant="outlined" placeholder="New Delhi"></v-select>
             </v-col> -->
-            <!-- <v-col>
-              <p class="font-weight-bold">Postal Code</p>
-              <v-text-field v-model="state.POSTAL_CODE" :error-messages="v$.POSTAL_CODE.$errors.map(e => e.$message)" @blur="v$.POSTAL_CODE.$touch" @input="v$.POSTAL_CODE.$touch" class="mt-1" rounded="lg" variant="outlined" placeholder="Postal Code"></v-text-field>
-            </v-col> -->
+            
           </v-row>
 
           <v-row align="end">
-            <v-col>
+            <v-col cols="12" md="6">
+              <p class="font-weight-bold">Postal Code</p>
+              <v-text-field v-model="state.POSTAL_CODE" :error-messages="v$.POSTAL_CODE.$errors.map(e => e.$message)" @blur="v$.POSTAL_CODE.$touch" @input="v$.POSTAL_CODE.$touch" class="mt-1" rounded="lg" variant="outlined" placeholder="Postal Code"></v-text-field>
+            </v-col>
+            <v-col cols="12" md="4">
               <p class="font-weight-bold">Area</p>
               <v-text-field :error-messages="v$.AREA.$errors.map(e => e.$message)" @blur="v$.AREA.$touch" @input="v$.AREA.$touch" v-model="state.AREA" class="mt-1" rounded="lg" variant="outlined" placeholder="Area"></v-text-field>
             </v-col>
-            <v-col cols="auto">
+            <v-col cols="12" md="2">
               <p class="pr-4 font-weight-bold">Area Unit</p>
               <v-select v-model="state.AREA_UNIT" variant="outlined" class="mt-auto" :items="['SQFT', 'SQYD', 'SQM', 'ACRE', 'HECTARE']" rounded="lg"></v-select>
             </v-col>
@@ -177,6 +189,7 @@ const state = reactive({
   TYPE_CODE: "",
   PROPERTY_TYPE_ID: 1,
   DIMENSIONS: "",
+  IS_ADDRESS_PRIVATE_FLG: 1,
   AREA: 0,
   AREA_UNIT: "SQFT",
   BUILTUP_AREA: 0,
@@ -220,6 +233,7 @@ const rules = {
   COUNTRY: { },
   STATE: { },
   CITY: { },
+  IS_ADDRESS_PRIVATE_FLG:{required},
   AREA: { required: helpers.withMessage('Area is required', required) },
   NO_BEDROOMS: {},
   NO_BATHROOMS: {},
@@ -282,6 +296,7 @@ onBeforeUnmount(() => {
 //------------------------------------------------------------------------------
 const saveProperty = async () => {
   const isFormCorrect = await v$.value.$validate();
+  console.log(await v$.value, 'isFormCorrect')
   if (!isFormCorrect) {
     return;
   } else {
@@ -289,22 +304,21 @@ const saveProperty = async () => {
     try {
       const data = {
         ...state,
-
         SELLER_USER_ID: state.SELLER_USER_ID || authStore?.userDetails?.USER_ID || 0,
         PROPERTY_ID: state.PROPERTY_ID || 0,
-        LISTING_TYPE: state.LISTING_TYPE || '',
-        TITLE: state.TITLE || '',
-        PROPERTY_DESC: state.PROPERTY_DESC || '',
-        PROPERTY_KIND: state.PROPERTY_KIND || 'LAND',
+        LISTING_TYPE: state.LISTING_TYPE,
+        TITLE: state.TITLE ,
+        PROPERTY_DESC: state.PROPERTY_DESC,
+        PROPERTY_KIND: state.PROPERTY_KIND,
         TYPE_CODE: state.TYPE_CODE || '',
         PROPERTY_TYPE_ID: state.PROPERTY_TYPE_ID || 0,
         DIMENSIONS: state.DIMENSIONS || '',
         AREA: state.AREA || 0,
-        AREA_UNIT: state.AREA_UNIT || 'SQFT',
+        AREA_UNIT: state.AREA_UNIT,
         BUILTUP_AREA: state.BUILTUP_AREA || 0,
-        BUILTUP_AREA_UNIT: state.BUILTUP_AREA_UNIT || 'SQFT',
+        BUILTUP_AREA_UNIT: state.BUILTUP_AREA_UNIT,
         CARPET_AREA: state.CARPET_AREA || 0,
-        CARPET_AREA_UNIT: state.CARPET_AREA_UNIT || 'SQFT',
+        CARPET_AREA_UNIT: state.CARPET_AREA_UNIT,
         PRICE_AMOUNT: state.PRICE_AMOUNT || 0,
         CURRENCY_CODE: state.CURRENCY_CODE || 'INR',
         NO_BEDROOMS: state.NO_BEDROOMS || 0,
@@ -318,7 +332,7 @@ const saveProperty = async () => {
         FLOOR_NO: state.FLOOR_NO || 0,
         TOTAL_FLOORS: state.TOTAL_FLOORS || 0,
         MAINTENANCE_FEE: state.MAINTENANCE_FEE || 0,
-        LAND_USE: state.LAND_USE || 'RESIDENTIAL',
+        LAND_USE: state.LAND_USE ,
         FRONTAGE_M: state.FRONTAGE_M || 0,
         DEPTH_M: state.DEPTH_M || 0,
         ROAD_WIDTH_M: state.ROAD_WIDTH_M || 0,
@@ -332,10 +346,9 @@ const saveProperty = async () => {
         STATE: state.STATE?.STATE_NAME || '',
         CITY: state.CITY?.CITY_NAME || '',
         POSTAL_CODE: state.POSTAL_CODE || '',
-       
         IS_ACTIVE_FLG: state.IS_ACTIVE_FLG || 1,
+        IS_ADDRESS_PRIVATE_FLG: state.IS_ADDRESS_PRIVATE_FLG
       }
-      console.log('--->', data);
       if (authStore.getTemporaryPropertyDetails.DRAFT_ID) {
         data.DRAFT_ID = authStore.getTemporaryPropertyDetails.DRAFT_ID
       }
