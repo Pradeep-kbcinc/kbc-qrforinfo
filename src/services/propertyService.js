@@ -142,6 +142,11 @@ export default {
     return axios.post(`/VerifyUser`, data)
   }, 
 
+
+  async getHistoryOfScannedProperty(data){
+    return axios.post(`/GetQRScanDashboard`, data)
+  }, 
+
   
 
 
