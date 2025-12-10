@@ -55,6 +55,7 @@
                   policy</span> , <span class="link">refund policy</span>,<span class="link">terms of
                   use</span> and <span class="link">cookie policies</span>
               </p>
+              <p class="version terms pt-0 mt-0 text-center">v{{ version }}</p>
             </div>
             <div v-else class="px-10">
               <!-- <v-text-field v-model="initialState.phoneNumber" placeholder="Phone No. / Email" :error-messages="v$.phoneNumber.$errors.map(e => e.$message)" @blur="v$.phoneNumber.$touch" @input="v$.phoneNumber.$touch" variant="outlined" rounded="xl" class="email-field mb-0 pb-0" density="compact"></v-text-field> -->
@@ -77,6 +78,7 @@
                   policy</span> , <span class="link">refund policy</span>,<span class="link">terms of
                   use</span> and <span class="link">cookie policies</span>
               </p>
+              <p class="version terms pt-0 mt-0 text-center">v{{ version }}</p>
             </div>
           </div>
         </v-col>

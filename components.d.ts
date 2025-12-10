@@ -13,7 +13,6 @@ declare module 'vue' {
   export interface GlobalComponents {
     AddNewProperty: typeof import('./src/components/AddNewProperty.vue')['default']
     AppFooter: typeof import('./src/components/AppFooter.vue')['default']
-    copy: typeof import('./src/components/LoginV2 copy.vue')['default']
     Dashboard: typeof import('./src/components/Dashboard.vue')['default']
     GoogleMap: typeof import('./src/components/GoogleMap.vue')['default']
     Login: typeof import('./src/components/Login.vue')['default']
