@@ -1,9 +1,9 @@
 var env = null
 var appAuthUrl = ''
 
-// env = 'DEV'
+env = 'DEV'
 // env = 'DEMO'
-env = 'UAT'
+// env = 'UAT'
 // env = 'LIVE'
 
 if (env == 'DEV') {

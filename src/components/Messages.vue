@@ -6,7 +6,7 @@
           <div class="pa-4 mb-2">
             <h5 class="mb-3">Messages</h5>
 
-            <v-text-field v-model="searchVal" hideDetails variant="outlined" placeholder="Search by property name..." density="comfortable"></v-text-field>
+            <v-text-field v-model="searchVal" hideDetails variant="outlined" placeholder="Search by property name or username..." density="comfortable"></v-text-field>
           </div>
 
           <div class="border-t">
@@ -57,7 +57,7 @@
                   <v-skeleton-loader class="my-2" v-for="item in 4" type="paragraph"></v-skeleton-loader>
                 </div>
                 <div v-else v-for="(msgObj, index) in allMessages" :key="index" :class="`d-flex ${msgObj.position == 'right' ? 'justify-end' : ''}`">
-                  <v-card class="pa-4 card-box-shadow mb-4 rounded-lg" :color="msgObj.position == 'right' ? 'primary' : ''" :class="{ 'ms-auto': msgObj.self }" style="width: fit-content;">
+                  <v-card class="pa-4 card-box-shadow mb-4 rounded-lg" :color="msgObj.position == 'right' ? '#f0f6ff' : ''" :class="{ 'ms-auto': msgObj.self }" style="width: fit-content;">
                     <div style="position: absolute;right: -3px;top: -2px" v-if="msgObj.position == 'right'" class="">
                       <v-btn @click="deleteMessage(msgObj, index)" :loading="deleteMessageLoader[index]" size="x-small"  elevation="10" icon><v-icon color="error">mdi-delete</v-icon></v-btn>
                     </div>
@@ -217,15 +217,40 @@ const truncateWords = (text, wordLimit) => {
 }
 
 const searchVal = ref('')
-watch(searchVal,(val)=>{
-  if(val && val.length >2){
-    channels.value = channelsRef.value.filter((item)=>{
-      return item.PROPERTY_NAME.toLowerCase().includes(val.toLowerCase())
-    })
-  }else{
-    channels.value = channelsRef.value
+watch(searchVal, (val) => {
+  const query = val?.toLowerCase() || "";
+
+  if (query.length > 2) {
+    // Step 1: search in members list
+    const matchedChannelsByMember = channelsRef.value.filter((channel) => {
+      const members = channel.MEMBERS_LIST.flat().filter((m) => {
+        return m.USER_ID !== authStore.getUserDetails.USER_ID;
+      });
+
+      return members.some((m) =>
+        m.USER_NAME.toLowerCase().includes(query)
+      );
+    });
+
+    // Step 2: search by property name
+    const matchedChannelsByProperty = channelsRef.value.filter((channel) =>
+      channel.PROPERTY_NAME.toLowerCase().includes(query)
+    );
+
+    // Combine unique results
+    const combined = [
+      ...matchedChannelsByMember,
+      ...matchedChannelsByProperty.filter(
+        (c) => !matchedChannelsByMember.includes(c)
+      ),
+    ];
+
+    channels.value = combined;
+  } else {
+    channels.value = channelsRef.value;
   }
-})
+});
+
 
 
 const selectedDeleteData = ref({})
