@@ -214,9 +214,9 @@
     </v-card>
   </v-dialog>
 
-  <v-dialog max-width="600" v-model="historyModal">
+  <v-dialog max-width="800" v-model="historyModal">
     <v-toolbar density="compact" rounded="t-lg" class="px-4">
-      <h5>Scanned History List</h5>
+      <h5 class="text-h6">Scanned History List</h5>
       <v-spacer></v-spacer>
       <v-btn @click="historyModal = false" icon><v-icon>mdi-close</v-icon></v-btn>
     </v-toolbar>
@@ -226,9 +226,13 @@
           <v-skeleton-loader type="list-item-avatar"></v-skeleton-loader>
         </div>
         <div v-else>
-          <div v-if="historyArr.length == 0">
+          <v-date-input class="rounded-lg" v-model="selectedDate" density="compact" clearable label="Date input" variant="outlined"></v-date-input>
+          <div v-if="historyArr && historyArr.length == 0">
             <p class="text-center mt-16">No Scanned Data Found for today</p>
           </div>
+          
+         
+          <v-divider></v-divider>
           <div v-for="(propertyObj, i) in historyArr" :key="i" class="rounded-lg">
             <v-list-item class="px-2 my-2 pointer">
               <template #prepend>
@@ -238,7 +242,7 @@
                 </v-avatar>
               </template>
 
-              <v-list-item-title class="font-weight-bold text-grey-darken-3">{{ propertyObj.TITLE
+              <v-list-item-title class="font-weight-bold text-grey-darken-3">{{ propertyObj.PROPERTY_NAME
                 }}</v-list-item-title>
               <!-- <v-list-item-subtitle>{{ property.location }}</v-list-item-subtitle> -->
               <v-list-item-subtitle v-if="propertyObj?.COUNTRY && propertyObj?.STATE && propertyObj?.CITY" class="mt-1"><v-icon>mdi-map-marker-outline</v-icon>{{ propertyObj.COUNTRY }}, {{ propertyObj.STATE
@@ -248,8 +252,8 @@
 
               <template #append>
                 <div class="text-end">
-                  <v-btn @click.stop="gotoDraftEdit(propertyObj)" rounded="lg" class="text-none font-weight-bold text-subtitle-1" color="success" elevation="0">
-                    <v-icon>mdi-pencil</v-icon> Edit</v-btn>
+                  <v-btn @click.stop="router.push(`/property/${propertyObj.PROPERTY_ID}?createdBy=false`)" rounded="lg" class="text-none font-weight-bold text-subtitle-1" color="success" elevation="0">
+                    <v-icon>mdi-eye</v-icon> View</v-btn>
                 </div>
               </template>
 
@@ -279,7 +283,8 @@ const totalPages = ref(null)
 const properties = [
   
 ]
-
+var today = moment();
+const selectedDate = ref(null)
 
 const statisticsData = ref({})
 const fetchStatistics = async () => {
@@ -431,8 +436,8 @@ const fetchHistory = async()=>{
   try {
     let data ={
       "PROPERTY_ID": 0,
-      "START_DATE": moment().format('YYYY-MM-DD'),
-      "END_DATE": moment().format('YYYY-MM-DD')
+      "START_DATE": selectedDate.value ? moment(selectedDate.value).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'),
+      "END_DATE": selectedDate.value ? moment(selectedDate.value).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD')
     }
     let res = await propertyService.getHistoryOfScannedProperty(data)
     if(res.data.ERR_CODE == 0){
@@ -445,6 +450,10 @@ const fetchHistory = async()=>{
   }
 }
 watch(historyModal, (val)=>{
+  fetchHistory()
+})
+watch(selectedDate,(val)=>{
+  console.log(val, 'val')
   fetchHistory()
 })
 </script>

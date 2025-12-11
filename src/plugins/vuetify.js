@@ -4,13 +4,14 @@
 import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/styles'
 import { VFileUpload } from 'vuetify/labs/VFileUpload'
-
+import { VDateInput } from 'vuetify/labs/VDateInput'
 // Composables
 import { createVuetify } from 'vuetify'
 
 export default createVuetify({
   components: {
     VFileUpload,
+    VDateInput
   },
   theme: {
     defaultTheme: 'light', 
