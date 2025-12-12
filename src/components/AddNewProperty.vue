@@ -579,9 +579,10 @@ const search = async () => {
     fetchResult.features.forEach((element, i) => {
       results.value.push({
         id: i + 1,
-        name: element.properties.formatted,
-        lat: element.properties.lat,
-        lng: element.properties.lon
+        name: element?.properties?.formatted,
+        lat: element?.properties?.lat,
+        lng: element?.properties?.lon, 
+        postalCode: element?.properties?.postcode
       })
     })
   } catch (error) {
@@ -597,9 +598,11 @@ const debouncedSearch = () => {
   }
 }
 const selectedAddress = (result) => {
-  state.LATITUDE = result.lat
-  state.LONGITUDE = result.lng
-  state.ADDRESS_LINE1 = result.name
+  console.log(result, 'result')
+  state.LATITUDE = result?.lat
+  state.LONGITUDE = result?.lng
+  state.ADDRESS_LINE1 = result?.name
+  state.POSTAL_CODE = result?.postalCode
   // lat.value = result.lat
   // long.value = result.lng
 }
