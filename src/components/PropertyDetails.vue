@@ -13,8 +13,8 @@
           <v-icon class="mr-2">mdi-arrow-left</v-icon> Back</v-btn>
         <h3 class="text-h5 font-weight-bold font-weight-bold mt-4">{{ propertyObj.TITLE }}</h3>
         <p class="mt-1">
-        <v-icon>mdi-map-marker-outline</v-icon><span v-if="propertyObj.ADDRESS_LINE1">{{ propertyObj.IS_ADDRESS_PRIVATE_FLG == 1 ? propertyObj.ADDRESS_LINE1 : 'Hidden' }}</span>
-      </p>
+          <v-icon>mdi-map-marker-outline</v-icon><span v-if="propertyObj.ADDRESS_LINE1">{{ propertyObj.IS_ADDRESS_PRIVATE_FLG == 1 ? propertyObj.ADDRESS_LINE1 : 'Hidden' }}</span>
+        </p>
         <!-- <p v-if="propertyObj.COUNTRY && propertyObj.STATE && propertyObj.CITY"><v-icon>mdi-map-marker-outline</v-icon>
           {{ propertyObj.COUNTRY }}, {{ propertyObj.STATE }}, {{ propertyObj.CITY }}</p> -->
       </div>
@@ -137,7 +137,7 @@
           </v-card>
         </v-col>
         <v-col cols="12" md="4" lg="4">
-          <GoogleMap class="mb-2" v-if="propertyObj.LATITUDE && propertyObj.LONGITUDE" :lat="propertyObj.LATITUDE" :lng="propertyObj.LONGITUDE"/>
+          <GoogleMap class="mb-2" v-if="propertyObj.LATITUDE && propertyObj.LONGITUDE" :lat="propertyObj.LATITUDE" :lng="propertyObj.LONGITUDE" />
           <v-card class="card-box-shadow rounded-lg pa-6">
             <p class="text-h4 font-weight-bold text-primary mb-6">
               {{ propertyObj?.PRICE_AMOUNT?.toLocaleString('en-IN', {
@@ -1039,11 +1039,23 @@ const updateStatistics = async () => {
 //------------------------------------------------------------------------------
 const updateQrStatistics = async () => {
   try {
-    let data = {
-      "PROPERTY_ID": Number(propertyObj.value?.PROPERTY_ID || route?.params?.id || 0),
-      "USER_ID": authStore.isAuthenticated ? authStore.userDetails.USER_ID : 0
+    if (authStore?.isAuthenticated && authStore?.userDetails?.USER_ID) {
+      let data = {
+        "PROPERTY_ID": Number(propertyObj.value?.PROPERTY_ID || route?.params?.id || 0),
+        "USER_ID": authStore.isAuthenticated ? authStore.userDetails.USER_ID : 0
+      }
+      let res = await propertyService.AddPropertyQrViewDetail(data)
+    } else {
+      const propertyArr = JSON.parse(localStorage.getItem('scannedPropertyArr') || '[]')
+      console.log('--->localStorage.getItem()', localStorage.getItem('scannedPropertyArr'));
+      console.log('--->propertyArr', propertyArr);
+      if (!propertyArr.includes(Number(propertyObj.value?.PROPERTY_ID || route?.params?.id || 0))) {
+        console.log('--->propertyArr', propertyArr);
+        propertyArr?.push(Number(propertyObj.value?.PROPERTY_ID || route?.params?.id || 0))
+        localStorage.setItem('scannedPropertyArr', JSON.stringify(propertyArr))
+        console.log('--->propertyArr', propertyArr);
+      }
     }
-    let res = await propertyService.AddPropertyQrViewDetail(data)
   } catch (error) {
     console.log(error)
   }

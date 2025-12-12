@@ -6,7 +6,8 @@ export const useAuthStore = defineStore("app", {
   state: () => ({
     token: localStorage.getItem("access_token") || null,
     userDetails: JSON.parse(localStorage.getItem("userDetails")) || null,
-    propertyDetailsTempo : localStorage.getItem('tempoPropertyData') || {}
+    propertyDetailsTempo : localStorage.getItem('tempoPropertyData') || {},
+    scannedPropertyArr : JSON.parse(localStorage.getItem('scannedPropertyArr') || '[]')
   }),
   getters: {
     isAuthenticated: (state) => {

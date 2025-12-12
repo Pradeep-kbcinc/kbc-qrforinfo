@@ -124,29 +124,29 @@ const authStore = useAuthStore()
 
 //------------------------------------------------------------------------------
 
-const checkCredentials = async()=>{
+const checkCredentials = async () => {
   const isFormCorrect = await v$.value.$validate();
   if (!isFormCorrect) {
     return;
   } else {
     btnLoader.value = true
-  try {
-    let data = {
-      USERNAME: initialState.value.phoneNumber
+    try {
+      let data = {
+        USERNAME: initialState.value.phoneNumber
+      }
+      let res = await propertyService.verifyUser(data)
+      if (res.data.FetchData.ERR_FLG !== 1) {
+        sendOtpToLogin()
+      } else {
+        toast.info('Provided phone number / email is not registered yet', {
+          autoClose: 4000,
+        });
+        btnLoader.value = false
+      }
+    } catch (error) {
+      console.log(error)
     }
-    let res = await propertyService.verifyUser(data)
-    if(res.data.FetchData.ERR_FLG !== 1){
-      sendOtpToLogin()
-    }else{
-      toast.info('Provided phone number / email is not registered yet', {
-        autoClose: 4000,
-      });
-      btnLoader.value = false
-    }
-  } catch (error) {
-    console.log(error)
   }
-}
 }
 const sendOtpToLogin = async () => {
   const isFormCorrect = await v$.value.$validate();
@@ -160,6 +160,8 @@ const sendOtpToLogin = async () => {
         USERNAME: initialState.value.phoneNumber
       }
       const res = await authStore.loginUser(data)
+
+
       console.log('--->res', res?.response?.data?.MESSAGE);
       if (!res?.response?.data?.ERR_CODE) isVerfiyOTP.value = true
       else if (res?.response?.data?.MESSAGE == 'No user found for this mobile no') {
@@ -206,6 +208,20 @@ const sendOtpToLogin = async () => {
   }
 }
 //------------------------------------------------------------------------------
+const updateQrStatistics = async (propertyId) => {
+  try {
+    if (authStore?.isAuthenticated && authStore?.userDetails?.USER_ID) {
+      let data = {
+        "PROPERTY_ID": Number(propertyId || 0),
+        "USER_ID": authStore.isAuthenticated ? authStore.userDetails.USER_ID : 0
+      }
+      let res = await propertyService.AddPropertyQrViewDetail(data)
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+//------------------------------------------------------------------------------
 const verifyOtp = async () => {
   try {
     btnLoader.value = true
@@ -219,6 +235,7 @@ const verifyOtp = async () => {
     if (res.data.Result.TOKEN && res.data.Result.USER) {
       authStore.login(res.data.Result.USER, res.data.Result.TOKEN)
       // localStorage.setItem("access_token", res.data)
+      await updateScannedProperty()
       router.push('/home')
     } else {
       toast.error(res.data?.Result?.MESSAGE, {
@@ -230,6 +247,17 @@ const verifyOtp = async () => {
   } finally {
     btnLoader.value = false
   }
+}
+//------------------------------------------------------------------------------
+const updateScannedProperty = async () => {
+  const propertyArr = JSON.parse(localStorage.getItem('scannedPropertyArr') || '[]')
+
+  for (let i = 0; i < propertyArr.length; i++) {
+    const propertyId = propertyArr[i];
+    await updateQrStatistics(propertyId)
+  }
+
+  localStorage.setItem('scannedPropertyArr', JSON.stringify([]))
 }
 //------------------------------------------------------------------------------
 
@@ -251,10 +279,11 @@ const verifyOtp = async () => {
   justify-content: center;
   /* center horizontally */
 }
+
 @media (max-width: 768px) {
   .login-screen-wrapper {
     padding: 0 !important;
-    height: 100%!important;
+    height: 100% !important;
   }
 }
 
@@ -277,6 +306,7 @@ const verifyOtp = async () => {
 
   /* NOTE: No height:100% here */
 }
+
 @media (max-width: 768px) {
   .inside-card {
     padding: 0 !important;
