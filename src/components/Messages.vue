@@ -61,7 +61,8 @@
                     <div style="position: absolute;right: -3px;top: -2px" v-if="msgObj.position == 'right'" class="">
                       
                       <v-menu
-                      v-model="menu"
+                      
+                      v-model="menu[index]"
                       :close-on-content-click="false"
                       location="end"
                     >
@@ -74,7 +75,7 @@
                           <v-divider class="mt-2"></v-divider>
                           <div class="mt-4">
                             <v-btn color="red" @click="deleteMessage(msgObj, index)" :loading="deleteMessageLoader[index]" elevation="0" class="text-none font-weight-bold" rounded="lg">Delete Now</v-btn>
-                            <v-btn color="secondary" elevation="0" @click="confirmDeleteModal = false" class="text-none font-weight-bold ml-2" rounded="lg">Cancel</v-btn>
+                            <v-btn color="secondary" elevation="0" @click="cancelPop" class="text-none font-weight-bold ml-2" rounded="lg">Cancel</v-btn>
                           </div>
                       </v-card-text>
                     </v-card>
@@ -137,7 +138,10 @@ const selectedMsgObj = ref({})
 const channels = ref([])
 const channelsRef = ref([])
 const channelLoader = ref(false)
-const menu = ref(false)
+const menu = ref([])
+const cancelPop = ()=>{
+  menu.value = []
+}
 const getAllChannels = async () => {
   channelLoader.value = true
   try {
