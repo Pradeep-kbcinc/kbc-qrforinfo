@@ -251,6 +251,12 @@ const verifyOtp = async () => {
   justify-content: center;
   /* center horizontally */
 }
+@media (max-width: 768px) {
+  .login-screen-wrapper {
+    padding: 0 !important;
+    height: 100%!important;
+  }
+}
 
 .inside-card {
   box-shadow:
@@ -270,6 +276,11 @@ const verifyOtp = async () => {
   // height: 100%;
 
   /* NOTE: No height:100% here */
+}
+@media (max-width: 768px) {
+  .inside-card {
+    padding: 0 !important;
+  }
 }
 
 .tw-object-cover {

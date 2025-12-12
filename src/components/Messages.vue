@@ -59,7 +59,27 @@
                 <div v-else v-for="(msgObj, index) in allMessages" :key="index" :class="`d-flex ${msgObj.position == 'right' ? 'justify-end' : ''}`">
                   <v-card class="pa-4 card-box-shadow mb-4 rounded-lg" :color="msgObj.position == 'right' ? '#f0f6ff' : ''" :class="{ 'ms-auto': msgObj.self }" style="width: fit-content;">
                     <div style="position: absolute;right: -3px;top: -2px" v-if="msgObj.position == 'right'" class="">
-                      <v-btn @click="deleteMessage(msgObj, index)" :loading="deleteMessageLoader[index]" size="x-small"  elevation="10" icon><v-icon color="error">mdi-delete</v-icon></v-btn>
+                      
+                      <v-menu
+                      v-model="menu"
+                      :close-on-content-click="false"
+                      location="end"
+                    >
+                      <template v-slot:activator="{ props }">
+                        <v-btn v-bind="props"  size="x-small"  elevation="10" icon><v-icon color="error">mdi-delete</v-icon></v-btn>
+                      </template>
+                      <v-card>
+                      <v-card-text>
+                          <h6 class="font-weight-bold mt-n">Are You Sure , To Delete This Channel ?</h6>
+                          <v-divider class="mt-2"></v-divider>
+                          <div class="mt-4">
+                            <v-btn color="red" @click="deleteMessage(msgObj, index)" :loading="deleteMessageLoader[index]" elevation="0" class="text-none font-weight-bold" rounded="lg">Delete Now</v-btn>
+                            <v-btn color="secondary" elevation="0" @click="confirmDeleteModal = false" class="text-none font-weight-bold ml-2" rounded="lg">Cancel</v-btn>
+                          </div>
+                      </v-card-text>
+                    </v-card>
+                    </v-menu>
+                    
                     </div>
                     <p>{{ msgObj.MESSAGE_BODY }}</p>
                  
@@ -117,6 +137,7 @@ const selectedMsgObj = ref({})
 const channels = ref([])
 const channelsRef = ref([])
 const channelLoader = ref(false)
+const menu = ref(false)
 const getAllChannels = async () => {
   channelLoader.value = true
   try {
