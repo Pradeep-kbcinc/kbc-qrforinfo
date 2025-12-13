@@ -48,7 +48,7 @@
             <span>OR</span>
         </div> -->
 
-            <div class="px-10">
+            <div class="px-md-10 px-0">
 
               <v-text-field :error-messages="v$.FNAME.$errors.map(e => e.$message)" @blur="v$.FNAME.$touch"
                 @input="v$.FNAME.$touch" v-model="propertyObj.FNAME" label="First Name" variant="outlined" rounded="xl"
@@ -242,6 +242,11 @@ const registerNow = async () => {
   /* vertically center card */
   justify-content: center;
   /* center horizontally */
+}
+@media (max-width: 768px) {
+.login-screen-wrapper{
+  padding: 0 !important;
+}
 }
 
 .inside-card {
