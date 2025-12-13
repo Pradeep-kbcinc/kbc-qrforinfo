@@ -12,7 +12,7 @@
             <v-btn @click="searchNow" color="primary" class="text-none rounded-lg elevation-0 font-weight-bold position-absolute top-0 right-0 mt-2 mr-2" height="42"> <v-icon size="large" class="mr-2 mt-1">mdi-magnify</v-icon> Search</v-btn>
           </div>
         </v-col>
-        <v-col cols="12" md="12">
+        <v-col cols="12" md="3">
           <v-btn v-if="route.name == 'BuyerLanding'" block @click="$router.push({ name: 'Login' })" variant="elevated" height="55" rounded="lg" class="elevation-0 text-none font-weight-bold" color="">
             <v-icon class="mr-3">mdi-login</v-icon> Login
           </v-btn>
