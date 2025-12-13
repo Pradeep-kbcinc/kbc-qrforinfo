@@ -16,6 +16,7 @@ import TermsAndCondition from "@/components/TermsAndCondition.vue"
 import AdminDashboard from "@/components/adminDashboard.vue"
 import { useAuthStore } from '@/stores/app'
 import SignupV2 from "@/components/SignupV2.vue";
+import PublicProfile from "@/components/Profile.vue"
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
@@ -82,6 +83,12 @@ const router = createRouter({
           path: '/admin-dashboard',
           name: "AdminDashboard",
           component: AdminDashboard
+          // redirect: '/buy/properties', // 👈 redirect root to this
+        },
+        {
+          path: '/public-profile',
+          name: "PublicProfile",
+          component: PublicProfile
           // redirect: '/buy/properties', // 👈 redirect root to this
         },
 

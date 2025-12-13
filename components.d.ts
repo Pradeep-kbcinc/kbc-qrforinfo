@@ -20,6 +20,7 @@ declare module 'vue' {
     LoginV2: typeof import('./src/components/LoginV2.vue')['default']
     Messages: typeof import('./src/components/Messages.vue')['default']
     PrivacyPolicy: typeof import('./src/components/PrivacyPolicy.vue')['default']
+    Profile: typeof import('./src/components/Profile.vue')['default']
     Properties: typeof import('./src/components/Properties.vue')['default']
     PropertyCard: typeof import('./src/components/PropertyCard.vue')['default']
     PropertyDetails: typeof import('./src/components/PropertyDetails.vue')['default']

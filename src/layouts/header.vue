@@ -27,7 +27,7 @@
           </template>
 
           <v-list v-if="authStore.isAuthenticated" density="compact" min-width="150">
-            <v-list-item @click="router.push('/settings')">
+            <v-list-item @click="router.push('/public-profile')">
               <v-list-item-title class="font-weight-medium">My Profile<br>(v{{ version }})</v-list-item-title>
             </v-list-item>
             <v-divider></v-divider>
