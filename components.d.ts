@@ -12,6 +12,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AddNewProperty: typeof import('./src/components/AddNewProperty.vue')['default']
+    AdminDashboard: typeof import('./src/components/adminDashboard.vue')['default']
     AppFooter: typeof import('./src/components/AppFooter.vue')['default']
     Dashboard: typeof import('./src/components/Dashboard.vue')['default']
     GoogleMap: typeof import('./src/components/GoogleMap.vue')['default']

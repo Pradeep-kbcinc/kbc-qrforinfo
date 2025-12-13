@@ -77,7 +77,7 @@
             <h3 class="text-h6">My Properties</h3>
             <!-- <v-btn variant="text" color="primary" class="text-capitalize">View All</v-btn> -->
             <v-spacer></v-spacer>
-            <v-btn @click="historyModal = true" class="elevation-0 text-none font-weight-bold mr-2" rounded="lg" color="grey" :height="!mobile ? 48 : 38" :width="mobile ? '140' : ''">My Scanned History</v-btn>
+            <v-btn @click="historyModal = true" class="elevation-0 text-none font-weight-bold mr-2" rounded="lg" color="grey" :height="!mobile ? 48 : 38" :width="mobile ? '160' : ''">My Scanned History</v-btn>
             <v-btn @click="openDraftList" :height="!mobile ? 48 : 38" :width="mobile ? '140' : ''" rounded="lg" class="elevation-0 text-none font-weight-bold mr-2" color="info">
               <v-icon class="mr-2">mdi-file-sign</v-icon>Saved Drafts
             </v-btn>

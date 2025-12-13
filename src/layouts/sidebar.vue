@@ -38,6 +38,10 @@
   <p :class="isRouteActive('/privacy-policy') ? 'font-weight-bold bolder-text' : ''">Privacy Policy</p>
 </v-list-item>
 
+<v-list-item prepend-icon="mdi-file-sign" @click="gotoMenu('/admin-dashboard')" :class="isRouteActive('/admin-dashboard') ? 'active-item text-primary' : ''">
+  <p :class="isRouteActive('/admin-dashbaord') ? 'font-weight-bold bolder-text' : ''">Admin Dashboard</p>
+</v-list-item>
+
     </v-list>
   </v-navigation-drawer>
 </template>

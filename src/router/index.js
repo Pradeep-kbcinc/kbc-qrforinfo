@@ -13,6 +13,7 @@ import PropertyDetails from "@/components/PropertyDetails.vue";
 import Signup from "@/components/Signup.vue";
 import PrivacyPolicy from "@/components/PrivacyPolicy.vue"
 import TermsAndCondition from "@/components/TermsAndCondition.vue"
+import AdminDashboard from "@/components/adminDashboard.vue"
 import { useAuthStore } from '@/stores/app'
 import SignupV2 from "@/components/SignupV2.vue";
 const router = createRouter({
@@ -77,6 +78,14 @@ const router = createRouter({
           component: TermsAndCondition
           // redirect: '/buy/properties', // 👈 redirect root to this
         },
+        {
+          path: '/admin-dashboard',
+          name: "AdminDashboard",
+          component: AdminDashboard
+          // redirect: '/buy/properties', // 👈 redirect root to this
+        },
+
+      
 
 
       ],
