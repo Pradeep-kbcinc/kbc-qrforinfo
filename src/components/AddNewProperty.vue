@@ -112,8 +112,9 @@
         <div>
           <v-row align="end">
             <v-col>
-              <p class="font-weight-bold">Price</p>
-              <v-text-field :error-messages="v$.PRICE_AMOUNT.$errors.map(e => e.$message)" @blur="v$.PRICE_AMOUNT.$touch" @input="v$.PRICE_AMOUNT.$touch" v-model="state.PRICE_AMOUNT" class="mt-1" rounded="lg" variant="outlined" placeholder="450000"></v-text-field>
+              <p class="font-weight-bold">Price   <span v-if="priceInWords" class="text-caption mt-n14 text-primary">({{ priceInWords }})</span> </p>
+              <v-number-input :error-messages="v$.PRICE_AMOUNT.$errors.map(e => e.$message)" @blur="v$.PRICE_AMOUNT.$touch" @input="v$.PRICE_AMOUNT.$touch" v-model="state.PRICE_AMOUNT" class="mt-1 mb-0" rounded="lg" variant="outlined" placeholder="450000"></v-number-input>
+           
             </v-col>
             <v-col cols="auto">
               <p class="pr-4 font-weight-bold mb-1">Currency Code</p>
@@ -631,6 +632,59 @@ const closeModal = (data)=>{
   state.LATITUDE = data.lat
   state.LONGITUDE = data.lng
 }
+
+
+const numberToWordsIndian = (num)=> {
+  if (!num || isNaN(num)) return ''
+
+  const ones = [
+    '', 'One', 'Two', 'Three', 'Four', 'Five',
+    'Six', 'Seven', 'Eight', 'Nine', 'Ten',
+    'Eleven', 'Twelve', 'Thirteen', 'Fourteen',
+    'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'
+  ]
+
+  const tens = [
+    '', '', 'Twenty', 'Thirty', 'Forty',
+    'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'
+  ]
+
+  const convertBelowThousand = (n) => {
+    let str = ''
+
+    if (n >= 100) {
+      str += ones[Math.floor(n / 100)] + ' Hundred '
+      n %= 100
+    }
+
+    if (n > 0) {
+      str += n < 20
+        ? ones[n]
+        : tens[Math.floor(n / 10)] + (n % 10 ? ' ' + ones[n % 10] : '')
+    }
+
+    return str.trim()
+  }
+
+  let result = ''
+  const crore = Math.floor(num / 10000000)
+  const lakh = Math.floor((num / 100000) % 100)
+  const thousand = Math.floor((num / 1000) % 100)
+  const rest = num % 1000
+
+  if (crore) result += convertBelowThousand(crore) + ' Crore '
+  if (lakh) result += convertBelowThousand(lakh) + ' Lakh '
+  if (thousand) result += convertBelowThousand(thousand) + ' Thousand '
+  if (rest) result += convertBelowThousand(rest)
+
+  return result.trim()
+}
+
+const priceInWords = computed(() => {
+  return numberToWordsIndian(state.PRICE_AMOUNT)
+})
+
+
 </script>
 
 <style scoped lang="scss">
