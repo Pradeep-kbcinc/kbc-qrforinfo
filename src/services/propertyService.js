@@ -145,7 +145,15 @@ export default {
 
   async getHistoryOfScannedProperty(data){
     return axios.post(`/GetQRScanDashboard`, data)
-  }, 
+  },
+
+  
+  async readStatusChange(data){
+    return axios.post(`/UpdateMessageViewStatus`, data)
+  },
+  
+
+
 
   
 

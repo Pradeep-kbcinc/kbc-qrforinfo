@@ -23,7 +23,7 @@
             </template>
             <template v-else>
               <h2 class="welcome text-center">Verification Code</h2>
-              <p class="subtitle text-center ">We have sent a otp code to {{ initialState.phoneNumber }}</p>
+              <p class="subtitle text-center ">We have sent a otp code to <strong> {{ initialState.phoneNumber }} </strong></p>
             </template>
 
             <!-- <div class="social-row">
