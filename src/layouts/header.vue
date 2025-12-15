@@ -36,7 +36,7 @@
             </v-list-item>
           </v-list>
           <v-list v-else density="compact" min-width="150">
-            <v-list-item @click="router.push({ name: 'Login' })">
+            <v-list-item @click="gotoLogin">
               <v-list-item-title class="font-weight-medium">Login</v-list-item-title>
             </v-list-item>
 
@@ -79,4 +79,15 @@ const logout = () => {
   router.push('/')
   console.log(authStore.isAuthenticated, 'authStore.isAuthenticated')
 }
+
+const gotoLogin = ()=>{
+  if(route.query.qr && route.query.qr == '1'){
+    router.push({ name: 'Login', query:{
+      qr: route.params.id
+    } })
+  }else{
+    router.push({ name: 'Login' })
+  }
+  }
+  
 </script>

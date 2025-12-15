@@ -9,7 +9,8 @@
 
     <div class="d-flex align-center justify-space-between pa-6 pb-0">
       <div class="">
-        <v-btn @click="router.back()" v-if="!route.query.QR" size="small" color="primary" variant="tonal"
+        
+        <v-btn @click="router.back()" v-if="route.query.qr !== '1'" size="small" color="primary" variant="tonal"
           class="text-none font-weight-bold">
           <v-icon class="mr-2">mdi-arrow-left</v-icon> Back</v-btn>
 
@@ -1043,7 +1044,8 @@ const makeFev = async () => {
       console.log(error)
     }
   } else {
-    router.push({ name: 'Login' })
+    // router.push({ name: 'Login' })
+    gotoLogin()
   }
 }
 
@@ -1125,6 +1127,17 @@ const oldMsges = async () => {
     console.log(error)
   }
 }
+
+
+const gotoLogin = ()=>{
+  if(route.query.qr && route.query.qr == '1'){
+    router.push({ name: 'Login', query:{
+      qr: route.params.id
+    } })
+  }else{
+    router.push({ name: 'Login' })
+  }
+  }
 const contactOwner = () => {
   if (authStore.isAuthenticated) {
     // router.push(`/messages?user_id=${propertyObj.SELLER_USER_ID}&property_id=${propertyObj.PROPERTY_ID}`)
@@ -1134,7 +1147,7 @@ const contactOwner = () => {
     property_id.value = propertyObj.value.PROPERTY_ID
     msgDialog.value = true
   } else {
-    router.push({ name: 'Login' })
+    gotoLogin()
   }
 }
 

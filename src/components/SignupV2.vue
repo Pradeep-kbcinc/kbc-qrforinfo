@@ -26,7 +26,7 @@
 
             <h2 class="welcome text-center">Create Account</h2>
             <p class="subtitle text-center mb-1">Already have an account ? <span class="link text-primary"
-                @click="$router.push({ name: 'Login' })">Login</span></p>
+                @click="gotoLogin()">Login</span></p>
             <p class="subtitle text-center mb-6">Go to <span class="link text-primary"
                 @click="$router.push({ name: 'BuyerLanding' })">Property Listing</span></p>
 
@@ -109,6 +109,7 @@ import { version } from '../../package.json'
 
 //..............................................................................
 const router = useRouter()
+const route = useRoute()
 const propertyObj = ref({
   ACTION_TYPE: "CREATE",
   USER_ID: 0,
@@ -194,6 +195,18 @@ const checkCredentials = async () => {
   }
 }
 
+
+
+const gotoLogin = ()=>{
+  if(route.query.qr){
+    router.push({ name: 'Login', query:{
+      qr: route.query.qr
+    } })
+  }else{
+    router.push({ name: 'Login' })
+  }
+  }
+
 const registerNow = async () => {
   const isFormCorrect = await v$.value.$validate();
   if (!isFormCorrect) {
@@ -208,7 +221,7 @@ const registerNow = async () => {
         toast.success('Registration Successfull', {
           autoClose: 4000,
         });
-        router.push({ name: 'Login' })
+        gotoLogin()
       } else {
         btnLoader.value = false
         toast.error('Something Went Wrong', {
