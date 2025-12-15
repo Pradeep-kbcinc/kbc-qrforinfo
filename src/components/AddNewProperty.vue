@@ -71,11 +71,16 @@
         </div>
         <div class="mt-4">
           <div class="d-flex align-center">
-            <p class="font-weight-bold">**Property Address</p>
-            <v-spacer></v-spacer>
-            <v-switch v-model="state.IS_ADDRESS_PRIVATE_FLG" :false-value="0"
-            :true-value="1" color="primary" label="Show Address to the buyers ?"></v-switch>
-          </div>
+            <div class="d-flex align-center">
+              <p class="font-weight-bold">**Property Address</p>
+              <v-btn @click="chooseFromMapModal = true" class="text-none elevation-0 text-body-2 ml-4" color="primary" size="small" min-width="200" rounded="lg">Choose From Map <v-icon class="ml-2">mdi-map-marker-multiple</v-icon></v-btn>
+            </div>
+            
+              <v-spacer></v-spacer>
+ 
+              <v-switch class="mt-5" v-model="state.IS_ADDRESS_PRIVATE_FLG" :false-value="0"
+              :true-value="1" color="primary" label="Show Address to the buyers ?"></v-switch>
+            </div>
           
           <v-text-field clearable prepend-inner-icon="mdi-magnify" v-model="address" class="mt-n5" rounded="lg" @input="debouncedSearch" variant="outlined" placeholder="Property Address..."></v-text-field>
          
@@ -107,8 +112,9 @@
         <div>
           <v-row align="end">
             <v-col>
-              <p class="font-weight-bold">Price</p>
-              <v-text-field :error-messages="v$.PRICE_AMOUNT.$errors.map(e => e.$message)" @blur="v$.PRICE_AMOUNT.$touch" @input="v$.PRICE_AMOUNT.$touch" v-model="state.PRICE_AMOUNT" class="mt-1" rounded="lg" variant="outlined" placeholder="450000"></v-text-field>
+              <p class="font-weight-bold">Price   <span v-if="priceInWords" class="text-caption mt-n14 text-primary">({{ priceInWords }})</span> </p>
+              <v-number-input :error-messages="v$.PRICE_AMOUNT.$errors.map(e => e.$message)" @blur="v$.PRICE_AMOUNT.$touch" @input="v$.PRICE_AMOUNT.$touch" v-model="state.PRICE_AMOUNT" class="mt-1 mb-0" rounded="lg" variant="outlined" placeholder="450000"></v-number-input>
+           
             </v-col>
             <v-col cols="auto">
               <p class="pr-4 font-weight-bold mb-1">Currency Code</p>
@@ -167,8 +173,20 @@
           <v-btn @click="saveProperty" :loading="saveBtnLoader" color="primary" class="text-none rounded-lg elevation-0 font-weight-bold" height="42"><v-icon class="mr-2">mdi-check</v-icon> Save Property</v-btn>
         </div>
       </v-card-text>
-
+     
     </v-card>
+    <v-dialog  v-model="chooseFromMapModal">
+        <v-toolbar color="blue-lighten-5" density="compact" class="px-2 rounded-t-lg">
+          <h6 class="text-h6">Choose From Map</h6>
+          <v-spacer></v-spacer>
+          <v-btn icon="mdi-close" @click="chooseFromMapModal = false"></v-btn>
+        </v-toolbar>
+        <v-card>
+          <v-card-text>
+            <GMap @confirmAdd="closeModal" />
+          </v-card-text>
+        </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -180,6 +198,7 @@ import { required, helpers, minLength, maxLength, numeric, email } from '@vuelid
 import { toast } from 'vue3-toastify';
 import { useDebounce } from '@/config/debounce.js'
 import GoogleMap from './GoogleMap.vue'
+import GMap from './Map.vue'
 //..............................................................................
 const route = useRoute()
 const router = useRouter()
@@ -258,7 +277,7 @@ const rules = {
 const v$ = useVuelidate(rules, state)
 const saveBtnLoader = ref(false)
 //..............................................................................
-
+const chooseFromMapModal = ref(false)
 //------------------------------------------------------------------------------
 const COUNTRY_LIST = ref([])
 const STATE_LIST = ref([])
@@ -606,6 +625,66 @@ const selectedAddress = (result) => {
   // lat.value = result.lat
   // long.value = result.lng
 }
+
+const closeModal = (data)=>{
+  chooseFromMapModal.value = false
+  state.ADDRESS_LINE1 = data.address
+  state.LATITUDE = data.lat
+  state.LONGITUDE = data.lng
+}
+
+
+const numberToWordsIndian = (num)=> {
+  if (!num || isNaN(num)) return ''
+
+  const ones = [
+    '', 'One', 'Two', 'Three', 'Four', 'Five',
+    'Six', 'Seven', 'Eight', 'Nine', 'Ten',
+    'Eleven', 'Twelve', 'Thirteen', 'Fourteen',
+    'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'
+  ]
+
+  const tens = [
+    '', '', 'Twenty', 'Thirty', 'Forty',
+    'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'
+  ]
+
+  const convertBelowThousand = (n) => {
+    let str = ''
+
+    if (n >= 100) {
+      str += ones[Math.floor(n / 100)] + ' Hundred '
+      n %= 100
+    }
+
+    if (n > 0) {
+      str += n < 20
+        ? ones[n]
+        : tens[Math.floor(n / 10)] + (n % 10 ? ' ' + ones[n % 10] : '')
+    }
+
+    return str.trim()
+  }
+
+  let result = ''
+  const crore = Math.floor(num / 10000000)
+  const lakh = Math.floor((num / 100000) % 100)
+  const thousand = Math.floor((num / 1000) % 100)
+  const rest = num % 1000
+
+  if (crore) result += convertBelowThousand(crore) + ' Crore '
+  if (lakh) result += convertBelowThousand(lakh) + ' Lakh '
+  if (thousand) result += convertBelowThousand(thousand) + ' Thousand '
+  if (rest) result += convertBelowThousand(rest)
+
+  return result.trim()
+}
+
+const priceInWords = computed(() => {
+  return numberToWordsIndian(state.PRICE_AMOUNT)
+})
+
+
 </script>
 
 <style scoped lang="scss">

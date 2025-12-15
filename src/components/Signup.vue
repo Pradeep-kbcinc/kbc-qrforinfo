@@ -61,7 +61,7 @@
             <v-btn @click="registerNow" :loading="btnLoader" class="text-none font-weight-bold mt-3" height="48" width="500" size="large" rounded="lg" color="#2663eb" elevation="0">
               SignUp
             </v-btn>
-            <p class="text-center mt-4">Already have an account ? <span @click="$router.push({ name: 'Login' })" class="text-primary font-weight-bold ml-2 cursor-pointer">Login</span> </p>
+            <p class="text-center mt-4">Already have an account ? <span @click="gotoLogin" class="text-primary font-weight-bold ml-2 cursor-pointer">Login</span> </p>
           </div>
         </v-container>
       </v-col>
@@ -78,6 +78,7 @@ import { version } from '../../package.json'
 
 //..............................................................................
 const router = useRouter()
+const route = useRoute()
 const propertyObj = ref({
   ACTION_TYPE: "CREATE",
   USER_ID: 0,
@@ -120,6 +121,15 @@ const btnLoader = ref(false)
 //..............................................................................
 
 //------------------------------------------------------------------------------
+const gotoLogin = ()=>{
+  if(route.query.qr){
+    router.push({ name: 'Login', query:{
+      qr: route.query.qr
+    } })
+  }else{
+    router.push({ name: 'Login' })
+  }
+  }
 const registerNow = async () => {
   const isFormCorrect = await v$.value.$validate();
   if (!isFormCorrect) {
@@ -134,7 +144,7 @@ const registerNow = async () => {
         toast.success('Registration Successfull', {
           autoClose: 4000,
         });
-        router.push({ name: 'Login' })
+        gotoLogin()
       } else {
         btnLoader.value = false
         toast.error('Something Went Wrong', {

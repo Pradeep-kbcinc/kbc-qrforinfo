@@ -14,6 +14,11 @@
               <v-skeleton-loader class="my-2" v-for="item in 4" type="list-item-avatar"></v-skeleton-loader>
             </div>
             <v-card v-else v-for="(msgObj, index) in channels" @click="selectChannel(msgObj)" class="border-b pa-4" elevation="0" rounded="0" :color="selectedMsgObj.THREAD_ID == msgObj.THREAD_ID ? '#f0f6ff' : ''">
+              <div v-if="msgObj.UNREAD_COUNT && msgObj.UNREAD_COUNT !== 0" class="d-flex justify-end position-absolute right-0 pr-5 pt-5">
+                  <v-badge location="top right" color="error" :content="msgObj.UNREAD_COUNT">
+                </v-badge>
+              </div>
+              
               <div class="d-flex align-center">
                 <v-avatar size="60" class="mr-2">
                   <v-img alt="John" src="@/assets/dummy_profile.webp"></v-img>
@@ -22,7 +27,12 @@
                   <!-- <h6>{{ getName(msgObj.MEMBERS_LIST)?.USER_NAME }}</h6> -->
                    <div>
                   
-                  <h6 class="mb-0">{{ msgObj?.PROPERTY_NAME ? truncateWords(msgObj?.PROPERTY_NAME, 6) : '' }}</h6>
+                    <div class="d-flex">
+                      <h6 class="mb-0">{{ msgObj?.PROPERTY_NAME ? truncateWords(msgObj?.PROPERTY_NAME, 6) : '' }}</h6>
+                      
+                      
+                    </div>
+                  
                   <p>{{ truncateWords(getName(msgObj?.MEMBERS_LIST)?.USER_NAME, 6) || '' }}</p>
                   </div>
                   
@@ -183,11 +193,29 @@ const fetchMassges = async (id) => {
     console.log(error)
   }
 }
-const selectChannel = (data) => {
-  
+
+
+const updateReadStatus = async(id)=>{
+  try {
+    let data = {
+      THREAD_ID : id
+    }
+    let res = await propertyService.readStatusChange(data)
+    console.log(res, 'Res')
+    if(res.data.ERR_CODE == 0){
+      
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const selectChannel = async(data) => {
+ await updateReadStatus(data.THREAD_ID)
   messageLoader.value = true
   selectedMsgObj.value = data
   fetchMassges(data.THREAD_ID)
+  data.UNREAD_COUNT = 0
 }
 
 const newMessage = ref('')

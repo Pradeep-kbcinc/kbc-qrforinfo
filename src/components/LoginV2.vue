@@ -18,12 +18,12 @@
 
             <template v-if="!isVerfiyOTP">
               <h2 class="welcome text-center">Welcome back</h2>
-              <p class="subtitle text-center mb-1">Don’t have an account ? <span class="link text-primary" @click="$router.push('/signup')">Sign up</span></p>
+              <p class="subtitle text-center mb-1">Don’t have an account ? <span class="link text-primary" @click="gotoSignUp">Sign up</span></p>
               <p class="subtitle text-center ">Go to <span class="link text-primary" @click="$router.push({ name: 'BuyerLanding' })">Property Listing</span></p>
             </template>
             <template v-else>
               <h2 class="welcome text-center">Verification Code</h2>
-              <p class="subtitle text-center ">We have sent a otp code to {{ initialState.phoneNumber }}</p>
+              <p class="subtitle text-center ">We have sent a otp code to <strong> {{ initialState.phoneNumber }} </strong></p>
             </template>
 
             <!-- <div class="social-row">
@@ -108,6 +108,7 @@ import { version } from '../../package.json'
 
 //..............................................................................
 const router = useRouter()
+const route = useRoute()
 const isVerfiyOTP = ref(false)
 const otpCode = ref('')
 
@@ -222,6 +223,14 @@ const updateQrStatistics = async (propertyId) => {
   }
 }
 //------------------------------------------------------------------------------
+const gotoLogin = ()=>{
+  if(route.query.qr){
+    router.push(`/property/${route.query.qr}?createdBy=false`)
+  }else{
+    router.push({ name: 'Dashboard' })
+  }
+  }
+
 const verifyOtp = async () => {
   try {
     btnLoader.value = true
@@ -236,7 +245,8 @@ const verifyOtp = async () => {
       authStore.login(res.data.Result.USER, res.data.Result.TOKEN)
       // localStorage.setItem("access_token", res.data)
       await updateScannedProperty()
-      router.push('/home')
+      // router.push('/home')
+      gotoLogin()
     } else {
       toast.error(res.data?.Result?.MESSAGE, {
         autoClose: 4000,
@@ -261,6 +271,22 @@ const updateScannedProperty = async () => {
 }
 //------------------------------------------------------------------------------
 
+
+
+const gotoSignUp = ()=>{
+  if(route.query.qr){
+    router.push(
+      {
+      name:'SignUp', 
+      query: {
+        qr: route.query.qr
+      }
+     })
+  }else{
+    router.push('/signup')
+  }
+  
+}
 </script>
 
 

@@ -18,6 +18,7 @@ declare module 'vue' {
     GoogleMap: typeof import('./src/components/GoogleMap.vue')['default']
     Login: typeof import('./src/components/Login.vue')['default']
     LoginV2: typeof import('./src/components/LoginV2.vue')['default']
+    Map: typeof import('./src/components/Map.vue')['default']
     Messages: typeof import('./src/components/Messages.vue')['default']
     PrivacyPolicy: typeof import('./src/components/PrivacyPolicy.vue')['default']
     Profile: typeof import('./src/components/Profile.vue')['default']
