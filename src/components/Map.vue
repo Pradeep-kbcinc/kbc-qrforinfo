@@ -2,7 +2,7 @@
     <div ref="mapRef" class="map"></div>
   
     <div class="mt-2">
-      <h4><strong>Address:</strong> {{ address }}</h4>
+      <h4><strong class="text-h6">Address :</strong><br> {{ address }}</h4>
       <v-btn @click="onConfirmAddress" color="primary" class="text-none mt-2 text-subtitle-2" elevation="0" rounded="lg">Confirm Address <v-icon class="ml-2">mdi-check</v-icon></v-btn>
     </div>
   </template>
@@ -12,7 +12,7 @@
     const emit = defineEmits(['confirmAdd'])
     const mapRef = ref(null)
     const address = ref('')
-    
+    const pincode = ref('')
     let map
     let marker
     let geocoder
@@ -88,16 +88,25 @@
 
 
 
-  console.log('LAT:', lat.value, 'LNG:', lng.value)
+  
       geocoder.geocode({ location: latLng }, (results, status) => {
         if (status === 'OK' && results?.[0]) {
+          
           address.value = results[0].formatted_address
+          
+          const postalCodeObj = results[0]?.address_components.find(component =>
+            component.types.includes('postal_code')
+          )
+          pincode.value = postalCodeObj ? postalCodeObj.long_name : ''
+          
+
+
         }
       })
     }
 
     const onConfirmAddress = ()=>{
-        emit('confirmAdd', {address :address.value, lat : lat.value, lng : lng.value})
+        emit('confirmAdd', {address :address.value, lat : lat.value, lng : lng.value, pincode: pincode.value})
     }
     </script>
     

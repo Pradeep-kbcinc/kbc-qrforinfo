@@ -631,6 +631,7 @@ const closeModal = (data)=>{
   state.ADDRESS_LINE1 = data.address
   state.LATITUDE = data.lat
   state.LONGITUDE = data.lng
+  state.POSTAL_CODE = data.pincode
 }
 
 

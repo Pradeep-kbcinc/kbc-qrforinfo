@@ -222,17 +222,23 @@
     </v-toolbar>
     <v-card rounded="b-lg t-0" min-height="400">
       <v-card-text>
-        <div v-if="historyLoader" v-for="value in 4" :key="value">
+        <!-- <div v-if="historyLoader" v-for="value in 4" :key="value">
           <v-skeleton-loader type="list-item-avatar"></v-skeleton-loader>
         </div>
-        <div v-else>
-          <v-date-input class="rounded-lg" v-model="selectedDate" density="compact" clearable label="Date input" variant="outlined"></v-date-input>
+        <div v-else> -->
+          
+          <div class="d-flex">
+            <v-date-input persistent-placeholder class="rounded-lg" v-model="selectedDate" density="compact"  label="Date input" variant="outlined"></v-date-input>
+            <v-btn :loading="historyLoader" :disabled="!selectedDate" @click="fetchHistory()" color="primary" elevation="0" class="text-none rounded-lg ml-2" height="40"><v-icon class="mt-1">mdi-magnify</v-icon> Search</v-btn>
+          </div>
+          
+         
           <div v-if="historyArr && historyArr.length == 0">
             <p class="text-center mt-16">No Scanned Data Found for today</p>
           </div>
           
          
-          <v-divider></v-divider>
+          <v-divider class="mt-2"></v-divider>
           <div v-for="(propertyObj, i) in historyArr" :key="i" class="rounded-lg">
             <v-list-item class="px-2 my-2 pointer">
               <template #prepend>
@@ -260,7 +266,7 @@
             </v-list-item>
             <v-divider v-for="(p, i) in properties.slice(0, -1)" :key="'divider-' + i"></v-divider>
           </div>
-        </div>
+        <!-- </div> -->
       </v-card-text>
     </v-card>
   </v-dialog>
@@ -284,7 +290,7 @@ const properties = [
   
 ]
 var today = moment();
-const selectedDate = ref(null)
+const selectedDate = ref(moment().format('YYYY-MM-DD'))
 
 const statisticsData = ref({})
 const fetchStatistics = async () => {
@@ -436,8 +442,8 @@ const fetchHistory = async()=>{
   try {
     let data ={
       "PROPERTY_ID": 0,
-      "START_DATE": selectedDate.value ? moment(selectedDate.value).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'),
-      "END_DATE": selectedDate.value ? moment(selectedDate.value).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD')
+      "START_DATE": selectedDate.value && selectedDate.value !== null  ? moment(selectedDate.value).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'),
+      "END_DATE": selectedDate.value && selectedDate.value !== null ? moment(selectedDate.value).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD')
     }
     let res = await propertyService.getHistoryOfScannedProperty(data)
     if(res.data.ERR_CODE == 0){
@@ -452,10 +458,11 @@ const fetchHistory = async()=>{
 watch(historyModal, (val)=>{
   fetchHistory()
 })
-watch(selectedDate,(val)=>{
-  console.log(val, 'val')
-  fetchHistory()
-})
+// watch(selectedDate,(val)=>{
+//   if(val){
+//     fetchHistory()
+//   }
+// })
 </script>
 
 <style scoped>
