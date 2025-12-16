@@ -53,14 +53,16 @@
               <v-text-field :error-messages="v$.FNAME.$errors.map(e => e.$message)" @blur="v$.FNAME.$touch"
                 @input="v$.FNAME.$touch" v-model="propertyObj.FNAME" label="First Name" variant="outlined" rounded="xl"
                 class="email-field mb-0 pb-0" density="compact"></v-text-field>
+
               <v-text-field :error-messages="v$.MNAME.$errors.map(e => e.$message)" @blur="v$.MNAME.$touch"
                 @input="v$.MNAME.$touch" v-model="propertyObj.MNAME" label="Middle Name (Optional)" variant="outlined"
-                rounded="xl" class="email-field mb-0 pb-0" density="compact"></v-text-field>
+                rounded="xl" class="email-field mb-0 pb-0 mt-2" density="compact"></v-text-field>
+
               <v-text-field :error-messages="v$.LNAME.$errors.map(e => e.$message)" @blur="v$.LNAME.$touch"
                 @input="v$.LNAME.$touch" v-model="propertyObj.LNAME" label="Last Name" variant="outlined" rounded="xl"
                 class="email-field mb-0 pb-0" density="compact"></v-text-field>
 
-              <div class="d-flex ga-2">
+              <div class="d-flex ga-2 mt-2">
                 <v-text-field :error-messages="v$.MOBILE_PHONE.$errors.map(e => e.$message)"
                   @blur="v$.MOBILE_PHONE.$touch" @input="v$.MOBILE_PHONE.$touch" v-model="propertyObj.MOBILE_PHONE"
                   label="Phone Number" variant="outlined" rounded="xl" class="email-field mb-0 pb-0 w-100"
@@ -132,7 +134,8 @@ const propertyObj = ref({
 const rules = {
   ACTION_TYPE: {},
   USER_ID: {},
-  MOBILE_PHONE: { required, numeric },
+  MOBILE_PHONE: { required, numeric, minLength: minLength(8),
+    maxLength: maxLength(15) },
   FNAME: { required },
   MNAME: {},
   LNAME: { required },
