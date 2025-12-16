@@ -153,14 +153,11 @@ export default {
   },
   
 
+  // Rating module 
+  async createRating(data){
+    return axios.post(`/CreateRating`, data)
+  },
 
 
-  
-
-
-
-
-  
-  
 
 }

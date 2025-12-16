@@ -239,6 +239,48 @@
     </div>
 
   </div>
+  <v-card  rounded="lg" elevation="2" class="pa-8 mx-6 card-box-shadow">
+            <h2 class="font-weight-bold mb-6">Recent Feedback</h2>
+
+            <div v-for="fb in feedback" :key="fb.id">
+              <v-card class="pa-6 mb-6 rounded-xl" variant="outlined" elevation="0">
+                <div class="d-flex justify-space-between">
+                  <!-- Reviewer Info -->
+                  <div class="d-flex">
+                    <v-avatar size="46" class="mr-4" color="grey-lighten-3">
+                      <span class="text-subtitle-2 font-weight-medium">{{ getInitials(fb.name) }}</span>
+                    </v-avatar>
+
+                    <div>
+                      <h4 class="font-weight-bold mb-1">{{ fb.name }}</h4>
+                      <span class="text-medium-emphasis text-body-2">{{ fb.date }}</span>
+
+                      <!-- Tags -->
+                      <div class="d-flex ga-2 mt-3">
+                        <v-chip v-for="tag in fb.tags" :key="tag" size="small" variant="outlined"
+                          color="grey-lighten-2">
+                          {{ tag }}
+                        </v-chip>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Star Rating -->
+                  <v-rating v-model="fb.rating" readonly color="amber" size="22" />
+                </div>
+
+                <!-- Feedback Text -->
+                <p class="mt-4 text-body-1 ml-15">
+                  {{ fb.comment }}
+                </p>
+              </v-card>
+            </div>
+            <div class="d-flex justify-center">
+              <v-btn color="primary" class="text-none font-weight-bold" variant="text" size="large">View All
+                Reviews</v-btn>
+            </div>
+
+          </v-card>
 
   <v-dialog max-width="1000" v-model="imagePreviewModal">
     <!-- <v-toolbar class="rounded-t-xl " flat density="compact"></v-toolbar> -->
@@ -575,7 +617,7 @@
             <label class="font-weight-bold">Overall Rating *</label>
 
             <div class="d-flex justify-center mt-3">
-              <v-rating v-model="rating" color="amber" size="x-large" hover />
+              <v-rating v-model="ratingState.OVERALL_RATING" color="amber" size="x-large" hover />
             </div>
 
             <p class="text-center text-medium-emphasis mt-2">Select a rating</p>
@@ -602,31 +644,31 @@
           <div class="mt-8">
             <label class="font-weight-bold">Public Feedback</label>
 
-            <v-textarea v-model="publicFeedback" rows="4" rounded="lg" variant="outlined"
+            <v-textarea v-model="ratingState.PUBLIC_COMMENT" rows="4" rounded="lg" variant="outlined"
               placeholder="Share your experience to help other users..." class="mt-1"></v-textarea>
 
-            <div class="text-right text-caption text-medium-emphasis">
+            <!-- <div class="text-right text-caption text-medium-emphasis">
               {{ publicFeedback.length }}/1000
-            </div>
+            </div> -->
           </div>
 
           <!-- Private Note -->
           <div>
             <label class="font-weight-bold">Private Note to QRFORINFO Team</label>
-            <v-textarea class="mt-1" v-model="privateNote" rows="3" rounded="lg" variant="outlined"
+            <v-textarea class="mt-1" v-model="ratingState.PRIVATE_COMMENT" rows="3" rounded="lg" variant="outlined"
               placeholder="Additional concerns for our safety team..."></v-textarea>
           </div>
 
           <!-- Actions -->
-          <div class="d-flex justify-space-between mt-10">
-            <v-btn color="primary" size="large" min-width="400" height="48"
-              class="elevation-0 text-none font-weight-bold" rounded="lg" @click="submit">
+          <div class="d-flex justify-end mt-10">
+            <v-btn @click="giveRating" :loading="giveRatingLoader" color="primary" size="large" min-width="400" height="48"
+              class="elevation-0 text-none font-weight-bold" rounded="lg">
               Submit Rating
             </v-btn>
-
+<!-- 
             <v-btn variant="text" class="text-medium-emphasis text-none font-weight-bold">
               Skip for now
-            </v-btn>
+            </v-btn> -->
           </div>
 
         </v-card>
@@ -1275,6 +1317,7 @@ const feedback = ref([
       "Very polite and very responsive. Smooth interaction overall.",
   },
 ]);
+const getInitials = (n) => n.split(" ").map((v) => v[0]).join("");
 
 
 const reports = [
@@ -1311,6 +1354,61 @@ const disputes = [
     feedback: "This person was completely unreliable and wasted my time. Would not recommend."
   }
 ];
+
+// RATING MODULE 
+
+
+
+const ratingState = ref({
+  OVERALL_RATING: null,
+  // PUBLIC_TAGS_JSON: selectedTags.value || [],
+  PUBLIC_COMMENT:'',
+  PRIVATE_COMMENT: ''
+})
+
+watch(feedbackModal,(val)=>{
+  if(!val){
+    ratingState.value = {
+      OVERALL_RATING: null,
+      // PUBLIC_TAGS_JSON: selectedTags.value || [],
+      PUBLIC_COMMENT:'',
+      PRIVATE_COMMENT: ''
+    }
+  }
+})
+
+const giveRatingLoader = ref(false)
+const giveRating = async()=>{
+  giveRatingLoader.value = true
+  try {
+    let data = {
+      "INTERACTION_ID": propertyObj.value.PROPERTY_ID,
+      "RATER_USER_ID": authStore.userDetails.USER_ID,
+      "RATED_USER_ID": propertyObj.value.SELLER_USER_ID,
+      "OVERALL_RATING": 5,
+      "PUBLIC_TAGS_JSON": selectedTags.value && selectedTags.value.length > 1 ? JSON.stringify(selectedTags.value) : '',
+      "PUBLIC_COMMENT": ratingState.value.PUBLIC_COMMENT,
+      "PRIVATE_COMMENT": ratingState.value.PRIVATE_COMMENT
+    }
+    let res = await propertyService.createRating(data)
+    
+    if(res.data.ERR_CODE == 0){
+      toast.success('Feedback Submitted', {
+            autoClose: 4000,
+          });
+      feedbackModal.value = false
+      giveRatingLoader.value = false
+    }else{
+      toast.info(res.data.MESSAGE, {
+            autoClose: 4000,
+          });
+          giveRatingLoader.value = false
+    }
+  } catch (error) {
+    console.log(error)
+    giveRatingLoader.value = false
+  }
+}
 </script>
 
 <style scoped lang="scss">

@@ -8,6 +8,7 @@
     --font-heading: 'Lato', sans-serif;
   }
   body {
+    // zoom: 0.8;
     font-family: var(--font-body);
     font-weight: 400;
     color: #333;
@@ -16,6 +17,10 @@
     -moz-osx-font-smoothing: grayscale;
     
   }
+
+  
+
+
   .slide-fade-enter-active,
 .slide-fade-leave-active {
   transition: all 0.9s ease;
