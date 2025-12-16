@@ -9,6 +9,8 @@ if (env=='DEV') {
   basicBaseUrl = 'https://devapi.qrforinfo.com/api/v1';
 } else if (env=='DEMO') {
   basicBaseUrl = 'https://demoapi.qrforinfo.com/api/v1';
+} else if (env=='UAT') {
+    basicBaseUrl = 'https://uatapi.qrforinfo.com/api/v1';
 } else {
   basicBaseUrl = 'https://liveapi.qrforinfo.com/api/v1';
 }
