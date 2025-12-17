@@ -60,17 +60,18 @@
 
               <v-text-field :error-messages="v$.LNAME.$errors.map(e => e.$message)" @blur="v$.LNAME.$touch"
                 @input="v$.LNAME.$touch" v-model="propertyObj.LNAME" label="Last Name" variant="outlined" rounded="xl"
-                class="email-field mb-0 pb-0" density="compact"></v-text-field>
+                class="email-field mb-0 mt-n2 pb-0" density="compact"></v-text-field>
 
-              <div class="d-flex ga-2 mt-2">
-                <v-text-field :error-messages="v$.MOBILE_PHONE.$errors.map(e => e.$message)"
+             
+                <v-number-input control-variant="hidden" prefix="+91" :error-messages="v$.MOBILE_PHONE.$errors.map(e => e.$message)"
                   @blur="v$.MOBILE_PHONE.$touch" @input="v$.MOBILE_PHONE.$touch" v-model="propertyObj.MOBILE_PHONE"
-                  label="Phone Number" variant="outlined" rounded="xl" class="email-field mb-0 pb-0 w-100"
-                  density="compact"></v-text-field>
+                  label="Phone Number" variant="outlined" rounded="xl" class="email-field mb-0 pb-0 mt-1"
+                  density="compact"></v-number-input>
+
                 <v-text-field :error-messages="v$.EMAIL.$errors.map(e => e.$message)" @blur="v$.EMAIL.$touch"
                   v-model="propertyObj.EMAIL" label="Email" variant="outlined" rounded="xl"
-                  class="email-field mb-0 pb-0 w-100" density="compact"></v-text-field>
-              </div>
+                  class="email-field mb-0 mt-1 pb-0 w-100" density="compact"></v-text-field>
+              
 
               <v-btn @click="checkCredentials" :loading="btnLoader" block rounded="xl" height="38" elevation="0"
                 class="continue-btn text-none text-caption mt-2" color="#19191a">
@@ -115,7 +116,7 @@ const route = useRoute()
 const propertyObj = ref({
   ACTION_TYPE: "CREATE",
   USER_ID: 0,
-  MOBILE_PHONE: "",
+  MOBILE_PHONE: null,
   FNAME: "",
   MNAME: "",
   LNAME: "",
