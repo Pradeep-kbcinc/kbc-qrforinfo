@@ -278,6 +278,10 @@ const v$ = useVuelidate(rules, state)
 const saveBtnLoader = ref(false)
 //..............................................................................
 const chooseFromMapModal = ref(false)
+watch(chooseFromMapModal,(val)=>{
+  address.value = ''
+  results.value = []
+})
 //------------------------------------------------------------------------------
 const COUNTRY_LIST = ref([])
 const STATE_LIST = ref([])
