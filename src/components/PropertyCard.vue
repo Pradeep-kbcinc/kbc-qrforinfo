@@ -48,8 +48,8 @@
     </v-card>
     <div class="pa-4">
       <p class="text-h6 single-line">{{ propertyObj.TITLE }}</p>
-      <p class="mt-1">
-        <v-icon>mdi-map-marker-outline</v-icon>
+      <p class="mt-1 single-line">
+        <v-icon color="black" size="large">mdi-map-marker-outline</v-icon>
         <span v-if="propertyObj.ADDRESS_LINE1">  {{ propertyObj.IS_ADDRESS_PRIVATE_FLG == 1 ? propertyObj.ADDRESS_LINE1 : 'Hidden' }}</span>
       </p>
       <div class="d-flex justify-space-between align-center text-primary mt-3">
