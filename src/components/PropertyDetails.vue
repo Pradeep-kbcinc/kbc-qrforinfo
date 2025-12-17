@@ -414,8 +414,8 @@
         <div class="d-flex ga-4">
           <v-btn @click="downloadPDF(propertyObj)" :loading="isDownloading" color="primary" prependIcon="mdi-download"
             class="text-none rounded-lg elevation-0 font-weight-bold flex-1-1" height="42">Download</v-btn>
-          <v-btn @click="shareAction(propertyObj)" variant="outlined" prependIcon="mdi-share-variant-outline"
-            class="text-none rounded-lg elevation-0 font-weight-bold flex-1-1" height="42">Share</v-btn>
+          <!-- <v-btn @click="shareAction(propertyObj)" variant="outlined" prependIcon="mdi-share-variant-outline"
+            class="text-none rounded-lg elevation-0 font-weight-bold flex-1-1" height="42">Share</v-btn> -->
         </div>
       </div>
 
