@@ -22,7 +22,7 @@
                     <!-- Verified badges -->
                   
                     <v-btn @click="$router.push('/settings')" class="text-none" rounded="lg" color="primary" elevation="0"> <v-icon class="mr-1">mdi-cog</v-icon> Profile Setting </v-btn>
-                    <v-btn  class="text-none ml-2" rounded="lg" color="primary" elevation="0"> <v-icon class="mr-1">mdi-chat</v-icon> Message Owner </v-btn>
+                    <!-- <v-btn  class="text-none ml-2" rounded="lg" color="primary" elevation="0"> <v-icon class="mr-1">mdi-chat</v-icon> Message Owner </v-btn> -->
 
                     <v-chip v-for="v in verified" :key="v" class="mr-2" color="green-lighten-4"
                       text-color="green-darken-2" variant="outlined">
@@ -115,6 +115,9 @@
     </section>
 </template>
 <script setup>
+import propertyService from '@/services/propertyService';
+import { useAuthStore } from '@/stores/app';
+const authStore = useAuthStore()
     const profile = ref({
   name: "Sarah Chen",
   memberSince: "2023",
@@ -150,4 +153,44 @@ const feedback = ref([
       "Very polite and very responsive. Smooth interaction overall.",
   },
 ]);
+
+
+const limit = ref(10)
+const getGivenRatingsByMe = async()=>{
+  try {
+    let res = await propertyService.getRatingsGiven(authStore.userDetails.USER_ID, 0, limit.value)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const getReceivedRatingsByMe = async()=>{
+  try {
+    let res = await propertyService.getRatingsReceived(authStore.userDetails.USER_ID, 0, limit.value)
+  } catch (error) {
+    console.log(error)
+  }
+}
+// get public trust // when other people will open 
+const getPublicTrustProfile = async()=>{
+  try {
+    let res = await propertyService.getPublicTrustProfile(authStore.userDetails.USER_ID)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+// get my reputation 
+const getMyReputation = async()=>{
+  try {
+    let res = await propertyService.getMyReputation()
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+
+onMounted(()=>{
+  // getGivenRatingsByMe()
+})
 </script>

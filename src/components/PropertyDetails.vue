@@ -764,12 +764,12 @@
           </p>
 
           <!-- ORIGINAL FEEDBACK CARD -->
-          <v-card rounded="xl" elevation="0" class="pa-6 mb-8" style="background:#fafafa; border:1px solid #eee;">
+          <!-- <v-card rounded="xl" elevation="0" class="pa-6 mb-8" style="background:#fafafa; border:1px solid #eee;">
             <div class="mb-2 text-body-1 text-medium-emphasis">
               Original feedback you're disputing:
             </div>
 
-            <!-- Stars + Date -->
+            
             <div class="d-flex align-center mb-2">
               <v-rating model-value="4" color="#E2B747" readonly density="compact" size="20"></v-rating>
 
@@ -778,18 +778,18 @@
               </span>
             </div>
 
-            <!-- Review text -->
+            
             <p class="text-body-1 mb-3">
               "Good service overall. Minor delay but handled professionally."
             </p>
 
-            <!-- Chip -->
+           
             <v-chip color="#e8e4d8" text-color="black" size="small" class="text-caption">
               Accurate info
             </v-chip>
-          </v-card>
+          </v-card> -->
 
-          <!-- FORM -->
+          
           <div class="text-body-1 font-weight-medium mb-2">Reason for Dispute *</div>
           <v-select :items="reasons" placeholder="Select a reason..." variant="outlined" rounded="lg"
             class="mb-6"></v-select>
@@ -803,7 +803,7 @@
             Our team will review your dispute within 3–5 business days
           </p>
 
-          <!-- NOTE BOX -->
+          
           <v-card rounded="lg" class="pa-4 mb-10" elevation="0" style="background:#fff7df; border:1px solid #f3e1b7;">
             <strong class="text-body-1 d-block mb-1">Note:</strong>
             <p class="text-body-2 text-medium-emphasis">
