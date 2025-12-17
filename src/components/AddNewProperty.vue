@@ -218,7 +218,7 @@ const state = reactive({
   PROPERTY_TYPE_ID: 1,
   DIMENSIONS: "",
   IS_ADDRESS_PRIVATE_FLG: 1,
-  AREA: 0,
+  AREA: null,
   AREA_UNIT: "SQFT",
   BUILTUP_AREA: 0,
   BUILTUP_AREA_UNIT: "SQFT",
