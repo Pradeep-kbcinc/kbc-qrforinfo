@@ -18,8 +18,9 @@
     let geocoder
     
     onMounted(async () => {
+      takePermission()
       await loadGoogleMaps()
-      await initMap()
+     
     })
     
     function loadGoogleMaps() {
@@ -38,6 +39,33 @@
   })
 }
 
+
+const latitude = ref()
+const longitude = ref()
+const takePermission = ()=>{
+  if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          async(position) => {
+            latitude.value = position.coords.latitude
+            longitude.value = position.coords.longitude
+            await initMap()
+          },
+          (error) => {
+            initMap()
+            console.error('Error getting location:', error.message)
+          },
+          {
+            enableHighAccuracy: true, // GPS if available
+            timeout: 10000,
+            maximumAge: 0
+          }
+        )
+      } else {
+        initMap()
+        console.log('Geolocation not supported')
+      }
+}
+
     
     async function initMap() {
       // ✅ Explicitly import required libraries
@@ -46,8 +74,8 @@
       const { Geocoder } = await google.maps.importLibrary('geocoding')
     
       geocoder = new Geocoder()
-    
-      const center = { lat: 12.9716, lng: 77.5946 }
+ 
+      const center = { lat: latitude.value || 28.7041, lng: longitude.value || 77.1025 }
     
       map = new Map(mapRef.value, {
         center,

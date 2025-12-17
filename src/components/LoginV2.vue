@@ -44,7 +44,8 @@
             <span>OR</span>
         </div> -->
             <div v-if="!isVerfiyOTP" class="px-10">
-              <v-text-field v-model="initialState.phoneNumber" placeholder="Phone No. / Email" :error-messages="v$.phoneNumber.$errors.map(e => e.$message)" @blur="v$.phoneNumber.$touch" @input="v$.phoneNumber.$touch" variant="outlined" rounded="xl" class="email-field mb-0 pb-0" density="compact"></v-text-field>
+              
+              <v-text-field :prefix="isNumber(initialState.phoneNumber) ? '+91' : ''" v-model="initialState.phoneNumber" placeholder="Phone No. / Email" :error-messages="v$.phoneNumber.$errors.map(e => e.$message)" @blur="v$.phoneNumber.$touch" @input="v$.phoneNumber.$touch" variant="outlined" rounded="xl" class="email-field mb-0 pb-0" density="compact"></v-text-field>
 
               <v-btn @click="checkCredentials" :loading="btnLoader" block rounded="xl" height="38" elevation="0" class="continue-btn text-none text-caption mt-2" color="#19191a">
                 Send OTP Code
@@ -122,7 +123,7 @@ const v$ = useVuelidate(rules, initialState.value)
 const btnLoader = ref(false)
 const authStore = useAuthStore()
 //..............................................................................
-
+const isNumber = (val) => /^\d+$/.test(val)
 //------------------------------------------------------------------------------
 
 const checkCredentials = async () => {

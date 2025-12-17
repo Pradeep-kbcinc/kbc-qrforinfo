@@ -218,7 +218,7 @@ const state = reactive({
   PROPERTY_TYPE_ID: 1,
   DIMENSIONS: "",
   IS_ADDRESS_PRIVATE_FLG: 1,
-  AREA: 0,
+  AREA: null,
   AREA_UNIT: "SQFT",
   BUILTUP_AREA: 0,
   BUILTUP_AREA_UNIT: "SQFT",
@@ -278,6 +278,10 @@ const v$ = useVuelidate(rules, state)
 const saveBtnLoader = ref(false)
 //..............................................................................
 const chooseFromMapModal = ref(false)
+watch(chooseFromMapModal,(val)=>{
+  address.value = ''
+  results.value = []
+})
 //------------------------------------------------------------------------------
 const COUNTRY_LIST = ref([])
 const STATE_LIST = ref([])

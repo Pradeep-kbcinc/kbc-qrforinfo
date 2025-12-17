@@ -19,6 +19,14 @@
             <v-icon size="x-large" color="lightBlack" icon="mdi-bell-outline" class="pointer"></v-icon>
           </v-btn>
         </v-badge> -->
+    
+        <v-select label="UI Scale" class="mt-6 drop-shadow" rounded="lg" density="compact" variant="outlined" :items="[
+          { title: '80%', value: 0.8 },
+          { title: '90% (Recommended)', value: 0.9 },
+          { title: '100%', value: 1 },
+          { title: '110%', value: 1.1 },
+        ]" v-model="uiScale"  />
+
         <v-menu location="bottom end" offset="8">
           <template #activator="{ props }">
             <v-avatar v-bind="props" color="grey" class="pointer ml-4">
@@ -48,6 +56,10 @@
   </div>
 </template>
 <script setup>
+import { useUiScale } from '@/composable/useZoom.js'
+
+const { uiScale } = useUiScale()
+
 import { defineProps, nextTick } from 'vue';
 import { useDisplay } from 'vuetify'
 const { mobile } = useDisplay()
@@ -80,14 +92,16 @@ const logout = () => {
   console.log(authStore.isAuthenticated, 'authStore.isAuthenticated')
 }
 
-const gotoLogin = ()=>{
-  if(route.query.qr && route.query.qr == '1'){
-    router.push({ name: 'Login', query:{
-      qr: route.params.id
-    } })
-  }else{
+const gotoLogin = () => {
+  if (route.query.qr && route.query.qr == '1') {
+    router.push({
+      name: 'Login', query: {
+        qr: route.params.id
+      }
+    })
+  } else {
     router.push({ name: 'Login' })
   }
-  }
-  
+}
+
 </script>

@@ -49,7 +49,7 @@
         </v-col>
       </v-row>
     </div>
-    <v-pagination v-model="currentPage" :length="totalPages" class="my-4"></v-pagination>
+    <v-pagination v-model="currentPage" :length="totalPages" :total-visible="7" class="my-4"></v-pagination>
   </div>
 </template>
 

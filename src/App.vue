@@ -6,5 +6,5 @@
 </template>
 
 <script setup>
-  //
+// console.log(zoomLevel.value, 'zoomLevel')
 </script>
