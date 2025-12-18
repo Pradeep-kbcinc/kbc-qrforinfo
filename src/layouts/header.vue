@@ -185,17 +185,17 @@ const showScaleMenu = ref(false)
 const recommended = [
   {
     title: 'Zoom (100%)',
-    value: 1,
+    value: 0.9,
     icon: 'mdi-numeric-1-box-outline'
   },
   {
     title: 'Recommended (90%)',
-    value: 0.9,
+    value: 0.8,
     icon: 'mdi-numeric-2-box-outline'
   },
   {
     title: 'Small size (80%)',
-    value: 0.8,
+    value: 0.7,
     icon: 'mdi-numeric-3-box-outline'
   },
 
@@ -207,20 +207,20 @@ const recommended = [
 ]
 
 const others = [
+  // {
+  //   title: 'Fit width',
+  //   value: 'fit-width',
+  //   icon: 'mdi-arrow-expand-horizontal'
+  // },
   {
-    title: 'Fit width',
-    value: 'fit-width',
-    icon: 'mdi-arrow-expand-horizontal'
-  },
-  {
-    title: 'Responsive',
-    value: 'responsive',
-    icon: 'mdi-responsive'
+    title: 'Fit width & height',
+    value: 'fit-width-height',
+    icon: 'mdi-arrow-expand-vertical'
   },
   {
     title: 'Full Screen/ Exit Full Screen',
     value: 'full',
-    icon: 'mdi-fullscreen'
+    icon: 'mdi-arrow-expand-all'
   }
 ]
 
@@ -259,6 +259,9 @@ const selectAdvanceScale = (item)=>{
     exitFullscreen()
   }
 
+  }
+  else if(item.value == 'fit-width-height'){
+    uiScale.value = 0.7
   }
   showScaleMenu.value = false
 }

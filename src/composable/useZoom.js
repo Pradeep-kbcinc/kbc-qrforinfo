@@ -7,7 +7,8 @@ const browserZoom = ref(0.8)
 
 export function useUiScale() {
   const detectBrowserZoom = () => {
-    browserZoom.value = window.devicePixelRatio || 1
+    browserZoom.value = window.devicePixelRatio 
+    console.log(browserZoom.value, 'browserZoom.value')
   }
 
   const applyScale = (scale) => {
@@ -20,7 +21,10 @@ export function useUiScale() {
     app.style.transformOrigin = 'top left'
     app.style.width = `calc(100% / ${scale})`
     app.style.height = `calc(100% / ${scale})`
+   
   }
+
+
 
   onMounted(() => {
     detectBrowserZoom()
