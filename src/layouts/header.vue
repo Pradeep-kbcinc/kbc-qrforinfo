@@ -20,12 +20,86 @@
           </v-btn>
         </v-badge> -->
     
-        <v-select label="UI Scale" class="mt-6 drop-shadow" rounded="lg" density="compact" variant="outlined" :items="[
+        <!-- <v-select label="UI Scale" class="mt-6 drop-shadow" rounded="lg" density="compact" variant="outlined" :items="[
           { title: '80%', value: 0.8 },
           { title: '90% (Recommended)', value: 0.9 },
           { title: '100%', value: 1 },
           { title: '110%', value: 1.1 },
-        ]" v-model="uiScale"  />
+        ]" v-model="uiScale"  /> -->
+        <v-menu
+  v-model="showScaleMenu"
+  location="bottom end"
+  transition="scale-transition"
+  :close-on-content-click="false"
+>
+  <template #activator="{ props }">
+    <v-btn
+      v-bind="props"
+      icon="mdi-tune-vertical"
+      variant="text"
+    />
+  </template>
+
+  <v-card
+    
+    rounded="xl"
+    class="pa-2 box-shadow drop-shadow"
+   
+  >
+    <!-- Recommended -->
+    <v-list density="compact">
+      <v-list-subheader>
+        Recommended
+      </v-list-subheader>
+
+      <v-list-item
+        v-for="item in recommended"
+        :key="item.value"
+        @click="selectScale(item)"
+        rounded="lg"
+      >
+        <template #prepend>
+          <v-icon size="18">{{ item.icon }}</v-icon>
+        </template>
+
+        <v-list-item-title>{{ item.title }}</v-list-item-title>
+
+        <template #append>
+          <v-icon
+            v-if="uiScale === item.value"
+            size="18"
+            color="primary"
+          >
+            mdi-check
+          </v-icon>
+        </template>
+      </v-list-item>
+    </v-list>
+
+    <v-divider class="my-2" />
+
+    <!-- Other options -->
+    <v-list density="compact">
+      <v-list-subheader>
+        Other scaling options
+      </v-list-subheader>
+
+      <v-list-item
+        v-for="item in others"
+        :key="item.value"
+        @click="selectAdvanceScale(item)"
+        rounded="lg"
+      >
+        <template #prepend>
+          <v-icon size="18">{{ item.icon }}</v-icon>
+        </template>
+
+        <v-list-item-title>{{ item.title }}</v-list-item-title>
+      </v-list-item>
+    </v-list>
+  </v-card>
+</v-menu>
+
 
         <v-menu location="bottom end" offset="8">
           <template #activator="{ props }">
@@ -102,6 +176,91 @@ const gotoLogin = () => {
   } else {
     router.push({ name: 'Login' })
   }
+}
+
+
+const showScaleMenu = ref(false)
+// const uiScale = ref('fit')
+
+const recommended = [
+  {
+    title: 'Zoom (100%)',
+    value: 1,
+    icon: 'mdi-numeric-1-box-outline'
+  },
+  {
+    title: 'Recommended (90%)',
+    value: 0.9,
+    icon: 'mdi-numeric-2-box-outline'
+  },
+  {
+    title: 'Small size (80%)',
+    value: 0.8,
+    icon: 'mdi-numeric-3-box-outline'
+  },
+
+  // {
+  //   title: 'Fit width and height',
+  //   value: 'fit',
+  //   icon: 'mdi-arrow-expand'
+  // }
+]
+
+const others = [
+  {
+    title: 'Fit width',
+    value: 'fit-width',
+    icon: 'mdi-arrow-expand-horizontal'
+  },
+  {
+    title: 'Responsive',
+    value: 'responsive',
+    icon: 'mdi-responsive'
+  },
+  {
+    title: 'Full screen',
+    value: 'full',
+    icon: 'mdi-fullscreen'
+  }
+]
+
+const selectScale = (item) => {
+  // uiScale.value = item.value
+  uiScale.value = item.value
+  showScaleMenu.value = false
+  showScaleMenu.value = false
+}
+
+
+const enterFullscreen = () => {
+  const el = document.documentElement
+
+  if (el.requestFullscreen) {
+    el.requestFullscreen()
+  } else if (el.webkitRequestFullscreen) {
+    el.webkitRequestFullscreen() // Safari
+  } else if (el.msRequestFullscreen) {
+    el.msRequestFullscreen() // IE
+  }
+}
+const exitFullscreen = () => {
+  if (document.exitFullscreen) {
+    document.exitFullscreen()
+  } else if (document.webkitExitFullscreen) {
+    document.webkitExitFullscreen()
+  }
+}
+
+const selectAdvanceScale = (item)=>{
+  if(item.value == 'full'){
+    if (!document.fullscreenElement) {
+    enterFullscreen()
+  } else {
+    exitFullscreen()
+  }
+
+  }
+  showScaleMenu.value = false
 }
 
 </script>

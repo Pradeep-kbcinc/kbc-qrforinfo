@@ -1,9 +1,9 @@
 import { ref, watch, onMounted } from 'vue'
 
-const DEFAULT_SCALE = 0.9
+const DEFAULT_SCALE = 0.8
 
 const uiScale = ref(DEFAULT_SCALE)
-const browserZoom = ref(1)
+const browserZoom = ref(0.8)
 
 export function useUiScale() {
   const detectBrowserZoom = () => {
