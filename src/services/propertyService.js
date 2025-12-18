@@ -154,15 +154,15 @@ export default {
   
 
   // Rating module ------------------------------------------------------------------ //
-  // async createRating(data){
-  //   return axios.post(`/CreateRating`, data)
-  // },
+  async createRating(data){
+    return axios.post(`/CreateRating`, data)
+  },
 
 
   // 1. Create Rating for Interaction (Implemented)
-  async createRating(data) {
-    return axios.post(`/interactions/${data.interactionId}/ratings`, data)
-  },
+  // async createRating(data) {
+  //   return axios.post(`/interactions/${data.interactionId}/ratings`, data)
+  // },
 
   // 2. Validate Rating Eligibility
   async validateRatingEligibility(interactionId, ratedUserId) {
@@ -216,9 +216,9 @@ export default {
   },
 
   // 10. Create Rating Dispute
-  async createRatingDispute(data) {
-    return axios.post(`/ratings/${data.ratingId}/disputes`, data)
-  },
+  // async createRatingDispute(data) {
+  //   return axios.post(`/ratings/${data.ratingId}/disputes`, data)
+  // },
 
   // 11. Get Dispute Details
   async getDisputeDetails(disputeId) {
@@ -320,11 +320,27 @@ export default {
   // 24. Admin Get Moderation Log for Rating
   async adminGetModerationLog(ratingId) {
     return axios.get(`/admin/ratings/${ratingId}/moderation-log`)
-  }
+  },
 
 
 
+  // sanjay sir api 
+  
 
+ async getRatingsReceivedList(data) {
+    return axios.post(`/GetRatingsReceivedList`, data)
+  },
+
+  async createRatingDispute(data) {
+    return axios.post(`/CreateRatingDispute`, data)
+  },
+  // {
+  //   "RATING_ID": 1001,
+  //   "DISPUTING_USER_ID": 1001,
+  //   "REASON_CODE": "INACCURATE",
+  //   "DETAILS": "Rating is incorrect."
+  // }
+  
 
 
 }

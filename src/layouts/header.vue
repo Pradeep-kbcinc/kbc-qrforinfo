@@ -218,7 +218,7 @@ const others = [
     icon: 'mdi-responsive'
   },
   {
-    title: 'Full screen',
+    title: 'Full Screen/ Exit Full Screen',
     value: 'full',
     icon: 'mdi-fullscreen'
   }

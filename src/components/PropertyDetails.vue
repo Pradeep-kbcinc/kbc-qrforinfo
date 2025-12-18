@@ -240,7 +240,7 @@
 
   </div>
   <v-card  rounded="lg" elevation="2" class="pa-8 mx-6 card-box-shadow">
-            <h2 class="font-weight-bold mb-6">Recent Feedback</h2>
+            <h2 class="font-weight-bold mb-6">Seller Feedback</h2>
 
             <div v-for="fb in feedback" :key="fb.id">
               <v-card class="pa-6 mb-6 rounded-xl" variant="outlined" elevation="0">
@@ -248,7 +248,7 @@
                   <!-- Reviewer Info -->
                   <div class="d-flex">
                     <v-avatar size="46" class="mr-4" color="grey-lighten-3">
-                      <span class="text-subtitle-2 font-weight-medium">{{ getInitials(fb.name) }}</span>
+                      <!-- <span class="text-subtitle-2 font-weight-medium">{{ getInitials(fb.name) }}</span> -->
                     </v-avatar>
 
                     <div>
@@ -547,13 +547,19 @@
                 <v-icon size="x-large" color="primary" class="mr-2">mdi-shield-sync-outline</v-icon>
                 <h2 class="font-weight-bold">QRFORINFO Trust System</h2>
               </div>
-              <v-row>
-                <v-col >
+              <!-- <v-row no-gutters> -->
+                <!-- <v-col> -->
                   <v-btn @click="selectedType = 'RatingForm'"
                     :color="selectedType == 'RatingForm' ? 'primary' : '#f5f5f4'"
                     class="text-none text-black rounded-lg elevation-0" size="large"
                     :variant="selectedType == 'RatingForm' ? 'elevated' : 'tonal'">1. Rating Form </v-btn>
-                </v-col>
+                <!-- </v-col> -->
+                <!-- <v-col> -->
+                  <v-btn @click="selectedType = 'RiskWarning'"
+                    :color="selectedType == 'RiskWarning' ? 'primary' : '#f5f5f4'"
+                    class="text-none text-black rounded-lg elevation-0 ml-2" size="large"
+                    :variant="selectedType == 'RiskWarning' ? 'elevated' : 'tonal'">2. Risk Warning </v-btn>
+                <!-- </v-col> -->
                 <!-- <v-col>
                   <v-btn @click="selectedType = 'PublicProfile'"
                     :color="selectedType == 'PublicProfile' ? 'primary' : '#f5f5f4'"
@@ -572,13 +578,13 @@
                     class="text-none text-black rounded-lg elevation-0" size="large"
                     :variant="selectedType == 'RiskWarning' ? 'elevated' : 'tonal'">4. Risk Warning </v-btn>
                 </v-col> -->
-                <v-col >
+                <!-- <v-col >
                   <v-btn @click="selectedType = 'DisputeForm'"
                     :color="selectedType == 'DisputeForm' ? 'primary' : '#f5f5f4'"
                     class="text-none text-black rounded-lg elevation-0" size="large"
                     :variant="selectedType == 'DisputeForm' ? 'elevated' : 'tonal'">2. Dispute Form </v-btn>
 
-                </v-col>
+                </v-col> -->
                 <!-- <v-col>
                   <v-btn @click="selectedType = 'AdminDashboard'"
                     :color="selectedType == 'AdminDashboard' ? 'primary' : '#f5f5f4'"
@@ -586,7 +592,7 @@
                     :variant="selectedType == 'AdminDashboard' ? 'elevated' : 'tonal'">6. Admin Dashboard </v-btn>
 
                 </v-col> -->
-              </v-row>
+              <!-- </v-row> -->
             </div>
             <v-spacer></v-spacer>
             <v-btn size="small" @click="feedbackModal = false" variant="tonal" icon="mdi-close"></v-btn>
@@ -661,7 +667,7 @@
 
           <!-- Actions -->
           <div class="d-flex justify-end mt-10">
-            <v-btn @click="giveRating" :loading="giveRatingLoader" color="primary" size="large" min-width="400" height="48"
+            <v-btn @click="giveRating" :disabled="!ratingState.PUBLIC_COMMENT || !ratingState.OVERALL_RATING" :loading="giveRatingLoader" color="primary" size="large" min-width="400" height="48"
               class="elevation-0 text-none font-weight-bold" rounded="lg">
               Submit Rating
             </v-btn>
@@ -862,14 +868,19 @@ const showMenu = ref(false)
 const menuTarget = ref(null)
 const menuItems = [
   { title: 'Feedback', prependIcon: 'mdi-plus-circle', code: 'feedback' },
-  { title: 'Report an issue',prependIcon: 'mdi-plus-circle', code: 'report' },
+  // { title: 'Report an issue',prependIcon: 'mdi-plus-circle', code: 'report' },
+  { title: 'Risk Warnings',prependIcon: 'mdi-plus-circle', code: 'RiskWarning' },
 ]
 const onMenuSelect = (item)=>{
   if(item.code == 'feedback'){
     selectedType.value = 'RatingForm'
     feedbackModal.value = true
   }else if(item.code == 'report'){
-    selectedType.value = 'DisputeForm'
+    // selectedType.value = 'DisputeForm'
+    feedbackModal.value = true
+  }
+  else if(item.code == 'RiskWarning'){
+    selectedType.value = 'RiskWarning'
     feedbackModal.value = true
   }
 }
@@ -879,6 +890,25 @@ const router = useRouter()
 
 //------------------------------------------------------------------------------
 const selectedType = ref('RatingForm')
+
+const fetchSellerFeedback = async(id)=>{
+  try {
+    let data = {
+      "RATED_USER_ID": id,
+      "OFFSET": 0,
+      "LIMIT": 10
+    }
+    let res = await propertyService.getRatingsReceivedList(data)
+    if(res.data.ERR_CODE == 0){
+      let response = res.data.FetchData
+      feedback.value = response
+      console.log(response)
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 onMounted(() => {
   // if (authStore.isAuthenticated) {
   //   fetchStatistics()
@@ -892,7 +922,7 @@ onMounted(() => {
   }
 
   fetchPropertyDetail()
-
+ 
 })
 //------------------------------------------------------------------------------
 const updateStatistics = async () => {
@@ -972,6 +1002,7 @@ const fetchPropertyDetail = async () => {
     }
     propertyObj.value = res.data?.FetchData?.PROPERTY_DETAILS?.[0] || {}
     qrCodeValue.value = res.data?.FetchData?.PROPERTY_DETAILS?.[0] || {}
+    fetchSellerFeedback(propertyObj.value?.SELLER_USER_ID)
     updateStatistics()
   } catch (error) {
 
@@ -1298,24 +1329,7 @@ const profile = ref({
 const verified = ["Email", "Phone", "Payment"];
 
 const feedback = ref([
-  {
-    id: 1,
-    name: "Alex Johnson",
-    date: "2 days ago",
-    tags: ["On time", "Professional", "Helpful"],
-    rating: 5,
-    comment:
-      "Excellent communication throughout. Very knowledgeable and provided accurate information quickly.",
-  },
-  {
-    id: 2,
-    name: "Maria Garcia",
-    date: "1 week ago",
-    tags: ["Responsive", "Polite"],
-    rating: 5,
-    comment:
-      "Very polite and very responsive. Smooth interaction overall.",
-  },
+  
 ]);
 const getInitials = (n) => n.split(" ").map((v) => v[0]).join("");
 
@@ -1409,6 +1423,9 @@ const giveRating = async()=>{
     giveRatingLoader.value = false
   }
 }
+
+
+
 </script>
 
 <style scoped lang="scss">
