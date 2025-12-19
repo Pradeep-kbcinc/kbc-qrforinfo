@@ -33,28 +33,30 @@
           prependIcon="mdi-square-edit-outline" class="text-none rounded-lg elevation-0 font-weight-bold"
           height="42">Edit</v-btn>
 
-        <v-menu location="bottom end" offset="8" scroll-strategy="close">
+        <v-menu location="bottom end">
           <template #activator="{ props }">
             <v-btn v-bind="props" height="42" icon="mdi-dots-vertical" color="primary"
               class="text-none elevation-0 font-weight-bold rounded-lg" variant="outlined" />
           </template>
 
-          <v-list density="compact" class="py-0">
-            <v-list-item
-              v-for="item in menuItems"
-              :key="item.code"
-              @click="onMenuSelect(item)"
-              class="px-3"
-            >
-              <template #prepend>
-                <v-icon size="18">{{ item.prependIcon }}</v-icon>
-              </template>
+          <v-card>
+            <v-list class="py-0">
+              <v-list-item
+                v-for="item in menuItems"
+                :key="item.code"
+                @click="onMenuSelect(item)"
+                class="px-3"
+              >
+                <template #prepend>
+                  <v-icon size="18">{{ item.prependIcon }}</v-icon>
+                </template>
 
-              <v-list-item-title class="text-body-2">
-                {{ item.title }}
-              </v-list-item-title>
-            </v-list-item>
-          </v-list>
+                <v-list-item-title class="">
+                  {{ item.title }}
+                </v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-card>
         </v-menu>
 
 
@@ -243,7 +245,7 @@
             <h2 class="text-h5 font-weight-bold font-weight-bold mb-2">Seller Feedback</h2>
 
             <v-row>
-              <v-col v-for="fb in feedback" :key="fb.id">
+              <v-col v-for="fb in feedback" :key="fb.id" cols="6">
                 <div >
               <v-card class="pa-6 mb-6 rounded-xl" variant="outlined" elevation="0">
                 <div class="d-flex justify-space-between">
@@ -255,8 +257,8 @@
 
                     <div>
                       <h4 class="font-weight-bold mb-1">{{ fb.name || '-' }}</h4>
-                      <span class="text-medium-emphasis text-body-2">{{ fb.CREATED_ON }}</span>
-
+                      <span class="text-medium-emphasis text-body-2 font-weight-bold">{{ moment(fb.CREATED_ON).format('Do MMM, YYYY') }}</span>
+                      
                       <!-- Tags -->
                       <div class="d-flex ga-2 mt-3">
                         <v-chip v-for="tag in fb.tags" :key="tag" size="small" variant="outlined"
@@ -268,9 +270,13 @@
                   </div>
 
                   <!-- Star Rating -->
-                  <v-rating v-model="fb.OVERALL_RATING" readonly color="amber" size="22" />
+                   <div class="d-flex flex-column align-items-end">
+                    <v-rating v-model="fb.OVERALL_RATING" readonly color="amber" size="22" />
+                    <v-btn @click="openDispute(fb)" v-if="propertyObj.SELLER_USER_ID === authStore.userDetails.USER_ID" size="small" class="text-none mt-2 font-weight-bold rounded-lg" color="red" variant="tonal">Dispute Request <v-icon class="ml-2">mdi-alert</v-icon></v-btn>
+                   </div>
+                  
                 </div>
-
+                <!-- <v-divider></v-divider> -->
                 <!-- Feedback Text -->
                 <p class="mt-4 text-body-1 ml-15">
                   {{ fb.PUBLIC_COMMENT_TEXT }}
@@ -281,8 +287,7 @@
             </v-row>
             
             <div class="d-flex justify-center">
-              <v-btn color="primary" class="text-none font-weight-bold" variant="text" size="large">View All
-                Reviews</v-btn>
+              <v-btn @click="viewMoreFeedback" :loading="viewMoreFeedbackLoader" color="primary" class="text-none font-weight-bold" variant="text" size="large">View more</v-btn>
             </div>
 
           </v-card>
@@ -554,13 +559,13 @@
               </div>
               <!-- <v-row no-gutters> -->
                 <!-- <v-col> -->
-                  <v-btn @click="selectedType = 'RatingForm'"
+                  <v-btn v-if="selectedType !== 'DisputeForm'" @click="selectedType = 'RatingForm'"
                     :color="selectedType == 'RatingForm' ? 'primary' : '#f5f5f4'"
                     class="text-none text-black rounded-lg elevation-0" size="large"
                     :variant="selectedType == 'RatingForm' ? 'elevated' : 'tonal'">1. Rating Form </v-btn>
                 <!-- </v-col> -->
                 <!-- <v-col> -->
-                  <v-btn @click="selectedType = 'RiskWarning'"
+                  <v-btn v-if="selectedType !== 'DisputeForm'" @click="selectedType = 'RiskWarning'"
                     :color="selectedType == 'RiskWarning' ? 'primary' : '#f5f5f4'"
                     class="text-none text-black rounded-lg elevation-0 ml-2" size="large"
                     :variant="selectedType == 'RiskWarning' ? 'elevated' : 'tonal'">2. Risk Warning </v-btn>
@@ -611,16 +616,18 @@
         <v-card v-if="selectedType == 'RatingForm'" width="900" class="pa-8 card-box-shadow" rounded="xl">
           <!-- Status Badge -->
           <div class="text-center mb-6">
-            <v-chip color="green-lighten-4" text-color="green-darken-2" variant="flat">
+            <!-- <v-chip color="green-lighten-4" text-color="green-darken-2" variant="flat">
               Interaction Completed
-            </v-chip>
+            </v-chip> -->
           </div>
 
           <!-- Title -->
           <h2 class="text-center font-weight-bold">Rate Your Experience</h2>
 
           <p class="text-center mt-2 text-medium-emphasis">
-            With <strong>Michael Torres</strong> • Consultation on Dec 1, 2024
+            With <strong>{{propertyObj.SELLER_NAME}}</strong> 
+            
+            <!-- • Consultation on Dec 1, 2024 -->
           </p>
 
           <!-- Rating -->
@@ -639,16 +646,16 @@
             <p class="font-weight-bold mb-2">Quick Tags</p>
 
             <div class="d-flex flex-wrap ga-3">
-              <v-chip v-for="tag in tags" size="large" :key="tag" rounded variant="outlined"
+              <v-chip elevation="0" v-for="tag in tags" size="small" :key="tag" rounded :variant="selectedTags.includes(tag.value) ? 'elevated' : 'outlined'"
                 class="px-4 font-weight-bold" @click="toggleTag(tag)"
-                :color="selectedTags.includes(tag) ? 'primary' : ''">
-                {{ tag }}
+                :color="tag.type == 'positive' ? 'primary' : 'red'">
+                {{ tag.label }}
               </v-chip>
             </div>
 
-            <v-btn variant="text" color="red" class="mt-3 text-caption">
-              Report concerns (scam, abuse, payment issues)
-            </v-btn>
+            <!-- <v-btn variant="tonal" color="red" class="mt-3 text-caption">
+              Report Concerns (scam, abuse, payment issues)
+            </v-btn> -->
           </div>
 
           <!-- Public Feedback -->
@@ -672,7 +679,7 @@
 
           <!-- Actions -->
           <div class="d-flex justify-end mt-10">
-            <v-btn @click="giveRating" :disabled="!ratingState.PUBLIC_COMMENT || !ratingState.OVERALL_RATING" :loading="giveRatingLoader" color="primary" size="large" min-width="400" height="48"
+            <v-btn @click="giveRating" :disabled="!ratingState.PUBLIC_COMMENT || !ratingState.OVERALL_RATING || (selectedTags.length < 1)" :loading="giveRatingLoader" color="primary" size="large" min-width="400" height="48"
               class="elevation-0 text-none font-weight-bold" rounded="lg">
               Submit Rating
             </v-btn>
@@ -802,11 +809,11 @@
 
           
           <div class="text-body-1 font-weight-medium mb-2">Reason for Dispute *</div>
-          <v-select :items="reasons" placeholder="Select a reason..." variant="outlined" rounded="lg"
+          <v-select placeholder="Select a reason..." :items="['ABUSIVE','FALSE','PRIVACY']" v-model="reasonForDispute" variant="outlined" rounded="lg"
             class="mb-6"></v-select>
 
           <div class="text-body-1 font-weight-medium mb-2">Explanation *</div>
-          <v-textarea variant="outlined" rounded="lg"
+          <v-textarea v-model="explanationForDispute" variant="outlined" rounded="lg"
             placeholder="Please explain why this feedback should be removed. Include any relevant details or evidence..."
             class="mb-2" rows="5"></v-textarea>
 
@@ -825,13 +832,13 @@
 
           <!-- BUTTONS -->
           <div class="d-flex align-center justify-center mt-8">
-            <v-btn height="48" class="submit-btn text-none" rounded="lg">
+            <v-btn @click="submitDispute" :loading="submitDisputeLoader" :disabled="!reasonForDispute || !explanationForDispute" height="48" class="submit-btn text-none" rounded="lg">
               Submit Dispute
             </v-btn>
 
-            <v-btn variant="plain" class="ml-6 text-medium-emphasis">
+            <!-- <v-btn variant="plain" class="ml-6 text-medium-emphasis">
               Cancel
-            </v-btn>
+            </v-btn> -->
           </div>
 
 
@@ -896,20 +903,25 @@ const router = useRouter()
 //------------------------------------------------------------------------------
 const selectedType = ref('RatingForm')
 
+const feedbackLimit = ref(10)
+const viewMoreFeedbackLoader = ref(false)
 const fetchSellerFeedback = async(id)=>{
+  viewMoreFeedbackLoader.value = true
+  
   try {
     let data = {
       "RATED_USER_ID": id,
       "OFFSET": 0,
-      "LIMIT": 10
+      "LIMIT": feedbackLimit.value
     }
     let res = await propertyService.getRatingsReceivedList(data)
     if(res.data.ERR_CODE == 0){
       let response = res.data.FetchData
       feedback.value = response
-      console.log(response)
+      viewMoreFeedbackLoader.value = false
     }
   } catch (error) {
+    viewMoreFeedbackLoader.value = false
     console.log(error)
   }
 }
@@ -1293,21 +1305,68 @@ const openFeedback = () => {
 const rating = ref(0);
 
 const tags = [
-  "On time",
-  "Responsive",
-  "Polite",
-  "Accurate info",
-  "Helpful",
-  "Professional",
+  {
+    label: 'Suspected Scam',
+    value: 'SUSPECTED_SCAM',
+    type: 'negative'
+  },
+  {
+    label: 'Off-platform Payment',
+    value: 'OFF_PLATFORM_PAYMENT',
+    type: 'negative'
+  },
+  {
+    label: 'Payment Issue',
+    value: 'PAYMENT_ISSUE',
+    type: 'negative'
+  },
+  {
+    label: 'Fake Information',
+    value: 'FAKE_INFO',
+    type: 'negative'
+  },
+
+  // ✅ Positive feedback tags
+  {
+    label: 'On Time',
+    value: 'ON_TIME',
+    type: 'positive'
+  },
+  {
+    label: 'Responsive',
+    value: 'RESPONSIVE',
+    type: 'positive'
+  },
+  {
+    label: 'Polite',
+    value: 'POLITE',
+    type: 'positive'
+  },
+  {
+    label: 'Accurate Info',
+    value: 'ACCURATE_INFO',
+    type: 'positive'
+  },
+  {
+    label: 'Helpful',
+    value: 'HELPFUL',
+    type: 'positive'
+  },
+  {
+    label: 'Professional',
+    value: 'PROFESSIONAL',
+    type: 'positive'
+  }
+
 ];
 
 const selectedTags = ref([]);
 
 const toggleTag = (tag) => {
-  if (selectedTags.value.includes(tag)) {
-    selectedTags.value = selectedTags.value.filter((t) => t !== tag);
+  if (selectedTags.value.includes(tag.value)) {
+    selectedTags.value = selectedTags.value.filter((t) => t !== tag.value);
   } else {
-    selectedTags.value.push(tag);
+    selectedTags.value.push(tag.value);
   }
 };
 
@@ -1431,6 +1490,48 @@ const giveRating = async()=>{
 }
 
 
+const viewMoreFeedback = ()=>{
+
+  feedbackLimit.value += 10
+  fetchSellerFeedback(propertyObj.value?.SELLER_USER_ID)
+}
+
+const selectedRating = ref()
+const openDispute = (data)=>{
+  selectedRating.value = data
+  selectedType.value = 'DisputeForm'
+  feedbackModal.value = true
+}
+
+
+const reasonForDispute = ref()
+const explanationForDispute = ref()
+const submitDisputeLoader = ref(false)
+const submitDispute = async()=>{
+  submitDisputeLoader.value = true
+  try {
+    let data = {
+        "RATING_ID": selectedRating.value?.RATING_ID,
+        "DISPUTING_USER_ID": selectedRating.value?.RATED_USER_ID,
+        "REASON_CODE": reasonForDispute.value,
+        "DETAILS": explanationForDispute.value
+    }
+    let res = await propertyService.createRatingDispute(data)
+    if(res.data.ERR_CODE == 0){
+      let response = res.data
+      submitDisputeLoader.value = false
+      reasonForDispute.value = ''
+      explanationForDispute.value = ''
+      toast.success('Dispute Submitted', {
+            autoClose: 4000,
+          });
+      feedbackModal.value = false
+    }
+  } catch (error) {
+    submitDisputeLoader.value = false
+    console.log(error)
+  }
+}
 
 </script>
 

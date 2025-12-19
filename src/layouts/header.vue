@@ -212,11 +212,11 @@ const others = [
   //   value: 'fit-width',
   //   icon: 'mdi-arrow-expand-horizontal'
   // },
-  {
-    title: 'Fit width & height',
-    value: 'fit-width-height',
-    icon: 'mdi-arrow-expand-vertical'
-  },
+  // {
+  //   title: 'Fit width & height',
+  //   value: 'fit-width-height',
+  //   icon: 'mdi-arrow-expand-vertical'
+  // },
   {
     title: 'Full Screen/ Exit Full Screen',
     value: 'full',
