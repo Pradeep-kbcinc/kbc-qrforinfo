@@ -16,19 +16,15 @@
                   </v-avatar>
 
                   <div>
-                    <h2 class="font-weight-bold">{{ profile.name }}</h2>
-                    <p class="text-medium-emphasis mb-3">Member since {{ profile.memberSince }}</p>
+                    <h2 class="font-weight-bold">{{ props.user.SELLER_NAME || authStore.userDetails.FNAME }}</h2>
+                    <!-- <p class="text-medium-emphasis mb-3">Member since {{ profile.memberSince }}</p> -->
 
                     <!-- Verified badges -->
                   
-                    <v-btn @click="$router.push('/settings')" class="text-none" rounded="lg" color="primary" elevation="0"> <v-icon class="mr-1">mdi-cog</v-icon> Profile Setting </v-btn>
-                    <!-- <v-btn  class="text-none ml-2" rounded="lg" color="primary" elevation="0"> <v-icon class="mr-1">mdi-chat</v-icon> Message Owner </v-btn> -->
+                    <v-btn v-if="!props.otherProfile" @click="$router.push('/settings')" class="text-none" rounded="lg" color="primary" elevation="0"> <v-icon class="mr-1">mdi-cog</v-icon> Profile Setting </v-btn>
+                    <v-btn v-else @click="messageSeller" class="text-none ml-2" rounded="lg" color="primary" elevation="0"> <v-icon class="mr-1">mdi-chat</v-icon> Message Owner </v-btn>
 
-                    <v-chip v-for="v in verified" :key="v" class="mr-2" color="green-lighten-4"
-                      text-color="green-darken-2" variant="outlined">
-                      <v-icon size="14" class="mr-1">mdi-check</v-icon>
-                      {{ v }}
-                    </v-chip>
+                    
                   </div>
 
                 </div>
@@ -118,6 +114,19 @@
 import propertyService from '@/services/propertyService';
 import { useAuthStore } from '@/stores/app';
 const authStore = useAuthStore()
+
+const emit = defineEmits(['triggerMSG'])
+const props = defineProps({
+  otherProfile:{
+    type: Boolean, 
+    default: false
+  },
+  user:{
+    type: Object
+  }
+})
+
+
     const profile = ref({
   name: "Sarah Chen",
   memberSince: "2023",
@@ -189,8 +198,26 @@ const getMyReputation = async()=>{
   }
 }
 
+const fetchTrustScore = async(id)=>{
+  try {
+    let res = await propertyService.getAdminUserTrust(id)
+    if(res.data.ERR_CODE == 0){
+      let response = res.data
+      console.log(response, 'response')
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 onMounted(()=>{
+  let user = props.user.USER_ID || authStore.userDetails.USER_ID
+  fetchTrustScore(user)
+
   // getGivenRatingsByMe()
 })
+
+const messageSeller = ()=>{
+  emit('triggerMSG')
+}
 </script>

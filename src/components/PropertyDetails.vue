@@ -851,6 +851,19 @@
 
     </div>
   </v-dialog>
+
+  <v-dialog fullscreen v-model="profileDetailsModal">
+    <v-toolbar class="px-4">
+      <h5>Seller Details</h5>
+      <v-spacer></v-spacer>
+      <v-btn icon="mdi-close" @click="profileDetailsModal = false"></v-btn>
+    </v-toolbar>
+    <v-card class="">
+      <v-card-text>
+          <ProfileDetails otherProfile @triggerMSG="messageSeller" :user="{USER_ID : propertyObj.SELLER_USER_ID, SELLER_NAME : propertyObj.SELLER_NAME}" />
+      </v-card-text>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup>
@@ -865,6 +878,7 @@ import DummyApartment from '@/assets/dummy_apartment.webp'
 import DummyLand from '@/assets/dummy_land.webp'
 import moment from 'moment';
 import GoogleMap from '@/components/GoogleMap.vue'
+import ProfileDetails from '@/components/Profile.vue'
 //..............................................................................
 const authStore = useAuthStore()
 const route = useRoute()
@@ -1228,9 +1242,24 @@ const gotoLogin = ()=>{
     router.push({ name: 'Login' })
   }
   }
+
+
+const profileDetailsModal = ref(false)
 const contactOwner = () => {
-  if (authStore.isAuthenticated) {
-    // router.push(`/messages?user_id=${propertyObj.SELLER_USER_ID}&property_id=${propertyObj.PROPERTY_ID}`)
+  profileDetailsModal.value = true
+  // if (authStore.isAuthenticated) {
+  //   oldMsges()
+  //   sender_id.value = authStore.getUserDetails.USER_ID
+  //   receiver_id.value = propertyObj.value.SELLER_USER_ID
+  //   property_id.value = propertyObj.value.PROPERTY_ID
+  //   msgDialog.value = true
+  // } else {
+  //   gotoLogin()
+  // }
+}
+
+const messageSeller = ()=>{
+   if (authStore.isAuthenticated) {
     oldMsges()
     sender_id.value = authStore.getUserDetails.USER_ID
     receiver_id.value = propertyObj.value.SELLER_USER_ID
