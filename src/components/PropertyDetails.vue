@@ -549,7 +549,7 @@
   </v-dialog>
 
   <v-dialog fullscreen v-model="feedbackModal">
-    <div style="background-color: white;overflow-y: auto; background-color: #faf8f0;height: 100vh;">
+    <div style="background-color: white;overflow-y: auto; background-color: #faf8f0;height: 150vh;">
       <div style="position: fixed;background-color: rgb(256, 256, 256, 0.9);width: 100%;height: 150px;z-index: 1;">
         <v-container fluid class="px-10">
           <div class="d-flex">
@@ -941,6 +941,29 @@ const fetchSellerFeedback = async(id)=>{
   }
 }
 
+
+const reportedFeedbackList = ref([])
+const fetchReportedFeedbacks = async()=>{
+  try {
+    let data = {
+        "RATED_USER_ID": propertyObj.value.SELLER_USER_ID,
+        "RATER_USER_ID": 0,
+       
+        "HAS_SCAM_TAG": 1,
+        "FROM_DATE": "2025-01-01",
+        "TO_DATE": "2025-12-19",
+        "OFFSET": 0,
+        "LIMIT": 20
+    }
+    let res = await propertyService.getReportedFeedback(data)
+    if(res.data.ERR_CODE == 0){
+      let response = res.data
+      reportedFeedbackList.value = response.FetchData
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
 onMounted(() => {
   // if (authStore.isAuthenticated) {
   //   fetchStatistics()
@@ -1035,6 +1058,7 @@ const fetchPropertyDetail = async () => {
     propertyObj.value = res.data?.FetchData?.PROPERTY_DETAILS?.[0] || {}
     qrCodeValue.value = res.data?.FetchData?.PROPERTY_DETAILS?.[0] || {}
     fetchSellerFeedback(propertyObj.value?.SELLER_USER_ID)
+    fetchReportedFeedbacks(propertyObj.value?.SELLER_USER_ID)
     updateStatistics()
   } catch (error) {
 
@@ -1493,7 +1517,7 @@ const giveRating = async()=>{
       "INTERACTION_ID": propertyObj.value.PROPERTY_ID,
       "RATER_USER_ID": authStore.userDetails.USER_ID,
       "RATED_USER_ID": propertyObj.value.SELLER_USER_ID,
-      "OVERALL_RATING": 5,
+      "OVERALL_RATING": ratingState.value.OVERALL_RATING,
       "PUBLIC_TAGS_JSON": selectedTags.value && selectedTags.value.length > 1 ? JSON.stringify(selectedTags.value) : '',
       "PUBLIC_COMMENT": ratingState.value.PUBLIC_COMMENT,
       "PRIVATE_COMMENT": ratingState.value.PRIVATE_COMMENT
