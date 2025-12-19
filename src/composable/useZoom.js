@@ -1,30 +1,25 @@
 import { ref, watch, onMounted } from 'vue'
 
-const DEFAULT_SCALE = 0.8
+const DEFAULT_SCALE = 0.9
 
 const uiScale = ref(DEFAULT_SCALE)
-const browserZoom = ref(0.8)
+const browserZoom = ref(1)
 
 export function useUiScale() {
   const detectBrowserZoom = () => {
-    browserZoom.value = window.devicePixelRatio 
-    console.log(browserZoom.value, 'browserZoom.value')
+    browserZoom.value = window.devicePixelRatio || 1
   }
 
   const applyScale = (scale) => {
-    uiScale.value = scale
-
     const app = document.getElementById('app')
     if (!app) return
-
+  
     app.style.transform = `scale(${scale})`
     app.style.transformOrigin = 'top left'
-    app.style.width = `calc(100% / ${scale})`
-    app.style.height = `calc(100% / ${scale})`
-   
+    app.style.width = `${100 / scale}%`
+    app.style.height = `${100 / scale}%`
   }
-
-
+  
 
   onMounted(() => {
     detectBrowserZoom()

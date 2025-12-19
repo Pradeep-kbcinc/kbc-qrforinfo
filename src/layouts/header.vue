@@ -184,18 +184,18 @@ const showScaleMenu = ref(false)
 
 const recommended = [
   {
-    title: 'Zoom (100%)',
-    value: 0.9,
+    title: 'Actual Size (100%)',
+    value: 1,
     icon: 'mdi-numeric-1-box-outline'
   },
   {
     title: 'Recommended (90%)',
-    value: 0.8,
+    value: 0.9,
     icon: 'mdi-numeric-2-box-outline'
   },
   {
     title: 'Small size (80%)',
-    value: 0.7,
+    value: 0.8,
     icon: 'mdi-numeric-3-box-outline'
   },
 

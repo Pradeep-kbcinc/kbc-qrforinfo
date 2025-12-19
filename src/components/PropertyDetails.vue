@@ -240,9 +240,11 @@
 
   </div>
   <v-card  rounded="lg" elevation="2" class="pa-8 mx-6 card-box-shadow">
-            <h2 class="font-weight-bold mb-6">Seller Feedback</h2>
+            <h2 class="text-h5 font-weight-bold font-weight-bold mb-2">Seller Feedback</h2>
 
-            <div v-for="fb in feedback" :key="fb.id">
+            <v-row>
+              <v-col v-for="fb in feedback" :key="fb.id">
+                <div >
               <v-card class="pa-6 mb-6 rounded-xl" variant="outlined" elevation="0">
                 <div class="d-flex justify-space-between">
                   <!-- Reviewer Info -->
@@ -252,8 +254,8 @@
                     </v-avatar>
 
                     <div>
-                      <h4 class="font-weight-bold mb-1">{{ fb.name }}</h4>
-                      <span class="text-medium-emphasis text-body-2">{{ fb.date }}</span>
+                      <h4 class="font-weight-bold mb-1">{{ fb.name || '-' }}</h4>
+                      <span class="text-medium-emphasis text-body-2">{{ fb.CREATED_ON }}</span>
 
                       <!-- Tags -->
                       <div class="d-flex ga-2 mt-3">
@@ -266,15 +268,18 @@
                   </div>
 
                   <!-- Star Rating -->
-                  <v-rating v-model="fb.rating" readonly color="amber" size="22" />
+                  <v-rating v-model="fb.OVERALL_RATING" readonly color="amber" size="22" />
                 </div>
 
                 <!-- Feedback Text -->
                 <p class="mt-4 text-body-1 ml-15">
-                  {{ fb.comment }}
+                  {{ fb.PUBLIC_COMMENT_TEXT }}
                 </p>
               </v-card>
             </div>
+              </v-col>
+            </v-row>
+            
             <div class="d-flex justify-center">
               <v-btn color="primary" class="text-none font-weight-bold" variant="text" size="large">View All
                 Reviews</v-btn>
@@ -1411,6 +1416,7 @@ const giveRating = async()=>{
             autoClose: 4000,
           });
       feedbackModal.value = false
+      fetchSellerFeedback(propertyObj.value?.SELLER_USER_ID)
       giveRatingLoader.value = false
     }else{
       toast.info(res.data.MESSAGE, {

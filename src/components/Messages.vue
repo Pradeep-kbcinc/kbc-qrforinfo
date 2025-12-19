@@ -2,7 +2,7 @@
   <div class="">
     <v-row>
       <v-col cols="4" class="pa-0">
-        <div class="border-e border-b overflow-y-auto" style="height: calc(100dvh - 65px)">
+        <div class="border-e border-b overflow-y-auto" style="height: calc(100vh - 5px)!important;overflow-y: auto;">
           <div class="pa-4 mb-2">
             <h5 class="mb-3">Messages</h5>
 
@@ -44,7 +44,7 @@
         </div>
       </v-col>
       <v-col cols="8" class="pa-0">
-        <div class="bg-grey-lighten-4" style="height: calc(100dvh - 65px)">
+        <div class="bg-grey-lighten-4" style="height: calc(100vh - 1px)!important;overflow-y: auto;">
           <div v-if="messageLoader" class="d-flex justify-center align-center pt-16">
             <v-progress-circular color="primary" indeterminate></v-progress-circular>
             <p class="ml-2">Loading Messages...</p>
