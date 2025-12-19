@@ -241,7 +241,7 @@
     </div>
 
   </div>
-  <v-card  rounded="lg" elevation="2" class="pa-8 mx-6 card-box-shadow">
+  <v-card rounded="lg" elevation="2" class="pa-8 mx-6 card-box-shadow">
             <h2 class="text-h5 font-weight-bold font-weight-bold mb-2">Seller Feedback</h2>
 
             <v-row>
@@ -253,10 +253,11 @@
                   <div class="d-flex">
                     <v-avatar size="46" class="mr-4" color="grey-lighten-3">
                       <!-- <span class="text-subtitle-2 font-weight-medium">{{ getInitials(fb.name) }}</span> -->
+                       {{ fb.RATER_FNAME.slice(0,1) + fb.RATER_LNAME.slice(0,1) }}
                     </v-avatar>
 
                     <div>
-                      <h4 class="font-weight-bold mb-1">{{ fb.name || '-' }}</h4>
+                      <h4 class="font-weight-bold mb-1">{{ fb.RATER_FNAME + fb.RATER_LNAME || '-' }}</h4>
                       <span class="text-medium-emphasis text-body-2 font-weight-bold">{{ moment(fb.CREATED_ON).format('Do MMM, YYYY') }}</span>
                       
                       <!-- Tags -->
@@ -559,7 +560,7 @@
               </div>
               <!-- <v-row no-gutters> -->
                 <!-- <v-col> -->
-                  <v-btn v-if="selectedType !== 'DisputeForm'" @click="selectedType = 'RatingForm'"
+                  <v-btn v-if="selectedType !== 'DisputeForm' && authStore.userDetails.USER_ID !== propertyObj.SELLER_USER_ID" @click="selectedType = 'RatingForm'"
                     :color="selectedType == 'RatingForm' ? 'primary' : '#f5f5f4'"
                     class="text-none text-black rounded-lg elevation-0" size="large"
                     :variant="selectedType == 'RatingForm' ? 'elevated' : 'tonal'">1. Rating Form </v-btn>

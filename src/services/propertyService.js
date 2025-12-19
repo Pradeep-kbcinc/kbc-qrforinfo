@@ -340,6 +340,10 @@ export default {
   },
   
 
+  async getMyReputation(id){
+    return axios.get(`/GetMyReputation?USER_ID=${id}`)
+  }
+
   
 
   
