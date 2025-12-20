@@ -11,16 +11,15 @@ export function useUiScale() {
   }
 
   const applyScale = (scale) => {
-    uiScale.value = scale
-
     const app = document.getElementById('app')
     if (!app) return
-
+  
     app.style.transform = `scale(${scale})`
     app.style.transformOrigin = 'top left'
-    app.style.width = `calc(100% / ${scale})`
-    app.style.height = `calc(100% / ${scale})`
+    app.style.width = `${100 / scale}%`
+    app.style.height = `${100 / scale}%`
   }
+  
 
   onMounted(() => {
     detectBrowserZoom()

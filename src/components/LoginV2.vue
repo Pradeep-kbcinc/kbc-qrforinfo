@@ -86,8 +86,8 @@
 
         <v-col cols="12" md="6">
           <video autoplay muted loop playsinline class="tw-relative tw-size-full tw-rounded-2xl tw-object-cover">
-            <source src="https://static.heygen.ai/prod/movio/public/resource/d5a3ba28e5d04d9987673d35d50ee3d0.webm" type="video/webm">
-            <source src="https://dynamic.heygen.ai/prod/movio/public/resource/7246d7c9786c49cfb03c77d2d4d98c6b.mp4" type="video/mp4">
+            <source src="@/assets/qrVideo.mp4" type="video/webm">
+            <source src="@/assets/qrVideo.mp4" type="video/mp4">
           </video>
 
         </v-col>

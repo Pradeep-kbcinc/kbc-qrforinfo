@@ -1,18 +1,44 @@
 <template>
+    <div class="d-flex">
+      <v-btn class="drop-shadow elevation-0 font-weight-medium" color="info">
+        Map Area : <span class="text-subtitle-1 font-weight-bold"> {{ state || '-' }}, {{ city || '-' }}</span>
+        </v-btn>
+        <v-spacer></v-spacer>
+        <div class="">
+        <v-text-field :loading="addLoader" min-width="500" glow density="compact" prepend-inner-icon="mdi-map-marker" @input="debouncedSearch" v-model="addressSearch" label="Search Area" variant="solo"></v-text-field>
+          <!-- <div class=""> -->
+           
+              <v-list class="mt-n5 position-absolute" style="z-index: 1;">
+                      <v-list-item v-for="(result, i) in results" :key="i" @click="selectedAddress(result)" @click.prevent="results = []" color="grey" variant="outlined">
+                        <v-list-item-title> {{ result.name }}</v-list-item-title>
+                      </v-list-item>
+              </v-list>
+            
+          <!-- </div> -->
+        
+          </div>
+    </div>
     <div ref="mapRef" class="map"></div>
-  
+    
     <div class="mt-2">
-      <h4><strong class="text-h6">Address :</strong><br> {{ address }}</h4>
-      <v-btn @click="onConfirmAddress" color="primary" class="text-none mt-2 text-subtitle-2" elevation="0" rounded="lg">Confirm Address <v-icon class="ml-2">mdi-check</v-icon></v-btn>
+     
+      <v-btn class="text-none font-weight-bold">
+        <v-icon color="red" size="x-large" class="mr-2">mdi-map-marker</v-icon> Selected Address :
+      </v-btn>
+      <h3 class="mt-2">{{ address }}</h3>
+      <v-divider></v-divider>
+      <v-btn :disabled="!address" @click="onConfirmAddress" color="primary" class="text-none mt-2 text-subtitle-2 elevation-0 drop-shadow" rounded="lg">Confirm Address <v-icon class="ml-2">mdi-check</v-icon></v-btn>
     </div>
   </template>
   
   <script setup>
     import { ref, onMounted } from 'vue'
+    import { useDebounce } from '@/config/debounce.js'
     const emit = defineEmits(['confirmAdd'])
     const mapRef = ref(null)
     const address = ref('')
     const pincode = ref('')
+    const addressSearch = ref('')
     let map
     let marker
     let geocoder
@@ -42,12 +68,50 @@
 
 const latitude = ref()
 const longitude = ref()
+
+const state = ref()
+const city = ref()
+
+const getCityState = (lat, lng) => {
+  return new Promise((resolve, reject) => {
+    const geocoder = new google.maps.Geocoder()
+
+    geocoder.geocode(
+      { location: { lat, lng } },
+      (results, status) => {
+        if (status === 'OK' && results[0]) {
+          let city = ''
+          let state = ''
+
+          results[0].address_components.forEach(component => {
+            if (component.types.includes('locality')) {
+              city = component.long_name
+            }
+            if (component.types.includes('administrative_area_level_1')) {
+              state = component.long_name
+            }
+          })
+
+          resolve({ city, state })
+        } else {
+          reject('Geocoder failed')
+        }
+      }
+    )
+  })
+}
+
+
 const takePermission = ()=>{
   if ('geolocation' in navigator) {
         navigator.geolocation.getCurrentPosition(
           async(position) => {
             latitude.value = position.coords.latitude
             longitude.value = position.coords.longitude
+            console.log(await getCityState(latitude.value,longitude.value))
+            let locationDetails = await getCityState(latitude.value,longitude.value)
+            state.value = locationDetails.state
+            city.value = locationDetails.city
             await initMap()
           },
           (error) => {
@@ -136,6 +200,57 @@ const takePermission = ()=>{
     const onConfirmAddress = ()=>{
         emit('confirmAdd', {address :address.value, lat : lat.value, lng : lng.value, pincode: pincode.value})
     }
+
+
+    const results = ref([])
+    const addLoader = ref(false)
+    const search = async () => {
+  if (addressSearch.value.length < 3) {
+    results.value = []
+    return
+  }
+
+  addLoader.value = true
+
+  try {
+    const response = await fetch(
+      `https://api.geoapify.com/v1/geocode/search?text=${addressSearch.value}&apiKey=4443e53cd6c740319898ef871c7e239c`
+    )
+
+    const fetchResult = await response.json()
+
+    results.value = fetchResult.features.map((element, i) => ({
+      id: i + 1,
+      name: element?.properties?.formatted,
+      lat: element?.properties?.lat,
+      lng: element?.properties?.lon,
+      postalCode: element?.properties?.postcode
+    }))
+  } catch (error) {
+    console.error('Failed to fetch addresses:', error)
+    results.value = []
+  } finally {
+    addLoader.value = false
+  }
+}
+
+
+    const debouncedSearch = () => {
+  if (addressSearch.value) {
+    return useDebounce(search(), 300)
+  } else {
+    results.value = []
+  }
+}
+const selectedAddress = async(result) => {
+  latitude.value = result.lat
+  longitude.value = result.lng
+  addressSearch.value = ''
+  await initMap()
+  await getCityState(latitude.value,longitude.value)
+  // lat.value = result.lat
+  // long.value = result.lng
+}
     </script>
     
     

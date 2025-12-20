@@ -16,19 +16,15 @@
                   </v-avatar>
 
                   <div>
-                    <h2 class="font-weight-bold">{{ profile.name }}</h2>
-                    <p class="text-medium-emphasis mb-3">Member since {{ profile.memberSince }}</p>
+                    <h2 class="font-weight-bold">{{ props.user.SELLER_NAME || authStore.userDetails.FNAME }}</h2>
+                    <!-- <p class="text-medium-emphasis mb-3">Member since {{ profile.memberSince }}</p> -->
 
                     <!-- Verified badges -->
                   
-                    <v-btn @click="$router.push('/settings')" class="text-none" rounded="lg" color="primary" elevation="0"> <v-icon class="mr-1">mdi-cog</v-icon> Profile Setting </v-btn>
-                    <!-- <v-btn  class="text-none ml-2" rounded="lg" color="primary" elevation="0"> <v-icon class="mr-1">mdi-chat</v-icon> Message Owner </v-btn> -->
+                    <v-btn v-if="!props.otherProfile" @click="$router.push('/settings')" class="text-none" rounded="lg" color="primary" elevation="0"> <v-icon class="mr-1">mdi-cog</v-icon> Profile Setting </v-btn>
+                    <v-btn v-else @click="messageSeller" class="text-none ml-2" rounded="lg" color="primary" elevation="0"> <v-icon class="mr-1">mdi-chat</v-icon> Message Owner </v-btn>
 
-                    <v-chip v-for="v in verified" :key="v" class="mr-2" color="green-lighten-4"
-                      text-color="green-darken-2" variant="outlined">
-                      <v-icon size="14" class="mr-1">mdi-check</v-icon>
-                      {{ v }}
-                    </v-chip>
+                    
                   </div>
 
                 </div>
@@ -70,42 +66,43 @@
           <v-card  rounded="xl" elevation="2" class="pa-8 card-box-shadow">
             <h2 class="font-weight-bold mb-6">Recent Feedback</h2>
 
-            <div v-for="fb in feedback" :key="fb.id">
-              <v-card class="pa-6 mb-6 rounded-xl" variant="outlined" elevation="0">
+              <v-row v-if="feedbackLoader">
+                <v-col v-for="item in 8" cols="4">
+                  <v-skeleton-loader type="card"></v-skeleton-loader>
+
+                </v-col>
+              </v-row>
+            <v-row v-else>
+              <v-col v-for="fb in feedback" :key="fb.id" cols="4">
+                <v-card class="pa-6 mb-6 rounded-xl" variant="outlined" elevation="0">
                 <div class="d-flex justify-space-between">
                   <!-- Reviewer Info -->
                   <div class="d-flex">
                     <v-avatar size="46" class="mr-4" color="grey-lighten-3">
-                      <span class="text-subtitle-2 font-weight-medium">{{ getInitials(fb.name) }}</span>
+                      <span class="text-subtitle-2 font-weight-medium">{{ fb?.RATER_FNAME ?  fb?.RATER_FNAME.slice(0,1) : '-' }} {{ fb?.RATER_LNAME ? fb?.RATER_LNAME.slice(0,1) : '-' }}</span>
                     </v-avatar>
 
                     <div>
-                      <h4 class="font-weight-bold mb-1">{{ fb.name }}</h4>
-                      <span class="text-medium-emphasis text-body-2">{{ fb.date }}</span>
+                      <h4 class="font-weight-bold mb-1">{{ fb.RATER_FNAME + fb.RATER_LNAME }}</h4>
+                      <span class="text-medium-emphasis text-body-2">{{ moment(fb.CREATED_ON).format('Do MMM, YYYY') }}</span>
 
-                      <!-- Tags -->
-                      <div class="d-flex ga-2 mt-3">
-                        <v-chip v-for="tag in fb.tags" :key="tag" size="small" variant="outlined"
-                          color="grey-lighten-2">
-                          {{ tag }}
-                        </v-chip>
-                      </div>
+                    
                     </div>
                   </div>
 
                   <!-- Star Rating -->
-                  <v-rating v-model="fb.rating" readonly color="amber" size="22" />
+                  <v-rating v-model="fb.OVERALL_RATING" readonly color="amber" size="22" />
                 </div>
 
                 <!-- Feedback Text -->
                 <p class="mt-4 text-body-1 ml-15">
                   {{ fb.comment }}
                 </p>
-              </v-card>
-            </div>
+                </v-card>
+              </v-col>
+            </v-row>
             <div class="d-flex justify-center">
-              <v-btn color="primary" class="text-none font-weight-bold" variant="text" size="large">View All
-                Reviews</v-btn>
+              <v-btn @click="viewMoreFeedback" :loading="viewMoreFeedbackLoader" color="primary" class="text-none font-weight-bold" variant="text" size="large">View More</v-btn>
             </div>
 
           </v-card>
@@ -117,7 +114,21 @@
 <script setup>
 import propertyService from '@/services/propertyService';
 import { useAuthStore } from '@/stores/app';
+import moment from 'moment'
 const authStore = useAuthStore()
+
+const emit = defineEmits(['triggerMSG'])
+const props = defineProps({
+  otherProfile:{
+    type: Boolean, 
+    default: false
+  },
+  user:{
+    type: Object
+  }
+})
+
+
     const profile = ref({
   name: "Sarah Chen",
   memberSince: "2023",
@@ -132,26 +143,9 @@ const initials = computed(() => {
     .join("");
 });
 
-const getInitials = (n) => n.split(" ").map((v) => v[0]).join("");
+
 const feedback = ref([
-  {
-    id: 1,
-    name: "Alex Johnson",
-    date: "2 days ago",
-    tags: ["On time", "Professional", "Helpful"],
-    rating: 5,
-    comment:
-      "Excellent communication throughout. Very knowledgeable and provided accurate information quickly.",
-  },
-  {
-    id: 2,
-    name: "Maria Garcia",
-    date: "1 week ago",
-    tags: ["Responsive", "Polite"],
-    rating: 5,
-    comment:
-      "Very polite and very responsive. Smooth interaction overall.",
-  },
+ 
 ]);
 
 
@@ -189,8 +183,61 @@ const getMyReputation = async()=>{
   }
 }
 
+const feedbackLoader = ref(false)
+const getDetails = async(id)=>{
+  feedbackLoader.value = true
+  try {
+    let res = await propertyService.getMyReputation(id)
+    if(res.data.ERR_CODE == 0){
+      let response = res.data
+      feedback.value = response.FetchData?.FeedbackList
+      feedbackLoader.value = false
+    }
+  } catch (error) {
+    feedbackLoader.value = false
+    console.log(error)
+  }
+}
+
+
 
 onMounted(()=>{
+  let user = props.user.USER_ID || authStore.userDetails.USER_ID
+  getDetails(user)
+
   // getGivenRatingsByMe()
 })
+
+const messageSeller = ()=>{
+  emit('triggerMSG')
+}
+
+
+const viewMoreFeedbackLoader  =ref(false)
+const fetchSellerFeedback = async(id)=>{
+  viewMoreFeedbackLoader.value = true
+  
+  try {
+    let data = {
+      "RATED_USER_ID": id,
+      "OFFSET": 0,
+      "LIMIT": feedbackLimit.value
+    }
+    let res = await propertyService.getRatingsReceivedList(data)
+    if(res.data.ERR_CODE == 0){
+      let response = res.data.FetchData
+      feedback.value = response
+      viewMoreFeedbackLoader.value = false
+    }
+  } catch (error) {
+    viewMoreFeedbackLoader.value = false
+    console.log(error)
+  }
+}
+
+const feedbackLimit = ref(10)
+const viewMoreFeedback = ()=>{
+feedbackLimit.value += 10
+fetchSellerFeedback(props.user?.USER_ID)
+}
 </script>

@@ -33,28 +33,30 @@
           prependIcon="mdi-square-edit-outline" class="text-none rounded-lg elevation-0 font-weight-bold"
           height="42">Edit</v-btn>
 
-        <v-menu location="bottom end" offset="8" scroll-strategy="close">
+        <v-menu location="bottom end">
           <template #activator="{ props }">
             <v-btn v-bind="props" height="42" icon="mdi-dots-vertical" color="primary"
               class="text-none elevation-0 font-weight-bold rounded-lg" variant="outlined" />
           </template>
 
-          <v-list density="compact" class="py-0">
-            <v-list-item
-              v-for="item in menuItems"
-              :key="item.code"
-              @click="onMenuSelect(item)"
-              class="px-3"
-            >
-              <template #prepend>
-                <v-icon size="18">{{ item.prependIcon }}</v-icon>
-              </template>
+          <v-card>
+            <v-list class="py-0">
+              <v-list-item
+                v-for="item in menuItems"
+                :key="item.code"
+                @click="onMenuSelect(item)"
+                class="px-3"
+              >
+                <template #prepend>
+                  <v-icon size="18">{{ item.prependIcon }}</v-icon>
+                </template>
 
-              <v-list-item-title class="text-body-2">
-                {{ item.title }}
-              </v-list-item-title>
-            </v-list-item>
-          </v-list>
+                <v-list-item-title class="">
+                  {{ item.title }}
+                </v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-card>
         </v-menu>
 
 
@@ -239,22 +241,25 @@
     </div>
 
   </div>
-  <v-card  rounded="lg" elevation="2" class="pa-8 mx-6 card-box-shadow">
-            <h2 class="font-weight-bold mb-6">Recent Feedback</h2>
+  <v-card rounded="lg" elevation="2" class="pa-8 mx-6 card-box-shadow">
+            <h2 class="text-h5 font-weight-bold font-weight-bold mb-2">Seller Feedback</h2>
 
-            <div v-for="fb in feedback" :key="fb.id">
+            <v-row>
+              <v-col v-for="fb in feedback" :key="fb.id" cols="6">
+                <div >
               <v-card class="pa-6 mb-6 rounded-xl" variant="outlined" elevation="0">
                 <div class="d-flex justify-space-between">
                   <!-- Reviewer Info -->
                   <div class="d-flex">
                     <v-avatar size="46" class="mr-4" color="grey-lighten-3">
-                      <span class="text-subtitle-2 font-weight-medium">{{ getInitials(fb.name) }}</span>
+                      <!-- <span class="text-subtitle-2 font-weight-medium">{{ getInitials(fb.name) }}</span> -->
+                       {{ fb.RATER_FNAME.slice(0,1) + fb.RATER_LNAME.slice(0,1) }}
                     </v-avatar>
 
                     <div>
-                      <h4 class="font-weight-bold mb-1">{{ fb.name }}</h4>
-                      <span class="text-medium-emphasis text-body-2">{{ fb.date }}</span>
-
+                      <h4 class="font-weight-bold mb-1">{{ fb.RATER_FNAME + fb.RATER_LNAME || '-' }}</h4>
+                      <span class="text-medium-emphasis text-body-2 font-weight-bold">{{ moment(fb.CREATED_ON).format('Do MMM, YYYY') }}</span>
+                      
                       <!-- Tags -->
                       <div class="d-flex ga-2 mt-3">
                         <v-chip v-for="tag in fb.tags" :key="tag" size="small" variant="outlined"
@@ -266,18 +271,24 @@
                   </div>
 
                   <!-- Star Rating -->
-                  <v-rating v-model="fb.rating" readonly color="amber" size="22" />
+                   <div class="d-flex flex-column align-items-end">
+                    <v-rating v-model="fb.OVERALL_RATING" readonly color="amber" size="22" />
+                    <v-btn @click="openDispute(fb)" v-if="propertyObj.SELLER_USER_ID === authStore.userDetails.USER_ID" size="small" class="text-none mt-2 font-weight-bold rounded-lg" color="red" variant="tonal">Dispute Request <v-icon class="ml-2">mdi-alert</v-icon></v-btn>
+                   </div>
+                  
                 </div>
-
+                <!-- <v-divider></v-divider> -->
                 <!-- Feedback Text -->
                 <p class="mt-4 text-body-1 ml-15">
-                  {{ fb.comment }}
+                  {{ fb.PUBLIC_COMMENT_TEXT }}
                 </p>
               </v-card>
             </div>
+              </v-col>
+            </v-row>
+            
             <div class="d-flex justify-center">
-              <v-btn color="primary" class="text-none font-weight-bold" variant="text" size="large">View All
-                Reviews</v-btn>
+              <v-btn @click="viewMoreFeedback" :loading="viewMoreFeedbackLoader" color="primary" class="text-none font-weight-bold" variant="text" size="large">View more</v-btn>
             </div>
 
           </v-card>
@@ -538,7 +549,7 @@
   </v-dialog>
 
   <v-dialog fullscreen v-model="feedbackModal">
-    <div style="background-color: white;overflow-y: auto; background-color: #faf8f0;height: 100vh;">
+    <div style="background-color: white;overflow-y: auto; background-color: #faf8f0;height: 150vh;">
       <div style="position: fixed;background-color: rgb(256, 256, 256, 0.9);width: 100%;height: 150px;z-index: 1;">
         <v-container fluid class="px-10">
           <div class="d-flex">
@@ -547,13 +558,19 @@
                 <v-icon size="x-large" color="primary" class="mr-2">mdi-shield-sync-outline</v-icon>
                 <h2 class="font-weight-bold">QRFORINFO Trust System</h2>
               </div>
-              <v-row>
-                <v-col >
-                  <v-btn @click="selectedType = 'RatingForm'"
+              <!-- <v-row no-gutters> -->
+                <!-- <v-col> -->
+                  <v-btn v-if="selectedType !== 'DisputeForm' && authStore.userDetails.USER_ID !== propertyObj.SELLER_USER_ID" @click="selectedType = 'RatingForm'"
                     :color="selectedType == 'RatingForm' ? 'primary' : '#f5f5f4'"
                     class="text-none text-black rounded-lg elevation-0" size="large"
                     :variant="selectedType == 'RatingForm' ? 'elevated' : 'tonal'">1. Rating Form </v-btn>
-                </v-col>
+                <!-- </v-col> -->
+                <!-- <v-col> -->
+                  <v-btn v-if="selectedType !== 'DisputeForm'" @click="selectedType = 'RiskWarning'"
+                    :color="selectedType == 'RiskWarning' ? 'primary' : '#f5f5f4'"
+                    class="text-none text-black rounded-lg elevation-0 ml-2" size="large"
+                    :variant="selectedType == 'RiskWarning' ? 'elevated' : 'tonal'">2. Risk Warning </v-btn>
+                <!-- </v-col> -->
                 <!-- <v-col>
                   <v-btn @click="selectedType = 'PublicProfile'"
                     :color="selectedType == 'PublicProfile' ? 'primary' : '#f5f5f4'"
@@ -572,13 +589,13 @@
                     class="text-none text-black rounded-lg elevation-0" size="large"
                     :variant="selectedType == 'RiskWarning' ? 'elevated' : 'tonal'">4. Risk Warning </v-btn>
                 </v-col> -->
-                <v-col >
+                <!-- <v-col >
                   <v-btn @click="selectedType = 'DisputeForm'"
                     :color="selectedType == 'DisputeForm' ? 'primary' : '#f5f5f4'"
                     class="text-none text-black rounded-lg elevation-0" size="large"
                     :variant="selectedType == 'DisputeForm' ? 'elevated' : 'tonal'">2. Dispute Form </v-btn>
 
-                </v-col>
+                </v-col> -->
                 <!-- <v-col>
                   <v-btn @click="selectedType = 'AdminDashboard'"
                     :color="selectedType == 'AdminDashboard' ? 'primary' : '#f5f5f4'"
@@ -586,7 +603,7 @@
                     :variant="selectedType == 'AdminDashboard' ? 'elevated' : 'tonal'">6. Admin Dashboard </v-btn>
 
                 </v-col> -->
-              </v-row>
+              <!-- </v-row> -->
             </div>
             <v-spacer></v-spacer>
             <v-btn size="small" @click="feedbackModal = false" variant="tonal" icon="mdi-close"></v-btn>
@@ -600,16 +617,18 @@
         <v-card v-if="selectedType == 'RatingForm'" width="900" class="pa-8 card-box-shadow" rounded="xl">
           <!-- Status Badge -->
           <div class="text-center mb-6">
-            <v-chip color="green-lighten-4" text-color="green-darken-2" variant="flat">
+            <!-- <v-chip color="green-lighten-4" text-color="green-darken-2" variant="flat">
               Interaction Completed
-            </v-chip>
+            </v-chip> -->
           </div>
 
           <!-- Title -->
           <h2 class="text-center font-weight-bold">Rate Your Experience</h2>
 
           <p class="text-center mt-2 text-medium-emphasis">
-            With <strong>Michael Torres</strong> • Consultation on Dec 1, 2024
+            With <strong>{{propertyObj.SELLER_NAME}}</strong> 
+            
+            <!-- • Consultation on Dec 1, 2024 -->
           </p>
 
           <!-- Rating -->
@@ -628,16 +647,16 @@
             <p class="font-weight-bold mb-2">Quick Tags</p>
 
             <div class="d-flex flex-wrap ga-3">
-              <v-chip v-for="tag in tags" size="large" :key="tag" rounded variant="outlined"
+              <v-chip elevation="0" v-for="tag in tags" size="small" :key="tag" rounded :variant="selectedTags.includes(tag.value) ? 'elevated' : 'outlined'"
                 class="px-4 font-weight-bold" @click="toggleTag(tag)"
-                :color="selectedTags.includes(tag) ? 'primary' : ''">
-                {{ tag }}
+                :color="tag.type == 'positive' ? 'primary' : 'red'">
+                {{ tag.label }}
               </v-chip>
             </div>
 
-            <v-btn variant="text" color="red" class="mt-3 text-caption">
-              Report concerns (scam, abuse, payment issues)
-            </v-btn>
+            <!-- <v-btn variant="tonal" color="red" class="mt-3 text-caption">
+              Report Concerns (scam, abuse, payment issues)
+            </v-btn> -->
           </div>
 
           <!-- Public Feedback -->
@@ -661,7 +680,7 @@
 
           <!-- Actions -->
           <div class="d-flex justify-end mt-10">
-            <v-btn @click="giveRating" :loading="giveRatingLoader" color="primary" size="large" min-width="400" height="48"
+            <v-btn @click="giveRating" :disabled="!ratingState.PUBLIC_COMMENT || !ratingState.OVERALL_RATING || (selectedTags.length < 1)" :loading="giveRatingLoader" color="primary" size="large" min-width="400" height="48"
               class="elevation-0 text-none font-weight-bold" rounded="lg">
               Submit Rating
             </v-btn>
@@ -791,11 +810,11 @@
 
           
           <div class="text-body-1 font-weight-medium mb-2">Reason for Dispute *</div>
-          <v-select :items="reasons" placeholder="Select a reason..." variant="outlined" rounded="lg"
+          <v-select placeholder="Select a reason..." :items="['ABUSIVE','FALSE','PRIVACY']" v-model="reasonForDispute" variant="outlined" rounded="lg"
             class="mb-6"></v-select>
 
           <div class="text-body-1 font-weight-medium mb-2">Explanation *</div>
-          <v-textarea variant="outlined" rounded="lg"
+          <v-textarea v-model="explanationForDispute" variant="outlined" rounded="lg"
             placeholder="Please explain why this feedback should be removed. Include any relevant details or evidence..."
             class="mb-2" rows="5"></v-textarea>
 
@@ -814,13 +833,13 @@
 
           <!-- BUTTONS -->
           <div class="d-flex align-center justify-center mt-8">
-            <v-btn height="48" class="submit-btn text-none" rounded="lg">
+            <v-btn @click="submitDispute" :loading="submitDisputeLoader" :disabled="!reasonForDispute || !explanationForDispute" height="48" class="submit-btn text-none" rounded="lg">
               Submit Dispute
             </v-btn>
 
-            <v-btn variant="plain" class="ml-6 text-medium-emphasis">
+            <!-- <v-btn variant="plain" class="ml-6 text-medium-emphasis">
               Cancel
-            </v-btn>
+            </v-btn> -->
           </div>
 
 
@@ -832,6 +851,19 @@
 
 
     </div>
+  </v-dialog>
+
+  <v-dialog fullscreen v-model="profileDetailsModal">
+    <v-toolbar class="px-4">
+      <h5>Seller Details</h5>
+      <v-spacer></v-spacer>
+      <v-btn icon="mdi-close" @click="profileDetailsModal = false"></v-btn>
+    </v-toolbar>
+    <v-card class="">
+      <v-card-text>
+          <ProfileDetails otherProfile @triggerMSG="messageSeller" :user="{USER_ID : propertyObj.SELLER_USER_ID, SELLER_NAME : propertyObj.SELLER_NAME}" />
+      </v-card-text>
+    </v-card>
   </v-dialog>
 </template>
 
@@ -847,6 +879,7 @@ import DummyApartment from '@/assets/dummy_apartment.webp'
 import DummyLand from '@/assets/dummy_land.webp'
 import moment from 'moment';
 import GoogleMap from '@/components/GoogleMap.vue'
+import ProfileDetails from '@/components/Profile.vue'
 //..............................................................................
 const authStore = useAuthStore()
 const route = useRoute()
@@ -862,14 +895,19 @@ const showMenu = ref(false)
 const menuTarget = ref(null)
 const menuItems = [
   { title: 'Feedback', prependIcon: 'mdi-plus-circle', code: 'feedback' },
-  { title: 'Report an issue',prependIcon: 'mdi-plus-circle', code: 'report' },
+  // { title: 'Report an issue',prependIcon: 'mdi-plus-circle', code: 'report' },
+  { title: 'Risk Warnings',prependIcon: 'mdi-plus-circle', code: 'RiskWarning' },
 ]
 const onMenuSelect = (item)=>{
   if(item.code == 'feedback'){
     selectedType.value = 'RatingForm'
     feedbackModal.value = true
   }else if(item.code == 'report'){
-    selectedType.value = 'DisputeForm'
+    // selectedType.value = 'DisputeForm'
+    feedbackModal.value = true
+  }
+  else if(item.code == 'RiskWarning'){
+    selectedType.value = 'RiskWarning'
     feedbackModal.value = true
   }
 }
@@ -879,6 +917,53 @@ const router = useRouter()
 
 //------------------------------------------------------------------------------
 const selectedType = ref('RatingForm')
+
+const feedbackLimit = ref(10)
+const viewMoreFeedbackLoader = ref(false)
+const fetchSellerFeedback = async(id)=>{
+  viewMoreFeedbackLoader.value = true
+  
+  try {
+    let data = {
+      "RATED_USER_ID": id,
+      "OFFSET": 0,
+      "LIMIT": feedbackLimit.value
+    }
+    let res = await propertyService.getRatingsReceivedList(data)
+    if(res.data.ERR_CODE == 0){
+      let response = res.data.FetchData
+      feedback.value = response
+      viewMoreFeedbackLoader.value = false
+    }
+  } catch (error) {
+    viewMoreFeedbackLoader.value = false
+    console.log(error)
+  }
+}
+
+
+const reportedFeedbackList = ref([])
+const fetchReportedFeedbacks = async()=>{
+  try {
+    let data = {
+        "RATED_USER_ID": propertyObj.value.SELLER_USER_ID,
+        "RATER_USER_ID": 0,
+       
+        "HAS_SCAM_TAG": 1,
+        "FROM_DATE": "2025-01-01",
+        "TO_DATE": "2025-12-19",
+        "OFFSET": 0,
+        "LIMIT": 20
+    }
+    let res = await propertyService.getReportedFeedback(data)
+    if(res.data.ERR_CODE == 0){
+      let response = res.data
+      reportedFeedbackList.value = response.FetchData
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
 onMounted(() => {
   // if (authStore.isAuthenticated) {
   //   fetchStatistics()
@@ -892,7 +977,7 @@ onMounted(() => {
   }
 
   fetchPropertyDetail()
-
+ 
 })
 //------------------------------------------------------------------------------
 const updateStatistics = async () => {
@@ -972,6 +1057,8 @@ const fetchPropertyDetail = async () => {
     }
     propertyObj.value = res.data?.FetchData?.PROPERTY_DETAILS?.[0] || {}
     qrCodeValue.value = res.data?.FetchData?.PROPERTY_DETAILS?.[0] || {}
+    fetchSellerFeedback(propertyObj.value?.SELLER_USER_ID)
+    fetchReportedFeedbacks(propertyObj.value?.SELLER_USER_ID)
     updateStatistics()
   } catch (error) {
 
@@ -1180,9 +1267,24 @@ const gotoLogin = ()=>{
     router.push({ name: 'Login' })
   }
   }
+
+
+const profileDetailsModal = ref(false)
 const contactOwner = () => {
-  if (authStore.isAuthenticated) {
-    // router.push(`/messages?user_id=${propertyObj.SELLER_USER_ID}&property_id=${propertyObj.PROPERTY_ID}`)
+  profileDetailsModal.value = true
+  // if (authStore.isAuthenticated) {
+  //   oldMsges()
+  //   sender_id.value = authStore.getUserDetails.USER_ID
+  //   receiver_id.value = propertyObj.value.SELLER_USER_ID
+  //   property_id.value = propertyObj.value.PROPERTY_ID
+  //   msgDialog.value = true
+  // } else {
+  //   gotoLogin()
+  // }
+}
+
+const messageSeller = ()=>{
+   if (authStore.isAuthenticated) {
     oldMsges()
     sender_id.value = authStore.getUserDetails.USER_ID
     receiver_id.value = propertyObj.value.SELLER_USER_ID
@@ -1257,21 +1359,68 @@ const openFeedback = () => {
 const rating = ref(0);
 
 const tags = [
-  "On time",
-  "Responsive",
-  "Polite",
-  "Accurate info",
-  "Helpful",
-  "Professional",
+  {
+    label: 'Suspected Scam',
+    value: 'SUSPECTED_SCAM',
+    type: 'negative'
+  },
+  {
+    label: 'Off-platform Payment',
+    value: 'OFF_PLATFORM_PAYMENT',
+    type: 'negative'
+  },
+  {
+    label: 'Payment Issue',
+    value: 'PAYMENT_ISSUE',
+    type: 'negative'
+  },
+  {
+    label: 'Fake Information',
+    value: 'FAKE_INFO',
+    type: 'negative'
+  },
+
+  // ✅ Positive feedback tags
+  {
+    label: 'On Time',
+    value: 'ON_TIME',
+    type: 'positive'
+  },
+  {
+    label: 'Responsive',
+    value: 'RESPONSIVE',
+    type: 'positive'
+  },
+  {
+    label: 'Polite',
+    value: 'POLITE',
+    type: 'positive'
+  },
+  {
+    label: 'Accurate Info',
+    value: 'ACCURATE_INFO',
+    type: 'positive'
+  },
+  {
+    label: 'Helpful',
+    value: 'HELPFUL',
+    type: 'positive'
+  },
+  {
+    label: 'Professional',
+    value: 'PROFESSIONAL',
+    type: 'positive'
+  }
+
 ];
 
 const selectedTags = ref([]);
 
 const toggleTag = (tag) => {
-  if (selectedTags.value.includes(tag)) {
-    selectedTags.value = selectedTags.value.filter((t) => t !== tag);
+  if (selectedTags.value.includes(tag.value)) {
+    selectedTags.value = selectedTags.value.filter((t) => t !== tag.value);
   } else {
-    selectedTags.value.push(tag);
+    selectedTags.value.push(tag.value);
   }
 };
 
@@ -1298,24 +1447,7 @@ const profile = ref({
 const verified = ["Email", "Phone", "Payment"];
 
 const feedback = ref([
-  {
-    id: 1,
-    name: "Alex Johnson",
-    date: "2 days ago",
-    tags: ["On time", "Professional", "Helpful"],
-    rating: 5,
-    comment:
-      "Excellent communication throughout. Very knowledgeable and provided accurate information quickly.",
-  },
-  {
-    id: 2,
-    name: "Maria Garcia",
-    date: "1 week ago",
-    tags: ["Responsive", "Polite"],
-    rating: 5,
-    comment:
-      "Very polite and very responsive. Smooth interaction overall.",
-  },
+  
 ]);
 const getInitials = (n) => n.split(" ").map((v) => v[0]).join("");
 
@@ -1385,7 +1517,7 @@ const giveRating = async()=>{
       "INTERACTION_ID": propertyObj.value.PROPERTY_ID,
       "RATER_USER_ID": authStore.userDetails.USER_ID,
       "RATED_USER_ID": propertyObj.value.SELLER_USER_ID,
-      "OVERALL_RATING": 5,
+      "OVERALL_RATING": ratingState.value.OVERALL_RATING,
       "PUBLIC_TAGS_JSON": selectedTags.value && selectedTags.value.length > 1 ? JSON.stringify(selectedTags.value) : '',
       "PUBLIC_COMMENT": ratingState.value.PUBLIC_COMMENT,
       "PRIVATE_COMMENT": ratingState.value.PRIVATE_COMMENT
@@ -1397,6 +1529,7 @@ const giveRating = async()=>{
             autoClose: 4000,
           });
       feedbackModal.value = false
+      fetchSellerFeedback(propertyObj.value?.SELLER_USER_ID)
       giveRatingLoader.value = false
     }else{
       toast.info(res.data.MESSAGE, {
@@ -1409,6 +1542,51 @@ const giveRating = async()=>{
     giveRatingLoader.value = false
   }
 }
+
+
+const viewMoreFeedback = ()=>{
+
+  feedbackLimit.value += 10
+  fetchSellerFeedback(propertyObj.value?.SELLER_USER_ID)
+}
+
+const selectedRating = ref()
+const openDispute = (data)=>{
+  selectedRating.value = data
+  selectedType.value = 'DisputeForm'
+  feedbackModal.value = true
+}
+
+
+const reasonForDispute = ref()
+const explanationForDispute = ref()
+const submitDisputeLoader = ref(false)
+const submitDispute = async()=>{
+  submitDisputeLoader.value = true
+  try {
+    let data = {
+        "RATING_ID": selectedRating.value?.RATING_ID,
+        "DISPUTING_USER_ID": selectedRating.value?.RATED_USER_ID,
+        "REASON_CODE": reasonForDispute.value,
+        "DETAILS": explanationForDispute.value
+    }
+    let res = await propertyService.createRatingDispute(data)
+    if(res.data.ERR_CODE == 0){
+      let response = res.data
+      submitDisputeLoader.value = false
+      reasonForDispute.value = ''
+      explanationForDispute.value = ''
+      toast.success('Dispute Submitted', {
+            autoClose: 4000,
+          });
+      feedbackModal.value = false
+    }
+  } catch (error) {
+    submitDisputeLoader.value = false
+    console.log(error)
+  }
+}
+
 </script>
 
 <style scoped lang="scss">
