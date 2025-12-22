@@ -9,7 +9,7 @@
         <v-col cols="12" md="9">
           <div class="position-relative d-flex align-center">
             <v-text-field v-model="searchVal" placeholder="Search Properties..." hide-details variant="solo-filled" rounded="lg"></v-text-field>
-            <v-btn @click="searchNow" color="primary" class="text-none rounded-lg elevation-0 font-weight-bold position-absolute top-0 right-0 mt-2 mr-2" height="42"> <v-icon size="large" class="mr-2 mt-1">mdi-magnify</v-icon> Search</v-btn>
+            <!-- <v-btn @click="searchNow" color="primary" class="text-none rounded-lg elevation-0 font-weight-bold position-absolute top-0 right-0 mt-2 mr-2" height="42"> <v-icon size="large" class="mr-2 mt-1">mdi-magnify</v-icon> Search</v-btn> -->
           </div>
         </v-col>
         <v-col cols="12" md="3">
@@ -103,6 +103,17 @@ const getProperties = async () => {
     isLoading.value = false;
   }
 }
+
+watch(searchVal,(val)=>{
+  console.log(val,'val')
+  if(val && val.length > 2){
+    searchNow()
+  }else if(!val) {
+    sessionStorage.clear()
+    getProperties()
+  }
+})
+
 const searchNow = () => {
   // currentPage.value = 1
   sessionStorage.setItem('PAGE_NO', 0)
@@ -116,12 +127,7 @@ watch(currentPage, (val) => {
   getProperties()
 })
 
-watch(searchVal, (val) => {
-  if (!val) {
-    sessionStorage.clear()
-    getProperties()
-  }
-})
+
 
 
 </script>

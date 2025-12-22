@@ -17,7 +17,7 @@
             </div>
 
             <template v-if="!isVerfiyOTP">
-              <h2 class="welcome text-center">Welcome back</h2>
+              <h2 class="welcome text-center">Sign In</h2>
               <p class="subtitle text-center mb-1">Don’t have an account ? <span class="link text-primary" @click="gotoSignUp">Sign up</span></p>
               <p class="subtitle text-center ">Go to <span class="link text-primary" @click="$router.push({ name: 'BuyerLanding' })">Property Listing</span></p>
             </template>

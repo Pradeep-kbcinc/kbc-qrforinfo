@@ -77,30 +77,71 @@
                   v-for="(image, i) in propertyObj.IMAGES" :key="i">
                   <div v-if="image?.IMAGE_URL">
                     <v-hover v-slot="{ isHovering, props }">
-                      <v-img v-bind="props"
-                        :src="image?.IMAGE_URL ? image.IMAGE_URL : `@/assets/property_placeholder.webp`"
-                        lazy-src="@/assets/property_placeholder.webp" cover height="250" class="rounded-lg">
-                        <v-btn :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'"
-                          class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 left-0 mt-4 ms-4"
-                          height="" density="comfortable">{{ propertyObj.LISTING_TYPE }}</v-btn>
-                        <template #placeholder>
-                          <div class="d-flex fill-height align-center justify-center"
-                            style="background-color: #f2f2f2;">
-                            <v-progress-circular indeterminate color="primary"></v-progress-circular>
-                          </div>
-                        </template>
-                        <v-overlay :model-value="!!isHovering" class="align-center justify-center" scrim="" contained>
-                          <v-btn variant="flat" class="text-none font-weight-bold">See Full Image</v-btn>
-                        </v-overlay>
-                      </v-img>
-                    </v-hover>
+                      <div class="position-relative rounded-lg overflow-hidden" style="height:250px">
 
+                        <!-- VIDEO -->
+                         
+                        <video
+                          v-if="isVideo(image?.IMAGE_URL)"
+                          v-bind="props"
+                          :src="image.IMAGE_URL"
+                          muted
+                          loop
+                          playsinline
+                          autoplay
+                          class="w-100 h-100 object-cover"
+                          
+                        ></video>
+
+                        <!-- IMAGE -->
+                        <v-img
+                          v-else
+                          v-bind="props"
+                          :src="image?.IMAGE_URL || '@/assets/property_placeholder.webp'"
+                          lazy-src="@/assets/property_placeholder.webp"
+                          cover
+                          height="250"
+                          class="rounded-lg"
+                        >
+                          <template #placeholder>
+                            <div
+                              class="d-flex fill-height align-center justify-center"
+                              style="background-color:#f2f2f2"
+                            >
+                              <v-progress-circular indeterminate color="primary" />
+                            </div>
+                          </template>
+                        </v-img>
+
+                        <!-- LISTING TYPE BADGE -->
+                        <v-btn
+                          :color="propertyObj.LISTING_TYPE === 'FOR SALE' ? 'success' : 'primary'"
+                          class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 left-0 mt-4 ms-4"
+                          density="comfortable"
+                        >
+                          {{ propertyObj.LISTING_TYPE }}
+                        </v-btn>
+
+                        <!-- HOVER OVERLAY -->
+                        <!-- <v-overlay
+                          :model-value="isHovering"
+                          contained
+                          class="align-center justify-center"
+                        >
+                          <v-btn variant="flat" class="text-none font-weight-bold">
+                            See Full {{ isVideo(image?.IMAGE_URL) ? 'Video' : 'Image' }}
+                          </v-btn>
+                        </v-overlay> -->
+
+                      </div>
+                    </v-hover>
                   </div>
                   <v-img v-bind="props" v-else cover src="@/assets/property_placeholder.webp" alt="" />
 
 
                 </v-carousel-item>
               </v-carousel>
+
               <v-carousel @click.stop="
                 $router.push({
                   path: route.name !== 'BuyProperties'
@@ -299,43 +340,48 @@
       <v-sheet class="overflow-hidden" rounded="xl">
         <v-carousel v-model="currentIndex" direction="vertical" show-arrows progress="warning" vertical-arrows="left"
           vertical-delimiters="right">
-          <v-carousel-item v-for="(item, i) in selectedImageArr" :key="i" :src="item.IMAGE_URL" contain>
+          <v-carousel-item
+    v-for="(item, i) in selectedImageArr"
+    :key="i"
+  >
+    <!-- IMAGE -->
+    <v-img
+      v-if="!isVideo(item.IMAGE_URL)"
+      :src="item.IMAGE_URL"
+      cover
+      height="100%"
+    />
 
-            <div class="d-flex justify-end">
+    <!-- VIDEO -->
+    <video
+      v-else
+      :src="item.IMAGE_URL"
+      controls
+      autoplay
+      muted
+      loop
+      playsinline
+      style="width: 100%; height: 100%; object-fit: contain;"
+    />
 
-              <v-btn @click="deleteImage(item)" v-if="propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID"
-                prependIcon="mdi-trash-can" class="text-none rounded-lg elevation-0 font-weight-bold ms-auto mt-2 mr-2"
-                color="red" height="42">Delete Image</v-btn>
-            </div>
-          </v-carousel-item>
-          <!-- <v-overlay
-          :scrim="false"
-          content-class="w-100 h-100 d-flex flex-column align-center justify-space-between pointer-pass-through py-3"
-          contained
-          model-value
-          no-click-animation
-          persistent
-        > -->
-          <!-- <v-scroll-x-transition mode="out-in" appear>
-            <v-sheet
-              :key="currentIndex"
-              rounded="xl"
-            >
-              <v-list-item
-                :prepend-avatar="`https://randomuser.me/api/portraits/${currentItem.avatarId}.jpg`"
-                :subtitle="currentItem.subtitle"
-                :title="currentItem.authorName"
-                class="pa-1 pr-6"
-              ></v-list-item>
-            </v-sheet>
-          </v-scroll-x-transition> -->
-          <!-- <v-chip
-            :text="`${ currentIndex + 1 } / ${items.length }`"
-            color="#eee"
-            size="small"
-            variant="flat"
-          ></v-chip> -->
-          <!-- </v-overlay> -->
+    <!-- DELETE BUTTON -->
+    <div class="d-flex justify-end position-absolute top-0 end-0 pa-2">
+      <v-btn
+        v-if="propertyObj?.SELLER_USER_ID === authStore?.userDetails?.USER_ID"
+        @click="deleteImage(item)"
+        prepend-icon="mdi-trash-can"
+        class="text-none rounded-lg elevation-0 font-weight-bold"
+        color="red"
+        height="42"
+      >
+        Delete Image
+      </v-btn>
+    </div>
+  </v-carousel-item>
+         
+
+          
+        
         </v-carousel>
       </v-sheet>
     </v-defaults-provider>
@@ -1057,8 +1103,11 @@ const fetchPropertyDetail = async () => {
     }
     propertyObj.value = res.data?.FetchData?.PROPERTY_DETAILS?.[0] || {}
     qrCodeValue.value = res.data?.FetchData?.PROPERTY_DETAILS?.[0] || {}
-    fetchSellerFeedback(propertyObj.value?.SELLER_USER_ID)
-    fetchReportedFeedbacks(propertyObj.value?.SELLER_USER_ID)
+    if(authStore.isAuthenticated){
+      fetchSellerFeedback(propertyObj.value?.SELLER_USER_ID)
+      fetchReportedFeedbacks(propertyObj.value?.SELLER_USER_ID)
+    }
+   
     updateStatistics()
   } catch (error) {
 
@@ -1529,7 +1578,9 @@ const giveRating = async()=>{
             autoClose: 4000,
           });
       feedbackModal.value = false
+      if(authStore.isAuthenticated){
       fetchSellerFeedback(propertyObj.value?.SELLER_USER_ID)
+      }
       giveRatingLoader.value = false
     }else{
       toast.info(res.data.MESSAGE, {
@@ -1585,6 +1636,10 @@ const submitDispute = async()=>{
     submitDisputeLoader.value = false
     console.log(error)
   }
+}
+
+const isVideo = (url = '') => {
+  return /\.(mp4|webm|ogg|mov)$/i.test(url)
 }
 
 </script>
@@ -1643,5 +1698,10 @@ const submitDispute = async()=>{
 .report-card {
   background: white;
   border: 1px solid #eee;
+}
+
+.object-cover {
+  object-fit: contain!important;
+
 }
 </style>

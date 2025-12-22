@@ -63,10 +63,10 @@
                 class="email-field mb-0 mt-n2 pb-0" density="compact"></v-text-field>
 
              
-                <v-number-input control-variant="hidden" prefix="+91" :error-messages="v$.MOBILE_PHONE.$errors.map(e => e.$message)"
+                <v-text-field type="number" control-variant="hidden" prefix="+91" :error-messages="v$.MOBILE_PHONE.$errors.map(e => e.$message)"
                   @blur="v$.MOBILE_PHONE.$touch" @input="v$.MOBILE_PHONE.$touch" v-model="propertyObj.MOBILE_PHONE"
                   label="Phone Number" variant="outlined" rounded="xl" class="email-field mb-0 pb-0 mt-1"
-                  density="compact"></v-number-input>
+                  density="compact"></v-text-field>
 
                 <v-text-field :error-messages="v$.EMAIL.$errors.map(e => e.$message)" @blur="v$.EMAIL.$touch"
                   v-model="propertyObj.EMAIL" label="Email" variant="outlined" rounded="xl"
@@ -89,10 +89,8 @@
 
         <v-col cols="12" md="6">
           <video autoplay muted loop playsinline class="tw-relative tw-size-full tw-rounded-2xl tw-object-cover">
-            <source src="https://static.heygen.ai/prod/movio/public/resource/d5a3ba28e5d04d9987673d35d50ee3d0.webm"
-              type="video/webm">
-            <source src="https://dynamic.heygen.ai/prod/movio/public/resource/7246d7c9786c49cfb03c77d2d4d98c6b.mp4"
-              type="video/mp4">
+            <source src="@/assets/qrVideo.mp4" type="video/webm">
+            <source src="@/assets/qrVideo.mp4" type="video/mp4">
           </video>
 
         </v-col>
@@ -166,7 +164,7 @@ const checkCredentials = async () => {
     btnLoader.value = true
     try {
       let data = {
-        USERNAME: propertyObj.value.MOBILE_PHONE
+        USERNAME: propertyObj.value.MOBILE_PHONE.toString()
       }
       let res = await propertyService.verifyUser(data)
       if (res.data.FetchData.ERR_FLG == 0) {

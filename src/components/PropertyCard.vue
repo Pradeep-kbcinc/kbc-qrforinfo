@@ -16,7 +16,19 @@
       <v-carousel v-if="propertyObj.IMAGES && propertyObj.IMAGES?.length > 0" hide-delimiters
         :show-arrows="propertyObj.IMAGES?.length > 1" height="250">
         <v-carousel-item cover v-for="(image, i) in propertyObj.IMAGES" :key="i">
-          <v-img v-if="image?.IMAGE_URL"
+
+          <video
+          v-if="isVideo(image?.IMAGE_URL)"
+          :src="image.IMAGE_URL"
+          controls
+          autoplay
+          muted
+          loop
+          playsinline
+          style="width: 100%; height: 100%; object-fit: cover;"
+        />
+
+          <v-img v-else-if="!isVideo(image?.IMAGE_URL)"
             :src="image?.IMAGE_URL ? image.IMAGE_URL : `@/assets/property_placeholder.webp`"
             lazy-src="@/assets/property_placeholder.webp" cover height="250" class="rounded-lg">
             <template #placeholder>
@@ -25,6 +37,11 @@
               </div>
             </template>
           </v-img>
+
+
+          
+
+
           <v-img v-else cover src="@/assets/property_placeholder.webp" alt="" />
         </v-carousel-item>
       </v-carousel>
@@ -154,6 +171,10 @@ onMounted(async()=>{
     btn.addEventListener('click', e => e.stopPropagation())
   })
 })
+
+const isVideo = (url = '') => {
+  return /\.(mp4|webm|ogg|mov)$/i.test(url)
+}
 </script>
 
 <style scoped>
