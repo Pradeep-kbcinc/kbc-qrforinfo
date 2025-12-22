@@ -73,7 +73,7 @@
               <v-carousel @click.stop v-if="propertyObj.IMAGES && propertyObj.IMAGES?.length > 0" hide-delimiters
                 :show-arrows="propertyObj.IMAGES?.length > 1" height="250">
 
-                <v-carousel-item class="pointer" @click="previewImages(propertyObj.IMAGES)" cover
+                <v-carousel-item class="pointer" @click="previewImages(propertyObj.IMAGES)" contain
                   v-for="(image, i) in propertyObj.IMAGES" :key="i">
                   <div v-if="image?.IMAGE_URL">
                     <v-hover v-slot="{ isHovering, props }">
@@ -99,7 +99,7 @@
                           v-bind="props"
                           :src="image?.IMAGE_URL || '@/assets/property_placeholder.webp'"
                           lazy-src="@/assets/property_placeholder.webp"
-                          cover
+                          contain
                           height="250"
                           class="rounded-lg"
                         >
@@ -489,10 +489,22 @@
 
         <v-carousel class="rounded-xl" @click.stop v-if="propertyObj.IMAGES && propertyObj.IMAGES?.length > 0"
           hide-delimiters :show-arrows="propertyObj.IMAGES?.length > 1" height="250">
-          <v-carousel-item cover v-for="(image, i) in propertyObj.IMAGES" :key="i">
+          <v-carousel-item contain v-for="(image, i) in propertyObj.IMAGES" :key="i">
+
+            <video
+              v-if="isVideo(image.IMAGE_URL)"
+              :src="image.IMAGE_URL"
+              controls
+              autoplay
+              muted
+              loop
+              playsinline
+              style="width: 100%; height: 100%; object-fit: contain;"
+            />
+
             <v-img v-if="image?.IMAGE_URL"
               :src="image?.IMAGE_URL ? image.IMAGE_URL : `@/assets/property_placeholder.webp`"
-              lazy-src="@/assets/property_placeholder.webp" cover height="250" class="rounded-lg">
+              lazy-src="@/assets/property_placeholder.webp" contain height="250" class="rounded-lg">
               <v-btn :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'"
                 class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 left-0 mt-4 ms-4"
                 height="" density="comfortable">{{ propertyObj.LISTING_TYPE }}</v-btn>
@@ -505,6 +517,7 @@
             <v-img v-else cover src="@/assets/property_placeholder.webp" alt="" />
           </v-carousel-item>
         </v-carousel>
+
         <v-carousel class="rounded-xl" @click.stop="
           $router.push({
             path: route.name !== 'BuyProperties'
@@ -516,7 +529,7 @@
           })
           " v-else hide-delimiters :show-arrows="propertyObj.IMAGES?.length > 1" height="250">
           <v-carousel-item>
-            <v-img cover :src="findImageType(propertyObj.PROPERTY_KIND)" alt="">
+            <v-img contain :src="findImageType(propertyObj.PROPERTY_KIND)" alt="">
               <v-btn v-if="propertyObj.LISTING_TYPE"
                 :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'"
                 class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 left-0 mt-4 ms-4"
@@ -540,7 +553,7 @@
             <v-col>
               <v-btn @click="warningPopUp = false" rounded="xl" height="48" color="secondary" width="100%"
                 class="text-none elevation-0 font-weight-bold">
-                <v-icon class="mr-1" color="">mdi-web</v-icon> View Detail
+                <v-icon class="mr-1" color="">mdi-web</v-icon> View Details
               </v-btn>
             </v-col>
             <v-col>
