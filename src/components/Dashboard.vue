@@ -111,8 +111,8 @@
                 <v-list-item-title class="font-weight-bold text-grey-darken-3">{{ propertyObj.TITLE
                   }}</v-list-item-title>
                 <!-- <v-list-item-subtitle>{{ property.location }}</v-list-item-subtitle> -->
-                <v-list-item-subtitle v-if="(propertyObj.IS_ADDRESS_PRIVATE_FLG == 1) && propertyObj.ADDRESS_LINE1" class="mt-1"><v-icon>mdi-map-marker-outline</v-icon>{{ propertyObj.ADDRESS_LINE1 }}</v-list-item-subtitle>
-
+                <v-list-item-subtitle v-if="(propertyObj.IS_ADDRESS_PRIVATE_FLG == 1) && propertyObj.ADDRESS_LINE1" class="mt-1"><v-icon color="black">mdi-map-marker</v-icon>{{ propertyObj.ADDRESS_LINE1 }}</v-list-item-subtitle>
+                 <p class="mt-2">Created Date : {{ moment(propertyObj.CREATED_ON).format('Do MMM, YYYY') }}</p> 
                 <div class="text-primary font-weight-bold text-subtitle-1">{{ propertyObj.price }}</div>
 
                 <template #append>
@@ -343,6 +343,7 @@ const getProperties = async () => {
 const selectedPropertyId = ref(null)
 const selectedData = ref()
 const openModal = (data) => {
+  console.log(data,'data')
   selectedPropertyId.value = data.PROPERTY_ID
   selectedData.value = data
   uploadImageModal.value = true

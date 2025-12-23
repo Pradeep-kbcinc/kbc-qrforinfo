@@ -26,6 +26,9 @@
       <div v-if="authStore.isAuthenticated" class="d-flex ga-4">
 
         <v-btn v-if="propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID"
+          @click="addImage(propertyObj)" variant="outlined" prependIcon="mdi-trash-can"
+          class="text-none rounded-lg elevation-0 font-weight-bold" color="primary" height="42">Add Image</v-btn>
+        <v-btn v-if="propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID"
           @click="deleteProperty(propertyObj)" variant="outlined" prependIcon="mdi-trash-can"
           class="text-none rounded-lg elevation-0 font-weight-bold" color="red" height="42">Delete</v-btn>
         <v-btn v-if="propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID"
@@ -83,7 +86,7 @@
                          
                         <video
                           v-if="isVideo(image?.IMAGE_URL)"
-                          v-bind="props"
+                         
                           :src="image.IMAGE_URL"
                           muted
                           loop
@@ -96,7 +99,7 @@
                         <!-- IMAGE -->
                         <v-img
                           v-else
-                          v-bind="props"
+                          
                           :src="image?.IMAGE_URL || '@/assets/property_placeholder.webp'"
                           lazy-src="@/assets/property_placeholder.webp"
                           contain
@@ -136,7 +139,7 @@
                       </div>
                     </v-hover>
                   </div>
-                  <v-img v-bind="props" v-else cover src="@/assets/property_placeholder.webp" alt="" />
+                  <v-img v-else cover src="@/assets/property_placeholder.webp" alt="" />
 
 
                 </v-carousel-item>
@@ -282,12 +285,14 @@
     </div>
 
   </div>
-  <v-card rounded="lg" elevation="2" class="pa-8 mx-6 card-box-shadow">
-            <h2 class="text-h5 font-weight-bold font-weight-bold mb-2">Seller Feedback</h2>
 
+  <v-row no-gutter>
+    <v-col cols="12" md="8">
+      <v-card rounded="lg" elevation="2" class="pa-8 mx-6 card-box-shadow">
+            <h2 class="text-h5 font-weight-bold font-weight-bold mb-2">Property Feedback</h2>
             <v-row>
-              <v-col v-for="fb in feedback" :key="fb.id" cols="6">
-                <div >
+              <v-col v-if="feedback && feedback.length > 0" v-for="fb in feedback" :key="fb.id" cols="12" md="6">
+               
               <v-card class="pa-6 mb-6 rounded-xl" variant="outlined" elevation="0">
                 <div class="d-flex justify-space-between">
                   <!-- Reviewer Info -->
@@ -324,15 +329,76 @@
                   {{ fb.PUBLIC_COMMENT_TEXT }}
                 </p>
               </v-card>
-            </div>
+            
+              </v-col>
+              <v-col v-else cols="12 d-flex justify-center flex-column align-center">
+                <v-img width="150" src="@/assets/noData.png"></v-img>
+                <p>No Data Found</p>
               </v-col>
             </v-row>
-            
-            <div class="d-flex justify-center">
+            <div v-if="feedback && feedback.length > 0" class="d-flex justify-center">
               <v-btn @click="viewMoreFeedback" :loading="viewMoreFeedbackLoader" color="primary" class="text-none font-weight-bold" variant="text" size="large">View more</v-btn>
             </div>
+  </v-card>
+    </v-col>
+    <v-col cols="12" md="4">
+      <v-card rounded="lg" elevation="2" class="pa-8 card-box-shadow">
+            <h2 class="text-h5 font-weight-bold font-weight-bold mb-2">Seller Feedback</h2>
+            <v-row>
+              <v-col v-if="feedback && feedback.length > 0" v-for="fb in feedback" :key="fb.id" cols="12">
+               
+              <v-card class="pa-6 mb-6 rounded-xl" variant="outlined" elevation="0">
+                <div class="d-flex justify-space-between">
+                  <!-- Reviewer Info -->
+                  <div class="d-flex">
+                    <v-avatar size="46" class="mr-4" color="grey-lighten-3">
+                      <!-- <span class="text-subtitle-2 font-weight-medium">{{ getInitials(fb.name) }}</span> -->
+                       {{ fb.RATER_FNAME.slice(0,1) + fb.RATER_LNAME.slice(0,1) }}
+                    </v-avatar>
 
-          </v-card>
+                    <div>
+                      <h4 class="font-weight-bold mb-1">{{ fb.RATER_FNAME + fb.RATER_LNAME || '-' }}</h4>
+                      <span class="text-medium-emphasis text-body-2 font-weight-bold">{{ moment(fb.CREATED_ON).format('Do MMM, YYYY') }}</span>
+                      
+                      <!-- Tags -->
+                      <div class="d-flex ga-2 mt-3">
+                        <v-chip v-for="tag in fb.tags" :key="tag" size="small" variant="outlined"
+                          color="grey-lighten-2">
+                          {{ tag }}
+                        </v-chip>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Star Rating -->
+                   <div class="d-flex flex-column align-items-end">
+                    <v-rating v-model="fb.OVERALL_RATING" readonly color="amber" size="22" />
+                    <v-btn @click="openDispute(fb)" v-if="propertyObj.SELLER_USER_ID === authStore.userDetails.USER_ID" size="small" class="text-none mt-2 font-weight-bold rounded-lg" color="red" variant="tonal">Dispute Request <v-icon class="ml-2">mdi-alert</v-icon></v-btn>
+                   </div>
+                  
+                </div>
+                <!-- <v-divider></v-divider> -->
+                <!-- Feedback Text -->
+                <p class="mt-4 text-body-1 ml-15">
+                  {{ fb.PUBLIC_COMMENT_TEXT }}
+                </p>
+              </v-card>
+            
+              </v-col>
+              <v-col v-else cols="12 d-flex justify-center flex-column align-center">
+                <v-img width="150" src="@/assets/noData.png"></v-img>
+                <p>No Data Found</p>
+              </v-col>
+            </v-row>
+            <div v-if="feedback && feedback.length > 0" class="d-flex justify-center">
+              <v-btn @click="viewMoreFeedback" :loading="viewMoreFeedbackLoader" color="primary" class="text-none font-weight-bold" variant="text" size="large">View more</v-btn>
+            </div>
+      </v-card>
+    </v-col>
+  </v-row>
+  
+  
+
 
   <v-dialog max-width="1000" v-model="imagePreviewModal">
     <!-- <v-toolbar class="rounded-t-xl " flat density="compact"></v-toolbar> -->
@@ -549,21 +615,20 @@
                 color="primary">mdi-map-marker</v-icon> {{ propertyObj.STATE }}</v-btn>
           </div>
           <v-divider class="my-4"></v-divider>
-          <v-row>
-            <v-col>
+         
               <v-btn @click="warningPopUp = false" rounded="xl" height="48" color="secondary" width="100%"
                 class="text-none elevation-0 font-weight-bold">
                 <v-icon class="mr-1" color="">mdi-web</v-icon> View Details
               </v-btn>
-            </v-col>
-            <v-col>
-
-              <v-btn @click="openMobileApp" rounded="xl" height="48" color="primary" width="100%"
-                class="text-none elevation-0 font-weight-bold">
-                <v-icon class="mr-1" color="">mdi-cellphone</v-icon> Open in App
+              <v-btn variant="tonal" @click="openMobileApp('android')" rounded="xl" height="48" width="100%"
+                class="text-none font-weight-bold my-2 drop-shadow">
+                <v-icon class="mr-1" size="28" color="green">mdi-android</v-icon> Open For Android
               </v-btn>
-            </v-col>
-          </v-row>
+              <v-btn variant="tonal" @click="openMobileApp" rounded="xl" height="48" color="primary" width="100%"
+                class="text-none elevation-0 font-weight-bold">
+                <v-icon class="mr-1"   size="28" color="black">mdi-apple</v-icon> Open in App
+              </v-btn>
+            
         </div>
       </div>
     </v-card>
@@ -924,6 +989,60 @@
       </v-card-text>
     </v-card>
   </v-dialog>
+
+  <v-dialog max-width="800" v-model="uploadImageModal">
+    <v-toolbar density="compact" color="" rounded="t-lg" class="px-4">
+      <h6>Upload Images</h6>
+      <v-spacer></v-spacer>
+      <v-btn @click="uploadImageModal = false" icon>
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
+
+    </v-toolbar>
+    <v-card rounded="t-0 b-lg">
+      <v-card-text>
+        <h6 class="">Available Images : </h6>
+        <div class="">
+          <div>
+            <v-row v-if="selectedData.IMAGES && selectedData.IMAGES.length > 0">
+              <v-col cols="3" v-for="(item,ind) in selectedData.IMAGES" :key="ind">
+
+                <div v-if="isVideo(item.IMAGE_URL)">
+                  <v-btn icon size="x-small" :loading="deleteImageLoader[ind]" @click="deleteNewImage(item, ind)">
+                    <v-icon color="red">mdi-delete</v-icon>
+                  </v-btn> 
+                  <video
+                          
+                          
+                          :src="item.IMAGE_URL"
+                          muted
+                          loop
+                          playsinline
+                          autoplay
+                          class="w-100 h-100 object-cover"
+                          
+                        ></video>
+                </div>
+                
+
+                <v-img v-else height="200" lazy-src="@/assets/property_placeholder.webp" contain class="rounded-lg" :src="item.IMAGE_URL">
+                  <v-btn icon size="x-small" :loading="deleteImageLoader[ind]" @click="deleteNewImage(item, ind)">
+                    <v-icon color="red">mdi-delete</v-icon>
+                  </v-btn> 
+                </v-img>
+              </v-col>
+            </v-row>
+            <p v-else class="text-center mb-4">No images added yet</p>
+          </div>
+        </div>
+        <v-divider class="mb-4"></v-divider>
+        <v-file-upload density="compact" v-model="addedImagesArr" title="Browse Or Drag and Drop Here" clearable multiple></v-file-upload>
+        <div class="d-flex justify-end mt-4">
+          <v-btn size="large" class="text-none rounded-lg" @click="uploadImages" :loading="uploadImagesLoader" elevation="0" min-width="200" color="primary">Save</v-btn>
+        </div>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup>
@@ -1007,10 +1126,9 @@ const fetchReportedFeedbacks = async()=>{
     let data = {
         "RATED_USER_ID": propertyObj.value.SELLER_USER_ID,
         "RATER_USER_ID": 0,
-       
         "HAS_SCAM_TAG": 1,
-        "FROM_DATE": "2025-01-01",
-        "TO_DATE": "2025-12-19",
+        "FROM_DATE": moment().startOf('year').format('YYYY-MM-DD'),
+        "TO_DATE": moment().format('YYYY-MM-DD'),
         "OFFSET": 0,
         "LIMIT": 20
     }
@@ -1184,8 +1302,17 @@ const shareAction = async (propertyObj) => {
   window.open(shareUrl, '_blank');
 }
 //------------------------------------------------------------------------------
-const openMobileApp = () => {
-  window.open('https://apps.apple.com/in/app/school/id1528665599')
+const openMobileApp = (type) => {
+  if(type == 'android'){
+    window.open('https://play.google.com/store/apps/details?id=com.qrinfo.app')
+  }
+  // else if(){
+
+  // }
+  else{
+    window.open('https://apps.apple.com/in/app/school/id1528665599')
+  }
+  
 }
 //------------------------------------------------------------------------------
 const panel = ref([0])
@@ -1653,6 +1780,71 @@ const submitDispute = async()=>{
 
 const isVideo = (url = '') => {
   return /\.(mp4|webm|ogg|mov)$/i.test(url)
+}
+
+
+const selectedPropertyId = ref()
+const selectedData = ref()
+const uploadImageModal = ref(false)
+const addImage = (data)=>{
+  console.log(data, 'data')
+  selectedPropertyId.value = data.PROPERTY_ID
+  selectedData.value = data
+  uploadImageModal.value = true
+}
+
+const deleteImageLoader = ref([false])
+const deleteNewImage = async (item,index) => {
+  if (confirm(`Are you sure you want to delete this image ?`)) {
+    try {
+      deleteImageLoader.value[index] = true
+      const data = {
+        IMAGE_ID: item?.IMAGE_ID || 0,
+        PROPERTY_ID: item?.PROPERTY_ID || 0,
+      }
+      const res = await propertyService.DeletePropertyImage(data);
+      if(res.data.ERR_CODE == 0){
+        
+        uploadImageModal.value = false
+        deleteImageLoader.value[index] = false
+      }else{
+        deleteImageLoader.value[index] = false
+      }
+      console.log('--->res', res);
+    } catch (error) {
+      deleteImageLoader.value[index] = false
+    }
+  }
+}
+
+const addedImagesArr = ref([])
+const uploadImagesLoader = ref(false)
+const uploadImages = async () => {
+  uploadImagesLoader.value = true
+  try {
+    for (let i = 0; i < addedImagesArr.value.length; i++) {
+      const file = addedImagesArr.value[i]
+      const formData = new FormData()
+      formData.append('ACTION_TYPE', 'CREATE')
+      formData.append('IMAGE_ID', 0),
+        formData.append('PROPERTY_ID', selectedPropertyId.value),
+        formData.append('IMAGE_URL', file)
+      formData.append('IS_PRIMARY', 0)
+      formData.append('SEQ_NO', i + 1)
+      formData.append('ALT_TEXT', `Image ${i + 1}`)
+      formData.append('IS_ACTIVE_FLG', 1)
+      await propertyService.uploadPropertyImage(formData)
+    }
+    uploadImagesLoader.value = false
+    addedImagesArr.value = [] // clear array
+    uploadImageModal.value = false
+    toast.success('All images uploaded successfully', {
+      autoClose: 4000,
+    });
+    // getProperties()
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 </script>
