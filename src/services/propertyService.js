@@ -346,8 +346,26 @@ export default {
 
   async getReportedFeedback(data){
     return axios.post(`/AdminRatingsSearch`, data)
-  }
+  },
 
+
+  async adminDashboardNumbers(){
+    return axios.get(`/GetAdminDisputsCount`)
+  }, 
+
+  // AdminDisputesList
+  async adminDisputesList(data){
+    return axios.post(`/AdminDisputesList`, data)
+  },
+
+  // acpt or reject 
+  async resolveAdminDispute(data){
+    return axios.post(`/ResolveAdminDispute`, data)
+  },
+  
+
+
+  // https://devapi.qrforinfo.com/api/v1/GetAdminDisputsCount?RATING_ID=1001
 
   
 

@@ -291,7 +291,7 @@
       <v-card rounded="lg" elevation="2" class="pa-8 mx-6 card-box-shadow">
             <h2 class="text-h5 font-weight-bold font-weight-bold mb-2">Property Feedback</h2>
             <v-row>
-              <v-col v-if="feedback && feedback.length > 0" v-for="fb in feedback" :key="fb.id" cols="12" md="6">
+              <v-col v-if="feedbackProperty && feedbackProperty.length > 0" v-for="fb in feedbackProperty" :key="fb.id" cols="12" md="6">
                
               <v-card class="pa-6 mb-6 rounded-xl" variant="outlined" elevation="0">
                 <div class="d-flex justify-space-between">
@@ -682,52 +682,23 @@
                 <v-icon size="x-large" color="primary" class="mr-2">mdi-shield-sync-outline</v-icon>
                 <h2 class="font-weight-bold">QRFORINFO Trust System</h2>
               </div>
-              <!-- <v-row no-gutters> -->
-                <!-- <v-col> -->
-                  <v-btn v-if="selectedType !== 'DisputeForm' && authStore.userDetails.USER_ID !== propertyObj.SELLER_USER_ID" @click="selectedType = 'RatingForm'"
-                    :color="selectedType == 'RatingForm' ? 'primary' : '#f5f5f4'"
+            
+                  <v-btn v-if="selectedType !== 'DisputeForm' && authStore.userDetails.USER_ID !== propertyObj.SELLER_USER_ID" @click="selectedType = 'RatingForProperty'"
+                    :color="selectedType == 'RatingForProperty' ? 'primary' : '#f5f5f4'"
                     class="text-none text-black rounded-lg elevation-0" size="large"
-                    :variant="selectedType == 'RatingForm' ? 'elevated' : 'tonal'">1. Rating Form </v-btn>
-                <!-- </v-col> -->
-                <!-- <v-col> -->
+                    :variant="selectedType == 'RatingForProperty' ? 'elevated' : 'tonal'">1. Rating For Property </v-btn>
+
+                    <v-btn v-if="selectedType !== 'DisputeForm' && authStore.userDetails.USER_ID !== propertyObj.SELLER_USER_ID" @click="selectedType = 'RatingForSeller'"
+                    :color="selectedType == 'RatingForSeller' ? 'primary' : '#f5f5f4'"
+                    class="text-none text-black rounded-lg elevation-0 ml-2" size="large"
+                    :variant="selectedType == 'RatingForSeller' ? 'elevated' : 'tonal'">2. Rating For Seller </v-btn>
+              
                   <v-btn v-if="selectedType !== 'DisputeForm'" @click="selectedType = 'RiskWarning'"
                     :color="selectedType == 'RiskWarning' ? 'primary' : '#f5f5f4'"
                     class="text-none text-black rounded-lg elevation-0 ml-2" size="large"
-                    :variant="selectedType == 'RiskWarning' ? 'elevated' : 'tonal'">2. Risk Warning </v-btn>
-                <!-- </v-col> -->
-                <!-- <v-col>
-                  <v-btn @click="selectedType = 'PublicProfile'"
-                    :color="selectedType == 'PublicProfile' ? 'primary' : '#f5f5f4'"
-                    class="text-none text-black rounded-lg elevation-0" size="large"
-                    :variant="selectedType == 'PublicProfile' ? 'elevated' : 'tonal'">2. Public Profile </v-btn>
-                </v-col>
-                <v-col>
-                  <v-btn @click="selectedType = 'MyReputation'"
-                    :color="selectedType == 'MyReputation' ? 'primary' : '#f5f5f4'"
-                    class="text-none text-black rounded-lg elevation-0" size="large"
-                    :variant="selectedType == 'MyReputation' ? 'elevated' : 'tonal'">3. My Reputation </v-btn>
-                </v-col>
-                <v-col>
-                  <v-btn @click="selectedType = 'RiskWarning'"
-                    :color="selectedType == 'RiskWarning' ? 'primary' : '#f5f5f4'"
-                    class="text-none text-black rounded-lg elevation-0" size="large"
-                    :variant="selectedType == 'RiskWarning' ? 'elevated' : 'tonal'">4. Risk Warning </v-btn>
-                </v-col> -->
-                <!-- <v-col >
-                  <v-btn @click="selectedType = 'DisputeForm'"
-                    :color="selectedType == 'DisputeForm' ? 'primary' : '#f5f5f4'"
-                    class="text-none text-black rounded-lg elevation-0" size="large"
-                    :variant="selectedType == 'DisputeForm' ? 'elevated' : 'tonal'">2. Dispute Form </v-btn>
-
-                </v-col> -->
-                <!-- <v-col>
-                  <v-btn @click="selectedType = 'AdminDashboard'"
-                    :color="selectedType == 'AdminDashboard' ? 'primary' : '#f5f5f4'"
-                    class="text-none text-black rounded-lg elevation-0" size="large"
-                    :variant="selectedType == 'AdminDashboard' ? 'elevated' : 'tonal'">6. Admin Dashboard </v-btn>
-
-                </v-col> -->
-              <!-- </v-row> -->
+                    :variant="selectedType == 'RiskWarning' ? 'elevated' : 'tonal'">3. Risk Warning </v-btn>
+                
+               
             </div>
             <v-spacer></v-spacer>
             <v-btn size="small" @click="feedbackModal = false" variant="tonal" icon="mdi-close"></v-btn>
@@ -738,7 +709,7 @@
 
 
       <div class="d-flex justify-center py-4 position-relative" style="top: 180px;">
-        <v-card v-if="selectedType == 'RatingForm'" width="900" class="pa-8 card-box-shadow" rounded="xl">
+        <v-card v-if="selectedType == 'RatingForProperty' || selectedType == 'RatingForSeller'" width="900" class="pa-8 card-box-shadow" rounded="xl">
           <!-- Status Badge -->
           <div class="text-center mb-6">
             <!-- <v-chip color="green-lighten-4" text-color="green-darken-2" variant="flat">
@@ -747,7 +718,7 @@
           </div>
 
           <!-- Title -->
-          <h2 class="text-center font-weight-bold">Rate Your Experience</h2>
+          <h3 class="text-center font-weight-bold text-h5">Rate Your Experience {{ selectedType == 'RatingForProperty' ? 'With This Property' : 'with the Seller' }}</h3>
 
           <p class="text-center mt-2 text-medium-emphasis">
             With <strong>{{propertyObj.SELLER_NAME}}</strong> 
@@ -804,7 +775,7 @@
 
           <!-- Actions -->
           <div class="d-flex justify-end mt-10">
-            <v-btn @click="giveRating" :disabled="!ratingState.PUBLIC_COMMENT || !ratingState.OVERALL_RATING || (selectedTags.length < 1)" :loading="giveRatingLoader" color="primary" size="large" min-width="400" height="48"
+            <v-btn @click="giveRating(selectedType)" :disabled="!ratingState.PUBLIC_COMMENT || !ratingState.OVERALL_RATING || (selectedTags.length < 1)" :loading="giveRatingLoader" color="primary" size="large" min-width="400" height="48"
               class="elevation-0 text-none font-weight-bold" rounded="lg">
               Submit Rating
             </v-btn>
@@ -1078,7 +1049,7 @@ const menuItems = [
 ]
 const onMenuSelect = (item)=>{
   if(item.code == 'feedback'){
-    selectedType.value = 'RatingForm'
+    selectedType.value = 'RatingForProperty'
     feedbackModal.value = true
   }else if(item.code == 'report'){
     // selectedType.value = 'DisputeForm'
@@ -1094,10 +1065,42 @@ const router = useRouter()
 //------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
-const selectedType = ref('RatingForm')
+const selectedType = ref('RatingForProperty')
+
+watch(selectedType,(val)=>{
+  ratingState.value = {OVERALL_RATING: null,
+  // PUBLIC_TAGS_JSON: selectedTags.value || [],
+  PUBLIC_COMMENT:'',
+  PRIVATE_COMMENT: ''}
+})
+
 
 const feedbackLimit = ref(10)
 const viewMoreFeedbackLoader = ref(false)
+
+
+const feedbackProperty = ref([])
+const fetchPropertyFeedback = async(id)=>{
+  viewMoreFeedbackLoader.value = true
+  
+  try {
+    let data = {
+      "RATED_USER_ID": id,
+      "OFFSET": 0,
+      "LIMIT": feedbackLimit.value,
+      "INTERACTION_ID": propertyObj.value.PROPERTY_ID
+    }
+    let res = await propertyService.getRatingsReceivedList(data)
+    if(res.data.ERR_CODE == 0){
+      let response = res.data.FetchData
+      feedbackProperty.value = response
+      viewMoreFeedbackLoader.value = false
+    }
+  } catch (error) {
+    viewMoreFeedbackLoader.value = false
+    console.log(error)
+  }
+}
 const fetchSellerFeedback = async(id)=>{
   viewMoreFeedbackLoader.value = true
   
@@ -1236,6 +1239,7 @@ const fetchPropertyDetail = async () => {
     qrCodeValue.value = res.data?.FetchData?.PROPERTY_DETAILS?.[0] || {}
     if(authStore.isAuthenticated){
       fetchSellerFeedback(propertyObj.value?.SELLER_USER_ID)
+      fetchPropertyFeedback()
       fetchReportedFeedbacks(propertyObj.value?.SELLER_USER_ID)
     }
    
@@ -1699,18 +1703,36 @@ watch(feedbackModal,(val)=>{
 })
 
 const giveRatingLoader = ref(false)
-const giveRating = async()=>{
+const giveRating = async(data)=>{
   giveRatingLoader.value = true
   try {
-    let data = {
-      "INTERACTION_ID": propertyObj.value.PROPERTY_ID,
-      "RATER_USER_ID": authStore.userDetails.USER_ID,
-      "RATED_USER_ID": propertyObj.value.SELLER_USER_ID,
-      "OVERALL_RATING": ratingState.value.OVERALL_RATING,
-      "PUBLIC_TAGS_JSON": selectedTags.value && selectedTags.value.length > 1 ? JSON.stringify(selectedTags.value) : '',
-      "PUBLIC_COMMENT": ratingState.value.PUBLIC_COMMENT,
-      "PRIVATE_COMMENT": ratingState.value.PRIVATE_COMMENT
+    let data 
+    if(selectedType.value == 'RatingForProperty'){
+        data = {
+          "INTERACTION_ID": propertyObj.value.PROPERTY_ID,
+          "RATER_USER_ID": authStore.userDetails.USER_ID,
+          "RATED_USER_ID": propertyObj.value.SELLER_USER_ID,
+          "OVERALL_RATING": ratingState.value.OVERALL_RATING,
+          "PUBLIC_TAGS_JSON": selectedTags.value && selectedTags.value.length > 1 ? JSON.stringify(selectedTags.value) : '',
+          "PUBLIC_COMMENT": ratingState.value.PUBLIC_COMMENT,
+          "PRIVATE_COMMENT": ratingState.value.PRIVATE_COMMENT
+        }
+    }else{
+        data = {
+          "INTERACTION_ID": 0,
+          "RATER_USER_ID": authStore.userDetails.USER_ID,
+          "RATED_USER_ID": propertyObj.value.SELLER_USER_ID,
+          "OVERALL_RATING": ratingState.value.OVERALL_RATING,
+          "PUBLIC_TAGS_JSON": selectedTags.value && selectedTags.value.length > 1 ? JSON.stringify(selectedTags.value) : '',
+          // "PUBLIC_TAGS_JSON":'FAKE_INFO',
+          "PUBLIC_COMMENT": ratingState.value.PUBLIC_COMMENT,
+          "PRIVATE_COMMENT": ratingState.value.PRIVATE_COMMENT
+        }
     }
+
+    console.log(data,'data')
+    console.log(propertyObj.value.PROPERTY_ID,'data')
+    
     let res = await propertyService.createRating(data)
     
     if(res.data.ERR_CODE == 0){
