@@ -1,5 +1,15 @@
 <template>
-  <div class="login-screen-wrapper">
+    <v-app-bar density="comfortable" flat class="pa-2 border-b">
+          <template v-slot:prepend>
+            <div class="d-flex align-center">
+              <v-img width="70" contain src="@/assets/newLogo.png"></v-img>
+              <v-btn @click="router.push('/')" size="small" variant="tonal" min-width="100" color="primary" class="text-none box-shadow ml-4 text-body-2 mt-1"> About </v-btn>
+            </div>
+          </template>
+          <v-btn class="text-none rounded-lg font-weight-bold card-box-shadow" variant="tonal" color="primary" min-width="150" @click="router.push('/signup')"> Sign Up For Free</v-btn>
+         
+    </v-app-bar>
+  <div class="login-screen-wrapper mt-16">
     <div class="inside-card">
       <v-row>
         <v-col cols="12" md="6" class="">
@@ -295,7 +305,7 @@ const gotoSignUp = ()=>{
 <style lang="scss" scoped>
 .login-screen-wrapper {
   width: 100%;
-  height: 100vh;
+  height: 100%;
   padding: 30px 100px !important;
   /* top/bottom + left/right */
   overflow-y: auto !important;
@@ -315,12 +325,7 @@ const gotoSignUp = ()=>{
 }
 
 .inside-card {
-  box-shadow:
-    0 14px 24px -4px #00000014,
-    0 0 8px -4px #00000029,
-    0 0 12px 2px #0496b033,
-    0 0 24px 6px #0496b01a;
-
+  box-shadow: 0 14px 24px -4px #00000014, 0 0 8px -4px #00000029;
 
   padding: 24px;
   border-radius: 35px;
