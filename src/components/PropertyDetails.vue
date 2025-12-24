@@ -801,23 +801,23 @@
           </div>
 
           <!-- USER RISK BOX -->
-          <v-card rounded="xl" class="pa-6 mt-8 risk-box" elevation="0">
+          <v-card v-if="trustScoreDetails?.TP_FNAME" rounded="xl" class="pa-6 mt-8 risk-box" elevation="0">
             <div class="d-flex align-start">
               <div class="avatar-box mr-4">
-                <span class="avatar-text">JS</span>
+                <span class="avatar-text">{{trustScoreDetails?.TP_FNAME ? trustScoreDetails?.TP_FNAME.slice(0,1) : ''}} {{trustScoreDetails?.TP_LNAME ? trustScoreDetails?.TP_LNAME.slice(0,1) : ''}}</span>
               </div>
-
+              
               <div>
                 <div class="">
-                  <h3 class="text-h6 font-weight-bold mr-3">John Suspicious</h3>
+                  <h3 class="text-h6 font-weight-bold mr-3">{{trustScoreDetails?.TP_FNAME}} {{trustScoreDetails?.TP_LNAME}}</h3>
                   <p>
                     <v-btn size="small" color="#D14B4B" elevation="0" rounded="lg" text-color="white"
                       class="mr-3 text-none font-weight-bold">
-                      HIGH_RISK
+                      {{trustScoreDetails?.RISK_STATUS}}
                     </v-btn>
 
                     <span class="text-body-1 text-medium-emphasis">
-                      Trust Score: 32/100
+                      Trust Score: {{trustScoreDetails?.TRUST_SCORE}}/100
                     </span>
                   </p>
                 </div>
@@ -826,16 +826,16 @@
                 <ul class="mt-4 reports-list">
                   <li>
                     <v-icon size="18" color="#D14B4B" class="mr-2">mdi-close-circle</v-icon>
-                    <strong>3 scam-related reports</strong> in the last 30 days
+                    <strong>{{ trustScoreDetails?.COMPLAINTS_COUNT }} scam-related reports</strong> in the last 30 days
                   </li>
                   <li>
                     <v-icon size="18" color="#D14B4B" class="mr-2">mdi-close-circle</v-icon>
-                    Only <strong>8 completed interactions</strong>
+                    Only <strong class="ml-1">{{ trustScoreDetails?.TOTAL_INTERACTIONS }} completed interactions</strong>
                   </li>
-                  <li>
+                  <!-- <li>
                     <v-icon size="18" color="#D14B4B" class="mr-2">mdi-close-circle</v-icon>
                     Phone and payment <strong>not verified</strong>
-                  </li>
+                  </li> -->
                 </ul>
               </div>
             </div>
@@ -845,15 +845,26 @@
           <h3 class="text-h6 font-weight-bold mt-10 mb-4">Recent User Reports:</h3>
 
           <!-- REPORT ITEM -->
-          <v-card v-for="item in reports" :key="item.id" rounded="xl" variant="outlined" color="red"
+          <v-card v-for="item in reportedFeedbackList" :key="item.id" rounded="xl" variant="outlined" color="red"
             class="rounded-lg pa-4 mt-2">
             <div class="d-flex justify-space-between text-black">
-              <strong class="text-black">{{ item.name }}</strong>
-              <span class="text-body-2 text-black">{{ item.time }}</span>
+              <strong class="text-black">{{ item.RATER_FNAME }} {{ item.RATER_LNAME }}</strong>
+              <span class="text-body-2 text-black">{{ item.CREATED_ON ? moment(item.CREATED_ON).format('Do MMM, YYYY') : '-' }}</span>
             </div>
-
+            <v-rating v-model="item.OVERALL_RATING" readonly color="red" size="22" />
+            <div>
+              <div no-guttes v-if="item.PUBLIC_TAGS_CSV">
+               
+                  <v-btn color="error" class="elevation-0 rounded-lg mr-2" v-for="(value,ind) in item.PUBLIC_TAGS_CSV.split(',')" :key="ind" size="small" v-if="value !== ''">
+                    {{ value }}
+                  </v-btn>
+                
+              </div>
+              
+            </div>
+            <v-divider></v-divider>
             <p class="text-body-2 mt-2">
-              {{ item.text }}
+              {{ item.PUBLIC_COMMENT_TEXT }}
             </p>
           </v-card>
 
@@ -1139,11 +1150,28 @@ const fetchReportedFeedbacks = async()=>{
     if(res.data.ERR_CODE == 0){
       let response = res.data
       reportedFeedbackList.value = response.FetchData
+      console.log(reportedFeedbackList.value, 'reportedFeedbackList.value')
     }
   } catch (error) {
     console.log(error)
   }
 }
+
+
+const trustScoreDetails = ref({})
+const getAdminUserTrust = async(id)=>{
+  try {
+    let res = await propertyService.getAdminUserTrust(id)
+    if(res.data.ERR_CODE == 0){
+      console.log(res)
+      let response = res.data
+      trustScoreDetails.value = response.FetchData ? response.FetchData[0] : {}
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 onMounted(() => {
   // if (authStore.isAuthenticated) {
   //   fetchStatistics()
@@ -1241,6 +1269,7 @@ const fetchPropertyDetail = async () => {
       fetchSellerFeedback(propertyObj.value?.SELLER_USER_ID)
       fetchPropertyFeedback()
       fetchReportedFeedbacks(propertyObj.value?.SELLER_USER_ID)
+      getAdminUserTrust(propertyObj.value?.SELLER_USER_ID)
     }
    
     updateStatistics()

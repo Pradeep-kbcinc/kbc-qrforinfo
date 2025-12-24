@@ -10,20 +10,23 @@
               <div>
                 <div class="d-flex">
                   <!-- Avatar -->
+                  
                   <v-avatar size="84" class="mr-6" rounded
                     style="background: linear-gradient(135deg, #F7C56A, #D9902A);">
                     <span class="text-h5 font-weight-bold white--text">{{ initials }}</span>
                   </v-avatar>
+                 
 
                   <div>
-                    <h2 class="font-weight-bold">{{ props.user.SELLER_NAME || authStore.userDetails.FNAME }}</h2>
+                    <h2 class="font-weight-bold">{{ props.user?.SELLER_NAME || authStore.userDetails.FNAME }}</h2>
                     <!-- <p class="text-medium-emphasis mb-3">Member since {{ profile.memberSince }}</p> -->
 
                     <!-- Verified badges -->
-                  
-                    <v-btn v-if="!props.otherProfile" @click="$router.push('/settings')" class="text-none" rounded="lg" color="primary" elevation="0"> <v-icon class="mr-1">mdi-cog</v-icon> Profile Setting </v-btn>
+                    <p class="font-weight-bold ml-2">Member Since : <span>{{ trustScoreDetails?.MEMBER_SINCE ? moment(trustScoreDetails.MEMBER_SINCE).format('Do MMM, YYYY') : '-' }}</span> </p>
+                    <v-btn v-if="!props.otherProfile" @click="$router.push('/settings')" class="text-none mt-2" rounded="lg" color="primary" elevation="0"> <v-icon class="mr-1">mdi-cog</v-icon> Profile Setting </v-btn>
                     <v-btn v-else @click="messageSeller" class="text-none ml-2" rounded="lg" color="primary" elevation="0"> <v-icon class="mr-1">mdi-chat</v-icon> Message Owner </v-btn>
 
+                    
                     
                   </div>
 
@@ -34,7 +37,7 @@
               <!-- Trust Score -->
               <v-card width="110" class="d-flex flex-column align-center py-4 text-white" rounded="lg"
                 style="background: linear-gradient(135deg, #3FB57C, #1E7F4B);">
-                <h2 class="font-weight-bold">{{ profile.trustScore }}</h2>
+                <h2 class="font-weight-bold">{{ trustScoreDetails?.TRUST_SCORE || '-' }}</h2>
                 <span class="text-caption">TRUST SCORE</span>
               </v-card>
 
@@ -43,20 +46,20 @@
             <v-row class="mt-10">
               <v-col>
                 <v-card class="pa-6 rounded-xl" elevation="0" color="grey-lighten-4">
-                  <h2 class="font-weight-bold mb-1">{{ profile.completedInteractions }}</h2>
+                  <h2 class="font-weight-bold mb-1">{{ trustScoreDetails?.TOTAL_INTERACTIONS || '-' }}</h2>
                   <span class="text-medium-emphasis">Completed Interactions</span>
                 </v-card>
               </v-col>
               <v-col>
                 <v-card height="100%" width="100%" class="pa-6 rounded-xl" elevation="0" color="grey-lighten-4">
-                  <h2 class="font-weight-bold mb-1">{{ profile.usersRatedBy }}</h2>
-                  <span class="text-medium-emphasis">Users Rated By</span>
+                  <h2 class="font-weight-bold mb-1">{{ trustScoreDetails?.COMPLAINTS_COUNT || '-' }}</h2>
+                  <span class="text-medium-emphasis">Complaints Count</span>
                 </v-card>
               </v-col>
               <v-col>
                 <v-card height="100%" width="100%" class="pa-6 rounded-xl" elevation="0" color="grey-lighten-4">
-                  <h2 class="font-weight-bold mb-1">{{ profile.usersRatedBy }}</h2>
-                  <span class="text-medium-emphasis">Users Rated By</span>
+                  <h2 class="font-weight-bold mb-1">{{ trustScoreDetails?.TOTAL_RATINGS || '-' }}</h2>
+                  <span class="text-medium-emphasis">Total Ratings</span>
                 </v-card>
               </v-col>
             </v-row>
@@ -96,7 +99,7 @@
 
                 <!-- Feedback Text -->
                 <p class="mt-4 text-body-1 ml-15">
-                  {{ fb.comment }}
+                  {{ fb.PUBLIC_COMMENT_TEXT }}
                 </p>
                 </v-card>
               </v-col>
@@ -200,10 +203,27 @@ const getDetails = async(id)=>{
 }
 
 
+const trustScoreDetails = ref({})
+const getAdminUserTrust = async(id)=>{
+  console.log(id, 'IDDD')
+  try {
+    let res = await propertyService.getAdminUserTrust(id)
+    if(res.data.ERR_CODE == 0){
+      console.log(res)
+      let response = res.data
+      trustScoreDetails.value = response.FetchData ? response.FetchData[0] : {}
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+
 
 onMounted(()=>{
-  let user = props.user.USER_ID || authStore.userDetails.USER_ID
+  let user = props.user?.USER_ID || authStore.userDetails.USER_ID
   getDetails(user)
+  getAdminUserTrust(user)
 
   // getGivenRatingsByMe()
 })
