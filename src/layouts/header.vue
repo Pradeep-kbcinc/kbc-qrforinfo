@@ -19,86 +19,58 @@
             <v-icon size="x-large" color="lightBlack" icon="mdi-bell-outline" class="pointer"></v-icon>
           </v-btn>
         </v-badge> -->
-    
+
         <!-- <v-select label="UI Scale" class="mt-6 drop-shadow" rounded="lg" density="compact" variant="outlined" :items="[
           { title: '80%', value: 0.8 },
           { title: '90% (Recommended)', value: 0.9 },
           { title: '100%', value: 1 },
           { title: '110%', value: 1.1 },
         ]" v-model="uiScale"  /> -->
-        <v-menu
-  v-model="showScaleMenu"
-  location="bottom end"
-  transition="scale-transition"
-  :close-on-content-click="false"
->
-  <template #activator="{ props }">
-    <v-btn
-      v-bind="props"
-      icon="mdi-tune-vertical"
-      variant="text"
-    />
-  </template>
+        <v-menu v-model="showScaleMenu" location="bottom end" transition="scale-transition" :close-on-content-click="false">
+          <template #activator="{ props }">
+            <v-btn v-bind="props" icon="mdi-tune-vertical" variant="text" />
+          </template>
 
-  <v-card
-    
-    rounded="xl"
-    class="pa-2 box-shadow drop-shadow"
-   
-  >
-    <!-- Recommended -->
-    <v-list density="compact">
-      <v-list-subheader>
-        Recommended
-      </v-list-subheader>
+          <v-card rounded="xl" class="pa-2 box-shadow drop-shadow">
+            <!-- Recommended -->
+            <v-list density="compact">
+              <v-list-subheader>
+                Recommended
+              </v-list-subheader>
 
-      <v-list-item
-        v-for="item in recommended"
-        :key="item.value"
-        @click="selectScale(item)"
-        rounded="lg"
-      >
-        <template #prepend>
-          <v-icon size="18">{{ item.icon }}</v-icon>
-        </template>
+              <v-list-item v-for="item in recommended" :key="item.value" @click="selectScale(item)" rounded="lg">
+                <template #prepend>
+                  <v-icon size="18">{{ item.icon }}</v-icon>
+                </template>
 
-        <v-list-item-title>{{ item.title }}</v-list-item-title>
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
 
-        <template #append>
-          <v-icon
-            v-if="uiScale === item.value"
-            size="18"
-            color="primary"
-          >
-            mdi-check
-          </v-icon>
-        </template>
-      </v-list-item>
-    </v-list>
+                <template #append>
+                  <v-icon v-if="uiScale === item.value" size="18" color="primary">
+                    mdi-check
+                  </v-icon>
+                </template>
+              </v-list-item>
+            </v-list>
 
-    <v-divider class="my-2" />
+            <v-divider class="my-2" />
 
-    <!-- Other options -->
-    <v-list density="compact">
-      <v-list-subheader>
-        Other scaling options
-      </v-list-subheader>
+            <!-- Other options -->
+            <v-list density="compact">
+              <v-list-subheader>
+                Other scaling options
+              </v-list-subheader>
 
-      <v-list-item
-        v-for="item in others"
-        :key="item.value"
-        @click="selectAdvanceScale(item)"
-        rounded="lg"
-      >
-        <template #prepend>
-          <v-icon size="18">{{ item.icon }}</v-icon>
-        </template>
+              <v-list-item v-for="item in others" :key="item.value" @click="selectAdvanceScale(item)" rounded="lg">
+                <template #prepend>
+                  <v-icon size="18">{{ item.icon }}</v-icon>
+                </template>
 
-        <v-list-item-title>{{ item.title }}</v-list-item-title>
-      </v-list-item>
-    </v-list>
-  </v-card>
-</v-menu>
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-card>
+        </v-menu>
 
 
         <v-menu location="bottom end" offset="8">
@@ -126,7 +98,7 @@
         </v-menu>
       </div>
     </v-app-bar>
-    <Sidebar v-if="route.name !== 'BuyProperties' && route.name !== 'BuyPropertyDetails'" ref="sidebarPanel" />
+    <Sidebar v-if="route.name !== 'BuyProperties' && route.name !== 'BuyPropertyDetails' && route.name !== 'AboutPage'" ref="sidebarPanel" />
   </div>
 </template>
 <script setup>
@@ -251,16 +223,16 @@ const exitFullscreen = () => {
   }
 }
 
-const selectAdvanceScale = (item)=>{
-  if(item.value == 'full'){
+const selectAdvanceScale = (item) => {
+  if (item.value == 'full') {
     if (!document.fullscreenElement) {
-    enterFullscreen()
-  } else {
-    exitFullscreen()
-  }
+      enterFullscreen()
+    } else {
+      exitFullscreen()
+    }
 
   }
-  else if(item.value == 'fit-width-height'){
+  else if (item.value == 'fit-width-height') {
     uiScale.value = 0.7
   }
   showScaleMenu.value = false
