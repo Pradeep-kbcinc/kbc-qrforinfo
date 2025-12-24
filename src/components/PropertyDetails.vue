@@ -845,15 +845,26 @@
           <h3 class="text-h6 font-weight-bold mt-10 mb-4">Recent User Reports:</h3>
 
           <!-- REPORT ITEM -->
-          <v-card v-for="item in reports" :key="item.id" rounded="xl" variant="outlined" color="red"
+          <v-card v-for="item in reportedFeedbackList" :key="item.id" rounded="xl" variant="outlined" color="red"
             class="rounded-lg pa-4 mt-2">
             <div class="d-flex justify-space-between text-black">
-              <strong class="text-black">{{ item.name }}</strong>
-              <span class="text-body-2 text-black">{{ item.time }}</span>
+              <strong class="text-black">{{ item.RATER_FNAME }} {{ item.RATER_LNAME }}</strong>
+              <span class="text-body-2 text-black">{{ item.CREATED_ON ? moment(item.CREATED_ON).format('Do MMM, YYYY') : '-' }}</span>
             </div>
-
+            <v-rating v-model="item.OVERALL_RATING" readonly color="red" size="22" />
+            <div>
+              <div no-guttes v-if="item.PUBLIC_TAGS_CSV">
+               
+                  <v-btn color="error" class="elevation-0 rounded-lg mr-2" v-for="(value,ind) in item.PUBLIC_TAGS_CSV.split(',')" :key="ind" size="small" v-if="value !== ''">
+                    {{ value }}
+                  </v-btn>
+                
+              </div>
+              
+            </div>
+            <v-divider></v-divider>
             <p class="text-body-2 mt-2">
-              {{ item.text }}
+              {{ item.PUBLIC_COMMENT_TEXT }}
             </p>
           </v-card>
 
@@ -1139,6 +1150,7 @@ const fetchReportedFeedbacks = async()=>{
     if(res.data.ERR_CODE == 0){
       let response = res.data
       reportedFeedbackList.value = response.FetchData
+      console.log(reportedFeedbackList.value, 'reportedFeedbackList.value')
     }
   } catch (error) {
     console.log(error)

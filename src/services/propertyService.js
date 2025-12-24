@@ -335,9 +335,7 @@ export default {
     return axios.post(`/CreateRatingDispute`, data)
   },
 
-  async getAdminUserTrust(id) {
-    return axios.get(`/GetAdminUserTrust?USER_ID=${id}`)
-  },
+
   
 
   async getMyReputation(id){
@@ -362,6 +360,13 @@ export default {
   async resolveAdminDispute(data){
     return axios.post(`/ResolveAdminDispute`, data)
   },
+
+
+  async getAdminUserTrust(id){
+    return axios.get(`/GetAdminUserTrust?USER_ID=${id}`)
+  },
+  
+
   
 
 

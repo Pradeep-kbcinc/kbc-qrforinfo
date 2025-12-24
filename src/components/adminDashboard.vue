@@ -8,7 +8,7 @@
               </p>
             </div>
 
-            <div class="d-flex ga-3">
+            <!-- <div class="d-flex ga-3">
               <v-btn variant="outlined" size="large" class="text-none" rounded="lg">
                 <v-icon left>mdi-magnify</v-icon>
                 Search Users
@@ -18,7 +18,7 @@
                 <v-icon left>mdi-filter-variant</v-icon>
                 Filters
               </v-btn>
-            </div>
+            </div> -->
           </div>
 
           <!-- METRICS GRID -->
