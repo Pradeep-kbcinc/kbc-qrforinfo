@@ -1083,6 +1083,7 @@ watch(selectedType,(val)=>{
   // PUBLIC_TAGS_JSON: selectedTags.value || [],
   PUBLIC_COMMENT:'',
   PRIVATE_COMMENT: ''}
+  selectedTags.value = []
 })
 
 
@@ -1150,7 +1151,6 @@ const fetchReportedFeedbacks = async()=>{
     if(res.data.ERR_CODE == 0){
       let response = res.data
       reportedFeedbackList.value = response.FetchData
-      console.log(reportedFeedbackList.value, 'reportedFeedbackList.value')
     }
   } catch (error) {
     console.log(error)
@@ -1163,7 +1163,6 @@ const getAdminUserTrust = async(id)=>{
   try {
     let res = await propertyService.getAdminUserTrust(id)
     if(res.data.ERR_CODE == 0){
-      console.log(res)
       let response = res.data
       trustScoreDetails.value = response.FetchData ? response.FetchData[0] : {}
     }
@@ -1741,7 +1740,7 @@ const giveRating = async(data)=>{
           "RATER_USER_ID": authStore.userDetails.USER_ID,
           "RATED_USER_ID": propertyObj.value.SELLER_USER_ID,
           "OVERALL_RATING": ratingState.value.OVERALL_RATING,
-          "PUBLIC_TAGS_JSON": selectedTags.value && selectedTags.value.length > 1 ? JSON.stringify(selectedTags.value) : '',
+          "PUBLIC_TAGS_JSON": selectedTags.value && selectedTags.value.length > 1 ? selectedTags.value.map(item => ({ TAG: item })) : [],
           // "PUBLIC_TAGS_JSON" : "[PROFESSIONAL, ON_TIME]",
           "PUBLIC_COMMENT": ratingState.value.PUBLIC_COMMENT,
           "PRIVATE_COMMENT": ratingState.value.PRIVATE_COMMENT
@@ -1752,7 +1751,7 @@ const giveRating = async(data)=>{
           "RATER_USER_ID": authStore.userDetails.USER_ID,
           "RATED_USER_ID": propertyObj.value.SELLER_USER_ID,
           "OVERALL_RATING": ratingState.value.OVERALL_RATING,
-          "PUBLIC_TAGS_JSON": selectedTags.value && selectedTags.value.length > 1 ? JSON.stringify(selectedTags.value) : '',
+          "PUBLIC_TAGS_JSON": selectedTags.value && selectedTags.value.length > 1 ? selectedTags.value.map(item => ({ TAG: item })) : [],
           // "PUBLIC_TAGS_JSON":'FAKE_INFO',
           "PUBLIC_COMMENT": ratingState.value.PUBLIC_COMMENT,
           "PRIVATE_COMMENT": ratingState.value.PRIVATE_COMMENT
