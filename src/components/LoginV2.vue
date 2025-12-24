@@ -2,7 +2,7 @@
   <v-app-bar density="comfortable" flat class="pa-2 border-b">
     <template v-slot:prepend>
       <div class="d-flex align-center">
-        <v-img width="70" contain src="@/assets/newLogo.png"></v-img>
+        <!-- <v-img width="70" contain src="@/assets/newLogo.png"></v-img> -->
         <v-btn @click="router.push('/about')" size="small" variant="tonal" min-width="100" color="primary" class="text-none box-shadow ml-4 text-body-2 mt-1"> About </v-btn>
       </div>
     </template>
