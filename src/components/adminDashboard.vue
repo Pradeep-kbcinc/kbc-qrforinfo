@@ -38,15 +38,18 @@
           <!-- TABS -->
           <v-tabs v-model="activeTab" color="primary" class="mb-6" slider-color="primary">
             <v-tab value="active">Active Disputes</v-tab>
-            <v-tab value="highrisk">High-Risk Flags</v-tab>
+            <!-- <v-tab value="highrisk">High-Risk Flags</v-tab>
             <v-tab value="recent">Recent Ratings</v-tab>
-            <v-tab value="patterns">Suspicious Patterns</v-tab>
+            <v-tab value="patterns">Suspicious Patterns</v-tab> -->
           </v-tabs>
 
           <v-divider class="mb-6"></v-divider>
 
           <!-- DISPUTE LIST -->
-          <v-row>
+          <!-- disputeListLoader -->
+          <v-skeleton-loader v-if="disputeListLoader" v-for="item in 2" type="card"></v-skeleton-loader>
+
+          <v-row v-else>
             <v-col cols="12" v-for="item in disputes" :key="item.id">
               <v-card rounded="xl" elevation="0" class="pa-6 mb-6 card-box-shadow"
                 style="background:white; border:1px solid #eee;">
@@ -58,9 +61,9 @@
                     </div>
 
                     <div class="text-body-1 font-weight-bold">
-                      {{ item.from }}
+                      {{ item.DISPUTING_FNAME }}  {{ item.DISPUTING_LNAME }}
                       <span class="text-medium-emphasis">vs</span>
-                      {{ item.to }}
+                      {{ item.RATER_FNAME }} {{ item.RATER_LNAME }}
 
                       <v-chip v-if="item.tag" size="small" class="ml-2"
                         :color="item.tag === 'URGENT' ? '#d9534f' : '#d48d27'" text-color="white">
@@ -72,12 +75,12 @@
                     <div class="d-flex align-center mt-2 ga-4 text-body-2 text-medium-emphasis">
                       <span>
                         <v-icon size="16" color="#d48d27">mdi-flag-outline</v-icon>
-                        {{ item.reason }}
+                        {{ item.DETAILS_TEXT }}
                       </span>
 
                       <span>• {{ item.time }}</span>
 
-                      <span>• ⭐ rating disputed</span>
+                      <span>• {{ item.OVERALL_RATING }} ⭐ rating disputed</span>
                     </div>
                   </div>
 
@@ -106,16 +109,16 @@
                 <v-card rounded="lg" elevation="0" class="pa-4 mb-4" style="background:#fafafa; border:1px solid #eee;">
                   <div class="text-medium-emphasis text-body-2 mb-1">Original feedback:</div>
                   <div class="text-body-1">
-                    “{{ item.feedback }}”
+                    “{{ item.PUBLIC_COMMENT_TEXT }}”
                   </div>
                 </v-card>
 
                 <!-- ACTION BUTTONS -->
                 <div class="d-flex ga-3">
-                  <v-btn rounded="lg" color="green" dark>Remove Rating</v-btn>
-                  <v-btn rounded="lg" color="#d48d27" dark>Keep Rating</v-btn>
-                  <v-btn rounded="lg" variant="outlined">Request More Info</v-btn>
-                  <v-btn rounded="lg" variant="outlined">View Full History</v-btn>
+                  <v-btn rounded="lg" @click="resolveOrReject('REMOVE', item.DISPUTE_ID)" :loading="resolveOrRejectLoader" color="green" class="text-none font-weight-bold" dark>Remove Rating</v-btn>
+                  <v-btn rounded="lg" @click="resolveOrReject('KEEP', item.DISPUTE_ID)" :loading="resolveOrRejectLoader" color="#d48d27" class="text-none font-weight-bold" dark>Keep Rating</v-btn>
+                  <!-- <v-btn rounded="lg" variant="outlined">Request More Info</v-btn>
+                  <v-btn rounded="lg" variant="outlined">View Full History</v-btn> -->
                 </div>
 
               </v-card>
@@ -125,32 +128,100 @@
 
 </template>
 <script setup>
-const stats = [
-  { label: "Open Disputes", value: 12, color: "#d9534f" },
-  { label: "Pending Reviews", value: 34, color: "#d48d27" },
-  { label: "High-Risk Users", value: 8, color: "#d04d4d" },
-  { label: "Resolved Today", value: 156, color: "#3d8b37" },
-  { label: "Total This Month", value: "2,341", color: "#2c60d3" }
-];
+  import { toast } from 'vue3-toastify';
+  import propertyService from '@/services/propertyService';
+  import { useAuthStore } from '@/stores/app';
+  const authStore = useAuthStore()
 const activeTab = ref("active");
-const disputes = [
-  {
-    id: "D-2847",
-    from: "Sarah Chen",
-    to: "Mike Johnson",
-    tag: "HIGH",
-    reason: "Contains false information",
-    time: "2 hours ago",
-    feedback: "This person was completely unreliable and wasted my time. Would not recommend."
-  },
-  {
-    id: "D-2846",
-    from: "Robert Taylor",
-    to: "Emma Davis",
-    tag: "URGENT",
-    reason: "Abusive language",
-    time: "5 hours ago",
-    feedback: "This person was completely unreliable and wasted my time. Would not recommend."
+const disputes = ref([
+  // {
+  //   id: "D-2847",
+  //   from: "Sarah Chen",
+  //   to: "Mike Johnson",
+  //   tag: "HIGH",
+  //   reason: "Contains false information",
+  //   time: "2 hours ago",
+  //   feedback: "This person was completely unreliable and wasted my time. Would not recommend."
+  // },
+  
+]);
+
+
+const counts = ref({
+
+})
+const stats = ref([
+ 
+]);
+const fetchCounts = async()=>{
+  try {
+    let res = await propertyService.adminDashboardNumbers()
+    if(res.data.ERR_CODE == 0){
+      let response = res.data.FetchData && res.data.FetchData.length > 0 ? res.data.FetchData[0] : {}
+      stats.value =  [
+        { label: "Open Disputes", value: response?.OPEN_DISPUTE_COUNT || 0, color: "#d9534f" },
+        { label: "Pending Reviews", value: response?.PENDING_REVIEW_DISPUTE_COUNT || 0, color: "#d48d27" },
+        { label: "High-Risk Users", value: response?.HIGH_RISK_USER_COUNT || 0, color: "#d04d4d" },
+        { label: "Resolved Today", value: response?.RESOLVED_TODAY_DISPUTE_COUNT || 0, color: "#3d8b37" },
+        { label: "Total This Month", value: response?.THIS_MONTH_DISPUTE_COUNT, color: "#2c60d3" }]
+    }
+  } catch (error) {
+    console.log(error)
   }
-];
+}
+
+
+
+const disputeListLoader = ref(false)
+const fetchDisputList = async()=>{
+  disputeListLoader.value = true
+  try {
+    let data = {
+      "STATUS": "",
+      "OFFSET": 0,
+      "LIMIT": 100
+    }
+    let res = await propertyService.adminDisputesList(data)
+    if(res){
+      console.log(res,'res')
+      disputes.value = res.data.FetchData
+      disputeListLoader.value = false
+    }
+  } catch (error) {
+    disputeListLoader.value = false
+    console.log(error)
+  }
+}
+
+const resolveOrRejectLoader = ref(false)
+const resolveOrReject = async(type, id)=>{
+  resolveOrRejectLoader.value = true
+  try {
+    let data = {
+      "DISPUTE_ID": id,
+      "RESOLUTION": type,
+      "ADMIN_ID": authStore.userDetails.USER_ID,
+      "NOTES": ""
+    }
+    let res = propertyService.resolveAdminDispute(data)
+    if(res){
+      toast.success('Status Updated', {
+            autoClose: 4000,
+          });
+          resolveOrRejectLoader.value = false
+      fetchCounts()
+      fetchDisputList()
+    }
+  } catch (error) {
+    resolveOrRejectLoader.value = false
+    console.log(error)
+  }
+}
+
+onMounted(()=>{
+  fetchCounts()
+  fetchDisputList()
+  
+})
+
 </script>
