@@ -1,14 +1,14 @@
 <template>
-    <v-app-bar density="comfortable" flat class="pa-2 border-b">
-          <template v-slot:prepend>
-            <div class="d-flex align-center">
-              <v-img width="70" contain src="@/assets/newLogo.png"></v-img>
-              <v-btn @click="router.push('/')" size="small" variant="tonal" min-width="100" color="primary" class="text-none box-shadow ml-4 text-body-2 mt-1"> About </v-btn>
-            </div>
-          </template>
-          <v-btn class="text-none rounded-lg font-weight-bold card-box-shadow" variant="tonal" color="primary" min-width="150" @click="router.push('/signup')"> Sign Up For Free</v-btn>
-         
-    </v-app-bar>
+  <v-app-bar density="comfortable" flat class="pa-2 border-b">
+    <template v-slot:prepend>
+      <div class="d-flex align-center">
+        <v-img width="70" contain src="@/assets/newLogo.png"></v-img>
+        <v-btn @click="router.push('/about')" size="small" variant="tonal" min-width="100" color="primary" class="text-none box-shadow ml-4 text-body-2 mt-1"> About </v-btn>
+      </div>
+    </template>
+    <v-btn class="text-none rounded-lg font-weight-bold card-box-shadow" variant="tonal" color="primary" min-width="150" @click="router.push('/signup')"> Sign Up For Free</v-btn>
+  </v-app-bar>
+
   <div class="login-screen-wrapper mt-16">
     <div class="inside-card">
       <v-row>
@@ -54,7 +54,7 @@
             <span>OR</span>
         </div> -->
             <div v-if="!isVerfiyOTP" class="px-10">
-              
+
               <v-text-field :prefix="isNumber(initialState.phoneNumber) ? '+91' : ''" v-model="initialState.phoneNumber" placeholder="Phone No. / Email" :error-messages="v$.phoneNumber.$errors.map(e => e.$message)" @blur="v$.phoneNumber.$touch" @input="v$.phoneNumber.$touch" variant="outlined" rounded="xl" class="email-field mb-0 pb-0" density="compact"></v-text-field>
 
               <v-btn @click="checkCredentials" :loading="btnLoader" block rounded="xl" height="38" elevation="0" class="continue-btn text-none text-caption mt-2" color="#19191a">
@@ -234,13 +234,13 @@ const updateQrStatistics = async (propertyId) => {
   }
 }
 //------------------------------------------------------------------------------
-const gotoLogin = ()=>{
-  if(route.query.qr){
+const gotoLogin = () => {
+  if (route.query.qr) {
     router.push(`/property/${route.query.qr}?createdBy=false`)
-  }else{
+  } else {
     router.push({ name: 'Dashboard' })
   }
-  }
+}
 
 const verifyOtp = async () => {
   try {
@@ -284,19 +284,19 @@ const updateScannedProperty = async () => {
 
 
 
-const gotoSignUp = ()=>{
-  if(route.query.qr){
+const gotoSignUp = () => {
+  if (route.query.qr) {
     router.push(
       {
-      name:'SignUp', 
-      query: {
-        qr: route.query.qr
-      }
-     })
-  }else{
+        name: 'SignUp',
+        query: {
+          qr: route.query.qr
+        }
+      })
+  } else {
     router.push('/signup')
   }
-  
+
 }
 </script>
 
