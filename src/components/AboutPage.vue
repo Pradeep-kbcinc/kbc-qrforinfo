@@ -56,7 +56,10 @@
       <v-col cols="auto" class="">
         <v-card class="bg-white pa-10 card-box-shadow rounded-xl text-center" width="520">
           <v-card class="pa-10 mb-6 rounded-xl d-flex justify-center align-center" height="200" style="background: linear-gradient(135deg, #2563eb, #1e40af);">
-            <v-card class="pa-10 rounded-lg bg-grey" width="100" height="100"></v-card>
+            <v-card class="pa-4 rounded-lg bg-white" width="100" height="100">
+              <!-- <v-icon size="x-large">mdi-qrcode-scan</v-icon> -->
+              <v-img class="w-100 h-100" src="@/assets/QR.svg"></v-img>
+            </v-card>
           </v-card>
           <p class="text-h6">Scan • View • Connect</p>
           <p class="text-h6">It's that simple</p>
@@ -80,7 +83,8 @@
         </v-card>
         <v-card class="card-hover card-blue-hover pa-10 rounded-xl elevation-0 overflow-visible" color="#F9FAFB" width="350">
           <v-span class="text-h5 rounded-pill d-block d-flex justify-center align-center text-white font-weight-bold position-absolute" style="height:40px; width:40px; background-color: #f97316; top: -15px;">2</v-span>
-          <h3 class="text-h2 mb-6 mt-4">🔲</h3>
+          <!-- <h3 class="text-h2 mb-6 mt-4">🔲</h3> -->
+          <h3 class="text-h2 mb-6 mt-4"><v-icon size="x-small">mdi-qrcode-scan</v-icon></h3>
           <h4 class="text-h5 font-weight-bold mb-3">Generate QR Code</h4>
           <p class="text-body-1">Get a unique QR code for your property</p>
         </v-card>
@@ -117,7 +121,7 @@
         </v-card>
         <v-card class="card-hover card-blue-hover pa-10 rounded-xl elevation-0 overflow-visible" color="#F9FAFB" width="350">
           <v-span class="text-h5 rounded-pill d-block d-flex justify-center align-center text-white font-weight-bold position-absolute" style="height:40px; width:40px; background-color: #f97316; top: -15px;">3</v-span>
-          <h3 class="text-h2 mb-6 mt-4">💾</h3>
+          <h3 class="text-h2 mb-6 mt-4">❤️</h3>
           <h4 class="text-h5 font-weight-bold mb-3">Save Favorites</h4>
           <p class="text-body-1">Bookmark properties you're interested in</p>
         </v-card>
