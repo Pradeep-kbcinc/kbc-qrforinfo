@@ -99,7 +99,7 @@
 
                 <!-- Feedback Text -->
                 <p class="mt-4 text-body-1 ml-15">
-                  {{ fb.comment }}
+                  {{ fb.PUBLIC_COMMENT_TEXT }}
                 </p>
                 </v-card>
               </v-col>

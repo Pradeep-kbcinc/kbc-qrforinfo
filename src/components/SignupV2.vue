@@ -81,6 +81,22 @@
                 <v-text-field :error-messages="v$.EMAIL.$errors.map(e => e.$message)" @blur="v$.EMAIL.$touch"
                   v-model="propertyObj.EMAIL" label="Email" variant="outlined" rounded="xl"
                   class="email-field mb-0 mt-1 pb-0 w-100" density="compact"></v-text-field>
+
+                  <v-text-field
+                    v-model="propertyObj.USER_PASSWORD"
+                    :type="showPassword ? 'text' : 'password'"
+                    label="Password"
+                    variant="outlined"
+                    rounded="xl"
+                    density="compact"
+                    class="email-field mb-0 mt-1 pb-0 w-100"
+                    :append-inner-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
+                    @click:append-inner="showPassword = !showPassword"
+                    :error-messages="v$.USER_PASSWORD.$errors.map(e => e.$message)"
+                    @blur="v$.USER_PASSWORD.$touch"
+                  />
+
+
               
 
               <v-btn @click="checkCredentials" :loading="btnLoader" block rounded="xl" height="38" elevation="0"
@@ -137,9 +153,10 @@ const propertyObj = ref({
   CITY: "",
   COUNTRY: "",
   IS_MOBILE_VERIFIED_FLG: 1,
-  IS_EMAIL_VERIFIED_FLG: 0
+  IS_EMAIL_VERIFIED_FLG: 0,
+  USER_PASSWORD:""
 })
-
+const showPassword = ref(false)
 const rules = {
   ACTION_TYPE: {},
   USER_ID: {},
@@ -150,6 +167,7 @@ const rules = {
   LNAME: { required },
   GENDER: {},
   EMAIL: { email, required },
+  USER_PASSWORD: {required},
   ADDRESS: {},
   LATITUDE: {},
   LONGITUDE: {},
