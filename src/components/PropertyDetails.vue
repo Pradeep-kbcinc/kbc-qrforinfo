@@ -1464,16 +1464,15 @@ const gotoLogin = ()=>{
 
 const profileDetailsModal = ref(false)
 const contactOwner = () => {
-  profileDetailsModal.value = true
-  // if (authStore.isAuthenticated) {
-  //   oldMsges()
-  //   sender_id.value = authStore.getUserDetails.USER_ID
-  //   receiver_id.value = propertyObj.value.SELLER_USER_ID
-  //   property_id.value = propertyObj.value.PROPERTY_ID
-  //   msgDialog.value = true
-  // } else {
-  //   gotoLogin()
-  // }
+  if (authStore.isAuthenticated) {
+    oldMsges()
+    sender_id.value = authStore.getUserDetails.USER_ID
+    receiver_id.value = propertyObj.value.SELLER_USER_ID
+    property_id.value = propertyObj.value.PROPERTY_ID
+    profileDetailsModal.value = true
+  } else {
+    gotoLogin()
+  }
 }
 
 const messageSeller = ()=>{
@@ -1714,6 +1713,7 @@ const giveRating = async(data)=>{
           "RATED_USER_ID": propertyObj.value.SELLER_USER_ID,
           "OVERALL_RATING": ratingState.value.OVERALL_RATING,
           "PUBLIC_TAGS_JSON": selectedTags.value && selectedTags.value.length > 1 ? JSON.stringify(selectedTags.value) : '',
+          // "PUBLIC_TAGS_JSON" : "[PROFESSIONAL, ON_TIME]",
           "PUBLIC_COMMENT": ratingState.value.PUBLIC_COMMENT,
           "PRIVATE_COMMENT": ratingState.value.PRIVATE_COMMENT
         }
