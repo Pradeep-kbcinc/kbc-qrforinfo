@@ -197,8 +197,8 @@
           <!-- <p>**Name Suggestions</p> -->
           <v-card class="mx-auto overflow-y-auto"  max-height="200">
             <v-list class="">
-              <v-list-item @click="selectSuggestion(item)" v-for="(item, i) in titleOptions" :key="i" :value="item" color="primary" variant="plain">
-                {{ item }}
+              <v-list-item class="text-subtitle-1 font-weight-bold" @click="selectSuggestion(item)" v-for="(item, i) in titleOptions" :key="i" :value="item" color="primary" variant="plain">
+               <v-icon>mdi-radiobox-blank</v-icon> {{ item }}
               </v-list-item>
             </v-list>
           </v-card>
