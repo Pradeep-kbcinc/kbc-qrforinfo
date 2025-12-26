@@ -172,14 +172,18 @@ const fetchCounts = async()=>{
 
 
 
+const pageNumber = ref(1)
+const pageLimit = ref(10)
+
 const disputeListLoader = ref(false)
 const fetchDisputList = async()=>{
   disputeListLoader.value = true
   try {
     let data = {
       "STATUS": "",
-      "OFFSET": 0,
-      "LIMIT": 100
+      "OFFSET": pageNumber.value,
+      "LIMIT": pageLimit.value,
+      "SEARCH_TEXT": ''
     }
     let res = await propertyService.adminDisputesList(data)
     if(res){
@@ -196,6 +200,7 @@ const fetchDisputList = async()=>{
 const resolveOrRejectLoader = ref(false)
 const resolveOrReject = async(type, id)=>{
   resolveOrRejectLoader.value = true
+  disputeListLoader.value = true
   try {
     let data = {
       "DISPUTE_ID": id,
@@ -210,7 +215,10 @@ const resolveOrReject = async(type, id)=>{
           });
           resolveOrRejectLoader.value = false
       fetchCounts()
-      fetchDisputList()
+      setTimeout(()=>{
+        fetchDisputList()
+      }, 2000)
+      
     }
   } catch (error) {
     resolveOrRejectLoader.value = false
