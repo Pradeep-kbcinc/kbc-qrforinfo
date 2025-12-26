@@ -185,7 +185,7 @@
             @input="v$.TITLE.$touch" v-model="state.TITLE" class="mt-1" rounded="lg" variant="outlined"
             placeholder="Modern 3BR Apartment"></v-text-field>
         </div>
-        <div v-if="titleOptions && titleOptions.length > 0 && selectedSuggestion" class="mt-n5">
+        <div v-if="titleOptions && titleOptions.length > 0 && selectedSuggestion && state.ADDRESS_LINE1" class="mt-n5">
           <!-- <p class="font-weight-bold">**Name Suggestions</p> -->
           <!-- <v-select
               class="mt-2"
@@ -195,9 +195,9 @@
               variant="solo"
             /> -->
           <!-- <p>**Name Suggestions</p> -->
-          <v-card class="mx-auto overflow-y-auto"  max-height="200">
+          <v-card class="mx-auto overflow-y-auto" max-height="200">
             <v-list class="">
-              <v-list-item class="text-subtitle-1 font-weight-bold" @click="selectSuggestion(item)" v-for="(item, i) in titleOptions" :key="i" :value="item" color="primary" variant="plain">
+              <v-list-item class="text-subtitle-1 font-weight-bold" @click="selectSuggestion(item)" v-for="(item, i) in titleOptions" :key="i" :value="item" color="primary" variant="flat">
                <v-icon>mdi-radiobox-blank</v-icon> {{ item }}
               </v-list-item>
             </v-list>
@@ -763,7 +763,7 @@ const generatePropertyTitles = (state) => {
   const location =
     CITY || STATE
       ? `${CITY}${CITY && STATE ? ', ' : ''}${STATE}`
-      : ADDRESS_LINE1?.split(',')[0] || ''
+      : ADDRESS_LINE1?.split(',')[1] || ''
 
   const bhk = NO_BEDROOMS ? `${NO_BEDROOMS} BHK` : ''
   const areaText = AREA ? `${AREA} ${AREA_UNIT}` : ''
