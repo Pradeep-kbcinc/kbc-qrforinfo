@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <h3>{{ $route.params.id ? 'Edit Property' : 'Add New Property' }}</h3>
-
+    <!-- {{ state }} -->
     <v-card :key="cardKey" class="mt-4 card-box-shadow rounded-lg pa-4">
       <v-skeleton-loader v-if="isLoadingProperty" type="article"></v-skeleton-loader>
       <v-card-text v-else>
@@ -13,15 +13,23 @@
           <p class="mt-6 font-weight-bold">Listing Type</p>
           <v-row>
             <v-col>
-              <v-btn @click="state.LISTING_TYPE = 'For Sale'" :color="state.LISTING_TYPE == 'For Sale' ? 'primary' : ''" :class="state.LISTING_TYPE == 'For Sale' ? 'selectedCard' : ''" variant="outlined" block size="x-large" rounded="lg" class="text-none elevation-0 text-body-1">
+              <v-btn @click="state.LISTING_TYPE = 'For Sale'" :color="state.LISTING_TYPE == 'For Sale' ? 'primary' : ''"
+                :class="state.LISTING_TYPE == 'For Sale' ? 'selectedCard' : ''" variant="outlined" block size="x-large"
+                rounded="lg" class="text-none elevation-0 text-body-1">
                 For Sale</v-btn>
             </v-col>
             <v-col>
-              <v-btn @click="state.LISTING_TYPE = 'For Rent'" variant="outlined" :color="state.LISTING_TYPE == 'For Rent' ? 'primary' : ''" block size="x-large" :class="state.LISTING_TYPE == 'For Rent' ? 'selectedCard' : ''" rounded="lg" class="text-none elevation-0 text-body-1">
+              <v-btn @click="state.LISTING_TYPE = 'For Rent'" variant="outlined"
+                :color="state.LISTING_TYPE == 'For Rent' ? 'primary' : ''" block size="x-large"
+                :class="state.LISTING_TYPE == 'For Rent' ? 'selectedCard' : ''" rounded="lg"
+                class="text-none elevation-0 text-body-1">
                 For Rent</v-btn>
             </v-col>
             <v-col>
-              <v-btn @click="state.LISTING_TYPE = 'Build to Suit'" variant="outlined" :color="state.LISTING_TYPE == 'Build to Suit' ? 'primary' : ''" block size="x-large" :class="state.LISTING_TYPE == 'Build to Suit' ? 'selectedCard' : ''" rounded="lg" class="text-none elevation-0 text-body-1">
+              <v-btn @click="state.LISTING_TYPE = 'Build to Suit'" variant="outlined"
+                :color="state.LISTING_TYPE == 'Build to Suit' ? 'primary' : ''" block size="x-large"
+                :class="state.LISTING_TYPE == 'Build to Suit' ? 'selectedCard' : ''" rounded="lg"
+                class="text-none elevation-0 text-body-1">
                 Build to Suit</v-btn>
             </v-col>
           </v-row>
@@ -36,7 +44,8 @@
             </v-radio-group>
           </v-col>
           <v-col v-if="state.PROPERTY_KIND != 'LAND'">
-            <v-radio-group :disabled="state.PROPERTY_KIND == 'LAND'" hide-details v-model="state.FURNISHING_TYPE" inline color="primary" label="Furnishing Type">
+            <v-radio-group :disabled="state.PROPERTY_KIND == 'LAND'" hide-details v-model="state.FURNISHING_TYPE" inline
+              color="primary" label="Furnishing Type">
               <v-radio label="Unfurnished" value="UNFURNISHED"></v-radio>
               <v-radio label="Semi" value="SEMI"></v-radio>
               <v-radio label="Full" value="FULL"></v-radio>
@@ -47,7 +56,8 @@
               <v-radio label="Residential" value="RESIDENTIAL"></v-radio>
               <v-radio label="Commercial" value="COMMERCIAL"></v-radio>
               <v-radio label="Mixed" value="MIXED"></v-radio>
-              <v-radio :disabled="state.PROPERTY_KIND == 'HOUSE' || state.PROPERTY_KIND == 'APARTMENT'" label="Agricultural" value="AGRICULTURAL"></v-radio>
+              <v-radio :disabled="state.PROPERTY_KIND == 'HOUSE' || state.PROPERTY_KIND == 'APARTMENT'"
+                label="Agricultural" value="AGRICULTURAL"></v-radio>
               <v-radio label="Industrial" value="INDUSTRIAL"></v-radio>
               <v-radio label="Institutional" value="INSTITUTIONAL"></v-radio>
               <v-radio :disabled="state.PROPERTY_KIND == 'LAND'" label="Recreational" value="RECREATIONAL"></v-radio>
@@ -56,79 +66,78 @@
           </v-col>
         </v-row>
 
-        <div>
-          <p class="font-weight-bold">Property Name</p>
-          <v-text-field :error-messages="v$.TITLE.$errors.map(e => e.$message)" @blur="v$.TITLE.$touch" @input="v$.TITLE.$touch" v-model="state.TITLE" class="mt-1" rounded="lg" variant="outlined" placeholder="Modern 3BR Apartment"></v-text-field>
-        </div>
-        <div>
-          <p class="mb-2 font-weight-bold">Property Description</p>
-          <!-- <v-textarea :error-messages="v$.PROPERTY_DESC.$errors.map(e => e.$message)" @blur="v$.PROPERTY_DESC.$touch" @input="v$.PROPERTY_DESC.$touch" v-model="state.PROPERTY_DESC" class="mt-1" rounded="lg" variant="outlined" placeholder="Modern 3BR Apartment"></v-textarea> -->
 
-          <QuillEditor style="height: 150px" theme="snow" contentType="html" placeholder="Property Description" v-model:content="state.PROPERTY_DESC" @blur="v$.PROPERTY_DESC.$touch" @input="v$.PROPERTY_DESC.$touch" />
-          <small v-if="v$.PROPERTY_DESC.$error" class="text-error">
-            {{ v$.PROPERTY_DESC.$errors[0].$message }}
-          </small>
-        </div>
         <div class="mt-4">
           <div class="d-flex align-center">
             <div class="d-flex align-center">
               <p class="font-weight-bold">**Property Address</p>
-              <v-btn @click="chooseFromMapModal = true" class="text-none elevation-0 text-body-2 ml-4" color="primary" size="small" min-width="200" rounded="lg">Choose From Map <v-icon class="ml-2">mdi-map-marker-multiple</v-icon></v-btn>
+              <v-btn @click="chooseFromMapModal = true" class="text-none elevation-0 text-body-2 ml-4" color="primary"
+                size="small" min-width="200" rounded="lg">Choose From Map <v-icon
+                  class="ml-2">mdi-map-marker-multiple</v-icon></v-btn>
             </div>
-            
-              <v-spacer></v-spacer>
- 
-              <v-switch class="mt-5" v-model="state.IS_ADDRESS_PRIVATE_FLG" :false-value="0"
-              :true-value="1" color="primary" label="Show Address to the buyers ?"></v-switch>
-            </div>
-          
-          <v-text-field clearable prepend-inner-icon="mdi-magnify" v-model="address" class="mt-n5" rounded="lg" @input="debouncedSearch" variant="outlined" placeholder="Property Address..."></v-text-field>
-         
-              <v-list v-show="results && results.length" class="mt-n5">
-                <v-list-item v-for="(result, i) in results" :key="i" @click="selectedAddress(result)" @click.prevent="results = []" color="grey" variant="outlined">
-                  <v-list-item-title> {{ result.name }}</v-list-item-title>
-                </v-list-item>
-              </v-list>
-              <div v-if="state.ADDRESS_LINE1">
 
-              <v-row>
-                <v-col>
-                  <p class="font-weight-bold">Selected Address :</p> 
-             <v-textarea variant="outlined" class="mt-1" rounded="lg" v-model="state.ADDRESS_LINE1">
-             </v-textarea>
-                </v-col>
-                <v-col>
-                  <GoogleMap v-if="state.LATITUDE && state.LONGITUDE" :lat="state.LATITUDE" :lng="state.LONGITUDE"/>
-                </v-col>
-              </v-row>
-            
-             
-            </div>
-            <small v-if="v$.ADDRESS_LINE1.$error" class="text-error">
+            <v-spacer></v-spacer>
+
+            <v-switch class="mt-5" v-model="state.IS_ADDRESS_PRIVATE_FLG" :false-value="0" :true-value="1"
+              color="primary" label="Show Address to the buyers ?"></v-switch>
+          </div>
+
+          <v-text-field clearable prepend-inner-icon="mdi-magnify" v-model="address" class="mt-n5" rounded="lg"
+            @input="debouncedSearch" variant="outlined" placeholder="Property Address..."></v-text-field>
+
+          <v-list v-show="results && results.length" class="mt-n5">
+            <v-list-item v-for="(result, i) in results" :key="i" @click="selectedAddress(result)"
+              @click.prevent="results = []" color="grey" variant="outlined">
+              <v-list-item-title> {{ result.name }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+          <div v-if="state.ADDRESS_LINE1">
+
+            <v-row>
+              <v-col>
+                <p class="font-weight-bold">Selected Address :</p>
+                <v-textarea variant="outlined" class="mt-1" rounded="lg" v-model="state.ADDRESS_LINE1">
+                </v-textarea>
+              </v-col>
+              <v-col>
+                <GoogleMap v-if="state.LATITUDE && state.LONGITUDE" :lat="state.LATITUDE" :lng="state.LONGITUDE" />
+              </v-col>
+            </v-row>
+
+
+          </div>
+          <small v-if="v$.ADDRESS_LINE1.$error" class="text-error">
             {{ v$.ADDRESS_LINE1.$errors[0].$message }}
           </small>
         </div>
-
         <div>
-          <v-row align="end">
+          <v-row>
             <v-col>
-              <p class="font-weight-bold">Price   <span v-if="priceInWords" class="text-caption mt-n14 text-primary">({{ priceInWords }})</span> </p>
-              <v-number-input :error-messages="v$.PRICE_AMOUNT.$errors.map(e => e.$message)" @blur="v$.PRICE_AMOUNT.$touch" @input="v$.PRICE_AMOUNT.$touch" v-model="state.PRICE_AMOUNT" class="mt-1 mb-0" rounded="lg" variant="outlined" placeholder="450000"></v-number-input>
-           
+              <p class="font-weight-bold">Price <span v-if="priceInWords" class="text-caption mt-n14 text-primary">({{
+                  priceInWords }})</span> </p>
+              <v-number-input :error-messages="v$.PRICE_AMOUNT.$errors.map(e => e.$message)"
+                @blur="v$.PRICE_AMOUNT.$touch" @input="v$.PRICE_AMOUNT.$touch" v-model="state.PRICE_AMOUNT"
+                class="mt-1 mb-0" rounded="lg" variant="outlined" placeholder="450000"></v-number-input>
+
             </v-col>
             <v-col cols="auto">
               <p class="pr-4 font-weight-bold mb-1">Currency Code</p>
-              <v-select v-model="state.CURRENCY_CODE" variant="outlined" class="mt-auto" :items="['INR', 'USD']" rounded="lg"></v-select>
+              <v-select v-model="state.CURRENCY_CODE" variant="outlined" class="mt-auto" :items="['INR', 'USD']"
+                rounded="lg"></v-select>
             </v-col>
 
 
             <v-col v-if="state.PROPERTY_KIND !== 'LAND'">
               <p class="font-weight-bold">Bedrooms</p>
-              <v-text-field type="number" :disabled="state.PROPERTY_KIND == 'LAND'" :error-messages="v$.NO_BEDROOMS.$errors.map(e => e.$message)" @blur="v$.NO_BEDROOMS.$touch" @input="v$.NO_BEDROOMS.$touch" v-model="state.NO_BEDROOMS" class="mt-1" rounded="lg" variant="outlined" placeholder="Ex. 3"></v-text-field>
+              <v-text-field type="number" :disabled="state.PROPERTY_KIND == 'LAND'"
+                :error-messages="v$.NO_BEDROOMS.$errors.map(e => e.$message)" @blur="v$.NO_BEDROOMS.$touch"
+                @input="v$.NO_BEDROOMS.$touch" v-model="state.NO_BEDROOMS" class="mt-1" rounded="lg" variant="outlined"
+                placeholder="Ex. 3"></v-text-field>
             </v-col>
             <v-col v-if="state.PROPERTY_KIND !== 'LAND'">
               <p class="font-weight-bold">Bathrooms</p>
-              <v-text-field :disabled="state.PROPERTY_KIND == 'LAND'" v-model="state.NO_BATHROOMS" class="mt-1" rounded="lg" variant="outlined" type="number" placeholder="Ex. 3"></v-text-field>
+              <v-text-field :disabled="state.PROPERTY_KIND == 'LAND'" v-model="state.NO_BATHROOMS" class="mt-1"
+                rounded="lg" variant="outlined" type="number" placeholder="Ex. 3"></v-text-field>
             </v-col>
           </v-row>
 
@@ -146,46 +155,89 @@
               
               <v-select :loading="dropdownLoader" :items="CITY_LIST" item-title="CITY_NAME" :return-object="true" :error-messages="v$.CITY.$errors.map(e => e.$message)" @blur="v$.CITY.$touch" @input="v$.CITY.$touch" v-model="state.CITY" class="mt-1" rounded="lg" variant="outlined" placeholder="New Delhi"></v-select>
             </v-col> -->
-            
+
           </v-row>
 
           <v-row align="end">
             <v-col cols="12" md="6">
               <p class="font-weight-bold">Postal Code</p>
-              <v-text-field v-model="state.POSTAL_CODE" :error-messages="v$.POSTAL_CODE.$errors.map(e => e.$message)" @blur="v$.POSTAL_CODE.$touch" @input="v$.POSTAL_CODE.$touch" class="mt-1" rounded="lg" variant="outlined" placeholder="Postal Code"></v-text-field>
+              <v-text-field v-model="state.POSTAL_CODE" :error-messages="v$.POSTAL_CODE.$errors.map(e => e.$message)"
+                @blur="v$.POSTAL_CODE.$touch" @input="v$.POSTAL_CODE.$touch" class="mt-1" rounded="lg"
+                variant="outlined" placeholder="Postal Code"></v-text-field>
             </v-col>
             <v-col cols="12" md="4">
               <p class="font-weight-bold">Area</p>
-              <v-text-field :error-messages="v$.AREA.$errors.map(e => e.$message)" @blur="v$.AREA.$touch" @input="v$.AREA.$touch" v-model="state.AREA" class="mt-1" rounded="lg" variant="outlined" placeholder="Area"></v-text-field>
+              <v-text-field :error-messages="v$.AREA.$errors.map(e => e.$message)" @blur="v$.AREA.$touch"
+                @input="v$.AREA.$touch" v-model="state.AREA" class="mt-1" rounded="lg" variant="outlined"
+                placeholder="Area"></v-text-field>
             </v-col>
             <v-col cols="12" md="2">
               <p class="pr-4 font-weight-bold">Area Unit</p>
-              <v-select v-model="state.AREA_UNIT" variant="outlined" class="mt-auto" :items="['SQFT', 'SQYD', 'SQM', 'ACRE', 'HECTARE']" rounded="lg"></v-select>
+              <v-select v-model="state.AREA_UNIT" variant="outlined" class="mt-auto"
+                :items="['SQFT', 'SQYD', 'SQM', 'ACRE', 'HECTARE']" rounded="lg"></v-select>
             </v-col>
           </v-row>
 
         </div>
+        <div>
+          <p class="font-weight-bold">Property Name</p>
+          <v-text-field :error-messages="v$.TITLE.$errors.map(e => e.$message)" @blur="v$.TITLE.$touch"
+            @input="v$.TITLE.$touch" v-model="state.TITLE" class="mt-1" rounded="lg" variant="outlined"
+            placeholder="Modern 3BR Apartment"></v-text-field>
+        </div>
+        <div v-if="titleOptions && titleOptions.length > 0 && selectedSuggestion" class="mt-n5">
+          <!-- <p class="font-weight-bold">**Name Suggestions</p> -->
+          <!-- <v-select
+              class="mt-2"
+              :items="titleOptions"
+              placeholder="Property names suggestions"
+              v-model="state.TITLE"
+              variant="solo"
+            /> -->
+          <!-- <p>**Name Suggestions</p> -->
+          <v-card class="mx-auto overflow-y-auto"  max-height="200">
+            <v-list class="">
+              <v-list-item class="text-subtitle-1 font-weight-bold" @click="selectSuggestion(item)" v-for="(item, i) in titleOptions" :key="i" :value="item" color="primary" variant="plain">
+               <v-icon>mdi-radiobox-blank</v-icon> {{ item }}
+              </v-list-item>
+            </v-list>
+          </v-card>
+        </div>
+        <div class="mt-3">
+          <p class="mb-2 font-weight-bold">Property Description</p>
+          <!-- <v-textarea :error-messages="v$.PROPERTY_DESC.$errors.map(e => e.$message)" @blur="v$.PROPERTY_DESC.$touch" @input="v$.PROPERTY_DESC.$touch" v-model="state.PROPERTY_DESC" class="mt-1" rounded="lg" variant="outlined" placeholder="Modern 3BR Apartment"></v-textarea> -->
+
+          <QuillEditor style="height: 150px" theme="snow" contentType="html" placeholder="Property Description"
+            v-model:content="state.PROPERTY_DESC" @blur="v$.PROPERTY_DESC.$touch" @input="v$.PROPERTY_DESC.$touch" />
+          <small v-if="v$.PROPERTY_DESC.$error" class="text-error">
+            {{ v$.PROPERTY_DESC.$errors[0].$message }}
+          </small>
+        </div>
         <v-divider></v-divider>
         <div class="d-flex mt-4">
-          <v-btn @click="saveDraft" :loading="draftLoader" color="grey" class="text-none rounded-lg box-shadow font-weight-bold" height="42"> <v-icon class="mr-2">mdi-file-sign</v-icon> Save
+          <v-btn @click="saveDraft" :loading="draftLoader" color="grey"
+            class="text-none rounded-lg box-shadow font-weight-bold" height="42"> <v-icon
+              class="mr-2">mdi-file-sign</v-icon> Save
             Draft</v-btn>
           <v-spacer></v-spacer>
-          <v-btn @click="saveProperty" :loading="saveBtnLoader" color="primary" class="text-none rounded-lg elevation-0 font-weight-bold" height="42"><v-icon class="mr-2">mdi-check</v-icon> Save Property</v-btn>
+          <v-btn @click="saveProperty" :loading="saveBtnLoader" color="primary"
+            class="text-none rounded-lg elevation-0 font-weight-bold" height="42"><v-icon
+              class="mr-2">mdi-check</v-icon> Save Property</v-btn>
         </div>
       </v-card-text>
-     
+
     </v-card>
-    <v-dialog  v-model="chooseFromMapModal">
-        <v-toolbar color="blue-lighten-5" density="compact" class="px-2 rounded-t-lg">
-          <h6 class="text-h6">Choose From Map</h6>
-          <v-spacer></v-spacer>
-          <v-btn icon="mdi-close" @click="chooseFromMapModal = false"></v-btn>
-        </v-toolbar>
-        <v-card>
-          <v-card-text>
-            <GMap @confirmAdd="closeModal" />
-          </v-card-text>
-        </v-card>
+    <v-dialog v-model="chooseFromMapModal">
+      <v-toolbar color="blue-lighten-5" density="compact" class="px-2 rounded-t-lg">
+        <h6 class="text-h6">Choose From Map</h6>
+        <v-spacer></v-spacer>
+        <v-btn icon="mdi-close" @click="chooseFromMapModal = false"></v-btn>
+      </v-toolbar>
+      <v-card>
+        <v-card-text>
+          <GMap @confirmAdd="closeModal" />
+        </v-card-text>
+      </v-card>
     </v-dialog>
   </v-container>
 </template>
@@ -206,6 +258,7 @@ const authStore = useAuthStore()
 const isLoadingProperty = ref(false)
 const cardKey = ref(1)
 const results = ref([])
+const selectedSuggestion = ref(true)
 const state = reactive({
   ACTION_TYPE: route?.params?.id ? 'UPDATE' : "CREATE",
   PROPERTY_ID: 0,
@@ -251,34 +304,34 @@ const state = reactive({
   STATE: "",
   POSTAL_CODE: "",
   COUNTRY: "",
-  IS_ACTIVE_FLG: 1, 
+  IS_ACTIVE_FLG: 1,
 })
 const rules = {
   LISTING_TYPE: { required: helpers.withMessage('Property Listing type is required', required) },
   TITLE: { required: helpers.withMessage('Property name is required', required) },
   PROPERTY_DESC: { required: helpers.withMessage('Property description is required', required) },
   PRICE_AMOUNT: { required: helpers.withMessage('Price is required', required) },
-  COUNTRY: { },
-  STATE: { },
-  CITY: { },
-  IS_ADDRESS_PRIVATE_FLG:{required},
+  COUNTRY: {},
+  STATE: {},
+  CITY: {},
+  IS_ADDRESS_PRIVATE_FLG: { required },
   AREA: { required: helpers.withMessage('Area is required', required) },
   NO_BEDROOMS: {},
   NO_BATHROOMS: {},
-  POSTAL_CODE:{
+  POSTAL_CODE: {
     required: helpers.withMessage('Postal code is required', required),
     validFormat: helpers.withMessage(
       'Postal code must be a 6-digit number',
       (value) => /^[0-9]{6}$/.test(value)
     )
   },
-  ADDRESS_LINE1:{ required: helpers.withMessage('Address is required', required) }
+  ADDRESS_LINE1: { required: helpers.withMessage('Address is required', required) }
 }
 const v$ = useVuelidate(rules, state)
 const saveBtnLoader = ref(false)
 //..............................................................................
 const chooseFromMapModal = ref(false)
-watch(chooseFromMapModal,(val)=>{
+watch(chooseFromMapModal, (val) => {
   address.value = ''
   results.value = []
 })
@@ -287,7 +340,7 @@ const COUNTRY_LIST = ref([])
 const STATE_LIST = ref([])
 const CITY_LIST = ref([])
 const dropdownLoader = ref(false)
-const getLocationDetails = async()=>{
+const getLocationDetails = async () => {
   dropdownLoader.value = true
   try {
     let data = {
@@ -295,15 +348,15 @@ const getLocationDetails = async()=>{
       "STATE_ID": state.STATE?.STATE_ID || 0,
     }
     let res = await propertyService.fetchLocationDetails(data)
-    if(res.data.ERR_CODE == 0){
+    if (res.data.ERR_CODE == 0) {
       let response = res.data.FetchData
-      if(response.COUNTRY_LIST){
+      if (response.COUNTRY_LIST) {
         COUNTRY_LIST.value = res.data.FetchData?.COUNTRY_LIST
       }
-      if(response.STATE_LIST){
+      if (response.STATE_LIST) {
         STATE_LIST.value = res.data.FetchData?.STATE_LIST
       }
-      if(response.CITY_LIST){
+      if (response.CITY_LIST) {
         CITY_LIST.value = res.data.FetchData?.CITY_LIST
       }
       dropdownLoader.value = false
@@ -339,7 +392,7 @@ const saveProperty = async () => {
         SELLER_USER_ID: state.SELLER_USER_ID || authStore?.userDetails?.USER_ID || 0,
         PROPERTY_ID: state.PROPERTY_ID || 0,
         LISTING_TYPE: state.LISTING_TYPE,
-        TITLE: state.TITLE ,
+        TITLE: state.TITLE,
         PROPERTY_DESC: state.PROPERTY_DESC,
         PROPERTY_KIND: state.PROPERTY_KIND,
         TYPE_CODE: state.TYPE_CODE || '',
@@ -364,7 +417,7 @@ const saveProperty = async () => {
         FLOOR_NO: state.FLOOR_NO || 0,
         TOTAL_FLOORS: state.TOTAL_FLOORS || 0,
         MAINTENANCE_FEE: state.MAINTENANCE_FEE || 0,
-        LAND_USE: state.LAND_USE ,
+        LAND_USE: state.LAND_USE,
         FRONTAGE_M: state.FRONTAGE_M || 0,
         DEPTH_M: state.DEPTH_M || 0,
         ROAD_WIDTH_M: state.ROAD_WIDTH_M || 0,
@@ -534,7 +587,7 @@ const saveDraft = async () => {
         STATE: state.STATE?.STATE_NAME || '',
         CITY: state.CITY?.CITY_NAME || '',
         POSTAL_CODE: state.POSTAL_CODE || '',
-       
+
         IS_ACTIVE_FLG: state.IS_ACTIVE_FLG || 1,
       }
       res = await propertyService.addPropertyToDraft(data)
@@ -562,24 +615,24 @@ const saveDraft = async () => {
   }
 }
 
-watch(() => state.COUNTRY,(val) => {
+watch(() => state.COUNTRY, (val) => {
   getLocationDetails()
-  if(!route.query.draft){
+  if (!route.query.draft) {
     state.STATE = ''
     state.CITY = ''
   }
-  
-  },
+
+},
   {
     deep: true
   }
 );
-watch(() => state.STATE,(val) => {
+watch(() => state.STATE, (val) => {
   getLocationDetails()
-  if(!route.query.draft){
-  state.CITY = ''
+  if (!route.query.draft) {
+    state.CITY = ''
   }
-  },
+},
   {
     deep: true
   }
@@ -598,13 +651,13 @@ const search = async () => {
     )
 
     let fetchResult = await response.json()
-    
+
     fetchResult.features.forEach((element, i) => {
       results.value.push({
         id: i + 1,
         name: element?.properties?.formatted,
         lat: element?.properties?.lat,
-        lng: element?.properties?.lon, 
+        lng: element?.properties?.lon,
         postalCode: element?.properties?.postcode
       })
     })
@@ -630,7 +683,7 @@ const selectedAddress = (result) => {
   // long.value = result.lng
 }
 
-const closeModal = (data)=>{
+const closeModal = (data) => {
   chooseFromMapModal.value = false
   state.ADDRESS_LINE1 = data.address
   state.LATITUDE = data.lat
@@ -639,7 +692,7 @@ const closeModal = (data)=>{
 }
 
 
-const numberToWordsIndian = (num)=> {
+const numberToWordsIndian = (num) => {
   if (!num || isNaN(num)) return ''
 
   const ones = [
@@ -689,6 +742,56 @@ const priceInWords = computed(() => {
   return numberToWordsIndian(state.PRICE_AMOUNT)
 })
 
+const titleOptions = computed(() =>
+  generatePropertyTitles(state)
+)
+
+
+const generatePropertyTitles = (state) => {
+  const {
+    LISTING_TYPE,
+    PROPERTY_KIND,
+    NO_BEDROOMS,
+    AREA,
+    AREA_UNIT,
+    FURNISHING_TYPE,
+    CITY,
+    STATE,
+    ADDRESS_LINE1
+  } = state
+
+  const location =
+    CITY || STATE
+      ? `${CITY}${CITY && STATE ? ', ' : ''}${STATE}`
+      : ADDRESS_LINE1?.split(',')[0] || ''
+
+  const bhk = NO_BEDROOMS ? `${NO_BEDROOMS} BHK` : ''
+  const areaText = AREA ? `${AREA} ${AREA_UNIT}` : ''
+  const furnishing =
+    FURNISHING_TYPE && FURNISHING_TYPE !== 'NA'
+      ? FURNISHING_TYPE.toLowerCase()
+      : ''
+
+  return [
+    `${bhk} ${PROPERTY_KIND} ${LISTING_TYPE}`.trim(),
+
+    `${bhk} ${PROPERTY_KIND} for ${LISTING_TYPE} in ${location}`.trim(),
+
+    `${areaText} ${bhk} ${PROPERTY_KIND} for ${LISTING_TYPE}`.trim(),
+
+    `${furnishing ? furnishing + ' ' : ''}${bhk} ${PROPERTY_KIND} in ${location}`.trim(),
+
+    `${PROPERTY_KIND} for ${LISTING_TYPE} near ${location}`.trim(),
+
+    `${bhk} ${PROPERTY_KIND} with ${areaText} area`.trim()
+  ].filter(Boolean)
+}
+
+
+const selectSuggestion = (item)=>{
+  state.TITLE = item
+  selectedSuggestion.value = false
+}
 
 </script>
 
