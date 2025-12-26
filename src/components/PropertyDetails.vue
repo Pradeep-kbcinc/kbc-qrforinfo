@@ -1094,7 +1094,6 @@ const viewMoreFeedbackLoader = ref(false)
 const feedbackProperty = ref([])
 const fetchPropertyFeedback = async(id)=>{
   viewMoreFeedbackLoader.value = true
-  
   try {
     let data = {
       "RATED_USER_ID": id,
@@ -1118,6 +1117,7 @@ const fetchSellerFeedback = async(id)=>{
   
   try {
     let data = {
+      "INTERACTION_ID":0,
       "RATED_USER_ID": id,
       "OFFSET": 0,
       "LIMIT": feedbackLimit.value
@@ -1266,7 +1266,7 @@ const fetchPropertyDetail = async () => {
     qrCodeValue.value = res.data?.FetchData?.PROPERTY_DETAILS?.[0] || {}
     if(authStore.isAuthenticated){
       fetchSellerFeedback(propertyObj.value?.SELLER_USER_ID)
-      fetchPropertyFeedback()
+      fetchPropertyFeedback(propertyObj.value?.SELLER_USER_ID)
       fetchReportedFeedbacks(propertyObj.value?.SELLER_USER_ID)
       getAdminUserTrust(propertyObj.value?.SELLER_USER_ID)
     }
@@ -1740,8 +1740,8 @@ const giveRating = async(data)=>{
           "RATER_USER_ID": authStore.userDetails.USER_ID,
           "RATED_USER_ID": propertyObj.value.SELLER_USER_ID,
           "OVERALL_RATING": ratingState.value.OVERALL_RATING,
-          "PUBLIC_TAGS_JSON": selectedTags.value && selectedTags.value.length > 1 ? selectedTags.value.map(item => ({ TAG: item })) : [],
-          // "PUBLIC_TAGS_JSON" : "[PROFESSIONAL, ON_TIME]",
+          "PUBLIC_TAGS_TEXT": selectedTags.value && selectedTags.value.length > 1 ? selectedTags.value.join(',') : ',',
+          // "PUBLIC_TAGS_TEXT" : "[PROFESSIONAL, ON_TIME]",
           "PUBLIC_COMMENT": ratingState.value.PUBLIC_COMMENT,
           "PRIVATE_COMMENT": ratingState.value.PRIVATE_COMMENT
         }
@@ -1751,8 +1751,9 @@ const giveRating = async(data)=>{
           "RATER_USER_ID": authStore.userDetails.USER_ID,
           "RATED_USER_ID": propertyObj.value.SELLER_USER_ID,
           "OVERALL_RATING": ratingState.value.OVERALL_RATING,
-          "PUBLIC_TAGS_JSON": selectedTags.value && selectedTags.value.length > 1 ? selectedTags.value.map(item => ({ TAG: item })) : [],
-          // "PUBLIC_TAGS_JSON":'FAKE_INFO',
+          "PUBLIC_TAGS_TEXT": selectedTags.value && selectedTags.value.length > 1 ? selectedTags.value.join(',') : '',
+          // selectedTags.value && selectedTags.value.length > 1 ? selectedTags.value.map(item => ({ TAG: item })) : [],
+          // "PUBLIC_TAGS_TEXT":'FAKE_INFO',
           "PUBLIC_COMMENT": ratingState.value.PUBLIC_COMMENT,
           "PRIVATE_COMMENT": ratingState.value.PRIVATE_COMMENT
         }
@@ -1770,6 +1771,7 @@ const giveRating = async(data)=>{
       feedbackModal.value = false
       if(authStore.isAuthenticated){
       fetchSellerFeedback(propertyObj.value?.SELLER_USER_ID)
+      fetchPropertyFeedback(propertyObj.value?.SELLER_USER_ID)
       }
       giveRatingLoader.value = false
     }else{

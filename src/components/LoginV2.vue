@@ -260,7 +260,8 @@ const gotoLogin = () => {
   } else {
     router.push({ name: 'Dashboard' })
   }
-}
+  loginLoader.value = false
+  }
 
 const verifyOtp = async () => {
   try {
@@ -330,10 +331,22 @@ const loginWithPass = async()=>{
       "USER_PASSWORD": password.value
     }
     let res = await propertyService.loginWithPass(data)
-    if(res){
-      console.log(res,'res')
-      loginLoader.value = false
+      if (res.data.Result.TOKEN && res.data.Result.USER) {
+      authStore.login(res.data.Result.USER, res.data.Result.TOKEN)
+      // localStorage.setItem("access_token", res.data)
+      await updateScannedProperty()
+      // router.push('/home')
+      gotoLogin()
+      
+    } else {
+      toast.error(res.data?.Result?.MESSAGE, {
+        autoClose: 4000,
+      });
     }
+
+
+      
+    
   } catch (error) {
     loginLoader.value = false
     console.log(error)
