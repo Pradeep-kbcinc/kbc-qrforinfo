@@ -331,8 +331,6 @@ const loginWithPass = async()=>{
       "USER_PASSWORD": password.value
     }
     let res = await propertyService.loginWithPass(data)
-    console.log(res, 'res')
- 
       if (res.data.Result.TOKEN && res.data.Result.USER) {
       authStore.login(res.data.Result.USER, res.data.Result.TOKEN)
       // localStorage.setItem("access_token", res.data)
