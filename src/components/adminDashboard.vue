@@ -184,7 +184,7 @@ const fetchDisputList = async()=>{
     let res = await propertyService.adminDisputesList(data)
     if(res){
       console.log(res,'res')
-      disputes.value = res.data.FetchData
+      disputes.value = res.data.FetchData?.list
       disputeListLoader.value = false
     }
   } catch (error) {

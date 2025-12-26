@@ -53,6 +53,13 @@
             <!-- <div class="or-divider">
             <span>OR</span>
         </div> -->
+
+        <v-tabs v-if="!isVerfiyOTP" v-model="tabVal" align-tabs="center" class="mt-n4" density="compact" color="primary">
+            <v-tab class="text-none" color="primary" value="otp">OTP Login</v-tab>
+            <v-tab class="text-none" color="primary" value="pass">Login With Password</v-tab>
+        </v-tabs>
+        <v-tabs-window class="mt-2" v-model="tabVal">
+          <v-tabs-window-item value="otp">
             <div v-if="!isVerfiyOTP" class="px-10">
 
               <v-text-field :prefix="isNumber(initialState.phoneNumber) ? '+91' : ''" v-model="initialState.phoneNumber" placeholder="Phone No. / Email" :error-messages="v$.phoneNumber.$errors.map(e => e.$message)" @blur="v$.phoneNumber.$touch" @input="v$.phoneNumber.$touch" variant="outlined" rounded="xl" class="email-field mb-0 pb-0" density="compact"></v-text-field>
@@ -91,6 +98,19 @@
               </p>
               <p class="version terms pt-0 mt-0 text-center">v{{ version }}</p>
             </div>
+          </v-tabs-window-item>
+          <v-tabs-window-item value="pass" class="px-10">
+              <v-text-field v-model="userId" placeholder="User Name" rounded="lg" density="compact" variant="outlined"></v-text-field>
+              <v-text-field v-model="password" :type="showPassword ? 'text' : 'password'" placeholder="Password" rounded="lg" density="compact" variant="outlined" :append-inner-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
+              @click:append-inner="showPassword = !showPassword"></v-text-field>
+              <v-btn @click="loginWithPass" :loading="loginLoader" block rounded="xl" height="38" elevation="0" class="continue-btn text-none text-caption mt-2" color="#19191a">
+                Login
+              </v-btn>
+          </v-tabs-window-item>
+        </v-tabs-window>
+          
+
+           
           </div>
         </v-col>
 
@@ -122,7 +142,7 @@ const router = useRouter()
 const route = useRoute()
 const isVerfiyOTP = ref(false)
 const otpCode = ref('')
-
+const tabVal = ref('otp')
 const initialState = ref({
   phoneNumber: '',
 })
@@ -297,6 +317,27 @@ const gotoSignUp = () => {
     router.push('/signup')
   }
 
+}
+const userId = ref('')
+const password = ref('')
+const loginLoader = ref(false)
+const showPassword = ref(false)
+const loginWithPass = async()=>{
+  loginLoader.value = true
+  try {
+    let data = {
+      "USERNAME":userId.value,
+      "USER_PASSWORD": password.value
+    }
+    let res = await propertyService.loginWithPass(data)
+    if(res){
+      console.log(res,'res')
+      loginLoader.value = false
+    }
+  } catch (error) {
+    loginLoader.value = false
+    console.log(error)
+  }
 }
 </script>
 

@@ -383,6 +383,9 @@ export default {
   //   "DETAILS": "Rating is incorrect."
   // }
   
-
+// login with pass 
+async loginWithPass(data){
+  return axios.post(`/VerifyPassword`, data)
+},
 
 }
