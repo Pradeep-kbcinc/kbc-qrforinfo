@@ -1,15 +1,15 @@
 <template>
   <!-- <Signup /> -->
   <v-app-bar density="comfortable" flat class="pa-2 border-b">
-          <template v-slot:prepend>
-            <div class="d-flex align-center">
-              <v-img width="70" contain src="@/assets/newLogo.png"></v-img>
-              <v-btn @click="router.push('/')" size="small" variant="tonal" min-width="100" color="primary" class="text-none box-shadow ml-4 text-body-2 mt-1"> About </v-btn>
-            </div>
-          </template>
-          <v-btn class="text-none rounded-lg font-weight-bold card-box-shadow" variant="tonal" color="primary" min-width="150" @click="router.push('/')"> Login</v-btn>
-         
-    </v-app-bar>
+    <template v-slot:prepend>
+      <div class="d-flex align-center">
+        <!-- <v-img width="70" contain src="@/assets/newLogo.png"></v-img> -->
+        <v-btn @click="router.push('/')" size="small" variant="tonal" min-width="100" color="primary" class="text-none box-shadow ml-4 text-body-2 mt-1"> About </v-btn>
+      </div>
+    </template>
+    <v-btn class="text-none rounded-lg font-weight-bold card-box-shadow" variant="tonal" color="primary" min-width="150" @click="router.push('/')"> Login</v-btn>
+
+  </v-app-bar>
   <div class="login-screen-wrapper mt-16">
     <div class="inside-card">
       <v-row>
@@ -17,14 +17,8 @@
           <div>
             <div v-if="false" class="d-flex">
 
-              <v-btn @click="selectedTab = 'staff'" color="#0397b1"
-                :variant="selectedTab == 'staff' ? 'tonal' : 'outlined'" height="35"
-                class="text-none font-weight-bold text-subtitle-1" rounded>Staff Login <v-icon
-                  class="ml-2">mdi-account-cog</v-icon></v-btn>
-              <v-btn @click="selectedTab = 'admin'" color="#0397b1"
-                :variant="selectedTab == 'admin' ? 'tonal' : 'outlined'" height="35"
-                class="text-none ml-2 font-weight-bold text-subtitle-1" rounded>Admin Login <v-icon
-                  class="ml-2">mdi-account-cog</v-icon></v-btn>
+              <v-btn @click="selectedTab = 'staff'" color="#0397b1" :variant="selectedTab == 'staff' ? 'tonal' : 'outlined'" height="35" class="text-none font-weight-bold text-subtitle-1" rounded>Staff Login <v-icon class="ml-2">mdi-account-cog</v-icon></v-btn>
+              <v-btn @click="selectedTab = 'admin'" color="#0397b1" :variant="selectedTab == 'admin' ? 'tonal' : 'outlined'" height="35" class="text-none ml-2 font-weight-bold text-subtitle-1" rounded>Admin Login <v-icon class="ml-2">mdi-account-cog</v-icon></v-btn>
               <v-spacer></v-spacer>
               <v-btn size="small" color="#0397b1" rounded="xl" class="mr-2"> <v-icon>mdi-qrcode-scan</v-icon></v-btn>
               <v-btn size="small" color="#0397b1" rounded="xl"><v-icon>mdi-key-alert</v-icon></v-btn>
@@ -35,10 +29,8 @@
             </div>
 
             <h2 class="welcome text-center">Create Account</h2>
-            <p class="subtitle text-center mb-1">Already have an account ? <span class="link text-primary"
-                @click="gotoLogin()">Login</span></p>
-            <p class="subtitle text-center mb-6">Go to <span class="link text-primary"
-                @click="$router.push({ name: 'BuyerLanding' })">Property Listing</span></p>
+            <p class="subtitle text-center mb-1">Already have an account ? <span class="link text-primary" @click="gotoLogin()">Login</span></p>
+            <p class="subtitle text-center mb-6">Go to <span class="link text-primary" @click="$router.push({ name: 'BuyerLanding' })">Property Listing</span></p>
 
             <!-- <div class="social-row">
             <v-btn variant="outlined" rounded="lg" class="social-btn">
@@ -60,25 +52,14 @@
 
             <div class="px-md-10 px-0">
 
-              <v-text-field :error-messages="v$.FNAME.$errors.map(e => e.$message)" @blur="v$.FNAME.$touch"
-                @input="v$.FNAME.$touch" v-model="propertyObj.FNAME" label="First Name" variant="outlined" rounded="xl"
-                class="email-field mb-0 pb-0" density="compact"></v-text-field>
+              <v-text-field :error-messages="v$.FNAME.$errors.map(e => e.$message)" @blur="v$.FNAME.$touch" @input="v$.FNAME.$touch" v-model="propertyObj.FNAME" label="First Name" variant="outlined" rounded="xl" class="email-field mb-0 pb-0" density="compact"></v-text-field>
 
-              <v-text-field :error-messages="v$.MNAME.$errors.map(e => e.$message)" @blur="v$.MNAME.$touch"
-                @input="v$.MNAME.$touch" v-model="propertyObj.MNAME" label="Middle Name (Optional)" variant="outlined"
-                rounded="xl" class="email-field mb-0 pb-0 mt-2" density="compact"></v-text-field>
+              <v-text-field :error-messages="v$.MNAME.$errors.map(e => e.$message)" @blur="v$.MNAME.$touch" @input="v$.MNAME.$touch" v-model="propertyObj.MNAME" label="Middle Name (Optional)" variant="outlined" rounded="xl" class="email-field mb-0 pb-0 mt-2" density="compact"></v-text-field>
 
-              <v-text-field :error-messages="v$.LNAME.$errors.map(e => e.$message)" @blur="v$.LNAME.$touch"
-                @input="v$.LNAME.$touch" v-model="propertyObj.LNAME" label="Last Name" variant="outlined" rounded="xl"
-                class="email-field mb-0 mt-n2 pb-0" density="compact"></v-text-field>
+              <v-text-field :error-messages="v$.LNAME.$errors.map(e => e.$message)" @blur="v$.LNAME.$touch" @input="v$.LNAME.$touch" v-model="propertyObj.LNAME" label="Last Name" variant="outlined" rounded="xl" class="email-field mb-0 mt-n2 pb-0" density="compact"></v-text-field>
 
-             
-                <v-text-field type="number" control-variant="hidden" prefix="+91" :error-messages="v$.MOBILE_PHONE.$errors.map(e => e.$message)"
-                  @blur="v$.MOBILE_PHONE.$touch" @input="v$.MOBILE_PHONE.$touch" v-model="propertyObj.MOBILE_PHONE"
-                  label="Phone Number" variant="outlined" rounded="xl" class="email-field mb-0 pb-0 mt-1"
-                  density="compact"></v-text-field>
 
-                <v-text-field :error-messages="v$.EMAIL.$errors.map(e => e.$message)" @blur="v$.EMAIL.$touch"
+                <!-- <v-text-field :error-messages="v$.EMAIL.$errors.map(e => e.$message)" @blur="v$.EMAIL.$touch"
                   v-model="propertyObj.EMAIL" label="Email" variant="outlined" rounded="xl"
                   class="email-field mb-0 mt-1 pb-0 w-100" density="compact"></v-text-field>
 
@@ -94,13 +75,16 @@
                     @click:append-inner="showPassword = !showPassword"
                     :error-messages="v$.USER_PASSWORD.$errors.map(e => e.$message)"
                     @blur="v$.USER_PASSWORD.$touch"
-                  />
+                  /> -->
 
 
               
+              <v-text-field type="number" control-variant="hidden" prefix="+91" :error-messages="v$.MOBILE_PHONE.$errors.map(e => e.$message)" @blur="v$.MOBILE_PHONE.$touch" @input="v$.MOBILE_PHONE.$touch" v-model="propertyObj.MOBILE_PHONE" label="Phone Number" variant="outlined" rounded="xl" class="email-field mb-0 pb-0 mt-1" density="compact"></v-text-field>
 
-              <v-btn @click="checkCredentials" :loading="btnLoader" block rounded="xl" height="38" elevation="0"
-                class="continue-btn text-none text-caption mt-2" color="#19191a">
+              <v-text-field :error-messages="v$.EMAIL.$errors.map(e => e.$message)" @blur="v$.EMAIL.$touch" v-model="propertyObj.EMAIL" label="Email" variant="outlined" rounded="xl" class="email-field mb-0 mt-1 pb-0 w-100" density="compact"></v-text-field>
+
+
+              <v-btn @click="checkCredentials" :loading="btnLoader" block rounded="xl" height="38" elevation="0" class="continue-btn text-none text-caption mt-2" color="#19191a">
                 Signup
               </v-btn>
 
@@ -160,8 +144,10 @@ const showPassword = ref(false)
 const rules = {
   ACTION_TYPE: {},
   USER_ID: {},
-  MOBILE_PHONE: { required, numeric, minLength: minLength(8),
-    maxLength: maxLength(15) },
+  MOBILE_PHONE: {
+    required, numeric, minLength: minLength(8),
+    maxLength: maxLength(15)
+  },
   FNAME: { required },
   MNAME: {},
   LNAME: { required },
@@ -227,15 +213,17 @@ const checkCredentials = async () => {
 
 
 
-const gotoLogin = ()=>{
-  if(route.query.qr){
-    router.push({ name: 'Login', query:{
-      qr: route.query.qr
-    } })
-  }else{
+const gotoLogin = () => {
+  if (route.query.qr) {
+    router.push({
+      name: 'Login', query: {
+        qr: route.query.qr
+      }
+    })
+  } else {
     router.push({ name: 'Login' })
   }
-  }
+}
 
 const registerNow = async () => {
   const isFormCorrect = await v$.value.$validate();
@@ -286,10 +274,11 @@ const registerNow = async () => {
   justify-content: center;
   /* center horizontally */
 }
+
 @media (max-width: 768px) {
-.login-screen-wrapper{
-  padding: 0 !important;
-}
+  .login-screen-wrapper {
+    padding: 0 !important;
+  }
 }
 
 .inside-card {

@@ -1,11 +1,11 @@
 <template>
-   <Transition name="slide-fade" mode="out-in">
+  <Transition name="slide-fade" mode="out-in">
     <div v-if="show" class="full-layout">
-  <v-main>
-    <Header />
-    <router-view />
-  </v-main>
-  </div>
+      <v-main>
+        <Header v-if="$route.name != 'AboutPage'" />
+        <router-view />
+      </v-main>
+    </div>
   </Transition>
 </template>
 
