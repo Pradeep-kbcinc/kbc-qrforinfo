@@ -83,6 +83,19 @@
 
               <v-text-field :error-messages="v$.EMAIL.$errors.map(e => e.$message)" @blur="v$.EMAIL.$touch" v-model="propertyObj.EMAIL" label="Email" variant="outlined" rounded="xl" class="email-field mb-0 mt-1 pb-0 w-100" density="compact"></v-text-field>
 
+              <v-text-field
+                    v-model="propertyObj.USER_PASSWORD"
+                    :type="showPassword ? 'text' : 'password'"
+                    label="Password"
+                    variant="outlined"
+                    rounded="xl"
+                    density="compact"
+                    class="email-field mb-0 mt-1 pb-0 w-100"
+                    :append-inner-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
+                    @click:append-inner="showPassword = !showPassword"
+                    :error-messages="v$.USER_PASSWORD.$errors.map(e => e.$message)"
+                    @blur="v$.USER_PASSWORD.$touch"
+                  />
 
               <v-btn @click="checkCredentials" :loading="btnLoader" block rounded="xl" height="38" elevation="0" class="continue-btn text-none text-caption mt-2" color="#19191a">
                 Signup
@@ -152,7 +165,7 @@ const rules = {
   MNAME: {},
   LNAME: { required },
   GENDER: {},
-  EMAIL: { email, required },
+  EMAIL: { email },
   USER_PASSWORD: {required},
   ADDRESS: {},
   LATITUDE: {},
