@@ -94,6 +94,11 @@
 
           </div>
 
+          <div v-else-if="!isLoading && propertyArr && propertyArr.length == 0" class="d-flex flex-column align-center justify-center">
+            <v-img width="150" src="@/assets/noData.png"></v-img>
+            <p>No any Property is submitted Yet</p>
+          </div>
+
           <v-list v-else class="py-0">
             <div v-for="(propertyObj, i) in propertyArr" :key="i" class="rounded-lg">
               <v-list-item @click="$router.push({

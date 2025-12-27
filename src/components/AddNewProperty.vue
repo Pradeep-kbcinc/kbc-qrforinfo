@@ -185,7 +185,7 @@
             @input="v$.TITLE.$touch" v-model="state.TITLE" class="mt-1" rounded="lg" variant="outlined"
             placeholder="Modern 3BR Apartment"></v-text-field>
         </div>
-        <div v-if="titleOptions && titleOptions.length > 0 && selectedSuggestion && state.ADDRESS_LINE1" class="mt-n5">
+        <div v-if="titleOptions && titleOptions.length > 0 && selectedSuggestion" class="mt-n5">
           <!-- <p class="font-weight-bold">**Name Suggestions</p> -->
           <!-- <v-select
               class="mt-2"
@@ -198,7 +198,7 @@
           <v-card class="mx-auto overflow-y-auto" max-height="200">
             <v-list class="">
               <v-list-item class="text-subtitle-1 font-weight-bold" @click="selectSuggestion(item)" v-for="(item, i) in titleOptions" :key="i" :value="item" color="primary" variant="flat">
-               <v-icon>mdi-radiobox-blank</v-icon> {{ item }}
+               <v-icon> {{ state.TITLE !== item ? 'mdi-radiobox-blank' : 'mdi-radiobox-marked'}}</v-icon> {{ item }}
               </v-list-item>
             </v-list>
           </v-card>
@@ -689,7 +689,21 @@ const closeModal = (data) => {
   state.LATITUDE = data.lat
   state.LONGITUDE = data.lng
   state.POSTAL_CODE = data.pincode
+  selectedSuggestion.value = true
 }
+
+// const stateWithoutTitle = computed(() => {
+//   const { TITLE, ...rest } = state
+//   return rest
+// })
+
+// watch(
+//   stateWithoutTitle,
+//   () => {
+//     selectedSuggestion.value = true
+//   },
+//   { deep: true }
+// )
 
 
 const numberToWordsIndian = (num) => {
@@ -790,7 +804,7 @@ const generatePropertyTitles = (state) => {
 
 const selectSuggestion = (item)=>{
   state.TITLE = item
-  selectedSuggestion.value = false
+  // selectedSuggestion.value = false
 }
 
 </script>

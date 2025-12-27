@@ -462,19 +462,14 @@
     </v-toolbar>
     <v-card rounded="b-lg t-0" elevation="0">
       <!-- Portrait  -->
-      <div id="portraitContent" class="border-lg rounded-xl overflow-hidden" v-if="qrViewSwitch == 'Portrait'">
+      <div id="portraitContent" class="border-lg rounded-xl overflow-hidden" v-if="qrViewSwitch == 'Portrait'" style="width:100%!important">
         <div>
           <div class="pa-4">
-
-            <!-- <h3 class="text-h6 font-weight-bold mb-2">QR Code</h3> -->
-
-
             <div class="d-flex justify-center">
               <img width="100" src="@/assets/newLogo.png" alt="">
             </div>
             <h2 class="text-center text-h3 font-weight-black mt-2 " v-if="propertyObj.LISTING_TYPE">
-              <!-- {{
-              propertyObj.LISTING_TYPE.toUpperCase() }} -->
+              
               FOR SALE
             </h2>
 
@@ -494,7 +489,7 @@
         <div
           style="background-color: #ee961d; min-height: 60px;position: relative;z-index: -1; height: 100%;margin-top: -80px;"
           elevation="0" color="primary" class="d-flex justify-center align-center" min-height="200">
-          <h5 class="text-white">SCAN TO SEE INFORMATION ABOUT THIS LISTING</h5>
+          <h5 class="text-white">SCAN TO SEE <span class="scan-text">INFORMATION ABOUT THIS</span> LISTING</h5>
         </div>
       </div>
 
@@ -528,7 +523,7 @@
         <!-- Bottom Banner -->
         <div class="d-flex justify-center align-center" style="background-color: #ee961d; min-height: 60px;">
           <h5 class="text-white text-center">
-            SCAN TO SEE INFORMATION ABOUT THIS LISTING
+            SCAN TO SEE <span class="scan-text">INFORMATION ABOUT THIS</span> LISTING
           </h5>
         </div>
 
@@ -1281,36 +1276,72 @@ const fetchPropertyDetail = async () => {
 //------------------------------------------------------------------------------
 const downloadPDF = async (propertyObj) => {
   try {
-    isDownloading.value = true;
-    let prtHtml
-    if (qrViewSwitch.value == 'Portrait') {
-      prtHtml = document.getElementById('portraitContent')
-    } else {
-      prtHtml = document.getElementById('landscapeContent')
-    }
-    // Reference to form container
-    console.log(prtHtml, 'prtHtml')
+    isDownloading.value = true
 
-    const html2pdf = (await import('html2pdf.js')).default;
+    const prtHtml =
+      qrViewSwitch.value === 'Portrait'
+        ? document.getElementById('portraitContent')
+        : document.getElementById('landscapeContent')
 
+    // 🔥 Inject PDF-safe styles
+    const style = document.createElement('style')
+    style.innerHTML = `
+      * {
+        box-sizing: border-box;
+      }
+        .scan-text{
+        word-spacing: 15px!important;
+        }
 
-    let fileName = `${propertyObj.TITLE}`
+      h1, h2, h3, h4, h5, p, span {
+        font-family: Arial, sans-serif !important;
+        font-weight: 600 !important;
+        line-height: 1.5 !important;
+        letter-spacing: normal !important;
+        word-spacing: 0.25em !important;
+        white-space: normal !important;
+      }
+
+      h5 {
+        font-size: 16px !important;
+        text-align: center !important;
+      }
+    `
+    prtHtml.prepend(style)
+
+    await document.fonts.ready
+
+    const html2pdf = (await import('html2pdf.js')).default
+
     const options = {
       margin: 0.5,
-      filename: fileName + '.pdf',
+      filename: `${propertyObj.TITLE}.pdf`,
       image: { type: 'jpeg', quality: 1 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: 'in', format: 'letter', orientation: qrViewSwitch.value == 'Portrait' ? 'portrait' : 'landscape' }
+      html2canvas: {
+        scale: 3,
+        useCORS: true,
+        letterRendering: true
+      },
+      jsPDF: {
+        unit: 'in',
+        format: 'letter',
+        orientation:
+          qrViewSwitch.value === 'Portrait' ? 'portrait' : 'landscape'
+      }
     }
+
     await html2pdf().from(prtHtml).set(options).save()
 
-  } 
-  catch (error) {
-    console.log(error, 'error')
+    // 🧹 Cleanup
+    style.remove()
+
+  } catch (error) {
+    console.error(error)
   } finally {
-    isDownloading.value = false;
+    isDownloading.value = false
   }
 }
+
 //------------------------------------------------------------------------------
 const shareAction = async (propertyObj) => {
   const shareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(

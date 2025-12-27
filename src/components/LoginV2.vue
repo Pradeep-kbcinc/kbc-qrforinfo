@@ -348,6 +348,7 @@ const loginWithPass = async()=>{
       toast.error(res.data?.Result?.MESSAGE, {
         autoClose: 4000,
       });
+      loginLoader.value = false
     }
 
 
