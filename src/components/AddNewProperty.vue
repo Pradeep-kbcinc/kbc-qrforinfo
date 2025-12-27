@@ -37,32 +37,90 @@
 
         <v-row>
           <v-col>
-            <v-radio-group hide-details v-model="state.PROPERTY_KIND" inline color="primary" label="Property Kind">
-              <v-radio label="Land" value="LAND"></v-radio>
-              <v-radio label="Apartment" value="APARTMENT"></v-radio>
-              <v-radio label="House" value="HOUSE"></v-radio>
-            </v-radio-group>
+            <p class="mb-2 font-weight-bold">Property Kind</p>
+
+        <v-chip-group
+          v-model="state.PROPERTY_KIND"
+          mandatory
+          selected-class="chip-selected"
+        >
+          <v-chip class="font-weight-bold" value="LAND" filter>Land</v-chip>
+          <v-chip class="font-weight-bold" value="APARTMENT" filter>Apartment</v-chip>
+          <v-chip class="font-weight-bold" value="HOUSE" filter>House</v-chip>
+        </v-chip-group>
           </v-col>
           <v-col v-if="state.PROPERTY_KIND != 'LAND'">
-            <v-radio-group :disabled="state.PROPERTY_KIND == 'LAND'" hide-details v-model="state.FURNISHING_TYPE" inline
-              color="primary" label="Furnishing Type">
-              <v-radio label="Unfurnished" value="UNFURNISHED"></v-radio>
-              <v-radio label="Semi" value="SEMI"></v-radio>
-              <v-radio label="Full" value="FULL"></v-radio>
-            </v-radio-group>
+            <p class="mb-2 font-weight-medium">Furnishing Type</p>
+
+<v-chip-group
+  v-model="state.FURNISHING_TYPE"
+  mandatory
+  :disabled="state.PROPERTY_KIND === 'LAND'"
+  selected-class="chip-selected"
+>
+  <v-chip class="font-weight-bold" value="UNFURNISHED" filter>
+    Unfurnished
+  </v-chip>
+
+  <v-chip class="font-weight-bold" value="SEMI" filter>
+    Semi
+  </v-chip>
+
+  <v-chip class="font-weight-bold" value="FULL" filter>
+    Full
+  </v-chip>
+</v-chip-group>
+
           </v-col>
           <v-col>
-            <v-radio-group hide-details v-model="state.LAND_USE" inline color="primary" label="Land Type">
-              <v-radio label="Residential" value="RESIDENTIAL"></v-radio>
-              <v-radio label="Commercial" value="COMMERCIAL"></v-radio>
-              <v-radio label="Mixed" value="MIXED"></v-radio>
-              <v-radio :disabled="state.PROPERTY_KIND == 'HOUSE' || state.PROPERTY_KIND == 'APARTMENT'"
-                label="Agricultural" value="AGRICULTURAL"></v-radio>
-              <v-radio label="Industrial" value="INDUSTRIAL"></v-radio>
-              <v-radio label="Institutional" value="INSTITUTIONAL"></v-radio>
-              <v-radio :disabled="state.PROPERTY_KIND == 'LAND'" label="Recreational" value="RECREATIONAL"></v-radio>
-              <v-radio label="Other" value="OTHER"></v-radio>
-            </v-radio-group>
+            <p class="mb-2 font-weight-bold">Land Type</p>
+
+<v-chip-group
+  v-model="state.LAND_USE"
+  mandatory
+  selected-class="chip-selected"
+>
+  <v-chip class="font-weight-bold" value="RESIDENTIAL" filter>
+    Residential
+  </v-chip>
+
+  <v-chip class="font-weight-bold" value="COMMERCIAL" filter>
+    Commercial
+  </v-chip>
+
+  <v-chip class="font-weight-bold" value="MIXED" filter>
+    Mixed
+  </v-chip>
+
+  <v-chip
+    value="AGRICULTURAL"
+    filter
+    :disabled="state.PROPERTY_KIND === 'HOUSE' || state.PROPERTY_KIND === 'APARTMENT'"
+  >
+    Agricultural
+  </v-chip>
+
+  <v-chip class="font-weight-bold" value="INDUSTRIAL" filter>
+    Industrial
+  </v-chip>
+
+  <v-chip class="font-weight-bold" value="INSTITUTIONAL" filter>
+    Institutional
+  </v-chip>
+
+  <v-chip
+    value="RECREATIONAL"
+    filter
+    :disabled="state.PROPERTY_KIND === 'LAND'"
+  >
+    Recreational
+  </v-chip>
+
+  <v-chip class="font-weight-bold" value="OTHER" filter>
+    Other
+  </v-chip>
+</v-chip-group>
+
           </v-col>
         </v-row>
 
@@ -115,6 +173,13 @@
             <v-col>
               <p class="font-weight-bold">Price <span v-if="priceInWords" class="text-caption mt-n14 text-primary">({{
                   priceInWords }})</span> </p>
+                 
+                  <!-- <v-slider
+                  :step="1"
+      v-model="state.PRICE_AMOUNT"
+      label=""
+      thumb-color="primary"
+    ></v-slider> -->
               <v-number-input :error-messages="v$.PRICE_AMOUNT.$errors.map(e => e.$message)"
                 @blur="v$.PRICE_AMOUNT.$touch" @input="v$.PRICE_AMOUNT.$touch" v-model="state.PRICE_AMOUNT"
                 class="mt-1 mb-0" rounded="lg" variant="outlined" placeholder="450000"></v-number-input>
@@ -813,5 +878,10 @@ const selectSuggestion = (item)=>{
 .selectedCard {
   background-color: #f0f6ff;
   border: 2px solid;
+}
+.chip-selected {
+  background-color: rgb(var(--v-theme-primary));
+  color: white;
+  font-weight: 800;
 }
 </style>
