@@ -3,7 +3,7 @@
     <v-app-bar border class="px-4 elevation-0" color="white">
       <v-icon @click="toggleSidebar" color="primary" v-if="mobile" class="mr-2">mdi-menu</v-icon>
       <!-- <v-avatar @click="router.push('/home')" tile size="40" class="rounded-lg pointer" color=""> -->
-      <!-- <img @click="router.push('/home')" class="pointer" contain width="60" src="@/assets/newLogo.png"> -->
+      <img @click="router.push('/home')" class="pointer" contain width="60" src="@/assets/newLogo.png">
       <!-- </v-avatar> -->
 
       <v-app-bar-title @click="router.push('/home')" class="font-weight-black pointer">QRForInfo</v-app-bar-title>

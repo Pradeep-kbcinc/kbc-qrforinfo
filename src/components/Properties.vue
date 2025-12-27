@@ -40,20 +40,22 @@
     </div>
 
     <div class="pa-4 pt-0">
-      <v-row>
+      <div>
         <template v-if="isLoading">
           <v-col cols="12" md="4" v-for="value in 6"><v-skeleton-loader class="mx-auto border" type="image, article"></v-skeleton-loader></v-col>
         </template>
-        <div v-else-if="!isLoading && propertyArr.length == 0" class="d-flex ">
+        <div v-else-if="!isLoading && propertyArr.length == 0" class="d-flex justify-center">
           <div>
             <v-img width="200" contain src="@/assets/noData.png"></v-img>
             <p>No Data Available</p>
           </div>
         </div>
-        <v-col v-else cols="12" md="6" lg="4" v-for="propertyObj in propertyArr">
-          <PropertyCard @recall="getProperties()" :propertyObj="propertyObj" />
-        </v-col>
+        <v-row v-else>
+          <v-col  cols="12" md="6" lg="4" v-for="propertyObj in propertyArr">
+            <PropertyCard @recall="getProperties()" :propertyObj="propertyObj" />
+          </v-col>
       </v-row>
+      </div>
     </div>
     <v-pagination v-model="currentPage" :length="totalPages" :total-visible="7" class="my-4"></v-pagination>
   </div>
@@ -101,7 +103,7 @@ const getProperties = async () => {
     //   res = await propertyService.GetPropertyDetail(data)
     // }
     res = await propertyService.GetPropertyDetailPublic(data)
-    totalPages.value = res.data.FetchData.TOTAL_PAGE
+    totalPages.value = res.data.FetchData?.TOTAL_PAGE
     propertyArr.value = res?.data?.FetchData?.PROPERTY_DETAILS || [];
   } catch (error) {
     console.log('--->err', error);

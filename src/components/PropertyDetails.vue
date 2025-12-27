@@ -1289,6 +1289,7 @@ const downloadPDF = async (propertyObj) => {
       prtHtml = document.getElementById('landscapeContent')
     }
     // Reference to form container
+    console.log(prtHtml, 'prtHtml')
 
     const html2pdf = (await import('html2pdf.js')).default;
 
@@ -1299,12 +1300,13 @@ const downloadPDF = async (propertyObj) => {
       filename: fileName + '.pdf',
       image: { type: 'jpeg', quality: 1 },
       html2canvas: { scale: 2 },
-      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+      jsPDF: { unit: 'in', format: 'letter', orientation: qrViewSwitch.value == 'Portrait' ? 'portrait' : 'landscape' }
     }
     await html2pdf().from(prtHtml).set(options).save()
 
-  } catch (error) {
-
+  } 
+  catch (error) {
+    console.log(error, 'error')
   } finally {
     isDownloading.value = false;
   }
@@ -1961,4 +1963,6 @@ const uploadImages = async () => {
   object-fit: contain!important;
 
 }
+
+
 </style>
