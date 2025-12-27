@@ -1,10 +1,10 @@
 var env = null
 var appAuthUrl = ''
 
-// env = 'DEV'
+env = 'DEV'
 // env = 'DEMO'
 // env = 'UAT'
-env = 'LIVE'
+// env = 'LIVE'
 
 if (env == 'DEV') {
   appAuthUrl = 'https://devapi.qrforinfo.com/api/v1'

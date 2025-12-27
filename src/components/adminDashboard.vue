@@ -125,6 +125,11 @@
             </v-col>
           </v-row>
         </section>
+        <v-pagination
+          v-model="pageNumber"
+          :length="totalPages"
+          :total-visible="7"
+        ></v-pagination>
 
 </template>
 <script setup>
@@ -171,7 +176,7 @@ const fetchCounts = async()=>{
 }
 
 
-
+const totalPages = ref()
 const pageNumber = ref(1)
 const pageLimit = ref(10)
 
@@ -190,6 +195,7 @@ const fetchDisputList = async()=>{
       console.log(res,'res')
       disputes.value = res.data.FetchData?.list
       disputeListLoader.value = false
+      totalPages.value = res.data?.FetchData?.totalPage
     }
   } catch (error) {
     disputeListLoader.value = false

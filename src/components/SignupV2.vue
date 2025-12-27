@@ -100,6 +100,9 @@
               <v-btn @click="checkCredentials" :loading="btnLoader" block rounded="xl" height="38" elevation="0" class="continue-btn text-none text-caption mt-2" color="#19191a">
                 Signup
               </v-btn>
+              <v-btn @click="gotoLogin()" :loading="btnLoader" block rounded="xl" height="38" elevation="0" class="continue-btn text-none text-caption mt-n2" color="primary">
+                Login
+              </v-btn>
 
               <p class="terms">
                 I agree to <span class="link">terms and conditions</span>, <span class="link">privacy

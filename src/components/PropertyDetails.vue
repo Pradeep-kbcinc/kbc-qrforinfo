@@ -5,10 +5,10 @@
     <v-skeleton-loader class="mx-auto border" type="image, article"></v-skeleton-loader>
   </div>
 
-  <div v-else :class="route.name == 'BuyPropertyDetails' ? 'mt-16' : ''">
+  <div v-else :class="route.name == 'BuyPropertyDetails' ? 'mt-15' : ''">
 
-    <div class="d-flex align-center justify-space-between pa-6 pb-0">
-      <div class="">
+    <v-row class="d-flex align-center justify-space-between pb-0">
+      <v-col cols="12" md="6" sm="7" class="">
         
         <v-btn @click="router.back()" v-if="route.query.qr !== '1'" size="small" color="primary" variant="tonal"
           class="text-none font-weight-bold">
@@ -21,12 +21,12 @@
         </p>
         <!-- <p v-if="propertyObj.COUNTRY && propertyObj.STATE && propertyObj.CITY"><v-icon>mdi-map-marker-outline</v-icon>
           {{ propertyObj.COUNTRY }}, {{ propertyObj.STATE }}, {{ propertyObj.CITY }}</p> -->
-      </div>
+        </v-col>
 
-      <div v-if="authStore.isAuthenticated" class="d-flex ga-4">
+      <v-col cols="12" md="6" sm="5" v-if="authStore.isAuthenticated" class="d-flex justify-end ga-4">
 
         <v-btn v-if="propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID"
-          @click="addImage(propertyObj)" variant="outlined" prependIcon="mdi-trash-can"
+          @click="addImage(propertyObj)" variant="outlined" prependIcon="mdi-image-move"
           class="text-none rounded-lg elevation-0 font-weight-bold" color="primary" height="42">Add Image</v-btn>
         <v-btn v-if="propertyObj?.SELLER_USER_ID == authStore?.userDetails?.USER_ID"
           @click="deleteProperty(propertyObj)" variant="outlined" prependIcon="mdi-trash-can"
@@ -63,8 +63,8 @@
         </v-menu>
 
 
-      </div>
-    </div>
+      </v-col>
+    </v-row>
 
     <div class="pa-4">
       <v-row>
@@ -537,8 +537,8 @@
         <div class="d-flex ga-4">
           <v-btn @click="downloadPDF(propertyObj)" :loading="isDownloading" color="primary" prependIcon="mdi-download"
             class="text-none rounded-lg elevation-0 font-weight-bold flex-1-1" height="42">Download</v-btn>
-          <!-- <v-btn @click="shareAction(propertyObj)" variant="outlined" prependIcon="mdi-share-variant-outline"
-            class="text-none rounded-lg elevation-0 font-weight-bold flex-1-1" height="42">Share</v-btn> -->
+          <v-btn @click="shareAction(propertyObj)" variant="outlined" prependIcon="mdi-share-variant-outline"
+            class="text-none rounded-lg elevation-0 font-weight-bold flex-1-1" height="42">Share</v-btn>
         </div>
       </div>
 
@@ -1097,7 +1097,7 @@ const fetchPropertyFeedback = async(id)=>{
   try {
     let data = {
       "RATED_USER_ID": id,
-      "OFFSET": 0,
+      "OFFSET": 1,
       "LIMIT": feedbackLimit.value,
       "INTERACTION_ID": propertyObj.value.PROPERTY_ID
     }
@@ -1119,7 +1119,7 @@ const fetchSellerFeedback = async(id)=>{
     let data = {
       "INTERACTION_ID":0,
       "RATED_USER_ID": id,
-      "OFFSET": 0,
+      "OFFSET": 1,
       "LIMIT": feedbackLimit.value
     }
     let res = await propertyService.getRatingsReceivedList(data)
@@ -1144,7 +1144,7 @@ const fetchReportedFeedbacks = async()=>{
         "HAS_SCAM_TAG": 1,
         "FROM_DATE": moment().startOf('year').format('YYYY-MM-DD'),
         "TO_DATE": moment().format('YYYY-MM-DD'),
-        "OFFSET": 0,
+        "OFFSET": 1,
         "LIMIT": 20
     }
     let res = await propertyService.getReportedFeedback(data)

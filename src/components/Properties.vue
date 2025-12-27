@@ -17,7 +17,7 @@
             <v-icon class="mr-3">mdi-login</v-icon> Login
           </v-btn>
           <v-btn v-else block @click="$router.push('/add-new-property')" variant="elevated" height="55" rounded="lg" class="elevation-0 text-none font-weight-bold" color="">
-            <v-icon>mdi-plus</v-icon> List Property
+            <v-icon>mdi-plus</v-icon> Post Property
           </v-btn>
         </v-col>
       </v-row>
@@ -44,6 +44,12 @@
         <template v-if="isLoading">
           <v-col cols="12" md="4" v-for="value in 6"><v-skeleton-loader class="mx-auto border" type="image, article"></v-skeleton-loader></v-col>
         </template>
+        <div v-else-if="!isLoading && propertyArr.length == 0" class="d-flex ">
+          <div>
+            <v-img width="200" contain src="@/assets/noData.png"></v-img>
+            <p>No Data Available</p>
+          </div>
+        </div>
         <v-col v-else cols="12" md="6" lg="4" v-for="propertyObj in propertyArr">
           <PropertyCard @recall="getProperties()" :propertyObj="propertyObj" />
         </v-col>

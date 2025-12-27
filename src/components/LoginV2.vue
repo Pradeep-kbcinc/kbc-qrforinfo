@@ -28,7 +28,7 @@
 
             <template v-if="!isVerfiyOTP">
               <h2 class="welcome text-center">Sign In</h2>
-              <p class="subtitle text-center mb-1">Don’t have an account ? <span class="link text-primary" @click="gotoSignUp">Sign up</span></p>
+              <p class="subtitle text-center mb-1">Don’t have an account ? <span class="link text-primary" >Sign up</span></p>
               <p class="subtitle text-center ">Go to <span class="link text-primary" @click="$router.push({ name: 'BuyerLanding' })">Property Listing</span></p>
             </template>
             <template v-else>
@@ -64,8 +64,11 @@
 
               <v-text-field :prefix="isNumber(initialState.phoneNumber) ? '+91' : ''" v-model="initialState.phoneNumber" placeholder="Phone No. / Email" :error-messages="v$.phoneNumber.$errors.map(e => e.$message)" @blur="v$.phoneNumber.$touch" @input="v$.phoneNumber.$touch" variant="outlined" rounded="xl" class="email-field mb-0 pb-0" density="compact"></v-text-field>
 
-              <v-btn @click="checkCredentials" :loading="btnLoader" block rounded="xl" height="38" elevation="0" class="continue-btn text-none text-caption mt-2" color="#19191a">
+              <v-btn @click="checkCredentials" :loading="btnLoader" block rounded="xl" height="38" elevation="0" class="continue-btn text-none text-caption mt-2" color="primary">
                 Send OTP Code
+              </v-btn>
+              <v-btn @click="gotoSignUp" :loading="btnLoader" block rounded="xl" height="38" elevation="0" class="continue-btn text-none text-caption mt-n2" color="#19191a">
+                Sign Up Now
               </v-btn>
 
               <p class="terms">
@@ -103,8 +106,11 @@
               <v-text-field v-model="userId" placeholder="User Name" rounded="lg" density="compact" variant="outlined"></v-text-field>
               <v-text-field v-model="password" :type="showPassword ? 'text' : 'password'" placeholder="Password" rounded="lg" density="compact" variant="outlined" :append-inner-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
               @click:append-inner="showPassword = !showPassword"></v-text-field>
-              <v-btn @click="loginWithPass" :loading="loginLoader" block rounded="xl" height="38" elevation="0" class="continue-btn text-none text-caption mt-2" color="#19191a">
+              <v-btn :disabled="!userId || !password" @click="loginWithPass" :loading="loginLoader" block rounded="xl" height="38" elevation="0" class="continue-btn text-none text-caption mt-2" color="primary">
                 Login
+              </v-btn>
+              <v-btn @click="gotoSignUp" :loading="btnLoader" block rounded="xl" height="38" elevation="0" class="continue-btn text-none text-caption mt-n2" color="#19191a">
+                Sign Up Now
               </v-btn>
           </v-tabs-window-item>
         </v-tabs-window>
