@@ -8,31 +8,59 @@
         <!-- <pre>
           {{ state }}
         </pre> -->
-        <h3 class="font-weight-bold">Basic Information</h3>
+        <!-- <h3 class="font-weight-bold">Draw Site Map :</h3>
+        <PropertyMapPreview
+          ref="mapRef"
+        /> -->
         <div>
           <p class="mt-6 font-weight-bold">Listing Type</p>
           <v-row>
             <v-col>
-              <v-btn @click="state.LISTING_TYPE = 'For Sale'" :color="state.LISTING_TYPE == 'For Sale' ? 'primary' : ''"
-                :class="state.LISTING_TYPE == 'For Sale' ? 'selectedCard' : ''" variant="outlined" block size="x-large"
-                rounded="lg" class="text-none elevation-0 text-body-1">
-                For Sale</v-btn>
+              <v-btn
+                @click="toggleListingType('For Sale')"
+                variant="outlined"
+                block
+                size="x-large"
+                rounded="lg"
+                class="text-none elevation-0 text-body-1"
+                :color="state.LISTING_TYPE.includes('For Sale') ? 'primary' : ''"
+                :class="state.LISTING_TYPE.includes('For Sale') ? 'selectedCard' : ''"
+              >
+                For Sale
+              </v-btn>
             </v-col>
+
             <v-col>
-              <v-btn @click="state.LISTING_TYPE = 'For Rent'" variant="outlined"
-                :color="state.LISTING_TYPE == 'For Rent' ? 'primary' : ''" block size="x-large"
-                :class="state.LISTING_TYPE == 'For Rent' ? 'selectedCard' : ''" rounded="lg"
-                class="text-none elevation-0 text-body-1">
-                For Rent</v-btn>
+              <v-btn
+                @click="toggleListingType('For Rent')"
+                variant="outlined"
+                block
+                size="x-large"
+                rounded="lg"
+                class="text-none elevation-0 text-body-1"
+                :color="state.LISTING_TYPE.includes('For Rent') ? 'primary' : ''"
+                :class="state.LISTING_TYPE.includes('For Rent') ? 'selectedCard' : ''"
+              >
+                For Rent
+              </v-btn>
             </v-col>
+
             <v-col>
-              <v-btn @click="state.LISTING_TYPE = 'Build to Suit'" variant="outlined"
-                :color="state.LISTING_TYPE == 'Build to Suit' ? 'primary' : ''" block size="x-large"
-                :class="state.LISTING_TYPE == 'Build to Suit' ? 'selectedCard' : ''" rounded="lg"
-                class="text-none elevation-0 text-body-1">
-                Build to Suit</v-btn>
+              <v-btn
+                @click="toggleListingType('Build to Suit')"
+                variant="outlined"
+                block
+                size="x-large"
+                rounded="lg"
+                class="text-none elevation-0 text-body-1"
+                :color="state.LISTING_TYPE.includes('Build to Suit') ? 'primary' : ''"
+                :class="state.LISTING_TYPE.includes('Build to Suit') ? 'selectedCard' : ''"
+              >
+                Build to Suit
+              </v-btn>
             </v-col>
           </v-row>
+
         </div>
 
         <v-row>
@@ -316,6 +344,7 @@ import { toast } from 'vue3-toastify';
 import { useDebounce } from '@/config/debounce.js'
 import GoogleMap from './GoogleMap.vue'
 import GMap from './Map.vue'
+import PropertyMapPreview from './svgCreate.vue'
 //..............................................................................
 const route = useRoute()
 const router = useRouter()
@@ -328,7 +357,7 @@ const state = reactive({
   ACTION_TYPE: route?.params?.id ? 'UPDATE' : "CREATE",
   PROPERTY_ID: 0,
   SELLER_USER_ID: authStore?.userDetails?.USER_ID,
-  LISTING_TYPE: 'For Sale',
+  LISTING_TYPE: ['For Sale'],
   TITLE: "",
   PROPERTY_DESC: "",
   PROPERTY_KIND: "LAND",
@@ -456,7 +485,7 @@ const saveProperty = async () => {
         ...state,
         SELLER_USER_ID: state.SELLER_USER_ID || authStore?.userDetails?.USER_ID || 0,
         PROPERTY_ID: state.PROPERTY_ID || 0,
-        LISTING_TYPE: state.LISTING_TYPE,
+        LISTING_TYPE: state.LISTING_TYPE && state.LISTING_TYPE.length > 0 ? state.LISTING_TYPE.join(',') : '',
         TITLE: state.TITLE,
         PROPERTY_DESC: state.PROPERTY_DESC,
         PROPERTY_KIND: state.PROPERTY_KIND,
@@ -564,7 +593,7 @@ const saveDraft = async () => {
         DRAFT_ID: authStore.getTemporaryPropertyDetails.DRAFT_ID,
         SELLER_USER_ID: state.SELLER_USER_ID || authStore?.userDetails?.USER_ID || 0,
         PROPERTY_ID: state.PROPERTY_ID || 0,
-        LISTING_TYPE: state.LISTING_TYPE || '',
+        LISTING_TYPE: state.LISTING_TYPE && state.LISTING_TYPE.length > 0 ? state.LISTING_TYPE.join(',') : '',
         TITLE: state.TITLE || '',
         PROPERTY_DESC: state.PROPERTY_DESC || '',
         PROPERTY_KIND: state.PROPERTY_KIND || 'LAND',
@@ -612,7 +641,7 @@ const saveDraft = async () => {
         ...state,
         SELLER_USER_ID: state.SELLER_USER_ID || authStore?.userDetails?.USER_ID || 0,
         PROPERTY_ID: state.PROPERTY_ID || 0,
-        LISTING_TYPE: state.LISTING_TYPE || '',
+        LISTING_TYPE: state.LISTING_TYPE && state.LISTING_TYPE.length > 0 ? state.LISTING_TYPE.join(',') : '',
         TITLE: state.TITLE || '',
         PROPERTY_DESC: state.PROPERTY_DESC || '',
         PROPERTY_KIND: state.PROPERTY_KIND,
@@ -870,6 +899,32 @@ const generatePropertyTitles = (state) => {
 const selectSuggestion = (item)=>{
   state.TITLE = item
   // selectedSuggestion.value = false
+}
+
+
+const toggleListingType = (type) => {
+  const index = state.LISTING_TYPE.indexOf(type)
+
+  if (index > -1) {
+    state.LISTING_TYPE.splice(index, 1) // remove
+  } else {
+    state.LISTING_TYPE.push(type) // add
+  }
+}
+
+
+const mapRef = ref(null)
+
+const submitProperty = async () => {
+  const mapData = mapRef.value.getMapData()
+  console.log(mapData, 'mapData')
+  const payload = {
+    title: 'My Property',
+    property_map: mapData, // image or json
+  }
+
+  console.log(payload)
+  // send payload to API
 }
 
 </script>
