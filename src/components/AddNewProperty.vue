@@ -8,8 +8,10 @@
         <!-- <pre>
           {{ state }}
         </pre> -->
-        <h3 class="font-weight-bold">Basic Information</h3>
-       
+        <!-- <h3 class="font-weight-bold">Draw Site Map :</h3>
+        <PropertyMapPreview
+          ref="mapRef"
+        /> -->
         <div>
           <p class="mt-6 font-weight-bold">Listing Type</p>
           <v-row>
@@ -342,6 +344,7 @@ import { toast } from 'vue3-toastify';
 import { useDebounce } from '@/config/debounce.js'
 import GoogleMap from './GoogleMap.vue'
 import GMap from './Map.vue'
+import PropertyMapPreview from './svgCreate.vue'
 //..............................................................................
 const route = useRoute()
 const router = useRouter()
@@ -907,6 +910,21 @@ const toggleListingType = (type) => {
   } else {
     state.LISTING_TYPE.push(type) // add
   }
+}
+
+
+const mapRef = ref(null)
+
+const submitProperty = async () => {
+  const mapData = mapRef.value.getMapData()
+  console.log(mapData, 'mapData')
+  const payload = {
+    title: 'My Property',
+    property_map: mapData, // image or json
+  }
+
+  console.log(payload)
+  // send payload to API
 }
 
 </script>

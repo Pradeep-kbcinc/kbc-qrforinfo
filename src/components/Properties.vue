@@ -25,7 +25,7 @@
                       <v-col cols="12" md="4">
                         <v-select
                           v-model="filters.FURNISHING_TYPE"
-                          :items="furnishingOptions"
+                          :items="['Unfurnished','Semi','Full']"
                           label="Furnishing"
                           variant="outlined"
                           rounded="lg"
@@ -37,7 +37,7 @@
                       <v-col cols="12" md="4">
                         <v-select
                           v-model="filters.PROPERTY_KIND"
-                          :items="propertyKindOptions"
+                          :items="['LAND','APARTMENT','HOUSE']"
                           label="Property Type"
                           variant="outlined"
                           rounded="lg"
@@ -47,25 +47,27 @@
 
                       <!-- Bedrooms -->
                       <v-col cols="12" md="2">
-                        <v-select
+                        <v-number-input
                           v-model="filters.NO_BEDROOMS"
-                          :items="bedroomOptions"
+                          
                           label="Beds"
                           variant="outlined"
                           rounded="lg"
                           clearable
+                          control-variant="hidden"
                         />
                       </v-col>
 
                       <!-- Bathrooms -->
                       <v-col cols="12" md="2">
-                        <v-select
+                        <v-number-input
                           v-model="filters.NO_BATHROOMS"
-                          :items="bathroomOptions"
+                          
                           label="Baths"
                           variant="outlined"
                           rounded="lg"
                           clearable
+                          control-variant="hidden"
                         />
                       </v-col>
 
@@ -95,16 +97,37 @@
                     </v-row>
 
                     <!-- Action -->
-                    <v-btn
-                      height="48"
-                      block
-                      color="primary"
-                      rounded="lg"
-                      class="text-none font-weight-bold mt-2 elevation-0"
-                      @click="applyFilters"
-                    >
-                      Apply Filters
-                    </v-btn>
+                     <div class="d-flex">
+                      <v-row>
+                        <v-col>
+                          <v-btn
+                          height="48"
+                          block
+                          color="primary"
+                          rounded="lg"
+                          class="text-none font-weight-bold mt-2 elevation-0"
+                          :loading="applyFiltersLoader"
+                          @click="applyFilters"
+                        >
+                          Apply Filters
+                        </v-btn>
+                        </v-col>
+                        <v-col>
+                          <v-btn
+                            height="48"
+                            block
+                            variant="outlined"
+                            color="error"
+                            rounded="lg"
+                            class="text-none font-weight-bold mt-2 elevation-0"
+                           
+                            @click="clearFilter"
+                          >
+                            Clear
+                          </v-btn>
+                        </v-col>
+                      </v-row>
+                  </div>
                 </v-card>
             </v-menu>
             <!-- Search input -->
@@ -177,7 +200,10 @@ const currentPage = ref(1)
 const pageLimit = ref(6)
 const totalPages = ref(null)
 
-const filters = reactive({})
+const filters = reactive({
+  // NO_BATHROOMS:'',
+  // NO_BEDROOMS:''
+})
 
 onMounted(() => {
   getProperties()
@@ -201,7 +227,13 @@ const getProperties = async () => {
       COUNTRY: "",
       SEARCH: searchVal.value,
       PAGE_NO: currentPage.value,
-      PAGE_SIZE: pageLimit.value
+      PAGE_SIZE: pageLimit.value,
+      FURNISHING_TYPE: filters.FURNISHING_TYPE,
+      PROPERTY_KIND: filters.PROPERTY_KIND,
+      NO_BEDROOMS: filters.NO_BEDROOMS || 0,
+      NO_BATHROOMS: filters.NO_BATHROOMS || 0,
+      AMOUNT_MIN: filters.AMOUNT_MIN,
+      AMOUNT_MAX: filters.AMOUNT_MAX
     }
     let res;
     // if (route.name == 'BuyProperties') {
@@ -212,10 +244,13 @@ const getProperties = async () => {
     res = await propertyService.GetPropertyDetailPublic(data)
     totalPages.value = res.data.FetchData?.TOTAL_PAGE
     propertyArr.value = res?.data?.FetchData?.PROPERTY_DETAILS || [];
+    applyFiltersLoader.value = false
   } catch (error) {
     console.log('--->err', error);
+    applyFiltersLoader.value = false
   } finally {
     isLoading.value = false;
+    applyFiltersLoader.value = false
   }
 }
 
@@ -242,8 +277,21 @@ watch(currentPage, (val) => {
   getProperties()
 })
 
+const applyFiltersLoader = ref(false)
+const applyFilters = ()=>{
+  applyFiltersLoader.value = true
+  getProperties()
+}
 
 
+const clearFilter = ()=>{
+  filters.FURNISHING_TYPE = null
+  filters.PROPERTY_KIND = null
+  filters.NO_BEDROOMS = 0
+  filters.NO_BATHROOMS = 0
+  filters.AMOUNT_MIN = ''
+  filters.AMOUNT_MAX = ''
+}
 
 </script>
 
