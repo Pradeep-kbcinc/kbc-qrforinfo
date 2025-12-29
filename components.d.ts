@@ -32,6 +32,7 @@ declare module 'vue' {
     Settings: typeof import('./src/components/Settings.vue')['default']
     Signup: typeof import('./src/components/Signup.vue')['default']
     SignupV2: typeof import('./src/components/SignupV2.vue')['default']
+    SvgCreate: typeof import('./src/components/svgCreate.vue')['default']
     TermsAndCondition: typeof import('./src/components/TermsAndCondition.vue')['default']
   }
 }

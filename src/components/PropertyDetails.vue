@@ -337,7 +337,13 @@
               </v-col>
             </v-row>
             <div v-if="feedback && feedback.length > 0" class="d-flex justify-center">
-              <v-btn @click="viewMoreFeedback" :loading="viewMoreFeedbackLoader" color="primary" class="text-none font-weight-bold" variant="text" size="large">View more</v-btn>
+              <!-- <v-btn @click="viewMoreFeedback" :loading="viewMoreFeedbackLoader" color="primary" class="text-none font-weight-bold" variant="text" size="large">View more</v-btn> -->
+              <!-- propertyTotalPages -->
+              <v-pagination
+                v-model="propertyPage"
+                :length="propertyTotalPages"
+                :total-visible="7"
+              ></v-pagination>
             </div>
   </v-card>
     </v-col>
@@ -391,7 +397,12 @@
               </v-col>
             </v-row>
             <div v-if="feedback && feedback.length > 0" class="d-flex justify-center">
-              <v-btn @click="viewMoreFeedback" :loading="viewMoreFeedbackLoader" color="primary" class="text-none font-weight-bold" variant="text" size="large">View more</v-btn>
+              <!-- <v-btn @click="viewMoreFeedback" :loading="viewMoreFeedbackLoader" color="primary" class="text-none font-weight-bold" variant="text" size="large">View more</v-btn> -->
+              <v-pagination
+                v-model="sellerPage"
+                :length="sellerTotalPages"
+                :total-visible="7"
+              ></v-pagination>
             </div>
       </v-card>
     </v-col>
@@ -1048,11 +1059,24 @@ const qrModal = ref(false)
 const qrViewSwitch = ref('Portrait')
 const showMenu = ref(false)
 const menuTarget = ref(null)
-const menuItems = [
+const reportMenu = [
   { title: 'Feedback', prependIcon: 'mdi-plus-circle', code: 'feedback' },
   // { title: 'Report an issue',prependIcon: 'mdi-plus-circle', code: 'report' },
   { title: 'Risk Warnings',prependIcon: 'mdi-plus-circle', code: 'RiskWarning' },
 ]
+
+const menuItems = computed(()=>{
+  if(authStore.userDetails.USER_ID === propertyObj.value.SELLER_USER_ID){
+    return [{ title: 'Risk Warnings',prependIcon: 'mdi-plus-circle', code: 'RiskWarning' }]
+  }else{
+    return [
+      { title: 'Feedback', prependIcon: 'mdi-plus-circle', code: 'feedback' },
+      { title: 'Risk Warnings',prependIcon: 'mdi-plus-circle', code: 'RiskWarning' }
+    ]
+  }
+})
+
+
 const onMenuSelect = (item)=>{
   if(item.code == 'feedback'){
     selectedType.value = 'RatingForProperty'
@@ -1087,19 +1111,22 @@ const viewMoreFeedbackLoader = ref(false)
 
 
 const feedbackProperty = ref([])
+const propertyPage = ref(1)
+const propertyTotalPages = ref(null)
 const fetchPropertyFeedback = async(id)=>{
   viewMoreFeedbackLoader.value = true
   try {
     let data = {
       "RATED_USER_ID": id,
-      "OFFSET": 1,
+      "OFFSET": propertyPage.value,
       "LIMIT": feedbackLimit.value,
       "INTERACTION_ID": propertyObj.value.PROPERTY_ID
     }
     let res = await propertyService.getRatingsReceivedList(data)
     if(res.data.ERR_CODE == 0){
       let response = res.data.FetchData
-      feedbackProperty.value = response
+      feedbackProperty.value = response.list
+      propertyTotalPages.value = response?.totalPage
       viewMoreFeedbackLoader.value = false
     }
   } catch (error) {
@@ -1107,6 +1134,10 @@ const fetchPropertyFeedback = async(id)=>{
     console.log(error)
   }
 }
+
+
+const sellerPage = ref (1)
+const sellerTotalPages = ref(null)
 const fetchSellerFeedback = async(id)=>{
   viewMoreFeedbackLoader.value = true
   
@@ -1114,13 +1145,14 @@ const fetchSellerFeedback = async(id)=>{
     let data = {
       "INTERACTION_ID":0,
       "RATED_USER_ID": id,
-      "OFFSET": 1,
-      "LIMIT": feedbackLimit.value
+      "OFFSET": sellerPage.value,
+      "LIMIT": 1
     }
     let res = await propertyService.getRatingsReceivedList(data)
     if(res.data.ERR_CODE == 0){
       let response = res.data.FetchData
-      feedback.value = response
+      feedback.value = response?.list
+      sellerTotalPages.value = response?.totalPage
       viewMoreFeedbackLoader.value = false
     }
   } catch (error) {
@@ -1597,8 +1629,12 @@ const deleteImage = async (item) => {
         PROPERTY_ID: item?.PROPERTY_ID || 0,
       }
       const res = await propertyService.DeletePropertyImage(data);
-      router.go(0)
-      console.log('--->res', res);
+      if(res){
+        console.log('--->res', res);
+        fetchPropertyDetail()
+        imagePreviewModal.value = false
+      }
+      
     } catch (error) {
       console.log('--->err', error);
     }
@@ -1791,9 +1827,6 @@ const giveRating = async(data)=>{
           "PRIVATE_COMMENT": ratingState.value.PRIVATE_COMMENT
         }
     }
-
-    console.log(data,'data')
-    console.log(propertyObj.value.PROPERTY_ID,'data')
     
     let res = await propertyService.createRating(data)
     
@@ -1817,13 +1850,6 @@ const giveRating = async(data)=>{
     console.log(error)
     giveRatingLoader.value = false
   }
-}
-
-
-const viewMoreFeedback = ()=>{
-
-  feedbackLimit.value += 10
-  fetchSellerFeedback(propertyObj.value?.SELLER_USER_ID)
 }
 
 const selectedRating = ref()
@@ -1872,7 +1898,6 @@ const selectedPropertyId = ref()
 const selectedData = ref()
 const uploadImageModal = ref(false)
 const addImage = (data)=>{
-  console.log(data, 'data')
   selectedPropertyId.value = data.PROPERTY_ID
   selectedData.value = data
   uploadImageModal.value = true
@@ -1927,6 +1952,7 @@ const uploadImages = async () => {
       autoClose: 4000,
     });
     // getProperties()
+    fetchPropertyDetail()
   } catch (error) {
     console.log(error)
   }
