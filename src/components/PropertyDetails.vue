@@ -118,11 +118,12 @@
 
                         <!-- LISTING TYPE BADGE -->
                         <v-btn
+                        v-if="propertyObj.LISTING_TYPE && propertyObj.LISTING_TYPE.length > 0"
                           :color="propertyObj.LISTING_TYPE === 'FOR SALE' ? 'success' : 'primary'"
                           class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 left-0 mt-4 ms-4"
                           density="comfortable"
                         >
-                          {{ propertyObj.LISTING_TYPE }}
+                          {{ propertyObj.LISTING_TYPE && propertyObj.LISTING_TYPE.length > 0 ? propertyObj.LISTING_TYPE.map(item => item.LISTING_TYPE).join(',') : '' }}
                         </v-btn>
 
                         <!-- HOVER OVERLAY -->
@@ -160,7 +161,7 @@
                     <v-btn v-if="propertyObj.LISTING_TYPE"
                       :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'"
                       class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 left-0 mt-4 ms-4"
-                      height="" density="comfortable">{{ propertyObj.LISTING_TYPE }}</v-btn>
+                      height="" density="comfortable">{{ propertyObj.LISTING_TYPE && propertyObj.LISTING_TYPE.length > 0 ? propertyObj.LISTING_TYPE.map(item => item.LISTING_TYPE).join(',') : '' }}</v-btn>
                   </v-img>
                 </v-carousel-item>
               </v-carousel>
@@ -1876,6 +1877,7 @@ const giveRating = async(data)=>{
       if(authStore.isAuthenticated){
       fetchSellerFeedback(propertyObj.value?.SELLER_USER_ID)
       fetchPropertyFeedback(propertyObj.value?.SELLER_USER_ID)
+      fetchReportedFeedbacks(propertyObj.value?.SELLER_USER_ID)
       }
       giveRatingLoader.value = false
     }else{

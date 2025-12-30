@@ -15,7 +15,7 @@
             <v-spacer></v-spacer>
             <v-btn @click="siteMapGeneratorModal = true" color="primary" class="rounded-lg elevation-0 text-none font-weight-bold">Generate Site Map</v-btn>
           </div>
-         
+        
           <v-row>
             <v-col>
               <v-btn
@@ -591,8 +591,12 @@ const fetchPropertyDetail = async () => {
     // state.value = { ...state.value, ...res?.data?.FetchData?.PROPERTY_DETAILS?.[0] } || {}
     // v$.value = useVuelidate(rules, state.value)
     const resData = res?.data?.FetchData?.PROPERTY_DETAILS?.[0] || {}
-    Object.assign(state, { ...state, ...resData });
+    Object.assign(state, {
+  ...resData,
+  LISTING_TYPE: resData.LISTING_TYPE?.map(i => i.LISTING_TYPE) || []
+})
     v$.value.$reset()
+    console.log(state, 'state')
     // cardKey.value++;
   } catch (error) {
 
