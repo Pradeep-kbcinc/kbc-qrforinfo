@@ -11,11 +11,13 @@
             <v-menu :close-on-content-click="false" v-model="advanceMenu" location="bottom start" offset="8" transition="scale-transition">
               <!-- Activator -->
               <template #activator="{ props }">
+              
                 <v-btn v-bind="props" variant="flat" height="55"
                   class="elevation-0 text-none font-weight-bold rounded-ts-lg rounded-bs-lg rounded-0">
-                  <v-icon class="mr-2">mdi-magnify</v-icon>
-                  Advance Search
+                  <v-icon color="primary" class="mr-2">{{filters.FURNISHING_TYPE || filters.PROPERTY_KIND || filters.NO_BEDROOMS || filters.NO_BATHROOMS || filters.AMOUNT_MIN || filters.AMOUNT_MAX ? 'mdi-close' : 'mdi-magnify'}}</v-icon>
+                  {{ filters.FURNISHING_TYPE || filters.PROPERTY_KIND || filters.NO_BEDROOMS || filters.NO_BATHROOMS || filters.AMOUNT_MIN || filters.AMOUNT_MAX ? 'Clear Filter' : 'Advance Search'}}
                 </v-btn>
+                
               </template>
 
               <!-- Menu Content -->
@@ -228,8 +230,8 @@ const getProperties = async () => {
       SEARCH: searchVal.value,
       PAGE_NO: currentPage.value,
       PAGE_SIZE: pageLimit.value,
-      FURNISHING_TYPE: filters.FURNISHING_TYPE,
-      PROPERTY_KIND: filters.PROPERTY_KIND,
+      FURNISHING_TYPE: filters.FURNISHING_TYPE || '',
+      PROPERTY_KIND: filters.PROPERTY_KIND || '',
       NO_BEDROOMS: filters.NO_BEDROOMS || 0,
       NO_BATHROOMS: filters.NO_BATHROOMS || 0,
       AMOUNT_MIN: filters.AMOUNT_MIN,
@@ -289,8 +291,9 @@ const clearFilter = ()=>{
   filters.PROPERTY_KIND = null
   filters.NO_BEDROOMS = 0
   filters.NO_BATHROOMS = 0
-  filters.AMOUNT_MIN = ''
-  filters.AMOUNT_MAX = ''
+  filters.AMOUNT_MIN = 0
+  filters.AMOUNT_MAX = 0
+  getProperties()
 }
 
 </script>

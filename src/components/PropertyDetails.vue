@@ -291,45 +291,49 @@
       <v-card rounded="lg" elevation="2" class="pa-8 mx-6 card-box-shadow">
             <h2 class="text-h5 font-weight-bold font-weight-bold mb-2">Property Feedback</h2>
             <v-row>
-              <v-col v-if="feedbackProperty && feedbackProperty.length > 0" v-for="fb in feedbackProperty" :key="fb.id" cols="12" md="6">
-               
-              <v-card class="pa-6 mb-6 rounded-xl" variant="outlined" elevation="0">
-                <div class="d-flex justify-space-between">
-                  <!-- Reviewer Info -->
-                  <div class="d-flex">
-                    <v-avatar size="46" class="mr-4" color="grey-lighten-3">
-                      <!-- <span class="text-subtitle-2 font-weight-medium">{{ getInitials(fb.name) }}</span> -->
-                       {{ fb.RATER_FNAME.slice(0,1) + fb.RATER_LNAME.slice(0,1) }}
-                    </v-avatar>
+              <v-col v-for="item in 2" v-if="propertyFeedbackLoader" cols="12" md="6">
+                <v-skeleton-loader  type="card"></v-skeleton-loader>
+              </v-col>
+              <v-col v-else-if="feedbackProperty && feedbackProperty.length > 0 && !propertyFeedbackLoader" v-for="fb in feedbackProperty" :key="fb.id" cols="12" md="6">
+                <v-card height="100%" class="pa-6 mb-6 rounded-xl" variant="outlined" elevation="0">
+                  <div class="d-flex justify-space-between">
+                    <!-- Reviewer Info -->
+                    <div class="d-flex">
+                      <v-avatar size="46" class="mr-4" color="grey-lighten-3">
+                        <!-- <span class="text-subtitle-2 font-weight-medium">{{ getInitials(fb.name) }}</span> -->
+                        {{ fb.RATER_FNAME.slice(0,1) + fb.RATER_LNAME.slice(0,1) }}
+                      </v-avatar>
 
-                    <div>
-                      <h4 class="font-weight-bold mb-1">{{ fb.RATER_FNAME + fb.RATER_LNAME || '-' }}</h4>
-                      <span class="text-medium-emphasis text-body-2 font-weight-bold">{{ moment(fb.CREATED_ON).format('Do MMM, YYYY') }}</span>
-                      
-                      <!-- Tags -->
-                      <div class="d-flex ga-2 mt-3">
-                        <v-chip v-for="tag in fb.tags" :key="tag" size="small" variant="outlined"
-                          color="grey-lighten-2">
-                          {{ tag }}
-                        </v-chip>
+                      <div>
+                        <div>
+                          <h4 class="font-weight-bold mb-1">{{ fb.RATER_FNAME + fb.RATER_LNAME || '-' }}</h4>
+                          <v-rating v-model="fb.OVERALL_RATING" readonly color="amber" size="22" />
+                          <v-btn @click="openDispute(fb)" v-if="propertyObj.SELLER_USER_ID === authStore.userDetails.USER_ID" size="small" class="d-lg-none d-flex text-none mt-2 font-weight-bold rounded-lg" color="red" variant="tonal">Dispute Request <v-icon class="ml-2">mdi-alert</v-icon></v-btn>
+                          <p class="text-medium-emphasis text-body-2 font-weight-bold">{{ moment(fb.CREATED_ON).format('Do MMM, YYYY') }}</p>
+                        </div>
+                        <!-- Tags -->
+                        <!-- <div class="d-flex ga-2 mt-3">
+                          <v-chip v-for="tag in fb.tags" :key="tag" size="small" variant="outlined"
+                            color="grey-lighten-2">
+                            {{ tag }}
+                          </v-chip>
+                        </div> -->
                       </div>
                     </div>
-                  </div>
 
-                  <!-- Star Rating -->
-                   <div class="d-flex flex-column align-items-end">
-                    <v-rating v-model="fb.OVERALL_RATING" readonly color="amber" size="22" />
-                    <v-btn @click="openDispute(fb)" v-if="propertyObj.SELLER_USER_ID === authStore.userDetails.USER_ID" size="small" class="text-none mt-2 font-weight-bold rounded-lg" color="red" variant="tonal">Dispute Request <v-icon class="ml-2">mdi-alert</v-icon></v-btn>
-                   </div>
-                  
-                </div>
-                <!-- <v-divider></v-divider> -->
-                <!-- Feedback Text -->
-                <p class="mt-4 text-body-1 ml-15">
-                  {{ fb.PUBLIC_COMMENT_TEXT }}
-                </p>
-              </v-card>
-            
+                    <!-- Star Rating -->
+                    <div class="d-lg-flex d-none flex-column align-items-end">
+                      
+                      <v-btn @click="openDispute(fb)" v-if="propertyObj.SELLER_USER_ID === authStore.userDetails.USER_ID" size="small" class="text-none mt-2 font-weight-bold rounded-lg" color="red" variant="tonal">Dispute Request <v-icon class="ml-2">mdi-alert</v-icon></v-btn>
+                    </div>
+                    
+                  </div>
+                  <!-- <v-divider></v-divider> -->
+                  <!-- Feedback Text -->
+                  <p class="mt-4 text-body-1 ">
+                    {{ fb.PUBLIC_COMMENT_TEXT }}
+                  </p>
+                </v-card>
               </v-col>
               <v-col v-else cols="12 d-flex justify-center flex-column align-center">
                 <v-img width="150" src="@/assets/noData.png"></v-img>
@@ -337,7 +341,7 @@
               </v-col>
             </v-row>
             <div v-if="feedback && feedback.length > 0" class="d-flex justify-center">
-              <!-- <v-btn @click="viewMoreFeedback" :loading="viewMoreFeedbackLoader" color="primary" class="text-none font-weight-bold" variant="text" size="large">View more</v-btn> -->
+             
               <!-- propertyTotalPages -->
               <v-pagination
                 v-model="propertyPage"
@@ -351,7 +355,10 @@
       <v-card rounded="lg" elevation="2" class="pa-8 card-box-shadow">
             <h2 class="text-h5 font-weight-bold font-weight-bold mb-2">Seller Feedback</h2>
             <v-row>
-              <v-col v-if="feedback && feedback.length > 0" v-for="fb in feedback" :key="fb.id" cols="12">
+              <v-col v-if="sellerFeedbackLoader" cols="12">
+                <v-skeleton-loader type="card"></v-skeleton-loader>
+              </v-col>
+              <v-col v-else-if="feedback && feedback.length > 0 && !sellerFeedbackLoader" v-for="fb in feedback" :key="fb.id" cols="12">
                
               <v-card class="pa-6 mb-6 rounded-xl" variant="outlined" elevation="0">
                 <div class="d-flex justify-space-between">
@@ -367,8 +374,8 @@
                       <span class="text-medium-emphasis text-body-2 font-weight-bold">{{ moment(fb.CREATED_ON).format('Do MMM, YYYY') }}</span>
                       
                       <!-- Tags -->
-                      <div class="d-flex ga-2 mt-3">
-                        <v-chip v-for="tag in fb.tags" :key="tag" size="small" variant="outlined"
+                      <div v-if="fb.PUBLIC_TAGS_CSV" class="d-flex ga-2 mt-3">
+                        <v-chip v-for="tag in fb.PUBLIC_TAGS_CSV.split(',')" :key="tag" size="small" variant="outlined"
                           color="grey-lighten-2">
                           {{ tag }}
                         </v-chip>
@@ -385,7 +392,7 @@
                 </div>
                 <!-- <v-divider></v-divider> -->
                 <!-- Feedback Text -->
-                <p class="mt-4 text-body-1 ml-15">
+                <p class="mt-4 text-body-1">
                   {{ fb.PUBLIC_COMMENT_TEXT }}
                 </p>
               </v-card>
@@ -396,8 +403,9 @@
                 <p>No Data Found</p>
               </v-col>
             </v-row>
-            <div v-if="feedback && feedback.length > 0" class="d-flex justify-center">
-              <!-- <v-btn @click="viewMoreFeedback" :loading="viewMoreFeedbackLoader" color="primary" class="text-none font-weight-bold" variant="text" size="large">View more</v-btn> -->
+            
+            <div  class="d-flex justify-center">
+              
               <v-pagination
                 v-model="sellerPage"
                 :length="sellerTotalPages"
@@ -849,8 +857,10 @@
 
           <!-- RECENT USER REPORTS -->
           <h3 class="text-h6 font-weight-bold mt-10 mb-4">Recent User Reports:</h3>
-
+         
           <!-- REPORT ITEM -->
+          <v-skeleton-loader v-if="reportedListLoader" type="card"></v-skeleton-loader>
+
           <v-card v-for="item in reportedFeedbackList" :key="item.id" rounded="xl" variant="outlined" color="red"
             class="rounded-lg pa-4 mt-2">
             <div class="d-flex justify-space-between text-black">
@@ -873,6 +883,12 @@
               {{ item.PUBLIC_COMMENT_TEXT }}
             </p>
           </v-card>
+
+          <v-pagination
+                v-model="reportedListPage"
+                :length="reportedListTotalPage"
+                :total-visible="7"
+              ></v-pagination>
 
 
 
@@ -1106,15 +1122,16 @@ watch(selectedType,(val)=>{
 })
 
 
-const feedbackLimit = ref(10)
-const viewMoreFeedbackLoader = ref(false)
+const feedbackLimit = ref(2)
+
 
 
 const feedbackProperty = ref([])
 const propertyPage = ref(1)
 const propertyTotalPages = ref(null)
+const propertyFeedbackLoader = ref(true)
 const fetchPropertyFeedback = async(id)=>{
-  viewMoreFeedbackLoader.value = true
+  propertyFeedbackLoader.value = true
   try {
     let data = {
       "RATED_USER_ID": id,
@@ -1127,19 +1144,24 @@ const fetchPropertyFeedback = async(id)=>{
       let response = res.data.FetchData
       feedbackProperty.value = response.list
       propertyTotalPages.value = response?.totalPage
-      viewMoreFeedbackLoader.value = false
+      propertyFeedbackLoader.value = false
     }
   } catch (error) {
-    viewMoreFeedbackLoader.value = false
+    propertyFeedbackLoader.value = false
     console.log(error)
   }
 }
 
+watch(propertyPage, (val)=>{
+  fetchPropertyFeedback(propertyObj.value?.SELLER_USER_ID)
+})
+
 
 const sellerPage = ref (1)
 const sellerTotalPages = ref(null)
+const sellerFeedbackLoader = ref(true)
 const fetchSellerFeedback = async(id)=>{
-  viewMoreFeedbackLoader.value = true
+  sellerFeedbackLoader.value = true
   
   try {
     let data = {
@@ -1153,17 +1175,24 @@ const fetchSellerFeedback = async(id)=>{
       let response = res.data.FetchData
       feedback.value = response?.list
       sellerTotalPages.value = response?.totalPage
-      viewMoreFeedbackLoader.value = false
+      sellerFeedbackLoader.value = false
     }
   } catch (error) {
-    viewMoreFeedbackLoader.value = false
+    sellerFeedbackLoader.value = false
     console.log(error)
   }
 }
 
+watch(sellerPage,(val)=>{
+  fetchSellerFeedback(propertyObj.value?.SELLER_USER_ID)
+})
 
+const reportedListPage = ref(1)
+const reportedListTotalPage = ref(null)
 const reportedFeedbackList = ref([])
+const reportedListLoader = ref(false)
 const fetchReportedFeedbacks = async()=>{
+  reportedListLoader.value = true
   try {
     let data = {
         "RATED_USER_ID": propertyObj.value.SELLER_USER_ID,
@@ -1171,18 +1200,27 @@ const fetchReportedFeedbacks = async()=>{
         "HAS_SCAM_TAG": 1,
         "FROM_DATE": moment().startOf('year').format('YYYY-MM-DD'),
         "TO_DATE": moment().format('YYYY-MM-DD'),
-        "OFFSET": 1,
-        "LIMIT": 20
+        "OFFSET": reportedListPage.value,
+        "LIMIT": 2
     }
     let res = await propertyService.getReportedFeedback(data)
     if(res.data.ERR_CODE == 0){
       let response = res.data
-      reportedFeedbackList.value = response.FetchData
+      reportedFeedbackList.value = response.FetchData?.list
+      reportedListTotalPage.value = response.FetchData.totalPage
+      reportedListLoader.value = false
+    }else{
+      reportedListLoader.value = false
     }
   } catch (error) {
+    reportedListLoader.value = false
     console.log(error)
   }
 }
+
+watch(reportedListPage,(val)=>{
+  fetchReportedFeedbacks()
+})
 
 
 const trustScoreDetails = ref({})

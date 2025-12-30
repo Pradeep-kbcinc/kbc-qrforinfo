@@ -8,12 +8,14 @@
         <!-- <pre>
           {{ state }}
         </pre> -->
-        <!-- <h3 class="font-weight-bold">Draw Site Map :</h3>
-        <PropertyMapPreview
-          ref="mapRef"
-        /> -->
+       
         <div>
-          <p class="mt-6 font-weight-bold">Listing Type</p>
+          <div class="d-flex">
+            <p class="mt-6 font-weight-bold">Listing Type</p>
+            <v-spacer></v-spacer>
+            <v-btn @click="siteMapGeneratorModal = true" color="primary" class="rounded-lg elevation-0 text-none font-weight-bold">Generate Site Map</v-btn>
+          </div>
+         
           <v-row>
             <v-col>
               <v-btn
@@ -274,7 +276,7 @@
         </div>
         <div>
           <p class="font-weight-bold">Property Name</p>
-          <v-text-field :error-messages="v$.TITLE.$errors.map(e => e.$message)" @blur="v$.TITLE.$touch"
+          <v-text-field clearable :error-messages="v$.TITLE.$errors.map(e => e.$message)" @blur="v$.TITLE.$touch"
             @input="v$.TITLE.$touch" v-model="state.TITLE" class="mt-1" rounded="lg" variant="outlined"
             placeholder="Modern 3BR Apartment"></v-text-field>
         </div>
@@ -289,9 +291,13 @@
             /> -->
           <!-- <p>**Name Suggestions</p> -->
           <v-card class="mx-auto overflow-y-auto" max-height="200">
+            <p class="text-overline mt-4 ml-4">Name Suggestions :</p>
+            <v-divider></v-divider>
             <v-list class="">
               <v-list-item class="text-subtitle-1 font-weight-bold" @click="selectSuggestion(item)" v-for="(item, i) in titleOptions" :key="i" :value="item" color="primary" variant="flat">
-               <v-icon> {{ state.TITLE !== item ? 'mdi-radiobox-blank' : 'mdi-radiobox-marked'}}</v-icon> {{ item }}
+               <!-- <v-icon> {{ state.TITLE !== item ? 'mdi-radiobox-blank' : 'mdi-radiobox-marked'}}</v-icon>  -->
+                <v-icon>mdi-circle-small</v-icon>
+               {{ item }}
               </v-list-item>
             </v-list>
           </v-card>
@@ -332,6 +338,19 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+
+    <v-dialog fullscreen v-model="siteMapGeneratorModal">
+      <v-toolbar rounded="t-lg" density="compact" class="px-4">
+       <h6>Create Site Map</h6> 
+        <v-spacer></v-spacer>
+        <v-icon @click="siteMapGeneratorModal = false">mdi-close</v-icon>
+      </v-toolbar>
+      <v-card>
+        <v-card-text>
+            <PropertyMapPreview/>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -353,12 +372,13 @@ const isLoadingProperty = ref(false)
 const cardKey = ref(1)
 const results = ref([])
 const selectedSuggestion = ref(true)
+const siteMapGeneratorModal = ref(false)
 const state = reactive({
   ACTION_TYPE: route?.params?.id ? 'UPDATE' : "CREATE",
   PROPERTY_ID: 0,
   SELLER_USER_ID: authStore?.userDetails?.USER_ID,
   LISTING_TYPE: ['For Sale'],
-  TITLE: "",
+  TITLE: null,
   PROPERTY_DESC: "",
   PROPERTY_KIND: "LAND",
   TYPE_CODE: "",
@@ -897,7 +917,13 @@ const generatePropertyTitles = (state) => {
 
 
 const selectSuggestion = (item)=>{
-  state.TITLE = item
+  // state.TITLE = item
+  if(state.TITLE){
+    state.TITLE = `${state.TITLE} ${item}`
+  }else{
+    state.TITLE = item
+  }
+  
   // selectedSuggestion.value = false
 }
 
@@ -913,19 +939,8 @@ const toggleListingType = (type) => {
 }
 
 
-const mapRef = ref(null)
 
-const submitProperty = async () => {
-  const mapData = mapRef.value.getMapData()
-  console.log(mapData, 'mapData')
-  const payload = {
-    title: 'My Property',
-    property_map: mapData, // image or json
-  }
 
-  console.log(payload)
-  // send payload to API
-}
 
 </script>
 

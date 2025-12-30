@@ -38,7 +38,7 @@
   <p :class="isRouteActive('/privacy-policy') ? 'font-weight-bold bolder-text' : ''">Privacy Policy</p>
 </v-list-item>
 
-<v-list-item prepend-icon="mdi-security" @click="gotoMenu('/admin-dashboard')" :class="isRouteActive('/admin-dashboard') ? 'active-item text-primary' : ''">
+<v-list-item v-if="authStore.userDetails.IS_ADMIN == 1" prepend-icon="mdi-security" @click="gotoMenu('/admin-dashboard')" :class="isRouteActive('/admin-dashboard') ? 'active-item text-primary' : ''">
   <p :class="isRouteActive('/admin-dashbaord') ? 'font-weight-bold bolder-text' : ''">Admin Dashboard</p>
 </v-list-item>
 
@@ -49,11 +49,11 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-
+import { useAuthStore } from '@/stores/app';
 const sidebarToggle = ref(true)
 const router = useRouter()
 const route = useRoute()
-
+const authStore = useAuthStore()
 
 const gotoMenu = (path) => {
   router.push(path)
