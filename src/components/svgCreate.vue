@@ -9,6 +9,7 @@
           type="number"
           variant="outlined"
           rounded="lg"
+          :readonly="!showEditBtn"
           
         />
       </v-col>
@@ -21,9 +22,10 @@
           variant="outlined"
           rounded="lg"
           class="ml-1"
+          :readonly="!showEditBtn"
         />
       </v-col>
-      <v-col cols="12">
+      <v-col v-if="showEditBtn" cols="12">
         <v-btn @click="returnVal" color="primary" class="text-none font-weight-bold rounded-lg elevation-0" height="48">Save Dimention</v-btn>
       </v-col>
     </v-row>
@@ -59,7 +61,21 @@
 import { ref, computed } from 'vue'
 
 
-const props = defineProps(['width','height'])
+const props = defineProps({
+  width: {
+    type: [String, Number],
+    required: false,
+  },
+  height: {
+    type: [String, Number],
+    required: false,
+  },
+  showEditBtn: {
+    type: Boolean,
+    default: true,
+  },
+})
+
 /* ========================
    USER INPUT (Feet)
 ======================== */

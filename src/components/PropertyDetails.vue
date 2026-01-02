@@ -187,7 +187,7 @@
                 </v-col>
                 <v-col v-if="propertyObj.DIMENSIONS">
                   <div class="">
-                    <p class="text-grey-darken-1">Dimensions</p>
+                    <p class="text-grey-darken-1">Dimensions <v-btn class="ml-2 mt-n1" icon color="primary" size="x-small" variant="tonal"> <v-icon @click="viewSiteMap" size="large">mdi-eye</v-icon></v-btn></p>
                     <p class="text-h6"> {{ propertyObj.DIMENSIONS }}
                     </p>
                   </div>
@@ -1055,9 +1055,22 @@
       </v-card-text>
     </v-card>
   </v-dialog>
+  <v-dialog v-model="sitemapViewer">
+    <v-toolbar rounded="t-xl" class="px-4">
+      Site Map View
+      <v-spacer></v-spacer>
+      <v-icon @click="sitemapViewer = false">mdi-close</v-icon>
+    </v-toolbar>
+    <v-card class="rounded-b-xl">
+      <v-card-text>
+        <PropertyMapPreview :showEditBtn="false" :width="separateWidth" :height="separateHeight"/>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup>
+  import PropertyMapPreview from './svgCreate.vue'
 import PropertyCard from './PropertyCard.vue';
 import QrcodeVue from 'qrcode.vue';
 import Header from '@/layouts/header.vue'
@@ -1309,6 +1322,8 @@ const statisticsData = ref({})
 //   }
 // }
 //------------------------------------------------------------------------------
+const separateWidth = ref(null)
+const separateHeight = ref(null)
 const fetchPropertyDetail = async () => {
   try {
     if (!route?.params?.id) return;
@@ -1337,6 +1352,11 @@ const fetchPropertyDetail = async () => {
     }
     propertyObj.value = res.data?.FetchData?.PROPERTY_DETAILS?.[0] || {}
     qrCodeValue.value = res.data?.FetchData?.PROPERTY_DETAILS?.[0] || {}
+    if(propertyObj.value.DIMENSIONS !== ''){
+      separateWidth.value = Number(propertyObj.value.DIMENSIONS.split(' ')[0])
+      separateHeight.value = Number(propertyObj.value.DIMENSIONS.split(' ')[2])
+      console.log(separateWidth.value, separateHeight.value)
+    }
     if(authStore.isAuthenticated){
       fetchSellerFeedback(propertyObj.value?.SELLER_USER_ID)
       fetchPropertyFeedback(propertyObj.value?.SELLER_USER_ID)
@@ -2003,6 +2023,11 @@ const uploadImages = async () => {
   } catch (error) {
     console.log(error)
   }
+}
+
+const sitemapViewer = ref(false)
+const viewSiteMap = ()=>{
+  sitemapViewer.value = true
 }
 
 </script>
