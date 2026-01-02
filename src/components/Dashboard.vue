@@ -43,7 +43,7 @@
           </v-card>
         </v-col>
         <v-col cols="6" md="3">
-          <v-card height="100%" class="rounded-lg card-box-shadow">
+          <v-card @click="router.push('/messages')" height="100%" class="rounded-lg card-box-shadow">
             <!-- First soft background polygon -->
             <div class="first-polygon" style="background: #9B27B04D!important;"></div>
 
@@ -56,7 +56,7 @@
           </v-card>
         </v-col>
         <v-col cols="6" md="3">
-          <v-card class="rounded-lg card-box-shadow">
+          <v-card @click="openDraftList" class="rounded-lg card-box-shadow">
             <!-- First soft background polygon -->
             <div class="first-polygon" style="background: #7A7A7A4D!important;"></div>
 

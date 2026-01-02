@@ -185,6 +185,13 @@
                     </p>
                   </div>
                 </v-col>
+                <v-col v-if="propertyObj.DIMENSIONS">
+                  <div class="">
+                    <p class="text-grey-darken-1">Dimensions</p>
+                    <p class="text-h6"> {{ propertyObj.DIMENSIONS }}
+                    </p>
+                  </div>
+                </v-col>
                 <v-col v-if="propertyObj.PROPERTY_KIND">
                   <div class="">
                     <p class="text-grey-darken-1">Property Type</p>

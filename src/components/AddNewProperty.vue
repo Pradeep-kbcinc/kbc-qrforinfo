@@ -347,7 +347,7 @@
       </v-toolbar>
       <v-card>
         <v-card-text>
-            <PropertyMapPreview/>
+            <PropertyMapPreview @getVal="savePropertyDimension" :width="separateWidth" :height="separateHeight"/>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -492,6 +492,9 @@ onMounted(() => {
 onBeforeUnmount(() => {
   localStorage.removeItem('tempoPropertyData')
 })
+
+const separateWidth = ref(null)
+const separateHeight = ref(null)
 //------------------------------------------------------------------------------
 const saveProperty = async () => {
   const isFormCorrect = await v$.value.$validate();
@@ -596,8 +599,15 @@ const fetchPropertyDetail = async () => {
   LISTING_TYPE: resData.LISTING_TYPE?.map(i => i.LISTING_TYPE) || []
 })
     v$.value.$reset()
-    console.log(state, 'state')
+    console.log(state.DIMENSIONS, 'state')
     // cardKey.value++;
+    if(state.DIMENSIONS !== ''){
+      separateWidth.value = Number(state.DIMENSIONS.split(' ')[0])
+      separateHeight.value = Number(state.DIMENSIONS.split(' ')[2])
+      console.log(separateWidth.value, separateHeight.value)
+    }
+    
+
   } catch (error) {
 
   } finally {
@@ -942,7 +952,10 @@ const toggleListingType = (type) => {
   }
 }
 
-
+const savePropertyDimension = (data)=>{
+  state.DIMENSIONS = `${data.widthFt} x ${data.heightFt} ft`
+  siteMapGeneratorModal.value = false
+}
 
 
 

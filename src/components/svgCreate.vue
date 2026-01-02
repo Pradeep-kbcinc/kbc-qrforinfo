@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Controls -->
-    <v-row class="mb-4">
+    <v-row no-gutters class="mb-4">
       <v-col cols="12" sm="3">
         <v-number-input
           v-model.number="plot.widthFt"
@@ -20,8 +20,11 @@
           type="number"
           variant="outlined"
           rounded="lg"
-          
+          class="ml-1"
         />
+      </v-col>
+      <v-col cols="12">
+        <v-btn @click="returnVal" color="primary" class="text-none font-weight-bold rounded-lg elevation-0" height="48">Save Dimention</v-btn>
       </v-col>
     </v-row>
 
@@ -52,14 +55,17 @@
 </template>
 
 <script setup>
+  import { toast } from 'vue3-toastify';
 import { ref, computed } from 'vue'
 
+
+const props = defineProps(['width','height'])
 /* ========================
    USER INPUT (Feet)
 ======================== */
 const plot = ref({
-  widthFt: 40,
-  heightFt: 60
+  widthFt: props.width ? Number(props.width) : null,
+  heightFt: props.height ? Number(props.height) : null
 })
 
 /* ========================
@@ -143,6 +149,19 @@ const dimensionTexts = computed(() => {
     }
   ]
 })
+
+const emit = defineEmits(['getVal'])
+
+const returnVal = ()=>{
+  if(plot.value && plot.value.heightFt && plot.value.widthFt){
+    emit('getVal', plot.value)
+  }else{
+    toast.info('Please choose width and height', {
+            autoClose: 4000,
+          });
+  }
+  
+}
 </script>
 
 <style scoped>
