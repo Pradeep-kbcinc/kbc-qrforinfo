@@ -1875,7 +1875,7 @@ const giveRating = async(data)=>{
           "RATER_USER_ID": authStore.userDetails.USER_ID,
           "RATED_USER_ID": propertyObj.value.SELLER_USER_ID,
           "OVERALL_RATING": ratingState.value.OVERALL_RATING,
-          "PUBLIC_TAGS_TEXT": selectedTags.value && selectedTags.value.length > 1 ? selectedTags.value.join(',') : ',',
+          "PUBLIC_TAGS_TEXT": selectedTags.value && selectedTags.value.length > 0 ? selectedTags.value.join(',') : ',',
           // "PUBLIC_TAGS_TEXT" : "[PROFESSIONAL, ON_TIME]",
           "PUBLIC_COMMENT": ratingState.value.PUBLIC_COMMENT,
           "PRIVATE_COMMENT": ratingState.value.PRIVATE_COMMENT
@@ -1886,7 +1886,7 @@ const giveRating = async(data)=>{
           "RATER_USER_ID": authStore.userDetails.USER_ID,
           "RATED_USER_ID": propertyObj.value.SELLER_USER_ID,
           "OVERALL_RATING": ratingState.value.OVERALL_RATING,
-          "PUBLIC_TAGS_TEXT": selectedTags.value && selectedTags.value.length > 1 ? selectedTags.value.join(',') : '',
+          "PUBLIC_TAGS_TEXT": selectedTags.value && selectedTags.value.length > 0 ? selectedTags.value.join(',') : '',
           // selectedTags.value && selectedTags.value.length > 1 ? selectedTags.value.map(item => ({ TAG: item })) : [],
           // "PUBLIC_TAGS_TEXT":'FAKE_INFO',
           "PUBLIC_COMMENT": ratingState.value.PUBLIC_COMMENT,
