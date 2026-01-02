@@ -67,7 +67,7 @@
               <v-btn @click="checkCredentials" :loading="btnLoader" block rounded="xl" height="38" elevation="0" class="continue-btn text-none text-caption mt-2" color="primary">
                 Send OTP Code
               </v-btn>
-              <v-btn @click="gotoSignUp" :loading="btnLoader" block rounded="xl" height="38" elevation="0" class="continue-btn text-none text-caption mt-n2" color="#19191a">
+              <v-btn @click="gotoSignUp" :disabled="btnLoader" block rounded="xl" height="38" elevation="0" class="continue-btn text-none text-caption mt-n2" color="#19191a">
                 Sign Up Now
               </v-btn>
 
