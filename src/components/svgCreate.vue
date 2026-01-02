@@ -31,8 +31,11 @@
     </v-row>
 
     <!-- Canvas -->
-     <div class="d-flex justify-center">
-        <v-stage :config="stageConfig">
+     <div class="d-flex justify-center flex-column">
+      <p class="text-center text-lightBlack font-weight-bold text-h6 mt-16" v-if="!plot.widthFt && !plot.heightFt">
+        Please Enter Width and Height In Above Fields.
+      </p>
+        <v-stage v-else :config="stageConfig">
           <v-layer>
             <!-- Plot Boundary -->
             <v-rect :config="plotRect" />
