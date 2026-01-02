@@ -210,7 +210,7 @@
       label=""
       thumb-color="primary"
     ></v-slider> -->
-              <v-number-input :error-messages="v$.PRICE_AMOUNT.$errors.map(e => e.$message)"
+              <v-number-input controlVariant="split" :error-messages="v$.PRICE_AMOUNT.$errors.map(e => e.$message)"
                 @blur="v$.PRICE_AMOUNT.$touch" @input="v$.PRICE_AMOUNT.$touch" v-model="state.PRICE_AMOUNT"
                 class="mt-1 mb-0" rounded="lg" variant="outlined" placeholder="450000"></v-number-input>
 
