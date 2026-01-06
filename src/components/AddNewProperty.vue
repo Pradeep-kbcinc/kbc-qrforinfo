@@ -341,7 +341,7 @@
 
     <v-dialog fullscreen v-model="siteMapGeneratorModal">
       <v-toolbar rounded="t-lg" density="compact" class="px-4">
-       <h6>Create Site Map</h6> 
+       <h6 class="font-weight-bold text-h6">Create Site Map</h6> 
         <v-spacer></v-spacer>
         <v-icon @click="siteMapGeneratorModal = false">mdi-close</v-icon>
       </v-toolbar>
