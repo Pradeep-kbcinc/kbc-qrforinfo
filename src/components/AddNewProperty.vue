@@ -347,7 +347,7 @@
       </v-toolbar>
       <v-card>
         <v-card-text>
-            <PropertyMapPreview @getVal="savePropertyDimension" :width="separateWidth" :height="separateHeight"/>
+            <PropertyMapPreview @getVal="savePropertyDimension" :area="state.DIMENSION_DETAIL?.area" :road="state.DIMENSION_DETAIL?.road" :dimensions="state.DIMENSION_DETAIL?.dimensions" />
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -394,6 +394,7 @@ const state = reactive({
   PRICE_AMOUNT: null,
   CURRENCY_CODE: "INR",
   NO_BEDROOMS: 0,
+  DIMENSION_DETAIL: {},
   NO_BATHROOMS: 0,
   FURNISHING_TYPE: "",
   IS_PARKING_SPACE_AVAILABLE: 0,
@@ -428,8 +429,9 @@ const rules = {
   COUNTRY: {},
   STATE: {},
   CITY: {},
+  DIMENSION_DETAIL:{},
   IS_ADDRESS_PRIVATE_FLG: { required },
-  AREA: { required: helpers.withMessage('Area is required', required) },
+  AREA: { },
   NO_BEDROOMS: {},
   NO_BATHROOMS: {},
   POSTAL_CODE: {
@@ -493,8 +495,7 @@ onBeforeUnmount(() => {
   localStorage.removeItem('tempoPropertyData')
 })
 
-const separateWidth = ref(null)
-const separateHeight = ref(null)
+
 //------------------------------------------------------------------------------
 const saveProperty = async () => {
   const isFormCorrect = await v$.value.$validate();
@@ -595,17 +596,20 @@ const fetchPropertyDetail = async () => {
     // v$.value = useVuelidate(rules, state.value)
     const resData = res?.data?.FetchData?.PROPERTY_DETAILS?.[0] || {}
     Object.assign(state, {
-  ...resData,
-  LISTING_TYPE: resData.LISTING_TYPE?.map(i => i.LISTING_TYPE) || []
-})
+      ...resData,
+      LISTING_TYPE: resData.LISTING_TYPE?.map(i => i.LISTING_TYPE) || []
+    })
+
+    state.DIMENSION_DETAIL = resData.DIMENSION_DETAIL
+
     v$.value.$reset()
     console.log(state.DIMENSIONS, 'state')
     // cardKey.value++;
-    if(state.DIMENSIONS !== ''){
-      separateWidth.value = Number(state.DIMENSIONS.split(' ')[0])
-      separateHeight.value = Number(state.DIMENSIONS.split(' ')[2])
-      console.log(separateWidth.value, separateHeight.value)
-    }
+    // if(state.DIMENSIONS !== ''){
+    //   separateWidth.value = Number(state.DIMENSIONS.split(' ')[0])
+    //   separateHeight.value = Number(state.DIMENSIONS.split(' ')[2])
+    //   console.log(separateWidth.value, separateHeight.value)
+    // }
     
 
   } catch (error) {
@@ -722,7 +726,7 @@ const saveDraft = async () => {
     }
     if (res?.data?.ERR_CODE == 0) {
       saveBtnLoader.value = false
-      toast.success('Property added to draft', {
+      toast.success('Property added !', {
         autoClose: 4000,
       });
       draftLoader.value = false
@@ -953,7 +957,7 @@ const toggleListingType = (type) => {
 }
 
 const savePropertyDimension = (data)=>{
-  state.DIMENSIONS = `${data.widthFt} x ${data.heightFt} ft`
+  state.DIMENSION_DETAIL = data
   siteMapGeneratorModal.value = false
 }
 

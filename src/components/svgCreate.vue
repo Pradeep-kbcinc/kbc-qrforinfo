@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-row>
       <!-- LEFT : PLOT DIAGRAM -->
-      <v-col cols="12" md="8" class="d-flex flex-column align-center justify-center">
+      <v-col cols="12" :md="onlyView ? '12' : '8'" class="d-flex flex-column align-center justify-center">
         <v-card width="100%" style="justify-content: center;" class="drop-shadow rounded-lg bg-grey-lighten-4 d-flex py-10">
           <div style="position: absolute;right: 10px;" class="d-flex justify-end">
             <img width="100" src="https://www.pikpng.com/pngl/b/333-3339164_compass-navigation-arrow-direction-gps-west-east-north.png" alt="">
@@ -64,7 +64,7 @@
       </v-col>
 
       <!-- RIGHT : PLOT DETAILS -->
-      <v-col cols="12" md="4">
+      <v-col v-if="!onlyView" cols="12" md="4">
         <v-card rounded="lg" class="drop-shadow">
           <v-card-title class="bg-grey-lighten-2 font-weight-bold">
             Plot Details
@@ -109,11 +109,25 @@
 </template>
 <script setup>
 import { reactive } from 'vue'
-
+const emit = defineEmits(['getVal'])
+const props = defineProps({
+  area: {
+        type: Number
+    },
+  road:{
+        type: Object
+    },
+  dimensions:{
+      type: Object
+    },
+  onlyView: {
+    type: Boolean,
+   
+  }
+})
 const form = reactive({
-  
   area: 2400,
-  facing: 'North',
+  facing: '',
   road: {
     name: '30 Ft Main Road',
     side: 'South'
@@ -127,9 +141,19 @@ const form = reactive({
 })
 
 const savePlot = () => {
-  console.log('SAVE TO BACKEND 👉', form)
-  // API call here
+  emit('getVal',form )
 }
+onMounted(()=>{
+  if(props.area){
+    form.area = props.area
+  }
+  if(props.road){
+    form.road = props.road
+  }
+  if(props.dimensions){
+    form.dimensions =  props.dimensions
+  }
+})
 </script>
 
 <style lang="scss" scoped>

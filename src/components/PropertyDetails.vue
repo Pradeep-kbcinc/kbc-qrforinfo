@@ -185,13 +185,13 @@
                     </p>
                   </div>
                 </v-col>
-                <v-col v-if="propertyObj.DIMENSIONS">
+                <!-- <v-col v-if="propertyObj.DIMENSIONS">
                   <div class="">
                     <p class="text-grey-darken-1">Dimensions <v-btn class="ml-2 mt-n1" icon color="primary" size="x-small" variant="tonal"> <v-icon @click="viewSiteMap" size="large">mdi-eye</v-icon></v-btn></p>
                     <p class="text-h6"> {{ propertyObj.DIMENSIONS }}
                     </p>
                   </div>
-                </v-col>
+                </v-col> -->
                 <v-col v-if="propertyObj.PROPERTY_KIND">
                   <div class="">
                     <p class="text-grey-darken-1">Property Type</p>
@@ -232,9 +232,16 @@
                 </v-col>
               </v-row>
 
-
+             
               <v-divider></v-divider>
+             
               <p class="mt-6 ml-4" v-html="propertyObj.PROPERTY_DESC"></p>
+              <v-divider></v-divider>
+              <div class="mt-4" v-if="propertyObj.DIMENSION_DETAIL">
+                <p class="text-h6">SiteMap :</p>
+                <PropertyMapPreview :onlyView="true" :area="propertyObj.DIMENSION_DETAIL?.area" :road="propertyObj.DIMENSION_DETAIL?.road" :dimensions="propertyObj.DIMENSION_DETAIL?.dimensions" />
+                
+              </div>
             </div>
           </v-card>
           <v-tabs bg-color="grey" color="primary" v-model="tabVal" class="mt-6 rounded-t-lg">
@@ -1072,7 +1079,7 @@
       </v-card-text>
     </v-card>
   </v-dialog>
-  <v-dialog v-model="sitemapViewer">
+  <!-- <v-dialog v-model="sitemapViewer">
     <v-toolbar rounded="t-xl" class="px-4">
       Site Map View
       <v-spacer></v-spacer>
@@ -1083,11 +1090,11 @@
         <PropertyMapPreview :showEditBtn="false" :width="separateWidth" :height="separateHeight"/>
       </v-card-text>
     </v-card>
-  </v-dialog>
+  </v-dialog> -->
 </template>
 
 <script setup>
-  import PropertyMapPreview from './svgCreate.vue'
+import PropertyMapPreview from './svgCreate.vue'
 import PropertyCard from './PropertyCard.vue';
 import QrcodeVue from 'qrcode.vue';
 import Header from '@/layouts/header.vue'
@@ -1100,6 +1107,7 @@ import DummyLand from '@/assets/dummy_land.webp'
 import moment from 'moment';
 import GoogleMap from '@/components/GoogleMap.vue'
 import ProfileDetails from '@/components/Profile.vue'
+
 //..............................................................................
 const authStore = useAuthStore()
 const route = useRoute()
@@ -1340,8 +1348,8 @@ const statisticsData = ref({})
 //   }
 // }
 //------------------------------------------------------------------------------
-const separateWidth = ref(null)
-const separateHeight = ref(null)
+// const separateWidth = ref(null)
+// const separateHeight = ref(null)
 const fetchPropertyDetail = async () => {
   try {
     if (!route?.params?.id) return;
@@ -1371,9 +1379,8 @@ const fetchPropertyDetail = async () => {
     propertyObj.value = res.data?.FetchData?.PROPERTY_DETAILS?.[0] || {}
     qrCodeValue.value = res.data?.FetchData?.PROPERTY_DETAILS?.[0] || {}
     if(propertyObj.value.DIMENSIONS !== ''){
-      separateWidth.value = Number(propertyObj.value.DIMENSIONS.split(' ')[0])
-      separateHeight.value = Number(propertyObj.value.DIMENSIONS.split(' ')[2])
-      console.log(separateWidth.value, separateHeight.value)
+      
+      
     }
     if(authStore.isAuthenticated){
       fetchSellerFeedback(propertyObj.value?.SELLER_USER_ID)
