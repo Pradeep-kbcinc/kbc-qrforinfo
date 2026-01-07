@@ -13,7 +13,7 @@
           <div class="d-flex">
             <p class="mt-6 font-weight-bold">Listing Type</p>
             <v-spacer></v-spacer>
-            <v-btn @click="siteMapGeneratorModal = true" color="primary" class="rounded-lg elevation-0 text-none font-weight-bold">Generate Site Map</v-btn>
+            <v-btn @click="siteMapGeneratorModal = true" color="primary" class="rounded-lg elevation-0 text-none font-weight-bold">{{ route?.params?.id ? 'Edit Site Map' :'Generate Site Map'}}</v-btn>
           </div>
         
           <v-row>
@@ -321,7 +321,7 @@
           <v-spacer></v-spacer>
           <v-btn @click="saveProperty" :loading="saveBtnLoader" color="primary"
             class="text-none rounded-lg elevation-0 font-weight-bold" height="42"><v-icon
-              class="mr-2">mdi-check</v-icon> Save Property</v-btn>
+              class="mr-2">mdi-check</v-icon> {{route?.params?.id ? 'Update Property Details' :'Save Property'}}</v-btn>
         </div>
       </v-card-text>
 
@@ -603,13 +603,8 @@ const fetchPropertyDetail = async () => {
     state.DIMENSION_DETAIL = resData.DIMENSION_DETAIL
 
     v$.value.$reset()
-    console.log(state.DIMENSIONS, 'state')
-    // cardKey.value++;
-    // if(state.DIMENSIONS !== ''){
-    //   separateWidth.value = Number(state.DIMENSIONS.split(' ')[0])
-    //   separateHeight.value = Number(state.DIMENSIONS.split(' ')[2])
-    //   console.log(separateWidth.value, separateHeight.value)
-    // }
+    
+    
     
 
   } catch (error) {

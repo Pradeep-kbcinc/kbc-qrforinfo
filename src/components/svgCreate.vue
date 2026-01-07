@@ -87,10 +87,10 @@
             <!-- <v-select label="Road Side" :items="['North', 'South', 'East', 'West']" v-model="form.road.side" /> -->
 
             <v-card-title  class="mb-4 font-weight-bold"> <v-icon>mdi-tape-measure</v-icon> Dimensions (ft)</v-card-title>
-            <v-number-input variant="outlined" label="North" v-model="form.dimensions.north" />
-            <v-number-input variant="outlined" label="South" v-model="form.dimensions.south" />
-            <v-number-input variant="outlined" label="East" v-model="form.dimensions.east" />
-            <v-number-input variant="outlined" label="West" v-model="form.dimensions.west" />
+            <v-number-input controlVariant="split" variant="outlined" label="North" v-model="form.dimensions.north" />
+            <v-number-input controlVariant="split" variant="outlined" label="South" v-model="form.dimensions.south" />
+            <v-number-input controlVariant="split" variant="outlined" label="East" v-model="form.dimensions.east" />
+            <v-number-input controlVariant="split" variant="outlined" label="West" v-model="form.dimensions.west" />
             <div>
               <v-btn color="primary" class="mt-4 text-none rounded-lg drop-shadow font-weight-bold" @click="savePlot" size="large"
                 height="48" min-width="200">
