@@ -126,17 +126,17 @@ const props = defineProps({
   }
 })
 const form = reactive({
-  area: 2400,
+  area: 0,
   facing: '',
   road: {
-    name: '30 Ft Main Road',
+    name: 'Road Name',
     side: 'South'
   },
   dimensions: {
-    north: 40,
-    south: 40,
-    east: 60,
-    west: 60
+    north: 0,
+    south: 0,
+    east: 0,
+    west: 0
   }
 })
 
