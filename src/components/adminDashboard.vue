@@ -178,7 +178,7 @@ const fetchCounts = async()=>{
 
 const totalPages = ref()
 const pageNumber = ref(1)
-const pageLimit = ref(10)
+const pageLimit = ref(3)
 
 const disputeListLoader = ref(false)
 const fetchDisputList = async()=>{
@@ -202,6 +202,10 @@ const fetchDisputList = async()=>{
     console.log(error)
   }
 }
+
+watch(pageNumber,(val)=>{
+  fetchDisputList()
+})
 
 const resolveOrRejectLoader = ref(false)
 const resolveOrReject = async(type, id)=>{

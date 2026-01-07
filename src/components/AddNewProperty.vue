@@ -13,7 +13,7 @@
           <div class="d-flex">
             <p class="mt-6 font-weight-bold">Listing Type</p>
             <v-spacer></v-spacer>
-            <v-btn @click="siteMapGeneratorModal = true" color="primary" class="rounded-lg elevation-0 text-none font-weight-bold">Generate Site Map</v-btn>
+            <v-btn @click="siteMapGeneratorModal = true" color="primary" class="rounded-lg elevation-0 text-none font-weight-bold">{{ route?.params?.id ? 'Edit Site Map' :'Generate Site Map'}}</v-btn>
           </div>
         
           <v-row>
@@ -210,7 +210,7 @@
       label=""
       thumb-color="primary"
     ></v-slider> -->
-              <v-number-input :error-messages="v$.PRICE_AMOUNT.$errors.map(e => e.$message)"
+              <v-number-input controlVariant="split" :error-messages="v$.PRICE_AMOUNT.$errors.map(e => e.$message)"
                 @blur="v$.PRICE_AMOUNT.$touch" @input="v$.PRICE_AMOUNT.$touch" v-model="state.PRICE_AMOUNT"
                 class="mt-1 mb-0" rounded="lg" variant="outlined" placeholder="450000"></v-number-input>
 
@@ -321,7 +321,7 @@
           <v-spacer></v-spacer>
           <v-btn @click="saveProperty" :loading="saveBtnLoader" color="primary"
             class="text-none rounded-lg elevation-0 font-weight-bold" height="42"><v-icon
-              class="mr-2">mdi-check</v-icon> Save Property</v-btn>
+              class="mr-2">mdi-check</v-icon> {{route?.params?.id ? 'Update Property Details' :'Save Property'}}</v-btn>
         </div>
       </v-card-text>
 
@@ -341,13 +341,13 @@
 
     <v-dialog fullscreen v-model="siteMapGeneratorModal">
       <v-toolbar rounded="t-lg" density="compact" class="px-4">
-       <h6>Create Site Map</h6> 
+       <h6 class="font-weight-bold text-h6">Create Site Map</h6> 
         <v-spacer></v-spacer>
         <v-icon @click="siteMapGeneratorModal = false">mdi-close</v-icon>
       </v-toolbar>
       <v-card>
         <v-card-text>
-            <PropertyMapPreview/>
+            <PropertyMapPreview @getVal="savePropertyDimension" :area="state.DIMENSION_DETAIL?.area" :road="state.DIMENSION_DETAIL?.road" :dimensions="state.DIMENSION_DETAIL?.dimensions" />
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -394,6 +394,7 @@ const state = reactive({
   PRICE_AMOUNT: null,
   CURRENCY_CODE: "INR",
   NO_BEDROOMS: 0,
+  DIMENSION_DETAIL: {},
   NO_BATHROOMS: 0,
   FURNISHING_TYPE: "",
   IS_PARKING_SPACE_AVAILABLE: 0,
@@ -428,8 +429,9 @@ const rules = {
   COUNTRY: {},
   STATE: {},
   CITY: {},
+  DIMENSION_DETAIL:{},
   IS_ADDRESS_PRIVATE_FLG: { required },
-  AREA: { required: helpers.withMessage('Area is required', required) },
+  AREA: { },
   NO_BEDROOMS: {},
   NO_BATHROOMS: {},
   POSTAL_CODE: {
@@ -492,6 +494,8 @@ onMounted(() => {
 onBeforeUnmount(() => {
   localStorage.removeItem('tempoPropertyData')
 })
+
+
 //------------------------------------------------------------------------------
 const saveProperty = async () => {
   const isFormCorrect = await v$.value.$validate();
@@ -592,12 +596,17 @@ const fetchPropertyDetail = async () => {
     // v$.value = useVuelidate(rules, state.value)
     const resData = res?.data?.FetchData?.PROPERTY_DETAILS?.[0] || {}
     Object.assign(state, {
-  ...resData,
-  LISTING_TYPE: resData.LISTING_TYPE?.map(i => i.LISTING_TYPE) || []
-})
+      ...resData,
+      LISTING_TYPE: resData.LISTING_TYPE?.map(i => i.LISTING_TYPE) || []
+    })
+
+    state.DIMENSION_DETAIL = resData.DIMENSION_DETAIL
+
     v$.value.$reset()
-    console.log(state, 'state')
-    // cardKey.value++;
+    
+    
+    
+
   } catch (error) {
 
   } finally {
@@ -712,7 +721,7 @@ const saveDraft = async () => {
     }
     if (res?.data?.ERR_CODE == 0) {
       saveBtnLoader.value = false
-      toast.success('Property added to draft', {
+      toast.success('Property added !', {
         autoClose: 4000,
       });
       draftLoader.value = false
@@ -942,7 +951,10 @@ const toggleListingType = (type) => {
   }
 }
 
-
+const savePropertyDimension = (data)=>{
+  state.DIMENSION_DETAIL = data
+  siteMapGeneratorModal.value = false
+}
 
 
 

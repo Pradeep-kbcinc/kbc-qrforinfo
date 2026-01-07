@@ -43,7 +43,7 @@
           </v-card>
         </v-col>
         <v-col cols="6" md="3">
-          <v-card height="100%" class="rounded-lg card-box-shadow">
+          <v-card @click="router.push('/messages')" height="100%" class="rounded-lg card-box-shadow">
             <!-- First soft background polygon -->
             <div class="first-polygon" style="background: #9B27B04D!important;"></div>
 
@@ -56,7 +56,7 @@
           </v-card>
         </v-col>
         <v-col cols="6" md="3">
-          <v-card class="rounded-lg card-box-shadow">
+          <v-card @click="openDraftList" class="rounded-lg card-box-shadow">
             <!-- First soft background polygon -->
             <div class="first-polygon" style="background: #7A7A7A4D!important;"></div>
 
@@ -116,13 +116,14 @@
                 <v-list-item-title class="font-weight-bold text-grey-darken-3">{{ propertyObj.TITLE
                   }}</v-list-item-title>
                 <!-- <v-list-item-subtitle>{{ property.location }}</v-list-item-subtitle> -->
-                <v-list-item-subtitle v-if="(propertyObj.IS_ADDRESS_PRIVATE_FLG == 1) && propertyObj.ADDRESS_LINE1" class="mt-1"><v-icon color="black">mdi-map-marker</v-icon>{{ propertyObj.ADDRESS_LINE1 }}</v-list-item-subtitle>
+                <v-list-item-subtitle v-if="(propertyObj.IS_ADDRESS_PRIVATE_FLG == 1) && propertyObj.ADDRESS_LINE1" class="mt-1"><v-icon color="primary">mdi-map-marker</v-icon>{{ propertyObj.ADDRESS_LINE1 }}</v-list-item-subtitle>
+                <v-list-item-subtitle class="mt-1"><v-icon class="mr-2" color="green-darken-1">mdi-eye</v-icon><strong class="text-subtitle-2 text-black font-weight-bold">{{ propertyObj.VIEW_COUNT }}</strong></v-list-item-subtitle>
                  <p class="mt-2">Created Date : {{ moment(propertyObj.CREATED_ON).format('Do MMM, YYYY') }}</p> 
                 <div class="text-primary font-weight-bold text-subtitle-1">{{ propertyObj.price }}</div>
 
                 <template #append>
                   <div class="text-end">
-
+                    
                     <v-btn @click.stop="openModal(propertyObj)" rounded="lg" class="text-none font-weight-bold text-subtitle-1" min-width="100" height="48" color="primary" elevation="0">Add Images</v-btn>
                   </div>
                 </template>
