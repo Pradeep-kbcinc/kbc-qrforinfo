@@ -15,7 +15,9 @@
                 <v-btn v-bind="props" variant="flat" height="55"
                   class="elevation-0 text-none font-weight-bold rounded-ts-lg rounded-bs-lg rounded-0">
                   <v-icon color="primary" class="mr-2">{{filters.FURNISHING_TYPE || filters.PROPERTY_KIND || filters.NO_BEDROOMS || filters.NO_BATHROOMS || filters.AMOUNT_MIN || filters.AMOUNT_MAX ? 'mdi-close' : 'mdi-magnify'}}</v-icon>
-                  {{ filters.FURNISHING_TYPE || filters.PROPERTY_KIND || filters.NO_BEDROOMS || filters.NO_BATHROOMS || filters.AMOUNT_MIN || filters.AMOUNT_MAX ? 'Clear Filter' : 'Advance Search'}}
+                  <span v-if="!mobile">
+                    {{ filters.FURNISHING_TYPE || filters.PROPERTY_KIND || filters.NO_BEDROOMS || filters.NO_BATHROOMS || filters.AMOUNT_MIN || filters.AMOUNT_MAX ? 'Clear Filter' : 'Advance Search'}}
+                  </span>
                 </v-btn>
                 
               </template>
@@ -191,9 +193,11 @@
 </template>
 
 <script setup>
+import { useDisplay } from 'vuetify'
 import propertyService from '../services/propertyService';
 import PropertyCard from './PropertyCard.vue';
 import Header from '@/layouts/header.vue';
+const { mobile } = useDisplay()
 const route = useRoute()
 const isLoading = ref(false)
 const propertyArr = ref([])

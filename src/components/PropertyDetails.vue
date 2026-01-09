@@ -237,7 +237,7 @@
              
               <p class="mt-6 ml-4" v-html="propertyObj.PROPERTY_DESC"></p>
               <v-divider></v-divider>
-              <div class="mt-4" v-if="propertyObj.DIMENSION_DETAIL">
+              <div class="mt-4" v-if="propertyObj.DIMENSION_DETAIL && propertyObj.DIMENSION_DETAIL.area">
                 <p class="text-h6">SiteMap :</p>
                 <PropertyMapPreview :onlyView="true" :area="propertyObj.DIMENSION_DETAIL?.area" :road="propertyObj.DIMENSION_DETAIL?.road" :dimensions="propertyObj.DIMENSION_DETAIL?.dimensions" />
                 

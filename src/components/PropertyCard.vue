@@ -53,9 +53,10 @@
       </v-carousel>
 
 
-      <v-btn v-if="propertyObj.LISTING_TYPE" :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'"
+      <v-btn v-if="propertyObj.LISTING_TYPE && propertyObj.LISTING_TYPE.length > 0" :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'"
         class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 left-0 mt-4 ms-4" height=""
-        density="comfortable">{{ propertyObj.LISTING_TYPE }}</v-btn>
+        density="comfortable">{{ propertyObj.LISTING_TYPE && propertyObj.LISTING_TYPE.length > 0 ? propertyObj.LISTING_TYPE.map(item => item.LISTING_TYPE).join(',') : '' }}</v-btn>
+
       <v-btn :loading="makeFevLoader" @click.stop="makeFev(propertyObj.PROPERTY_ID)" color="white"
         :icon="propertyObj.IS_FAV ? 'mdi-heart' : 'mdi-heart-outline'"
         class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 right-0 mt-4 mr-4">
