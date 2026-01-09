@@ -542,7 +542,7 @@
         <div
           style="background-color: #ee961d; min-height: 60px;position: relative;z-index: -1; height: 100%;margin-top: -80px;"
           elevation="0" color="primary" class="d-flex justify-center align-center" min-height="200">
-          <h5 class="text-white text-center">SCAN TO  <span class="scan-text">CONTACT THE</span> OWNER</h5>
+          <h5 class="text-white text-center">SCAN TO <span class="scan-text">CONTACT </span> SELLER</h5>
         </div>
       </div>
 
@@ -575,7 +575,7 @@
 
         <!-- Bottom Banner -->
         <div class="d-flex justify-center align-center" style="background-color: #ee961d; min-height: 60px;">
-          <h5 class="text-white text-center">SCAN TO  <span class="scan-text">CONTACT THE</span> OWNER</h5>
+          <h5 class="text-white text-center">SCAN TO  <span class="scan-text">CONTACT </span> SELLER</h5>
         </div>
 
       </div>

@@ -124,7 +124,7 @@
                 <template #append>
                   <div class="text-end">
                     
-                    <v-btn @click.stop="openModal(propertyObj)" rounded="lg" class="text-none font-weight-bold text-subtitle-1" min-width="100" height="48" color="primary" elevation="0">Add Images</v-btn>
+                    <!-- <v-btn @click.stop="openModal(propertyObj)" rounded="lg" class="text-none font-weight-bold text-subtitle-1" min-width="100" height="48" color="primary" elevation="0">Add Images</v-btn> -->
                   </div>
                 </template>
 
