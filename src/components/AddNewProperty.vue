@@ -347,7 +347,7 @@
       </v-toolbar>
       <v-card>
         <v-card-text>
-            <PropertyMapPreview @getVal="savePropertyDimension" :area="state.DIMENSION_DETAIL?.area" :road="state.DIMENSION_DETAIL?.road" :dimensions="state.DIMENSION_DETAIL?.dimensions" />
+            <PropertyMapPreview @getVal="savePropertyDimension" :area="state.AREA" :road="state.DIMENSION_DETAIL?.road" :dimensions="state.DIMENSION_DETAIL?.dimensions" />
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -952,7 +952,9 @@ const toggleListingType = (type) => {
 }
 
 const savePropertyDimension = (data)=>{
+  console.log(data, 'data')
   state.DIMENSION_DETAIL = data
+  state.AREA = data?.area ?  Number(data?.area) : 0
   siteMapGeneratorModal.value = false
 }
 

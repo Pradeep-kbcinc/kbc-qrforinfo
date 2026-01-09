@@ -10,13 +10,27 @@
     })
     " class="card-box-shadow rounded-lg">
 
-    <v-card height="250" elevation="0" rounded="0" class="bg-box-gradient d-flex justify-center align-center position-relative" style="font-size: 5.0rem;line-height: 1;">
-      <v-carousel v-if="propertyObj.IMAGES && propertyObj.IMAGES?.length > 0" hide-delimiters :show-arrows="propertyObj.IMAGES?.length > 1" height="250">
+    <v-card height="250" elevation="0" rounded="0"
+      class="bg-box-gradient d-flex justify-center align-center position-relative"
+      style="font-size: 5.0rem;line-height: 1;">
+      <v-carousel v-if="propertyObj.IMAGES && propertyObj.IMAGES?.length > 0" hide-delimiters
+        :show-arrows="propertyObj.IMAGES?.length > 1" height="250">
         <v-carousel-item cover v-for="(image, i) in propertyObj.IMAGES" :key="i">
 
-          <video v-if="isVideo(image?.IMAGE_URL)" :src="image.IMAGE_URL" controls autoplay muted loop playsinline style="width: 100%; height: 100%; object-fit: cover;" />
+          <video
+          v-if="isVideo(image?.IMAGE_URL)"
+          :src="image.IMAGE_URL"
+          controls
+          autoplay
+          muted
+          loop
+          playsinline
+          style="width: 100%; height: 100%; object-fit: cover;"
+        />
 
-          <v-img v-else-if="!isVideo(image?.IMAGE_URL)" :src="image?.IMAGE_URL ? image.IMAGE_URL : `@/assets/property_placeholder.webp`" lazy-src="@/assets/property_placeholder.webp" cover height="250" class="rounded-lg">
+          <v-img v-else-if="!isVideo(image?.IMAGE_URL)"
+            :src="image?.IMAGE_URL ? image.IMAGE_URL : `@/assets/property_placeholder.webp`"
+            lazy-src="@/assets/property_placeholder.webp" cover height="250" class="rounded-lg">
             <template #placeholder>
               <div class="d-flex fill-height align-center justify-center" style="background-color: #f2f2f2;">
                 <v-progress-circular indeterminate color="primary"></v-progress-circular>
@@ -25,7 +39,7 @@
           </v-img>
 
 
-
+          
 
 
           <v-img v-else cover src="@/assets/property_placeholder.webp" alt="" />
@@ -39,8 +53,13 @@
       </v-carousel>
 
 
-      <v-btn v-if="propertyObj.LISTING_TYPE" :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'" class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 left-0 mt-4 ms-4" height="" density="comfortable">{{ propertyObj.LISTING_TYPE }}</v-btn>
-      <v-btn :loading="makeFevLoader" @click.stop="makeFev(propertyObj.PROPERTY_ID)" color="white" :icon="propertyObj.IS_FAV ? 'mdi-heart' : 'mdi-heart-outline'" class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 right-0 mt-4 mr-4">
+      <v-btn v-if="propertyObj.LISTING_TYPE && propertyObj.LISTING_TYPE.length > 0" :color="propertyObj.LISTING_TYPE == 'FOR SALE' ? 'success' : 'primary'"
+        class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 left-0 mt-4 ms-4" height=""
+        density="comfortable">{{ propertyObj.LISTING_TYPE && propertyObj.LISTING_TYPE.length > 0 ? propertyObj.LISTING_TYPE.map(item => item.LISTING_TYPE).join(',') : '' }}</v-btn>
+
+      <v-btn :loading="makeFevLoader" @click.stop="makeFev(propertyObj.PROPERTY_ID)" color="white"
+        :icon="propertyObj.IS_FAV ? 'mdi-heart' : 'mdi-heart-outline'"
+        class="text-none rounded-pill elevation-0 font-weight-bold position-absolute top-0 right-0 mt-4 mr-4">
         <v-icon :color="propertyObj.IS_FAVOURITE ? 'red' : 'black'">{{ propertyObj.IS_FAVOURITE ? 'mdi-heart' :
           'mdi-heart-outline' }}</v-icon>
       </v-btn>
@@ -49,7 +68,7 @@
       <p class="text-h6 single-line">{{ propertyObj.TITLE }}</p>
       <p class="mt-1 single-line">
         <v-icon color="black" size="large">mdi-map-marker-outline</v-icon>
-        <span v-if="propertyObj.ADDRESS_LINE1"> {{ propertyObj.IS_ADDRESS_PRIVATE_FLG == 1 ? propertyObj.ADDRESS_LINE1 : 'Hidden' }}</span>
+        <span v-if="propertyObj.ADDRESS_LINE1">  {{ propertyObj.IS_ADDRESS_PRIVATE_FLG == 1 ? propertyObj.ADDRESS_LINE1 : 'Hidden' }}</span>
       </p>
       <div class="d-flex justify-space-between align-center text-primary mt-3">
         <p class="text-h5 font-weight-bold">
@@ -65,9 +84,8 @@
           <!-- {{ propertyObj.CURRENCY_CODE }} -->
         </p>
         <div v-if="authStore.isAuthenticated">
-          <v-btn elevation="0" v-if="propertyObj.SELLER_USER_ID === authStore.getUserDetails.USER_ID" variant="elevated" color="success" class="font-weight-bold text-none">
-            Edit
-          </v-btn>
+          <v-btn elevation="0" v-if="propertyObj.SELLER_USER_ID === authStore.getUserDetails.USER_ID" variant="elevated"
+            color="success" class="font-weight-bold text-none">Edit</v-btn>
         </div>
 
       </div>
@@ -117,16 +135,16 @@ const makeFev = async (id) => {
     }
     let res = await propertyService.PropertyFavoriteTxnCrud(data)
     if (res.data.ERR_CODE == 0) {
-      if (props.propertyObj.IS_FAVOURITE == 0) {
+      if(props.propertyObj.IS_FAVOURITE == 0){
         toast.success('Property added to saved list', {
-          autoClose: 4000,
-        });
-      } else {
+        autoClose: 4000,
+      });
+      }else{
         toast.success('Property removed from saved list', {
-          autoClose: 4000,
-        });
+        autoClose: 4000,
+      });
       }
-
+      
       emit('recall')
       makeFevLoader.value = false
     }
@@ -146,7 +164,7 @@ const findImageType = (type) => {
   }
 }
 
-onMounted(async () => {
+onMounted(async()=>{
   await nextTick()
 
   // Select all carousel arrow buttons and stop their click from bubbling

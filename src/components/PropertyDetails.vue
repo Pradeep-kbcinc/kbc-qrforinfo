@@ -237,7 +237,7 @@
              
               <p class="mt-6 ml-4" v-html="propertyObj.PROPERTY_DESC"></p>
               <v-divider></v-divider>
-              <div class="mt-4" v-if="propertyObj.DIMENSION_DETAIL">
+              <div class="mt-4" v-if="propertyObj.DIMENSION_DETAIL && propertyObj.DIMENSION_DETAIL.area">
                 <p class="text-h6">SiteMap :</p>
                 <PropertyMapPreview :onlyView="true" :area="propertyObj.DIMENSION_DETAIL?.area" :road="propertyObj.DIMENSION_DETAIL?.road" :dimensions="propertyObj.DIMENSION_DETAIL?.dimensions" />
                 
@@ -542,7 +542,7 @@
         <div
           style="background-color: #ee961d; min-height: 60px;position: relative;z-index: -1; height: 100%;margin-top: -80px;"
           elevation="0" color="primary" class="d-flex justify-center align-center" min-height="200">
-          <h5 class="text-white text-center">SCAN TO  <span class="scan-text">CONTACT THE</span> OWNER</h5>
+          <h5 class="text-white text-center">SCAN TO <span class="scan-text">CONTACT </span> SELLER</h5>
         </div>
       </div>
 
@@ -575,7 +575,7 @@
 
         <!-- Bottom Banner -->
         <div class="d-flex justify-center align-center" style="background-color: #ee961d; min-height: 60px;">
-          <h5 class="text-white text-center">SCAN TO  <span class="scan-text">CONTACT THE</span> OWNER</h5>
+          <h5 class="text-white text-center">SCAN TO  <span class="scan-text">CONTACT </span> SELLER</h5>
         </div>
 
       </div>
