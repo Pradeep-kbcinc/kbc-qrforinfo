@@ -508,7 +508,11 @@
 
   <v-dialog :max-width="qrViewSwitch == 'Portrait' ? 500 : 900" v-model="qrModal">
     <v-toolbar rounded="t-lg b-0" class="px-4">
-      <h5>QR Code & Analytics</h5>
+      <div>
+        <h5 class="text-subtitle-1 font-weight-bold">QR Code & Analytics</h5>
+        <v-switch density="compact" size="x-small"  v-model="toggleContact" hide-details label="Show Seller Contact" class="ml-2 mt-n2" color="primary"></v-switch>
+      </div>
+      
       <v-spacer></v-spacer>
       <v-switch size="large" inset v-model="qrViewSwitch" :label="`${qrViewSwitch} View`" false-value="Portrait"
         true-value="Landscape" hide-details class="ml-4" color="primary"></v-switch>
@@ -534,6 +538,9 @@
                   background="white" foreground="black" />
               </v-card>
               <p class="text-center mt-2 text-white">Hold the camera to the image</p>
+              <v-card v-if="toggleContact" color="grey" class="pa-2 elevation-0 rounded-lg d-flex mt-2 d-flex justify-center contact-card font-weight-bold" min-width="300">
+                <v-icon>mdi-account</v-icon> <p class="ml-1">{{ authStore.userDetails.FNAME }} {{ authStore.userDetails.LNAME }}</p> <v-icon class="ml-4">mdi-phone-message-outline</v-icon><p class="ml-1">{{ authStore.userDetails.MOBILE_PHONE }}</p>
+              </v-card>
             </div>
           </div>
           <div style="background-color: #2663eb; min-height: 200px;position: relative;top: -80px;z-index: -1;"
@@ -569,6 +576,9 @@
               <!-- {{ propertyObj.LISTING_TYPE.toUpperCase() }} -->
               FOR SALE
             </h2>
+            <v-card v-if="toggleContact" color="grey" class="pa-2 elevation-0 rounded-lg d-flex mt-2 d-flex justify-center contact-card font-weight-bold" min-width="300">
+                <v-icon>mdi-account</v-icon> <p class="ml-1">{{ authStore.userDetails.FNAME }} {{ authStore.userDetails.LNAME }}</p> <v-icon class="ml-4">mdi-phone-message-outline</v-icon><p class="ml-1">{{ authStore.userDetails.MOBILE_PHONE }}</p>
+              </v-card>
             <!-- <p class="text-primary text-center">REALLY <span class="px-1">GREAT</span> REALITY</p> -->
           </div>
         </div>
@@ -1198,6 +1208,7 @@ const fetchPropertyFeedback = async(id)=>{
     console.log(error)
   }
 }
+const toggleContact = ref(false)
 
 watch(propertyPage, (val)=>{
   fetchPropertyFeedback(propertyObj.value?.SELLER_USER_ID)
@@ -1414,6 +1425,12 @@ const downloadPDF = async (propertyObj) => {
       }
         .scan-text{
         word-spacing: 10px!important;
+        }
+        .contact-card{
+        min-width: 300px!important;
+        display: flex!important;
+        justify-content: center!important;
+        align-items: center!important;
         }
 
       h1, h2, h3, h4, h5, p, span {
