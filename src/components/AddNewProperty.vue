@@ -15,7 +15,7 @@
             <v-spacer></v-spacer>
             <v-btn @click="siteMapGeneratorModal = true" color="primary" class="rounded-lg elevation-0 text-none font-weight-bold">{{ route?.params?.id ? 'Edit Site Map' :'Generate Site Map'}}</v-btn>
           </div>
-        
+       
           <v-row>
             <v-col>
               <v-btn
@@ -485,7 +485,9 @@ const getLocationDetails = async () => {
 onMounted(() => {
   getLocationDetails()
   if (route.query.draft) {
-    Object.assign(state, { ...state, ...authStore.getTemporaryPropertyDetails });
+    Object.assign(state, { ...state, ...authStore.getTemporaryPropertyDetails, LISTING_TYPE: authStore.getTemporaryPropertyDetails.LISTING_TYPE?.map(
+    i => i.LISTING_TYPE
+  ) });
   } else {
     fetchPropertyDetail()
   }
