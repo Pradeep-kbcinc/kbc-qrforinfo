@@ -58,7 +58,7 @@
               <div class="d-flex ga-2 justify-space-between">
                 <p class="font-weight-bold"> {{ getName(selectedMsgObj?.MEMBERS_LIST)?.USER_NAME || '' }}</p>
                 
-                <v-btn @click.stop="deleteChannelPopUp(selectedMsgObj)" elevation="0" class="text-none font-weight-bold" rounded="lg" color="error" size="small" > <v-icon class="mr-2">mdi-delete</v-icon> Delete Channel</v-btn> 
+                <v-btn @click.stop="deleteChannelPopUp(selectedMsgObj)" elevation="0" class="text-none font-weight-bold" rounded="lg" color="error" size="small" > <v-icon class="mr-2">mdi-delete</v-icon> Delete Conversation</v-btn> 
               </div>
             </div>
             <div class="w-100 h-100 overflow-y-scroll">
