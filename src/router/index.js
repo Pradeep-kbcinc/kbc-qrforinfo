@@ -19,7 +19,7 @@ import SignupV2 from "@/components/SignupV2.vue";
 import PublicProfile from "@/components/Profile.vue"
 import AboutPage from "@/components/AboutPage.vue";
 const router = createRouter({
-  history: createWebHashHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: "/home",
@@ -117,10 +117,14 @@ const router = createRouter({
       // redirect: '/buy/properties', // 👈 redirect root to this
     },
     {
-      path: "/",
+      path: "/login",
       name: "Login",
       component: Login,
       beforeEnter: checkLoggedInRouteGuard
+    },
+    {
+      path: "/",
+      redirect: "/propertyListing"
     },
     {
       path: "/404",
