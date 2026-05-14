@@ -124,7 +124,7 @@ const router = createRouter({
     },
     {
       path: "/",
-      redirect: "/propertyListing"
+      redirect: "/about"
     },
     {
       path: "/404",

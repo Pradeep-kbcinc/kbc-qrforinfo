@@ -29,7 +29,7 @@
             <template v-if="!isVerfiyOTP">
               <h2 class="welcome text-center">Sign In</h2>
               <p class="subtitle text-center mb-1">Don’t have an account ? <span @click="router.push('/signup')" class="link text-primary" >Sign up</span></p>
-              <p class="subtitle text-center ">Go to <span class="link text-primary" @click="$router.push({ name: 'BuyerLanding' })">Property Listing</span></p>
+              <!-- <p class="subtitle text-center ">Go to <span class="link text-primary" @click="$router.push({ name: 'BuyerLanding' })">Property Listing</span></p> -->
             </template>
             <template v-else>
               <h2 class="welcome text-center">Verification Code</h2>
@@ -54,9 +54,9 @@
             <span>OR</span>
         </div> -->
 
-        <v-tabs v-if="!isVerfiyOTP" v-model="tabVal" align-tabs="center" class="mt-n4" density="compact" color="primary">
+        <v-tabs v-if="!isVerfiyOTP" v-model="tabVal" align-tabs="center" class="mt-n" density="compact" color="primary">
             <v-tab class="text-none" color="primary" value="otp">OTP Login</v-tab>
-            <v-tab class="text-none" color="primary" value="pass">Login With Password</v-tab>
+            <!-- <v-tab class="text-none" color="primary" value="pass">Login With Password</v-tab> -->
         </v-tabs>
         <v-tabs-window class="mt-2" v-model="tabVal">
           <v-tabs-window-item value="otp">
@@ -67,7 +67,7 @@
               <v-btn @click="checkCredentials" :loading="btnLoader" block rounded="xl" height="38" elevation="0" class="continue-btn text-none text-caption mt-2" color="primary">
                 Send OTP Code
               </v-btn>
-              <v-btn @click="gotoSignUp" :disabled="btnLoader" block rounded="xl" height="38" elevation="0" class="continue-btn text-none text-caption mt-n2" color="#f3a43b">
+              <v-btn @click="gotoSignUp" :disabled="btnLoader" block rounded="xl" height="38" elevation="0" class="continue-btn text-none text-white text-caption mt-n2" color="#f3a43b">
                 Sign Up Now
               </v-btn>
 
@@ -89,7 +89,7 @@
                 <v-btn @click="isVerfiyOTP = false; otpCode = ''" rounded="xl" height="38" elevation="0" class="continue-btn text-none text-caption" variant="tonal" color="red">
                   Cancel
                 </v-btn>
-                <v-btn @click="verifyOtp()" :loading="btnLoader" :disabled="otpCode.length < 4" rounded="xl" height="38" elevation="0" class="continue-btn text-none text-caption flex-1-1" color="#19191a">
+                <v-btn @click="verifyOtp()" :loading="btnLoader" :disabled="otpCode.length < 4" rounded="xl" height="38" elevation="0" class="continue-btn text-none text-caption flex-1-1" color="#ef951d">
                   Confirm
                 </v-btn>
               </div>
@@ -109,7 +109,7 @@
               <v-btn :disabled="!userId || !password" @click="loginWithPass" :loading="loginLoader" block rounded="xl" height="38" elevation="0" class="continue-btn text-none text-caption mt-2" color="primary">
                 Login
               </v-btn>
-              <v-btn @click="gotoSignUp" :loading="btnLoader" block rounded="xl" height="38" elevation="0" class="continue-btn text-none text-caption mt-n2" color="#f3a43b">
+              <v-btn @click="gotoSignUp" :loading="btnLoader" block rounded="xl" height="38" elevation="0" class="continue-btn text-none text-white text-caption mt-n2" color="#f3a43b">
                 Sign Up Now
               </v-btn>
           </v-tabs-window-item>

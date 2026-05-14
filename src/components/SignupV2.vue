@@ -30,7 +30,7 @@
 
             <h2 class="welcome text-center">Create Account</h2>
             <p class="subtitle text-center mb-1">Already have an account ? <span class="link text-primary" @click="gotoLogin()">Login</span></p>
-            <p class="subtitle text-center mb-6">Go to <span class="link text-primary" @click="$router.push({ name: 'BuyerLanding' })">Property Listing</span></p>
+            <!-- <p class="subtitle text-center mb-6">Go to <span class="link text-primary" @click="$router.push({ name: 'BuyerLanding' })">Property Listing</span></p> -->
 
             <!-- <div class="social-row">
             <v-btn variant="outlined" rounded="lg" class="social-btn">
@@ -97,7 +97,7 @@
                     @blur="v$.USER_PASSWORD.$touch"
                   />
 
-              <v-btn @click="checkCredentials" :loading="btnLoader" block rounded="xl" height="38" elevation="0" class="continue-btn text-none text-caption mt-2" color="#f3a43b">
+              <v-btn @click="checkCredentials" :loading="btnLoader" block rounded="xl" height="38" elevation="0" class="continue-btn text-none text-caption mt-2 text-white" color="#f3a43b">
                 Signup
               </v-btn>
               <v-btn @click="gotoLogin()" :loading="btnLoader" block rounded="xl" height="38" elevation="0" class="continue-btn text-none text-caption mt-n2" color="primary">
