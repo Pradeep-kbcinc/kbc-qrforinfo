@@ -97,7 +97,7 @@
                     @blur="v$.USER_PASSWORD.$touch"
                   />
 
-              <v-btn @click="checkCredentials" :loading="btnLoader" block rounded="xl" height="38" elevation="0" class="continue-btn text-none text-caption mt-2" color="#19191a">
+              <v-btn @click="checkCredentials" :loading="btnLoader" block rounded="xl" height="38" elevation="0" class="continue-btn text-none text-caption mt-2" color="#f3a43b">
                 Signup
               </v-btn>
               <v-btn @click="gotoLogin()" :loading="btnLoader" block rounded="xl" height="38" elevation="0" class="continue-btn text-none text-caption mt-n2" color="primary">
