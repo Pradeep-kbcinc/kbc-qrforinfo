@@ -147,8 +147,8 @@
                 })" class="px-2 my-2 pointer rounded-lg listing-card">
                   <template #prepend>
                     <!-- {{ propertyObj }} -->
-                    <v-img cover class="mr-6" v-if="propertyObj.IMAGES && propertyObj.IMAGES.length > 0" width="200" :src="propertyObj.IMAGES[0].IMAGE_URL" />
-                    <v-img cover class="mr-6" v-else width="200" src="@/assets/dummyBuilding.jpeg" />
+                    <v-img cover class="mr-6 rounded-lg" v-if="propertyObj.IMAGES && propertyObj.IMAGES.length > 0" width="200" :src="propertyObj.IMAGES[0].IMAGE_URL" />
+                    <v-img cover class="mr-6 rounded-lg" v-else width="200" src="@/assets/dummyBuilding.jpeg" />
                   </template>
 
                   <v-list-item-title class="font-weight-bold text-grey-darken-3">{{ propertyObj.TITLE

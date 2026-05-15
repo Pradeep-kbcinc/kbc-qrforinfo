@@ -51,10 +51,10 @@
   
   // Props for easy customization
   const props = defineProps({
-    companyName: { type: String, default: '[Company Name]' },
+    companyName: { type: String, default: 'KBC India' },
     websiteUrl: { type: String, default: 'www.website.com' },
-    effectiveDate: { type: String, default: '[Insert Date]' },
-    lastUpdated: { type: String, default: '[Insert Date]' },
+    effectiveDate: { type: String, default: '' },
+    lastUpdated: { type: String, default: '' },
     grievanceOfficerName: { type: String, default: '[Full Name]' },
     supportEmail: { type: String, default: 'support@company.com' },
     address: { type: String, default: '[Full Company Address]' },
@@ -62,64 +62,346 @@
     workingHours: { type: String, default: 'Monday–Friday, 10 AM – 6 PM IST' }
   })
   
-  // Build the sections from the provided privacy policy text (HTML-safe)
+
   const sections = ref([
-    {
-      id: 'overview',
-      title: 'Overview',
-      html: `We, at ${props.companyName}, including our affiliates and subsidiaries worldwide ("Company", "we", "us", or "our"), respect your privacy and are committed to protecting your personal information. This Privacy Policy ("Policy") explains how we collect, use, disclose, and safeguard your information when you access or use our property buying and selling platform, including our website ${props.websiteUrl}, mobile application, and other online services (collectively referred to as the "Platform").<br><br>By using our Platform, you agree to the terms of this Policy. If you do not agree, please do not use the Platform or provide us with your personal information.`
-    },
-    {
-      id: 'personal-data',
-      title: '1. Personal Data We Collect',
-      html: `<strong>A. Information You Provide Directly</strong><ul><li><strong>Account Information:</strong> Name, email address, phone number, password, and profile photo.</li><li><strong>Property Details:</strong> Property address, type, price, ownership documents, images, videos, amenities, and location.</li><li><strong>Identity Verification:</strong> Government-issued ID proof (PAN, Aadhaar, Passport), address proof, or business registration for brokers/dealers.</li><li><strong>Transaction Data:</strong> Payment details (excluding full credit/debit card numbers), invoices, transaction history, and subscription details.</li><li><strong>Communication Data:</strong> Emails, chat messages, reviews, or inquiries shared via our Platform.</li></ul><strong>B. Information Collected Automatically</strong><ul><li><strong>Device and Usage Data:</strong> IP address, device ID, browser type, operating system, access time, referring URLs, and app version.</li><li><strong>Location Data:</strong> Approximate or precise location when enabled, for showing nearby listings or personalized search results.</li><li><strong>Cookies and Tracking:</strong> We use cookies, web beacons, and similar technologies to improve Platform performance and user experience.</li></ul><strong>C. Information from Third Parties</strong><ul><li>We may receive data from payment gateways or financial institutions for verifying transactions.</li><li>Real estate agents, builders, or partners who list properties.</li><li>Publicly available records (e.g., property registration databases).</li><li>Social media platforms, if you sign in using Google, Facebook, or similar accounts.</li></ul>`
-    },
-    {
-      id: 'use',
-      title: '2. How We Use Your Personal Data',
-      html: `<ul><li>Enable core services — property search, listing, buying, selling, and renting.</li><li>Create and manage your account, verify your identity, and prevent fraud.</li><li>Facilitate communication between buyers, sellers, brokers, and agents.</li><li>Send notifications about listings, offers, transactions, or account activity.</li><li>Improve our services by analyzing trends and user behavior.</li><li>Provide customer support and respond to your requests or complaints.</li><li>Comply with legal obligations, regulatory requirements, or enforce our Terms of Use.</li><li>Personalize user experience, including targeted advertisements or property recommendations.</li></ul>`
-    },
-    {
-      id: 'share',
-      title: '3. Who We Share Your Personal Data With',
-      html: `<ul><li>Property owners, buyers, tenants, and brokers when you express interest in a listing or post a property.</li><li>Service providers who assist in hosting, analytics, customer support, marketing, and payments.</li><li>Business partners or affiliates offering related services (e.g., home loans, movers, interior design).</li><li>Regulatory or law enforcement agencies, if required by applicable law or legal process.</li><li>Successors or assignees in case of merger, acquisition, or restructuring of our business.</li></ul><p>All third parties are contractually obligated to maintain confidentiality and use your data only for authorized purposes.</p>`
-    },
-    {
-      id: 'storage',
-      title: '4. Data Storage and Retention',
-      html: `<p>Your data is stored on secure servers located in India and/or other jurisdictions with adequate protection.</p><p>We retain your personal data only as long as necessary to provide our services, comply with legal obligations, or resolve disputes. Once the retention period ends, data is securely deleted or anonymized.</p>`
-    },
-    {
-      id: 'rights',
-      title: '5. Your Rights',
-      html: `<p>Subject to applicable laws, you have the following rights:</p><ul><li><strong>Access:</strong> Request a copy of your personal data.</li><li><strong>Correction:</strong> Update or rectify inaccurate or incomplete information.</li><li><strong>Deletion:</strong> Request deletion of your data where processing is no longer necessary.</li><li><strong>Withdrawal of Consent:</strong> Withdraw previously given consent without affecting prior processing.</li><li><strong>Data Portability:</strong> Request transfer of your data to another platform (if technically feasible).</li><li><strong>Grievance Redressal:</strong> File a complaint regarding misuse or unauthorized access.</li></ul><p>You can exercise these rights by contacting our Grievance Officer (details below).</p>`
-    },
-    {
-      id: 'protection',
-      title: '6. Data Protection Practices',
-      html: `<p>We use industry-standard measures to protect your data, including:</p><ul><li>SSL encryption for data transmission.</li><li>Multi-factor authentication for sensitive transactions.</li><li>Access control and audit mechanisms for internal handling of data.</li><li>Regular security audits and employee confidentiality training.</li></ul><p>However, please note that no digital platform can guarantee absolute security. Users are encouraged to maintain strong passwords and avoid sharing login credentials.</p>`
-    },
-    {
-      id: 'thirdparty',
-      title: '7. Third-Party Websites, Apps, and Services',
-      html: `<p>Our Platform may contain links to third-party websites or apps (e.g., banks, payment gateways, insurance providers). We are not responsible for the privacy practices or content of such external sites. We encourage you to review their privacy policies before sharing any data.</p>`
-    },
-    {
-      id: 'children',
-      title: '8. Children\'s Privacy',
-      html: `<p>Our Platform is not intended for individuals under the age of 18. We do not knowingly collect or process data from minors. If we become aware that a child has provided us with personal data, we will delete it promptly.</p>`
-    },
-    {
-      id: 'changes',
-      title: '9. Changes to this Privacy Policy',
-      html: `<p>We may update this Policy periodically to reflect changes in our practices or legal requirements. The revised version will be posted on the Platform with an updated “Last Updated” date. Continued use of our Platform after such updates constitutes your consent to the revised Policy.</p>`
-    },
-    {
-      id: 'contact',
-      title: '10. How to Contact Us – Grievance Officer',
-      html: `<p>For any concerns, queries, or complaints regarding this Policy or data processing, you may contact:<br><strong>Grievance Officer:</strong> ${props.grievanceOfficerName}<br><strong>Email:</strong> <a href=\"mailto:${props.supportEmail}\">${props.supportEmail}</a><br><strong>Address:</strong> ${props.address}<br><strong>Contact Number:</strong> ${props.phone}<br><strong>Working Hours:</strong> ${props.workingHours}</p><p>✅ This Privacy Policy is compliant with the Information Technology (Reasonable Security Practices and Procedures and Sensitive Personal Data or Information) Rules, 2011, and the Digital Personal Data Protection Act, 2023 (India).</p>`
-    }
-  ])
+  {
+    id: 'overview',
+    title: 'Overview',
+    html: `
+      <p>
+        At Knowledge Bridge Consulting India (“KBC India”, “Company”, “we”, “us”, or “our”), 
+        we value your privacy and are committed to protecting your personal information.
+      </p>
+
+      <p>
+        This Privacy Policy (“Policy”) explains how we collect, use, store, disclose, and 
+        safeguard your information when you access or use our website, mobile applications, 
+        assessments, counseling platforms, educational services, digital wellness solutions, 
+        and related services (collectively referred to as the “Platform” or “Services”).
+      </p>
+
+      <p>
+        By accessing or using our Platform, you agree to the terms outlined in this Policy. 
+        If you do not agree with this Policy, please refrain from using our Services or 
+        sharing your personal information with us.
+      </p>
+    `
+  },
+
+  {
+    id: 'personal-data',
+    title: '1. Personal Data We Collect',
+    html: `
+      <strong>A. Information You Provide Directly</strong>
+
+      <p class="mt-2"><strong>Account & Registration Information</strong></p>
+
+      <p>We may collect personal details such as:</p>
+
+      <ul>
+        <li>Full name</li>
+        <li>Email address</li>
+        <li>Phone number</li>
+        <li>Password and login credentials</li>
+        <li>Organization or institution details</li>
+        <li>Profile photograph</li>
+      </ul>
+
+      <br>
+
+      <strong>B. Information Collected Automatically</strong>
+
+      <p class="mt-2"><strong>Location Information</strong></p>
+
+      <p>
+        With your permission, we may collect approximate or precise location information 
+        to improve service delivery, attendance systems, or location-based recommendations.
+      </p>
+
+      <p class="mt-4"><strong>Cookies & Tracking Technologies</strong></p>
+
+      <p>We use cookies, analytics tools, and similar tracking technologies to:</p>
+
+      <ul>
+        <li>Enhance user experience</li>
+        <li>Improve platform functionality</li>
+        <li>Analyze user behavior and engagement</li>
+        <li>Maintain security and session management</li>
+      </ul>
+
+      <br>
+
+      <strong>C. Information from Third Parties</strong>
+
+      <p class="mt-2">We may receive information from:</p>
+
+      <ul>
+        <li>Schools, institutions, NGOs, or partner organizations</li>
+        <li>Payment gateways and financial institutions</li>
+        <li>Government departments or authorized agencies</li>
+        <li>Public databases or records</li>
+        <li>
+          Social media platforms when users log in through third-party accounts 
+          such as Google or Facebook
+        </li>
+      </ul>
+    `
+  },
+
+  {
+    id: 'use',
+    title: '2. How We Use Your Personal Data',
+    html: `
+      <p>
+        We use your personal information to operate and improve the QRForInfo 
+        real estate marketplace, in the following ways:
+      </p>
+
+      <ul>
+        <li>Create and manage user accounts for buyers, sellers, tenants, and agents.</li>
+        <li>Enable property listing, browsing, buying, selling, and renting activities.</li>
+        <li>Facilitate direct communication between users through chat, calls, and inquiries.</li>
+        <li>Provide personalized property recommendations based on user preferences and behavior.</li>
+        <li>Improve search results, platform performance, and overall user experience.</li>
+        <li>Allow property owners and agents to manage and update their listings efficiently.</li>
+        <li>Send alerts, notifications, and updates related to properties and platform activity.</li>
+        <li>Detect and prevent fraud, spam, and unauthorized access to ensure platform safety.</li>
+        <li>Offer customer support and resolve user queries or disputes.</li>
+        <li>Comply with applicable legal, regulatory, and real estate requirements.</li>
+        <li>Enforce platform policies, terms of use, and maintain marketplace integrity.</li>
+      </ul>
+    `
+  },
+
+  {
+    id: 'share',
+    title: '3. Who We Share Your Personal Data With',
+    html: `
+      <p><strong>Authorized Institutions & Organizations</strong></p>
+
+      <p>
+        Schools, educational boards, NGOs, government departments, counselors, therapists, 
+        or institutions associated with the services being provided.
+      </p>
+
+      <p class="mt-4"><strong>Service Providers</strong></p>
+
+      <p>Third-party vendors assisting with:</p>
+
+      <ul>
+        <li>Cloud hosting</li>
+        <li>Technical support</li>
+        <li>Data analytics</li>
+        <li>Payment processing</li>
+        <li>Communication services</li>
+      </ul>
+
+      <p class="mt-4"><strong>Business Affiliates & Partners</strong></p>
+
+      <p>
+        Organizations providing complementary educational, counseling, healthcare, 
+        or wellness services.
+      </p>
+
+      <p class="mt-4"><strong>Legal & Regulatory Authorities</strong></p>
+
+      <p>
+        Government agencies, courts, or law enforcement authorities where disclosure 
+        is required under applicable laws or legal processes.
+      </p>
+
+      <p class="mt-4"><strong>Corporate Transactions</strong></p>
+
+      <p>
+        In the event of a merger, acquisition, restructuring, or transfer of business assets, 
+        user information may be transferred as part of the business transaction.
+      </p>
+
+      <p>
+        All third parties receiving personal data are required to maintain confidentiality 
+        and process information only for authorized purposes.
+      </p>
+    `
+  },
+
+  {
+    id: 'storage',
+    title: '4. Data Storage and Retention',
+    html: `
+      <p>
+        Your information may be stored on secure servers located in India and other 
+        jurisdictions that maintain adequate data protection standards.
+      </p>
+
+      <p>
+        We retain personal information only for as long as necessary to:
+      </p>
+
+      <ul>
+        <li>Provide our services</li>
+        <li>Meet contractual and legal obligations</li>
+        <li>Resolve disputes</li>
+        <li>Maintain security and compliance requirements</li>
+      </ul>
+
+      <p>
+        After the applicable retention period, data is securely deleted, anonymized, 
+        or archived in accordance with applicable laws.
+      </p>
+    `
+  },
+
+  {
+    id: 'rights',
+    title: '5. Your Rights',
+    html: `
+      <p>Subject to applicable laws, you may have the right to:</p>
+
+      <ul>
+        <li>Access your personal information</li>
+        <li>Correct or update inaccurate information</li>
+        <li>Request deletion of your data</li>
+        <li>Withdraw consent for certain processing activities</li>
+        <li>Request data portability where technically feasible</li>
+        <li>Object to or restrict processing under certain circumstances</li>
+        <li>File complaints or grievances regarding misuse of personal data</li>
+      </ul>
+
+      <p>
+        To exercise these rights, you may contact our Grievance Officer 
+        using the details provided below.
+      </p>
+    `
+  },
+
+  {
+    id: 'protection',
+    title: '6. Data Protection Practices',
+    html: `
+      <p>
+        We implement industry-standard security measures, including:
+      </p>
+
+      <ul>
+        <li>SSL encryption and secure communication protocols</li>
+        <li>Role-based access controls</li>
+        <li>Multi-factor authentication for sensitive systems</li>
+        <li>Regular security monitoring and audits</li>
+        <li>Employee confidentiality and data protection training</li>
+        <li>Secure backup and disaster recovery mechanisms</li>
+      </ul>
+
+      <p>
+        While we strive to protect all information, no electronic transmission 
+        or storage system can guarantee complete security.
+      </p>
+
+      <p>
+        Users are encouraged to use strong passwords and safeguard account credentials.
+      </p>
+    `
+  },
+
+  {
+    id: 'thirdparty',
+    title: '7. Third-Party Websites, Applications, and Services',
+    html: `
+      <p>
+        Our Platform may contain links to external websites, applications, 
+        or services operated by third parties.
+      </p>
+
+      <p>
+        Knowledge Bridge Consulting India is not responsible for the privacy practices, 
+        content, or security of such external platforms.
+      </p>
+
+      <p>
+        Users are encouraged to review the privacy policies of third-party services 
+        before sharing personal information.
+      </p>
+    `
+  },
+
+  {
+    id: 'children',
+    title: '8. Children’s Privacy',
+    html: `
+      <p>
+        Our services intended for minors are accessed only under the supervision 
+        or authorization of parents, guardians, schools, or authorized institutions.
+      </p>
+
+      <p>
+        We do not knowingly collect personal information from children without 
+        appropriate consent or lawful authority.
+      </p>
+
+      <p>
+        If we become aware of unauthorized collection of a child’s information, 
+        we will take immediate steps to delete such data.
+      </p>
+    `
+  },
+
+  {
+    id: 'changes',
+    title: '9. Changes to this Privacy Policy',
+    html: `
+      <p>
+        We may revise or update this Privacy Policy periodically to reflect changes 
+        in legal, regulatory, operational, or technological requirements.
+      </p>
+
+      <p>
+        Updated versions will be published on our Platform with the revised 
+        “Last Updated” date.
+      </p>
+
+      <p>
+        Continued use of our Services after such updates constitutes acceptance 
+        of the revised Policy.
+      </p>
+    `
+  },
+
+  {
+    id: 'contact',
+    title: '10. Contact Us – Grievance Officer',
+    html: `
+      <p>
+        For questions, concerns, or complaints regarding this Privacy Policy 
+        or our data handling practices, please contact:
+      </p>
+
+      <p>
+        <strong>Grievance Officer:</strong> ${props.grievanceOfficerName}<br>
+        <strong>Designation:</strong> Data Protection Officer<br>
+        <strong>Organization:</strong> Knowledge Bridge Consulting India<br>
+        <strong>Email:</strong>
+        <a href="mailto:${props.supportEmail}">
+          ${props.supportEmail}
+        </a><br>
+        <strong>Address:</strong> ${props.address}<br>
+        <strong>Contact Number:</strong> ${props.phone}<br>
+        <strong>Working Hours:</strong> ${props.workingHours}
+      </p>
+
+      <p class="mt-4">
+        This Privacy Policy is designed in compliance with applicable Indian laws, including:
+      </p>
+
+      <ul>
+        <li>Information Technology Act, 2000</li>
+        <li>
+          Information Technology (Reasonable Security Practices and Procedures and 
+          Sensitive Personal Data or Information) Rules, 2011
+        </li>
+        <li>Digital Personal Data Protection Act, 2023 (India)</li>
+      </ul>
+    `
+  }
+])
   
   // Methods
   function scrollTo(id) {
