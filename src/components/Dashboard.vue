@@ -144,7 +144,7 @@
                   path: '/property/' + propertyObj.PROPERTY_ID, query: {
                     createdBy: propertyObj.SELLER_USER_ID === authStore.getUserDetails.USER_ID
                   }
-                })" class="px-2 my-2 pointer">
+                })" class="px-2 my-2 pointer rounded-lg listing-card">
                   <template #prepend>
                     <!-- {{ propertyObj }} -->
                     <v-img cover class="mr-6" v-if="propertyObj.IMAGES && propertyObj.IMAGES.length > 0" width="200" :src="propertyObj.IMAGES[0].IMAGE_URL" />
@@ -566,4 +566,14 @@ watch(historyModal, (val) => {
   clip-path: polygon(0px 0px, 67% 0px, 19% 102%, 0% 90%);
 
 }
+
+.listing-card{
+  transition: all 0.25s ease;
+}
+.listing-card:hover{
+  background: #f8fafc;
+  transform: scale(1.003);
+  border-radius: 20px!important;
+}
+
 </style>
