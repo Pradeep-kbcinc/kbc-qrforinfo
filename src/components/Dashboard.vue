@@ -146,22 +146,40 @@
                   }
                 })" class="px-2 my-2 pointer">
                   <template #prepend>
-                    <v-avatar size="82" rounded="lg" class="mr-4 bg-grey-lighten-4 text-h4">
-                      <!-- <v-img :src="property.image" cover /> -->
-                      🏠
-                    </v-avatar>
+                    <!-- {{ propertyObj }} -->
+                    <v-img cover class="mr-6" v-if="propertyObj.IMAGES && propertyObj.IMAGES.length > 0" width="200" :src="propertyObj.IMAGES[0].IMAGE_URL" />
+                    <v-img cover class="mr-6" v-else width="200" src="@/assets/dummyBuilding.jpeg" />
                   </template>
 
                   <v-list-item-title class="font-weight-bold text-grey-darken-3">{{ propertyObj.TITLE
                     }}</v-list-item-title>
                   <!-- <v-list-item-subtitle>{{ property.location }}</v-list-item-subtitle> -->
                   <v-list-item-subtitle v-if="(propertyObj.IS_ADDRESS_PRIVATE_FLG == 1) && propertyObj.ADDRESS_LINE1"
-                    class="mt-1"><v-icon color="primary">mdi-map-marker</v-icon>{{ propertyObj.ADDRESS_LINE1
+                    class="mt-1">{{ propertyObj.ADDRESS_LINE1
                     }}</v-list-item-subtitle>
-                  <v-list-item-subtitle class="mt-1"><v-icon class="mr-2" color="green-darken-1">mdi-eye</v-icon><strong
-                      class="text-subtitle-2 text-black font-weight-bold">{{ propertyObj.VIEW_COUNT
-                      }}</strong></v-list-item-subtitle>
-                  <p class="mt-2">Created Date : {{ moment(propertyObj.CREATED_ON).format('Do MMM, YYYY') }}</p>
+
+                  <v-list-item-subtitle class="mt-1">
+                    <v-btn color="green-darken-1" variant="tonal" class="text-none rounded-lg">
+                    <v-icon class="mr-2" color="green-darken-1">mdi-eye</v-icon>
+                      {{ propertyObj.VIEW_COUNT }} <span class="text-grey-darken-4 text-body-2 ml-1">Views</span> 
+                    </v-btn>
+                  </v-list-item-subtitle>
+                  <v-divider class="mt-2"></v-divider>
+                  <div class="d-flex align-center">
+                    <div>
+                      <p class=""> 
+                        <v-icon color="info">mdi-calendar-month</v-icon> Created Date 
+                      </p>
+                      <span class="ml-6 text-subtitle-1 mt-n2">{{ moment(propertyObj.CREATED_ON).format('Do MMM, YYYY') }}</span>
+                    </div>
+                    <v-spacer></v-spacer>
+                    <v-btn color="info" size="large" class="my-6 rounded-lg text-none" variant="outlined">
+                      View Details
+                    </v-btn>
+                  </div>
+                  
+                  
+
                   <div class="text-primary font-weight-bold text-subtitle-1">{{ propertyObj.price }}</div>
 
                   <template #append>
