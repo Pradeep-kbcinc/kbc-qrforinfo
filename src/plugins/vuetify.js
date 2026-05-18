@@ -5,13 +5,15 @@ import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/styles'
 import { VFileUpload } from 'vuetify/labs/VFileUpload'
 import { VDateInput } from 'vuetify/labs/VDateInput'
+// import { VAvatarGroup } from 'vuetify/labs/VAvatarGroup'
 // Composables
 import { createVuetify } from 'vuetify'
 
 export default createVuetify({
   components: {
     VFileUpload,
-    VDateInput
+    VDateInput,
+    // VAvatarGroup
   },
   theme: {
     defaultTheme: 'light', 

@@ -90,133 +90,59 @@
   </v-container>
   </section>
 
-  <section class="text-center pa-10 py-16 d-flex justify-center align-center" style="background-color: #F9FAFB;">
-    <v-row justify="center" align="center" class="">
-      <v-col class="text-left my-10" style="max-width: 760px;" md="px-6" lg="px-16">
-        <h3 class="text-h2 font-weight-bold mb-10"
-          style="background: linear-gradient(135deg, #2563eb, #10b98f); background-clip: text;-webkit-text-fill-color: transparent; line-height: 1.6;">
-          The QRForInfo <br> Solution</h3>
-        <p class="font-italic text-h5 text-grey-darken-1 mb-10">Direct. Simple. Transparent.</p>
-        <p class="text-h5 mb-10">Connect buyers and sellers directly through smart QR codes. No agents, no commissions,
-          no
-          delays. Just instant property sharing and direct communication.</p>
-        <v-btn @click="$router.push({ name: 'Login' })"
-          class="btn-hover text-none font-weight-bold rounded-lg card-box-shadow" size="x-large" color="#F97316"
-          append-icon="mdi-arrow-right-thin">Learn More</v-btn>
-      </v-col>
+  <section class="text-center d-flex justify-center align-center">
+    <v-img class="d-flex align-center" cover src="@/assets/about_2.png">
+      <v-row justify="center" align="center" class="">
+        <v-col class="text-left my-10" style="max-width: 760px;" md="px-6" lg="px-16">
+          <h3 class="section-title ">
+            The <span class="text-primary"> QRForInfo Solution</span> </h3>
+          <p class="font-italic text-h5 mb-10">Direct. Simple. Transparent.</p>
+          <p class="section-desc mb-10">Connect buyers and sellers directly through smart QR codes. No agents, no commissions,
+            no
+            delays. Just instant property sharing and direct communication.</p>
 
-      <v-col cols="auto" class="" md="px-6" lg="px-16">
-        <v-card v-if="false" class="bg-white pa-10 card-box-shadow rounded-xl text-center" width="520">
-          <v-img class="w-100 h-100" src="@/assets/qr-banner.jpeg"></v-img>
-        </v-card>
-        <v-card class="bg-white pa-10 card-box-shadow rounded-xl text-center" width="520" style="max-width: 70vw;">
-          <v-card class="pa-10 mb-6 rounded-xl d-flex justify-center align-center" height="200"
-            style="background: linear-gradient(135deg, #2563eb, #1e40af);">
-            <v-card class="pa-4 rounded-lg bg-white" width="100" height="100">
-              <!-- <v-icon size="x-large">mdi-qrcode-scan</v-icon> -->
-              <v-img class="w-100 h-100" src="@/assets/QR.svg"></v-img>
-            </v-card>
+            <div class="d-flex">
+              <v-avatar size="large" v-for="value in avatarGroup">
+                <v-img
+                  alt="John"
+                  :src="value.image"
+                  contain
+                ></v-img>
+              </v-avatar>
+              <div class="ml-4">
+                <p>Trusted By</p>
+                <p class="font-weight-bold">1000+ Users</p>
+              </div>
+              
+            </div>
+            
+        </v-col>
+
+        <v-col cols="auto" class="" md="px-6" lg="px-16">
+          <v-card v-if="false" class="bg-white pa-10 card-box-shadow rounded-xl text-center" width="520">
+            <v-img class="w-100 h-100" src="@/assets/qr-banner.jpeg"></v-img>
           </v-card>
-          <p class="text-h6">Scan • View • Connect</p>
-          <p class="text-h6">It's that simple</p>
-        </v-card>
+          <v-card class="bg-white pa-10 card-box-shadow rounded-xl text-center" width="520" style="max-width: 70vw;">
+            <v-card class="pa-10 mb-6 rounded-xl d-flex justify-center align-center" height="200"
+              style="background: linear-gradient(135deg, #2563eb, #1e40af);">
+              <v-card class="pa-4 rounded-lg bg-white" width="100" height="100">
+                <!-- <v-icon size="x-large">mdi-qrcode-scan</v-icon> -->
+                <v-img class="w-100 h-100" src="@/assets/QR.svg"></v-img>
+              </v-card>
+            </v-card>
+            <p class="text-h6">Scan • View • Connect</p>
+            <p class="text-h6">It's that simple</p>
+          </v-card>
 
-      </v-col>
-    </v-row>
+        </v-col>
+      </v-row>
+  </v-img>
   </section>
 
-  <section class="text-center pa-10 py-16 d-flex flex-column justify-center align-center">
-    <h3 class="text-h2 font-weight-bold mb-16 mt-16">How It Works</h3>
-    <div class="text-left mb-10">
-      <h5 class="text-primary font-weight-black mb-10 pb-4"
-        style="border-bottom: 4px solid #2563eb;max-width: fit-content; font-size: 2.2rem !important; font-family: 'Sora', sans-serif;">
-        FOR SELLERS</h5>
-
-      <div class="d-flex ga-10 mb-16 flex-wrap justify-center">
-        <v-card class="card-hover card-blue-hover pa-10 rounded-xl elevation-0 overflow-visible" color="#F9FAFB"
-          width="350">
-          <v-span
-            class="text-h5 rounded-pill d-block d-flex justify-center align-center text-white font-weight-bold position-absolute"
-            style="height:40px; width:40px; background-color: #f97316; top: -15px;">1</v-span>
-          <h3 class="text-h2 mb-6 mt-4">📝</h3>
-          <h4 class="text-h5 font-weight-bold mb-3">List Your Property</h4>
-          <p class="text-body-1">Create your property listing in minutes</p>
-        </v-card>
-        <v-card class="card-hover card-blue-hover pa-10 rounded-xl elevation-0 overflow-visible" color="#F9FAFB"
-          width="350">
-          <v-span
-            class="text-h5 rounded-pill d-block d-flex justify-center align-center text-white font-weight-bold position-absolute"
-            style="height:40px; width:40px; background-color: #f97316; top: -15px;">2</v-span>
-          <!-- <h3 class="text-h2 mb-6 mt-4">🔲</h3> -->
-          <h3 class="text-h2 mb-6 mt-4"><v-icon size="x-small">mdi-qrcode-scan</v-icon></h3>
-          <h4 class="text-h5 font-weight-bold mb-3">Generate QR Code</h4>
-          <p class="text-body-1">Get a unique QR code for your property</p>
-        </v-card>
-        <v-card class="card-hover card-blue-hover pa-10 rounded-xl elevation-0 overflow-visible" color="#F9FAFB"
-          width="350">
-          <v-span
-            class="text-h5 rounded-pill d-block d-flex justify-center align-center text-white font-weight-bold position-absolute"
-            style="height:40px; width:40px; background-color: #f97316; top: -15px;">3</v-span>
-          <h3 class="text-h2 mb-6 mt-4">📱</h3>
-          <h4 class="text-h5 font-weight-bold mb-3">Print & Share</h4>
-          <p class="text-body-1">Display on property, share digitally, or print</p>
-        </v-card>
-        <v-card class="card-hover card-blue-hover pa-10 rounded-xl elevation-0 overflow-visible" color="#F9FAFB"
-          width="350">
-          <v-span
-            class="text-h5 rounded-pill d-block d-flex justify-center align-center text-white font-weight-bold position-absolute"
-            style="height:40px; width:40px; background-color: #f97316; top: -15px;">4</v-span>
-          <h3 class="text-h2 mb-6 mt-4">💬</h3>
-          <h4 class="text-h5 font-weight-bold mb-3">Connect Directly</h4>
-          <p class="text-body-1">Receive inquiries and negotiate directly</p>
-        </v-card>
-      </div>
-    </div>
-
-    <div class="text-left">
-      <h5 class="text-primary font-weight-black mb-10 pb-4"
-        style="border-bottom: 4px solid #2563eb;max-width: fit-content; font-size: 2.2rem !important; font-family: 'Sora', sans-serif;">
-        FOR BUYERS</h5>
-
-      <div class="d-flex ga-10 mb-16 flex-wrap justify-center">
-        <v-card class="card-hover card-blue-hover pa-10 rounded-xl elevation-0 overflow-visible" color="#F9FAFB"
-          width="350">
-          <v-span
-            class="text-h5 rounded-pill d-block d-flex justify-center align-center text-white font-weight-bold position-absolute"
-            style="height:40px; width:40px; background-color: #f97316; top: -15px;">1</v-span>
-          <h3 class="text-h2 mb-6 mt-4">📷</h3>
-          <h4 class="text-h5 font-weight-bold mb-3">Scan QR Code</h4>
-          <p class="text-body-1">Use your phone to scan the property's QR code</p>
-        </v-card>
-        <v-card class="card-hover card-blue-hover pa-10 rounded-xl elevation-0 overflow-visible" color="#F9FAFB"
-          width="350">
-          <v-span
-            class="text-h5 rounded-pill d-block d-flex justify-center align-center text-white font-weight-bold position-absolute"
-            style="height:40px; width:40px; background-color: #f97316; top: -15px;">2</v-span>
-          <h3 class="text-h2 mb-6 mt-4">📄</h3>
-          <h4 class="text-h5 font-weight-bold mb-3">View Details</h4>
-          <p class="text-body-1">Access complete property information instantly</p>
-        </v-card>
-        <v-card class="card-hover card-blue-hover pa-10 rounded-xl elevation-0 overflow-visible" color="#F9FAFB"
-          width="350">
-          <v-span
-            class="text-h5 rounded-pill d-block d-flex justify-center align-center text-white font-weight-bold position-absolute"
-            style="height:40px; width:40px; background-color: #f97316; top: -15px;">3</v-span>
-          <h3 class="text-h2 mb-6 mt-4">❤️</h3>
-          <h4 class="text-h5 font-weight-bold mb-3">Save Favorites</h4>
-          <p class="text-body-1">Bookmark properties you're interested in</p>
-        </v-card>
-        <v-card class="card-hover card-blue-hover pa-10 rounded-xl elevation-0 overflow-visible" color="#F9FAFB"
-          width="350">
-          <v-span
-            class="text-h5 rounded-pill d-block d-flex justify-center align-center text-white font-weight-bold position-absolute"
-            style="height:40px; width:40px; background-color: #f97316; top: -15px;">4</v-span>
-          <h3 class="text-h2 mb-6 mt-4">📞</h3>
-          <h4 class="text-h5 font-weight-bold mb-3">Contact Seller</h4>
-          <p class="text-body-1">Message or call the owner directly</p>
-        </v-card>
-      </div>
-    </div>
+  <section class="text-center py-6 d-flex flex-column justify-center align-center">
+    <h3 class="section-title font-weight-bold">How It <span class="text-primary">Works</span></h3>
+    <p class="text-center section-desc">List,generate,and share your property in just a few simple steps.</p>
+    
   </section>
 
   <section class="text-center pa-10 py-16 d-flex justify-center flex-column align-center"
@@ -423,6 +349,16 @@
   </section>
 </template>
 
+<script setup>
+import People1 from '@/assets/people1.png'
+import People2 from '@/assets/people2.jpg'
+import People3 from '@/assets/people3.jpg'
+const avatarGroup = ref([
+    { image: People1 },
+    { image: People2 },
+    { image: People3 }
+])
+</script>
 <style lang="scss" scoped>
 
 td,
