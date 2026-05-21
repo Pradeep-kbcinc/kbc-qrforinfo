@@ -42,13 +42,13 @@
     
     <v-row class="mt-10">
       <v-col cols="12" sm="6" md="6" lg="3">
-          <v-card height="400" class="pa-14 rounded-xl elevation-0 card-hover"
+         
+        <v-card height="400" class="pa-14 rounded-xl elevation-0 card-hover"
           style="background: #F7FAFF">
-          
+         
           <h4 class="custom-card-title font-weight-bold mb-6">High Commission</h4>
           <p class="text-grey-darken-1">2-5% in fees eating into your profits</p>
-
-          <div class="d-flex justify-center">
+          <div class="adjust-card-img">
             <img width="90" class="mt-10" src="@/assets/card_1.png" alt="">
           </div>
         </v-card>
@@ -59,7 +59,7 @@
          
           <h4 class="custom-card-title font-weight-bold mb-6">Lengthy Process</h4>
           <p class="text-grey-darken-1">Weeks or months to close deals</p>
-          <div class="d-flex justify-center">
+          <div class="adjust-card-img">
             <img width="90" class="mt-10" src="@/assets/card_2.png" alt="">
           </div>
         </v-card>
@@ -70,7 +70,7 @@
         
         <h4 class="custom-card-title font-weight-bold mb-6">Too Many Intermediaries</h4>
         <p class="text-grey-darken-1">Multiple middlemen slowing everything down</p>
-        <div class="d-flex justify-center">
+        <div class="" style="">
             <img width="90" class="mt-10" src="@/assets/card_3.png" alt="">
           </div>
       </v-card>
@@ -81,7 +81,7 @@
         
         <h4 class="custom-card-title font-weight-bold mb-6">Lack of Transparency</h4>
         <p class="text-grey-darken-1">Unverified listings and unclear property information</p>
-        <div class="d-flex justify-center">
+        <div class="adjust-card-img">
             <img width="90" class="mt-10" src="@/assets/card_4.png" alt="">
           </div>
       </v-card>
@@ -119,21 +119,7 @@
         </v-col>
 
         <v-col cols="auto" class="" md="px-6" lg="px-16">
-          <v-card v-if="false" class="bg-white pa-10 card-box-shadow rounded-xl text-center" width="520">
-            <v-img class="w-100 h-100" src="@/assets/qr-banner.jpeg"></v-img>
-          </v-card>
-          <v-card class="bg-white pa-10 card-box-shadow rounded-xl text-center" width="520" style="max-width: 70vw;">
-            <v-card class="pa-10 mb-6 rounded-xl d-flex justify-center align-center" height="200"
-              style="background: linear-gradient(135deg, #2563eb, #1e40af);">
-              <v-card class="pa-4 rounded-lg bg-white" width="100" height="100">
-                <!-- <v-icon size="x-large">mdi-qrcode-scan</v-icon> -->
-                <v-img class="w-100 h-100" src="@/assets/QR.svg"></v-img>
-              </v-card>
-            </v-card>
-            <p class="text-h6">Scan • View • Connect</p>
-            <p class="text-h6">It's that simple</p>
-          </v-card>
-
+          <img width="550" contain src="@/assets/qrCardImg.png" />
         </v-col>
       </v-row>
   </v-img>
@@ -142,210 +128,347 @@
   <section class="text-center py-6 d-flex flex-column justify-center align-center">
     <h3 class="section-title font-weight-bold">How It <span class="text-primary">Works</span></h3>
     <p class="text-center section-desc">List,generate,and share your property in just a few simple steps.</p>
-    
+      <v-container>
+        <v-row class="mt-4">
+          <v-col cols="12" md="3" v-for="item in howItWorksCard" :key="item.id">
+            <v-card height="400" class="py-6 px-4 rounded-xl elevation-0 card-hover"
+              style="background: #F7FAFF">
+              
+              <h4 class="custom-card-title font-weight-bold mb-6 text-center">{{item.title}}</h4>
+              <p class="text-grey-darken-1 text-center">{{item.subtitle}}</p>
+
+              <div class="adjust-card-img">
+                <img style="width: 130px;height: 140px;" class="mt-10" :src="item.img" alt="" />
+              </div>
+            </v-card>
+          </v-col>
+        </v-row>
+    </v-container>
   </section>
 
-  <section class="text-center pa-10 py-16 d-flex justify-center flex-column align-center"
-    style="background-color: #F9FAFB;">
-    <h3 class="text-h2 font-weight-bold mb-16 mt-16">Perfect For Every Scenario</h3>
-    <div class="d-flex ga-10 mb-16 flex-wrap justify-center text-left">
-      <v-card class="pa-10 card-hover rounded-xl elevation-0 bg-white card-box-shadow" width="400"
-        style="border: 2.5px solid #3B82F6;">
-        <h3 class="text-h1 mb-10">🏠</h3>
-        <h4 class="text-h4 font-weight-bold mb-10">BUY / SELL</h4>
-        <p class="text-h6 font-weight-regular mb-4"><v-icon color="primary">mdi-arrow-right-thin</v-icon> Residential
-          homes</p>
-        <p class="text-h6 font-weight-regular mb-4"><v-icon color="primary">mdi-arrow-right-thin</v-icon> Apartments</p>
-        <p class="text-h6 font-weight-regular mb-4"><v-icon color="primary">mdi-arrow-right-thin</v-icon> Villas</p>
-        <p class="text-h6 font-weight-regular mb-4"><v-icon color="primary">mdi-arrow-right-thin</v-icon> Plots/Land</p>
-        <p class="text-h6 font-weight-regular mb-4"><v-icon color="primary">mdi-arrow-right-thin</v-icon> Commercial
-          properties</p>
-        <v-btn @click="$router.push({ name: 'BuyerLanding' })"
-          class="btn-hover w-100 text-none font-weight-bold rounded-lg card-box-shadow mt-10"
-          append-icon="mdi-arrow-right-thin" size="x-large" color="#F97316">
-          Explore Listing
-        </v-btn>
-      </v-card>
-      <v-card class="pa-10 card-hover rounded-xl elevation-0 bg-white card-box-shadow" width="400"
-        style="border: 2.5px solid #10B981;">
-        <h3 class="text-h1 mb-10">🔑</h3>
-        <h4 class="text-h4 font-weight-bold mb-10">RENT / LEASE</h4>
-        <p class="text-h6 font-weight-regular mb-4"><v-icon color="primary">mdi-arrow-right-thin</v-icon> Apartments</p>
-        <p class="text-h6 font-weight-regular mb-4"><v-icon color="primary">mdi-arrow-right-thin</v-icon> Villas</p>
-        <p class="text-h6 font-weight-regular mb-4"><v-icon color="primary">mdi-arrow-right-thin</v-icon> Commercial
-          spaces</p>
-        <p class="text-h6 font-weight-regular mb-4"><v-icon color="primary">mdi-arrow-right-thin</v-icon> Co-working
-          spaces</p>
-        <p class="text-h6 font-weight-regular mb-4"><v-icon color="primary">mdi-arrow-right-thin</v-icon> Shops</p>
-        <v-btn @click="$router.push({ name: 'BuyerLanding' })"
-          class="btn-hover w-100 text-none font-weight-bold rounded-lg card-box-shadow mt-10"
-          append-icon="mdi-arrow-right-thin" size="x-large" color="#F97316">
-          Explore Listing
-        </v-btn>
-      </v-card>
-      <v-card class="pa-10 card-hover rounded-xl elevation-0 bg-white card-box-shadow" width="400"
-        style="border: 2.5px solid #F59E0B;">
-        <h3 class="text-h1 mb-10">🏗️</h3>
-        <h4 class="text-h4 font-weight-bold mb-10">BUILD TO SUIT</h4>
-        <p class="text-h6 font-weight-regular mb-4"><v-icon color="primary">mdi-arrow-right-thin</v-icon> Custom builds
-        </p>
-        <p class="text-h6 font-weight-regular mb-4"><v-icon color="primary">mdi-arrow-right-thin</v-icon> Commercial
-          projects</p>
-        <p class="text-h6 font-weight-regular mb-4"><v-icon color="primary">mdi-arrow-right-thin</v-icon> Industrial
-          spaces</p>
-        <p class="text-h6 font-weight-regular mb-4"><v-icon color="primary">mdi-arrow-right-thin</v-icon> Warehouses</p>
-        <p class="text-h6 font-weight-regular mb-4" style="visibility: hidden;"><v-icon
-            color="primary">mdi-arrow-right-thin</v-icon> Warehouses</p>
-        <v-btn @click="$router.push({ name: 'Login' })"
-          class="btn-hover w-100 text-none font-weight-bold rounded-lg card-box-shadow mt-10"
-          append-icon="mdi-arrow-right-thin" size="x-large" color="#F97316">
-          Get Started
-        </v-btn>
-      </v-card>
-    </div>
+  <section class="text-center py-6 d-flex flex-column justify-center align-center">
+    <h3 class="section-title font-weight-bold">For <span class="text-primary">Buyers</span></h3>
+    <v-container fluid class="py-8 px-10 fill-height mt-4" style="background-color: #F6F9FD;">
+    <v-row>
+      <v-col
+        v-for="(item, i) in features"
+        :key="i"
+        cols="12"
+        sm="6"
+        md="3"
+      >
+        <v-card
+          rounded="xl"
+          elevation="0"
+          class="feature-card overflow-hidden"
+        >
+          <!-- Image -->
+          <div class="image-wrapper">
+            <v-img
+              :src="item.image"
+              cover
+              height="220"
+            />
+          </div>
+
+          <!-- Content -->
+          <v-card-text class="pa-5">
+            <div style="font-size: 20px;text-align: left;" class="font-weight-bold text-grey-darken-4 mb-2">
+              {{ item.title }}
+            </div>
+
+            <div class="text-body-1 text-grey-darken-1 text-left">
+              {{ item.description }}
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
   </section>
 
-  <section class="text-center pa-10 py-16 d-flex justify-center flex-column align-center text-white"
-    style="background-color: #1F2937;">
-    <h3 class="text-h2 font-weight-bold mb-16 mt-16">QRForInfo vs Traditional Methods</h3>
-    <v-table class="rounded-xl bg-transparent font-weight-bold text-h6 mb-16">
-      <thead>
-        <tr style="background-color: rgba(255, 255, 255, 0.1) !important;">
-          <th class="pa-6" width="350">Feature</th>
-          <th class="text-center pa-6" width="350">Traditional Real Estate</th>
-          <th class="text-center pa-6" width="350" style="background: linear-gradient(135deg, #2563eb, #10b98f);">
-            QRForInfo</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr style="background-color: rgba(255, 255, 255, 0.05) !important;">
-          <td class="text-left pa-6">Commission</td>
-          <td class="pa-6">2-5% fees</td>
-          <td class="pa-6" style="background: linear-gradient(135deg, #2563eb, #10b98f);">✓ Zero commission</td>
-        </tr>
-        <tr style="background-color: rgba(255, 255, 255, 0.05) !important;">
-          <td class="text-left pa-6">Time to List</td>
-          <td class="pa-6">Days/Weeks</td>
-          <td class="pa-6" style="background: linear-gradient(135deg, #2563eb, #10b98f);">✓ Minutes</td>
-        </tr>
-        <tr style="background-color: rgba(255, 255, 255, 0.05) !important;">
-          <td class="text-left pa-6">Communication</td>
-          <td class="pa-6">Via agents</td>
-          <td class="pa-6" style="background: linear-gradient(135deg, #2563eb, #10b98f);">✓ Direct with seller</td>
-        </tr>
-        <tr style="background-color: rgba(255, 255, 255, 0.05) !important;">
-          <td class="text-left pa-6">Property Info</td>
-          <td class="pa-6">Limited access</td>
-          <td class="pa-6" style="background: linear-gradient(135deg, #2563eb, #10b98f);">✓ Complete details instantly
-          </td>
-        </tr>
-        <tr style="background-color: rgba(255, 255, 255, 0.05) !important;">
-          <td class="text-left pa-6" style="border-bottom: none !important">Control</td>
-          <td class="pa-6" style="border-bottom: none !important">Agent managed</td>
-          <td class="pa-6"
-            style="background: linear-gradient(135deg, #2563eb, #10b98f); border-bottom: none !important">✓
-            You control everything</td>
-        </tr>
-      </tbody>
-    </v-table>
+  <section class="text-center py-6 d-flex flex-column justify-center align-center">
+    <h3 class="section-title font-weight-bold">Find the Right Space
+     <br><span class="text-primary">For Every Need</span></h3>
+     <p class="text-center section-desc">Whether you’re investing, renting, or building - We have
+      the perfect solution for you</p>
+
+      <v-container>
+    <v-row>
+      <v-col
+        v-for="(plan, i) in serviceCards"
+        :key="i"
+        cols="12"
+        md="4"
+      >
+        <v-card
+        height="100%"
+          rounded="xl"
+          elevation="0"
+          max-width="400"
+          class="service-card pa-7 d-flex flex-column"
+          :style="{
+            border: `1px solid ${plan.borderColor}`
+          }"
+        >
+          <!-- Top Circle -->
+          <div
+            class="top-circle mb-6"
+            :style="{ backgroundColor: plan.lightColor }"
+          />
+
+          <!-- Heading -->
+          <div
+            class="text-h5 font-weight-bold mb-4"
+            :style="{ color: plan.color }"
+          >
+            {{ plan.title }}
+          </div>
+
+          <!-- Description -->
+          <div class="text-subtitle text-grey-darken-3 text-left mb-6">
+            {{ plan.description }}
+          </div>
+
+          <!-- Features -->
+          <div class="d-flex flex-column ga-5 mb-10">
+            <div
+              v-for="(item, idx) in plan.features"
+              :key="idx"
+              class="d-flex align-center"
+            >
+              <div
+                class="check-icon d-flex align-center justify-center mr-4"
+                :style="{ backgroundColor: plan.color }"
+              >
+                <v-icon color="white" size="18">
+                  mdi-check
+                </v-icon>
+              </div>
+
+              <span class="text-grey-darken-4">
+                {{ item }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Button -->
+          <v-btn
+            block
+            size="large"
+            rounded="lg"
+            style="position: absolute;bottom: 0;left: 0;"
+            elevation="0"
+            class="text-none mt-6"
+            height="50"
+            :color="plan.color"
+          >
+            {{ plan.buttonText }}
+          </v-btn>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
   </section>
 
-  <section class="text-center pa-10 py-16 d-flex justify-center flex-column align-center text-white"
-    style="background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%)">
-    <h3 class="text-h2 font-weight-bold mb-10 mt-16">Ready to Revolutionize Your Property Transaction?</h3>
-    <p class="text-h5 mb-16">Join Thousands of Smart Property Owners and Buyers Today</p>
-    <div class="d-flex ga-10 mb-16 flex-wrap justify-center text-left">
-      <v-card class="card-bottom-hover pa-10 rounded-xl elevation-0 bg-white card-box-shadow text-center" width="400"
-        style="max-width: 70vw;">
-        <h4 class="text-h4 font-weight-bold mb-10 text-primary">I Want to Sell</h4>
-        <v-btn @click="$router.push({ name: 'Login' })"
-          class="btn-hover text-none font-weight-bold rounded-lg card-box-shadow" append-icon="mdi-arrow-right-thin"
-          size="x-large" color="#F97316">
-          Get Started
-        </v-btn>
-      </v-card>
-      <v-card class="card-bottom-hover pa-10 rounded-xl elevation-0 bg-white card-box-shadow text-center" width="400"
-        style="max-width: 70vw;">
-        <h4 class="text-h4 font-weight-bold mb-10 text-primary">I Want to Buy</h4>
-        <v-btn @click="$router.push({ name: 'BuyerLanding' })"
-          class="btn-hover text-none font-weight-bold rounded-lg card-box-shadow" append-icon="mdi-arrow-right-thin"
-          size="x-large" color="#F97316">
-          Browse Listing
-        </v-btn>
-      </v-card>
-    </div>
-    <p class="text-h6 font-weight-regular mb-16 d-flex flex-wrap justify-center text-center ga-6">✓ Free to get started
-      <span class="">✓ No credit card required</span>
-    </p>
-  </section>
+  <section class="text-center py-6 d-flex flex-column justify-center align-center">
+    <h3 class="section-title font-weight-bold">QRForInfo vs Traditional Methods</h3>
+    <p class="section-desc">Smarter, faster and better - see how QRForinfo makes real estate simpler for everyone</p>
+    <v-container class="pa-1">
+    <v-card
+      rounded="xl"
+      elevation="0"
+      class="comparison-card overflow-hidden mt-6"
+    >
+      <!-- Header -->
+      <div class="table-row table-header">
+        <div class="col feature-col">
+          FEATURE
+        </div>
 
-  <section class="text-center pa-10 py-16" style="background-color: #1F2937;">
-    <div class="d-flex justify-center align-start text-white flex-wrap pb-10" style="gap: 100px 100px;">
-      <div class="text-left">
-        <h3 class="text-h3 font-weight-bold mb-10 text-white">QRForInfo</h3>
-        <p class="text-h6">Connecting Property Buyers and Sellers Directly</p>
-      </div>
-      <div class="">
-        <h5 class="text-h5 font-weight-bold mb-6 text-left">PRODUCT</h5>
-        <div class="d-flex flex-column justify-start align-start text-start ga-6">
-          <v-btn variant="text" class="link-hover text-none text-h6 font-weight-regular text-grey-lighten-1" size="">How
-            It Works</v-btn>
-          <v-btn variant="text" class="link-hover text-none text-h6 font-weight-regular text-grey-lighten-1" size="">For
-            Sellers</v-btn>
-          <v-btn variant="text" class="link-hover text-none text-h6 font-weight-regular text-grey-lighten-1" size="">For
-            Buyers</v-btn>
-          <v-btn variant="text" class="link-hover text-none text-h6 font-weight-regular text-grey-lighten-1"
-            size="">Pricing</v-btn>
+        <div class="col">
+          TRADITIONAL REAL ESTATE
+        </div>
+
+        <div class="col text-success">
+          QRFORINFO
         </div>
       </div>
-      <div class="">
-        <h5 class="text-h5 font-weight-bold mb-6 text-left">USE CASES</h5>
-        <div class="d-flex flex-column justify-start align-start text-start ga-6">
-          <v-btn variant="text" class="link-hover text-none text-h6 font-weight-regular text-grey-lighten-1" size="">Buy
-            Property</v-btn>
-          <v-btn variant="text" class="link-hover text-none text-h6 font-weight-regular text-grey-lighten-1"
-            size="">Sell
-            Property</v-btn>
-          <v-btn variant="text" class="link-hover text-none text-h6 font-weight-regular text-grey-lighten-1"
-            size="">Rent/Lease</v-btn>
-          <v-btn variant="text" class="link-hover text-none text-h6 font-weight-regular text-grey-lighten-1"
-            size="">Build
-            to Suit</v-btn>
+
+      <!-- Rows -->
+      <div
+        v-for="(item, i) in comparisonData"
+        :key="i"
+        class="table-row"
+      >
+        <!-- Feature -->
+        <div class="col feature-col body-text">
+          {{ item.feature }}
+        </div>
+
+        <!-- Traditional -->
+        <div class="col body-text">
+          <div class="d-flex align-center">
+            <div class="icon-circle icon-grey mr-5">
+              <v-icon size="20">
+                mdi-close
+              </v-icon>
+            </div>
+
+            <span>
+              {{ item.traditional }}
+            </span>
+          </div>
+        </div>
+
+        <!-- QRFORINFO -->
+        <div class="col body-text text-success">
+          <div class="d-flex align-center">
+            <div class="icon-circle icon-success mr-5">
+              <v-icon size="20" color="white">
+                mdi-check
+              </v-icon>
+            </div>
+
+            <span>
+              {{ item.qrforinfo }}
+            </span>
+          </div>
         </div>
       </div>
-      <div class="">
-        <h5 class="text-h5 font-weight-bold mb-6 text-left">COMPANY</h5>
-        <div class="d-flex flex-column justify-start align-start text-start ga-6">
-          <v-btn variant="text" class="link-hover text-none text-h6 font-weight-regular text-grey-lighten-1"
-            size="">About
-            Us</v-btn>
-          <v-btn variant="text" class="link-hover text-none text-h6 font-weight-regular text-grey-lighten-1"
-            size="">Contact</v-btn>
-          <v-btn variant="text" class="link-hover text-none text-h6 font-weight-regular text-grey-lighten-1"
-            size="">Career</v-btn>
-          <v-btn variant="text" class="link-hover text-none text-h6 font-weight-regular text-grey-lighten-1"
-            size="">Press</v-btn>
-        </div>
-      </div>
-      <div class="">
-        <h5 class="text-h5 font-weight-bold mb-6 text-left">SUPPORT</h5>
-        <div class="d-flex flex-column justify-start align-start text-start ga-6">
-          <v-btn variant="text" class="link-hover text-none text-h6 font-weight-regular text-grey-lighten-1"
-            size="">Help
-            Center</v-btn>
-          <v-btn variant="text" class="link-hover text-none text-h6 font-weight-regular text-grey-lighten-1"
-            size="">FAQs</v-btn>
-          <v-btn variant="text" class="link-hover text-none text-h6 font-weight-regular text-grey-lighten-1"
-            size="">Terms
-            of Use</v-btn>
-          <v-btn variant="text" class="link-hover text-none text-h6 font-weight-regular text-grey-lighten-1"
-            size="">Privacy Policy</v-btn>
-        </div>
-      </div>
-    </div>
-    <v-divider class="text-white mt-16"></v-divider>
-    <p class="text-white pt-10 text-h6 text-grey-lighten-1">© {{ new Date().getFullYear() }} QRForInfo. All rights
-      reserved.</p>
+    </v-card>
+  </v-container>
+  </section>
+  
+  <section>
+    <section class="hero-section py-16">
+        <v-container>
+          <!-- Heading -->
+          <div class="text-center mb-12">
+            <h1 class="hero-title">
+              Ready to Revolutionize
+              <br />
+              Your <span class="highlight">Property Transaction?</span>
+            </h1>
+
+            <p class="section-desc mt-4 text-white">
+              Join thousands of smart property owners and buyers today
+            </p>
+          </div>
+
+          <!-- Cards -->
+          <v-row justify="center" class="ga-8">
+            <!-- SELL CARD -->
+            <v-col cols="12" md="5">
+              <v-card class="pa-8 rounded-xl option-card" elevation="0">
+                <div class="d-flex align-center">
+                  <!-- Image -->
+                  <div class="icon-wrapper mr-6">
+                    <img
+                      src="https://cdn-icons-png.flaticon.com/512/619/619153.png"
+                      alt="sell"
+                      class="option-image"
+                    />
+                  </div>
+
+                  <!-- Content -->
+                  <div class="flex-grow-1">
+                    <h2 class="sell-title mb-2">I Want to Sell</h2>
+
+                    <p class="option-text mb-6">
+                      List your property in minutes
+                    </p>
+
+                    <v-btn
+                      block
+                      class="action-btn elevation-0"
+                    >
+                      Get Started
+                    </v-btn>
+                  </div>
+                </div>
+              </v-card>
+            </v-col>
+
+            <!-- BUY CARD -->
+            <v-col cols="12" md="5">
+              <v-card class="pa-8 rounded-xl option-card" elevation="0">
+                <div class="d-flex align-center">
+                  <!-- Image -->
+                  <div class="icon-wrapper mr-6">
+                    <img
+                      src="https://cdn-icons-png.flaticon.com/512/1040/1040230.png"
+                      alt="buy"
+                      class="option-image"
+                    />
+                  </div>
+
+                  <!-- Content -->
+                  <div class="flex-grow-1">
+                    <h2 class="buy-title mb-2">I Want to Buy</h2>
+
+                    <p class="option-text mb-6">
+                      Explore Verified Listings
+                    </p>
+
+                    <v-btn
+                      block
+                      class="action-btn elevation-0"
+                    >
+                      Explore Listings
+                    </v-btn>
+                  </div>
+                </div>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-container>
+      </section>
+
+      <!-- FOOTER -->
+      <footer class="footer-section py-14">
+        <v-container>
+          <v-row>
+            <!-- Brand -->
+            <v-col cols="12" md="6">
+              <h2 class="footer-logo mb-2">QRForInfo</h2>
+
+              <p class="footer-description">
+                Connecting Property Buyers and Sellers Directly
+              </p>
+            </v-col>
+
+            <!-- Product -->
+            <v-col cols="6" md="2">
+              <h3 class="footer-heading mb-5">Product</h3>
+
+              <ul class="footer-links">
+                <li>How it Works</li>
+                <li>For Sellers</li>
+                <li>For Buyers</li>
+                <li>Pricing</li>
+              </ul>
+            </v-col>
+
+            <!-- Use Cases -->
+            <v-col cols="6" md="2">
+              <h3 class="footer-heading mb-5">Use Cases</h3>
+
+              <ul class="footer-links">
+                <li>How it Works</li>
+                <li>For Sellers</li>
+                <li>For Buyers</li>
+                <li>Pricing</li>
+              </ul>
+            </v-col>
+
+            <!-- Company -->
+            <v-col cols="12" md="2">
+              <h3 class="footer-heading mb-5">Company</h3>
+            </v-col>
+          </v-row>
+        </v-container>
+      </footer>
   </section>
 </template>
 
@@ -353,10 +476,147 @@
 import People1 from '@/assets/people1.png'
 import People2 from '@/assets/people2.jpg'
 import People3 from '@/assets/people3.jpg'
+import Card_11 from '@/assets/card_11.png'
+import Card_22 from '@/assets/card_22.png'
+import Card_33 from '@/assets/card_33.png'
+import Card_44 from '@/assets/card_44.png'
+import featureCard_1 from '@/assets/featureCard_1.png'
+import featureCard_2 from '@/assets/featureCard_2.png'
+import featureCard_4 from '@/assets/featureCard_4.png'
+
 const avatarGroup = ref([
     { image: People1 },
     { image: People2 },
     { image: People3 }
+])
+
+const comparisonData = [
+  {
+    feature: 'Commission',
+    traditional: '2-5% Fees',
+    qrforinfo: '2-5% Fees'
+  },
+  {
+    feature: 'Time to List',
+    traditional: 'Days / Weeks',
+    qrforinfo: 'Days / Weeks'
+  },
+  {
+    feature: 'Communication',
+    traditional: 'Via Agents',
+    qrforinfo: 'Via Agents'
+  },
+  {
+    feature: 'Property Info',
+    traditional: 'Limited Access',
+    qrforinfo: 'Limited Access'
+  },
+  {
+    feature: 'Control',
+    traditional: 'Agent Managed',
+    qrforinfo: 'Agent Managed'
+  }
+]
+const serviceCards = [
+  {
+    title: 'BUY/SELL',
+    description:
+      'Explore verified properties and find the perfect match to buy or sell',
+    color: '#0B22B5',
+    lightColor: '#D8DCF7',
+    borderColor: '#A7B3FF',
+    buttonText: 'Explore Listings',
+    features: [
+      'Residential Homes',
+      'Apartments',
+      'Villas',
+      'Plots / Land',
+      'Commercial Properties'
+    ]
+  },
+  {
+    title: 'RENT/LEASE',
+    description:
+      'Flexible renting options for homes, offices and commercial spaces',
+    color: '#0F9250',
+    lightColor: '#D7ECE3',
+    borderColor: '#9ED3B9',
+    buttonText: 'Explore Listings',
+    features: [
+      'Apartments',
+      'Villas',
+      'Commercial Space',
+      'Co-Working Spaces',
+      'Shops'
+    ]
+  },
+  {
+    title: 'BUILD TO SUIT',
+    description:
+      'Custom-built solutions tailored to your business needs',
+    color: '#E46C00',
+    lightColor: '#F5D7BB',
+    borderColor: '#F0B47A',
+    buttonText: 'Get Started',
+    features: [
+      'Custom Builds',
+      'Commercial Projects',
+      'Industrial Spaces',
+      'Warehouses'
+    ]
+  }
+]
+const features = [
+  {
+    title: 'Scan QR Code',
+    description: 'Use your phone to scan the property’s QR Code',
+    image:
+    featureCard_1,
+  },
+  {
+    title: 'View Details',
+    description: 'Access complete property information instantly',
+    image:
+    featureCard_2,
+  },
+  {
+    title: 'Save Favorites',
+    description: 'Use your phone to scan the property’s QR Code',
+    image:
+    featureCard_1,
+  },
+  {
+    title: 'Contact Seller',
+    description: 'Connect directly with the seller via call or chat',
+    image:
+    featureCard_4,
+  },
+]
+const howItWorksCard = ref([
+  {
+    id:1,
+    title:'List your Property',
+    subtitle:'Create your property listing in minutes with all the essential details.',
+    img: Card_11
+  },
+  {
+    id:2,
+    title:'Generate QR Code',
+    subtitle:'Get a unique QR code for your property instantly.',
+    img: Card_22
+  },
+  {
+    id:3,
+    title:'Print & Share',
+    subtitle:'Display on property, share digitally, or print to reach more buyers',
+    img: Card_33
+  },
+  {
+    id:4,
+    title:'Get More Leads',
+    subtitle:'Buyers scan the QR code to view your property and  contact you directly.',
+    img: Card_44
+  }
 ])
 </script>
 <style lang="scss" scoped>
@@ -399,7 +659,7 @@ th {
 }
 
 .section-title{
-  font-family: Inter;
+  
   font-weight: 600;
   font-style: Semi Bold;
   font-size: 45px!important;
@@ -411,7 +671,7 @@ th {
   font-family: Inter;
   font-weight: 400;
   font-style: Regular;
-  font-size: 20px;
+  font-size: 24px;
   line-height: 30px;
   letter-spacing: 0%;
                 
@@ -421,9 +681,235 @@ th {
   font-family: Inter;
   font-weight: 600;
   font-style: Semi Bold;
-  font-size: 24px;
+  font-size: 20px;
   line-height: 30px;
   letter-spacing: 0%;
 }
+.comparison-card {
+  background: #f6f6f6;
+  border-radius: 32px!important;
+  box-shadow: 0 8px 24px #64646F33!important;
+}
 
+.table-row {
+  display: grid;
+  grid-template-columns: 1.1fr 1.4fr 1fr;
+  align-items: center;
+  min-height: 120px;
+  border-bottom: 1px solid #dddddd;
+  padding: 0 56px;
+}
+
+.table-row:last-child {
+  border-bottom: none;
+}
+
+.table-header {
+  min-height: 100px;
+}
+
+.col {
+  font-size: 22px;
+  font-weight: 500;
+  color: #475569;
+}
+
+.feature-col {
+  padding-left: 28px;
+}
+
+.table-header .col {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: #51627d;
+}
+
+.body-text {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.text-success {
+  color: #0ea44b !important;
+}
+
+.icon-circle {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.icon-grey {
+  background: #e6e7eb;
+  color: #64748b;
+}
+
+.icon-success {
+  background: #0b9444;
+}
+
+.hero-section {
+  background: #0019b8;
+  border: 4px solid #1db4ff;
+}
+
+.hero-title {
+  color: white;
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.highlight {
+  color: #f2c230;
+}
+
+.hero-subtitle {
+  color: white;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.option-card {
+  background: #ececec;
+}
+
+.icon-wrapper {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: #dfe5ef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.option-image {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+}
+
+.sell-title {
+  color: #24109a;
+  font-size: 42px;
+  font-weight: 700;
+}
+
+.buy-title {
+  color: #15762e;
+  font-size: 42px;
+  font-weight: 700;
+}
+
+.option-text {
+  color: #444;
+  font-size: 24px;
+}
+
+.action-btn {
+  background: #e67a10 !important;
+  color: white !important;
+  font-size: 20px;
+  font-weight: 700;
+  text-transform: none;
+  height: 58px !important;
+  border-radius: 10px;
+}
+
+.footer-section {
+  background: #ececec;
+}
+
+.footer-logo {
+  font-size: 54px;
+  font-weight: 700;
+  color: #24109a;
+}
+
+.footer-description {
+  font-size: 22px;
+  color: #4a5a74;
+}
+
+.footer-heading {
+  font-size: 32px;
+  font-weight: 700;
+  color: #24109a;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li {
+  margin-bottom: 18px;
+  font-size: 20px;
+  color: #4a5a74;
+  cursor: pointer;
+}
+
+/* RESPONSIVE */
+@media (max-width: 960px) {
+  .hero-title {
+    font-size: 34px;
+  }
+
+  .sell-title,
+  .buy-title {
+    font-size: 28px;
+  }
+
+  .option-text {
+    font-size: 18px;
+  }
+
+  .footer-logo {
+    font-size: 38px;
+  }
+
+  .footer-heading {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-title {
+    font-size: 28px;
+  }
+
+  .hero-subtitle {
+    font-size: 16px;
+  }
+
+  .icon-wrapper {
+    width: 100px;
+    height: 100px;
+  }
+
+  .option-image {
+    width: 60px;
+    height: 60px;
+  }
+
+  .sell-title,
+  .buy-title {
+    font-size: 22px;
+  }
+
+  .option-text {
+    font-size: 15px;
+  }
+}
+
+.adjust-card-img{
+  position: absolute; bottom: 40px; left: 0px;right: 0px;
+}
 </style>
