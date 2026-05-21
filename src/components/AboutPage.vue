@@ -366,7 +366,7 @@
                   <!-- Image -->
                   <div class="icon-wrapper mr-6">
                     <img
-                      src="https://cdn-icons-png.flaticon.com/512/619/619153.png"
+                      src="@/assets/house.png"
                       alt="sell"
                       class="option-image"
                     />
@@ -399,7 +399,7 @@
                   <!-- Image -->
                   <div class="icon-wrapper mr-6">
                     <img
-                      src="https://cdn-icons-png.flaticon.com/512/1040/1040230.png"
+                      src="@/assets/Frame.png"  
                       alt="buy"
                       class="option-image"
                     />
