@@ -22,8 +22,8 @@
             <p class="mt-4 section-desc" >Buy, Sell or Rent Properties with ease, Scan QR,<br>
               explore verified listings and connect directly<br>
               with owners or agents</p>
-              <v-btn size="large" height="60" width="200" color="primary" class="rounded-xl text-none elevation-0 font-weight-bold mt-4" rounded="lg">
-                Scan QR Code
+              <v-btn @click="router.push('/home')" size="large" height="60" width="200" color="primary" class="rounded-xl text-none elevation-0 font-weight-bold mt-4" rounded="lg">
+              <img class="mr-2" width="30" src="@/assets/qrIcon.png" alt="">  Explore
               </v-btn>
           </v-col>
           <v-col cols="12" md="6 d-none d-md-flex justify-center align-center">
@@ -125,7 +125,7 @@
   </v-img>
   </section>
 
-  <section class="text-center py-6 d-flex flex-column justify-center align-center">
+  <section id="howItWorks" class="text-center py-6 d-flex flex-column justify-center align-center">
     <h3 class="section-title font-weight-bold">How It <span class="text-primary">Works</span></h3>
     <p class="text-center section-desc">List,generate,and share your property in just a few simple steps.</p>
       <v-container>
@@ -146,7 +146,7 @@
     </v-container>
   </section>
 
-  <section class="text-center py-6 d-flex flex-column justify-center align-center">
+  <section id="forBuyers" class="text-center py-6 d-flex flex-column justify-center align-center">
     <h3 class="section-title font-weight-bold">For <span class="text-primary">Buyers</span></h3>
     <v-container fluid class="py-8 px-10 fill-height mt-4" style="background-color: #F6F9FD;">
     <v-row>
@@ -259,6 +259,7 @@
             rounded="lg"
             style="position: absolute;bottom: 0;left: 0;"
             elevation="0"
+            @click="router.push('/propertyListing')"
             class="text-none mt-6"
             height="50"
             :color="plan.color"
@@ -271,7 +272,7 @@
   </v-container>
   </section>
 
-  <section class="text-center py-6 d-flex flex-column justify-center align-center">
+  <section id="pricing" class="text-center py-6 d-flex flex-column justify-center align-center">
     <h3 class="section-title font-weight-bold">QRForInfo vs Traditional Methods</h3>
     <p class="section-desc">Smarter, faster and better - see how QRForinfo makes real estate simpler for everyone</p>
     <v-container class="pa-1">
@@ -286,11 +287,11 @@
           FEATURE
         </div>
 
-        <div class="col">
+        <div class="col text-left">
           TRADITIONAL REAL ESTATE
         </div>
 
-        <div class="col text-success">
+        <div class="col text-success text-left">
           QRFORINFO
         </div>
       </div>
@@ -381,6 +382,7 @@
 
                     <v-btn
                       block
+                      @click="router.push('/home')"
                       class="action-btn elevation-0"
                     >
                       Get Started
@@ -412,6 +414,7 @@
                     </p>
 
                     <v-btn
+                      @click="router.push('/propertyListing')"
                       block
                       class="action-btn elevation-0"
                     >
@@ -443,10 +446,10 @@
               <h3 class="footer-heading mb-5">Product</h3>
 
               <ul class="footer-links">
-                <li>How it Works</li>
-                <li>For Sellers</li>
-                <li>For Buyers</li>
-                <li>Pricing</li>
+                <li @click="redirect('howItWorks')">How it Works</li>
+                <li @click="redirect('forSellers')">For Sellers</li>
+                <li @click="redirect('forBuyers')">For Buyers</li>
+                <li @click="redirect('pricing')">Pricing</li>
               </ul>
             </v-col>
 
@@ -455,17 +458,17 @@
               <h3 class="footer-heading mb-5">Use Cases</h3>
 
               <ul class="footer-links">
-                <li>How it Works</li>
-                <li>For Sellers</li>
-                <li>For Buyers</li>
-                <li>Pricing</li>
+                <li @click="router.push('/home')">Buy Property</li>
+                <li @click="router.push('/home')">Sell Property</li>
+                <li @click="router.push('/home')">Rent/Lease</li>
+                <li @click="router.push('/home')">Built to Suit</li>
               </ul>
             </v-col>
 
             <!-- Company -->
-            <v-col cols="12" md="2">
+            <!-- <v-col cols="12" md="2">
               <h3 class="footer-heading mb-5">Company</h3>
-            </v-col>
+            </v-col> -->
           </v-row>
         </v-container>
       </footer>
@@ -484,6 +487,7 @@ import featureCard_1 from '@/assets/featureCard_1.png'
 import featureCard_2 from '@/assets/featureCard_2.png'
 import featureCard_4 from '@/assets/featureCard_4.png'
 
+const router = useRouter()
 const avatarGroup = ref([
     { image: People1 },
     { image: People2 },
@@ -618,6 +622,17 @@ const howItWorksCard = ref([
     img: Card_44
   }
 ])
+
+const redirect = (id)=>{
+  const element = document.getElementById(id)
+
+  if (element) {
+    element.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    })
+  }
+}
 </script>
 <style lang="scss" scoped>
 
